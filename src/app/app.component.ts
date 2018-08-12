@@ -47,11 +47,11 @@ export class AppComponent implements OnInit {
         this.translate.use('en');
     }
 
-    ping() {
-        this.http
-          .get('http://example.com/api/things')
-          .subscribe(data => console.log(data), err => console.log(err));
-      }
+    // ping() {
+    //     this.http
+    //       .get('http://example.com/api/things')
+    //       .subscribe(data => console.log(data), err => console.log(err));
+    //   }
 
     ngOnInit() {
         // this.authService.currentUser.subscribe(user => this.fullname = user.fullname);

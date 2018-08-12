@@ -103,16 +103,16 @@ export function tokenGetter() {
         MatChipsModule,
         MatDatepickerModule,
         // add the token to the headers of the requsts to backend
-        JwtModule.forRoot({
-            config: {
-              tokenGetter: tokenGetter,
-              throwNoTokenError: false,
-              skipWhenExpired: false,
-              whitelistedDomains: [appConfig.apiUrl],
-              blacklistedRoutes: [appConfig.apiAuthUrl + '/users/login'],
-              authScheme: 'JWT '
-            }
-          }),
+        // JwtModule.forRoot({
+        //     config: {
+        //       tokenGetter: tokenGetter,
+        //       throwNoTokenError: false,
+        //       skipWhenExpired: false,
+        //       whitelistedDomains: [appConfig.apiUrl],
+        //       blacklistedRoutes: [appConfig.apiAuthUrl + '/users/login'],
+        //       authScheme: 'JWT '
+        //     }
+        //   }),
 
     ],
     bootstrap   : [

@@ -22,7 +22,7 @@ export class AuthenticationService {
 
     constructor(private http: HttpClient, 
                 private router: Router,
-                public jwtHelper: JwtHelperService
+                // public jwtHelper: JwtHelperService
                 ) 
                 { }
 

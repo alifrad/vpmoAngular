@@ -1,0 +1,31 @@
+  
+<h1>Edit Your Profile </h1>
+
+<form class="user-form" [formGroup]="userProfileForm" (ngSubmit)="saveProfile(userProfileForm.value)" autocomplete="off" novalidate>
+    Value: {{ userProfileForm.value | json }}
+    
+    <!-- <hr> -->
+
+    <mat-form-field class="full-width">
+        <input matInput formControlName="fullname" type="text" placeholder="Full Name" />
+ 
+    </mat-form-field>
+    <br>
+    <mat-form-field class="full-width">
+        <input matInput formControlName="username" id="username" type="text" placeholder="User Name" />
+    </mat-form-field>
+    <br>
+    <mat-form-field class="full-width">
+        <input matInput formControlName="email" id="email" type="text" placeholder="Email Address" />
+    </mat-form-field>
+    <br>
+
+    <!-- <mat-form-field>
+        <input matInput formControlName="id" id="id" type="number" placeholder="id" />
+    </mat-form-field> -->
+
+    <button mat-raised-button color="primary" type="submit" [disabled]="userProfileForm.invalid">Save</button>
+    <button mat-raised-button routerLink="user/dashboard">Cancel</button>
+    
+</form>
+

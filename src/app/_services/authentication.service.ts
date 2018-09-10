@@ -67,15 +67,15 @@ export class AuthenticationService {
         // return a boolean reflecting 
         // whether or not the token is expired
         // true or false
-        return !this.jwtHelper.isTokenExpired();
-        // return true;
+        // return !this.jwtHelper.isTokenExpired();
+        return true;
     }
 
 
     login(email: string, password: string) {
         console.log('Logging In...');
         
-        return this.http.post<any>(appConfig.apiAuthUrl + '/users/login', { email: email, password: password })
+        return this.http.post<any>(appConfig.apiAuthUrl + '/users/login/', { email: email, password: password })
             .pipe(map(user => {
                 // login successful if there's a jwt token in the response
                 if (user && user.token) {

@@ -1,4 +1,3 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -32,7 +31,6 @@ const UserRoutes: Routes = [
 
 @NgModule({
     imports: [
-        BrowserModule,
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
@@ -43,7 +41,6 @@ const UserRoutes: Routes = [
         MatButtonModule,
     ],
     exports: [
-        RouterModule,
         SignUpComponent,
         DashboardComponent,
         UserProfileComponent,
@@ -58,7 +55,7 @@ const UserRoutes: Routes = [
     providers: [
         UserService,
         AuthenticationService,
-        AuthGuard,
+        // AuthGuard,
     ],
     schemas: [
         CUSTOM_ELEMENTS_SCHEMA,

@@ -1,3 +1,8 @@
-<p>
-  teams works!
-</p>
+<div>
+  <table class="table" *ngIf='teams && teams.length'>
+    <tr *ngFor='let team of teams'>
+      <td></td>
+      <td> {{team.name}}</td>
+    </tr>
+  </table>
+</div>

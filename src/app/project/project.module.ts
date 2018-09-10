@@ -46,4 +46,4 @@ const ProjectRoutes: Routes = [
 })
 export class ProjectModule { }
 
-platformBrowserDynamic().bootstrapModule(ProjectModule);
+// platformBrowserDynamic().bootstrapModule(ProjectModule);

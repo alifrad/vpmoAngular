@@ -15,9 +15,6 @@ const routes = [
 ];
 
 @NgModule({
-    declarations: [
-        LoginComponent
-    ],
     imports     : [
         RouterModule.forChild(routes),
 
@@ -27,7 +24,15 @@ const routes = [
         MatInputModule,
 
         FuseSharedModule
+    ],
+
+    declarations: [
+        LoginComponent
+    ],
+    exports : [
+        LoginComponent
     ]
+
 })
 export class LoginModule
 {

@@ -9,7 +9,6 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule, Routes } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-import { JwtModule } from '@auth0/angular-jwt';
 import 'hammerjs';
 
 import { FuseModule } from '@fuse/fuse.module';
@@ -33,6 +32,7 @@ import { AuthenticationService } from './_services/authentication.service';
 import { HttpCacheService } from './_services/http-cache.service';
 import { CacheInterceptor } from './_services/cache.interceptor';
 import { appConfig } from './app.config';
+import { JwtInterceptor } from './_helpers/jwt.interceptor';
 
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
@@ -41,7 +41,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { TeamsComponent } from './team/teams.component';
+import { TeamModule } from './team/team.module';
 
 
 const appRoutes: Routes = [
@@ -72,16 +72,11 @@ export function tokenGetter() {
 
 
 @NgModule({
-    declarations: [
-        AppComponent,
-        HomeComponent,
-        ErrorComponent,
-        AlertComponent,
-        TeamsComponent
-    ],
-    imports     : [
-        CommonModule,
+    // Other modules whose exported classes are needed 
+    // by component templates declared in this NgModule 
+      imports     : [
         BrowserModule,
+        CommonModule,
         BrowserAnimationsModule,
         HttpClientModule,
         RouterModule.forRoot(appRoutes),
@@ -95,36 +90,42 @@ export function tokenGetter() {
         
         UserModule,
         ProjectModule,
-        ReactiveFormsModule,
-        MatInputModule,
-        MatSelectModule,
-        MatButtonModule,
-        MatCheckboxModule,
-        MatChipsModule,
-        MatDatepickerModule,
-        // add the token to the headers of the requsts to backend
-        // JwtModule.forRoot({
-        //     config: {
-        //       tokenGetter: tokenGetter,
-        //       throwNoTokenError: false,
-        //       skipWhenExpired: false,
-        //       whitelistedDomains: [appConfig.apiUrl],
-        //       blacklistedRoutes: [appConfig.apiAuthUrl + '/users/login'],
-        //       authScheme: 'JWT '
-        //     }
-        //   }),
+        // ReactiveFormsModule,
+        // MatInputModule,
+        // MatSelectModule,
+        // MatButtonModule,
+        // MatCheckboxModule,
+        // MatChipsModule,
+        // MatDatepickerModule,
 
     ],
+    // The components, directives, and pipes that belong to this NgModule
+    declarations: [
+        AppComponent,
+        HomeComponent,
+        ErrorComponent,
+        AlertComponent,
+    ],
+    // The main application view, called the root component, which hosts all other app views
+    // Only the root NgModule should set the bootstrap property
     bootstrap   : [
         AppComponent
     ],
+    // The subset of declarations that should be visible and 
+    // usable in the component templatesof other NgModules
+    exports: [
+        
+    ],
+    // Creators of services that this NgModule contributes to the global
+    // collection of services; they become accessible in all parts of the app
     providers: [
         MessageService,
         AuthenticationService,
         AlertService,
         HttpCacheService,
         { provide: ErrorHandler, useFactory: errorHandlerFactory },
-        { provide: HTTP_INTERCEPTORS, useClass: CacheInterceptor, multi: true }
+        { provide: HTTP_INTERCEPTORS, useClass: CacheInterceptor , multi: true },
+        { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor , multi: true }
       ],
 })
 export class AppModule

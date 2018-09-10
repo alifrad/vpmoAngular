@@ -14,10 +14,9 @@ import { FuseToolbarModule } from 'app/main/toolbar/toolbar.module';
 import { FuseMainComponent } from './main.component';
 
 
+
 @NgModule({
-    declarations: [
-        FuseMainComponent,
-    ],
+    
     imports     : [
         RouterModule,
 
@@ -37,6 +36,12 @@ import { FuseMainComponent } from './main.component';
         FuseQuickPanelModule,
         FuseToolbarModule,
     ],
+
+    declarations: [
+        FuseMainComponent,
+        
+    ],
+
     exports     : [
         FuseMainComponent
     ]

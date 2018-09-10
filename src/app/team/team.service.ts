@@ -27,7 +27,7 @@ export class TeamService {
 
  
   getTeams() {
-    return this.http.get(appConfig.apiUrl + `/filtered_organisations`);
+    return this.http.get<Team[]>(appConfig.apiUrl + `/filtered_organisations/`);
   }
 
   getUserTeamPerm(_id, team: number) {

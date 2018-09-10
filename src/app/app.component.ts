@@ -30,8 +30,8 @@ export class AppComponent implements OnInit {
         private fuseNavigationService: FuseNavigationService,
         private fuseSplashScreen: FuseSplashScreenService,
         private fuseTranslationLoader: FuseTranslationLoaderService,
-        private authService: AuthenticationService,
-        private http: HttpClient,
+        // private authService: AuthenticationService,
+        // private http: HttpClient,
     )
     {
         // Add languages

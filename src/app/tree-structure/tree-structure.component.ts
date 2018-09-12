@@ -71,7 +71,7 @@ export class TreeStructureComponent implements OnInit {
 
   public removeNode = (node) => {
     this.cancelNewItemIfItNead();
-    this.treeStructureHttpService.removeNode(node.data._id);
+    this.treeStructureHttpService.deleteNode(node.data._id);
     _.remove(node.parent.data.children, (n: INodeDto) => {
       return node.data._id === n._id;
     });
@@ -94,7 +94,6 @@ export class TreeStructureComponent implements OnInit {
   }
 
   constructor(private treeStructureService: TreeStructureService, private treeStructureHttpService: TreeStructureHttpService) { }
-
 
   public onMoveNode($event) {
     let nodeM = this.tree.treeModel.getNodeById($event.node._id);

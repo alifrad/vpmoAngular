@@ -1,0 +1,30 @@
+<tree-root [nodes]="nodes" [options]="options" (moveNode)="onMoveNode($event)">
+  <ng-template #treeNodeTemplate let-node let-index="index">
+      <div class="edit my-container" *ngIf="node.data.isEditing">
+        <input type="text" [(ngModel)]="editValue">
+        <div class="buttons">
+          <a (click)="saveNode(node)">
+            save
+          </a>
+          <a (click)="cancelNode(node)">
+            cancel
+          </a>
+        </div>
+      </div>
+      <div class="my-container" *ngIf="!node.data.isEditing"> 
+        <div>{{ node.data.name }}</div>
+        <div class="buttons">
+          <a (click)="startAdd(node)">
+            <i class="material-icons"> add </i>
+          </a>
+          <a (click)="startEditing(node)">
+            <i class="material-icons"> edit </i>
+          </a>
+          <a (click)="removeNode(node)">
+              <i class="material-icons"> clear </i>
+            </a> 
+        </div>
+      </div>
+
+  </ng-template>
+</tree-root>'

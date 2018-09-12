@@ -42,6 +42,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { TeamModule } from './team/team.module';
+import { TreeStructureModule } from './tree-structure/tree-structure.module';
 
 
 const appRoutes: Routes = [
@@ -97,6 +98,8 @@ export function tokenGetter() {
         // MatCheckboxModule,
         // MatChipsModule,
         // MatDatepickerModule,
+
+        TreeStructureModule,
 
     ],
     // The components, directives, and pipes that belong to this NgModule

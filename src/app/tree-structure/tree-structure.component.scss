@@ -1,10 +1,39 @@
 .my-container {
     display: flex;
     align-items: center;
+    .node-name {
+        flex: 1;
+    }
     .buttons {
+        display: flex;
+        align-items: center;
         margin-left: 10px;
         a {
+            padding: 1px 5px;
+            /* font-size: 12px; */
+            line-height: 1.5;
+            border-radius: 3px;
+            color: #fff;
+            background-color: #428bca;
+            border-color: #357ebd;
+            margin-left: 10px;
+            display: inline-block;
+            display: flex;
+            height: 100%;
+            padding: 3px;
             padding-left: 5px;
+            i.material-icons {
+                color: white;
+            }
+        }
+        a.button-red {
+            background-color: #d9534f;
+        }
+        a.button-green {
+            background-color: #5cb85c;
+        }
+        a.button-blue {
+            background-color: #428bca;
         }
     }
 }
@@ -20,6 +49,9 @@
     }
     tree-node-expander {
         padding-left: 10px;
+    }
+    .node-content-wrapper {
+        width: 100%;
     }
     .node-content-wrapper-active,
     .node-content-wrapper-focused,

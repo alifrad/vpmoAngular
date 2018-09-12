@@ -5,6 +5,7 @@ import { TreeComponent, ITreeOptions } from '../../../node_modules/angular-tree-
 import { ITreeNode } from '../../../node_modules/angular-tree-component/dist/defs/api';
 import * as _ from 'lodash';
 import { INodeDto } from './tree-structure-model';
+import { timeout } from '../../../node_modules/rxjs/operators';
 
 @Component({
   selector: 'app-tree-structure',
@@ -104,10 +105,13 @@ export class TreeStructureComponent implements OnInit {
   public ngOnInit() {    
     this.treeStructureHttpService.getTree((nodes)=>{
       this.nodes =nodes;
+      setTimeout(() => {
+        this.tree.treeModel.expandAll();
+      }, 111);     
     });
   }
 
   public ngAfterViewInit() {
-    this.tree.treeModel.expandAll();
+    
   }
 }

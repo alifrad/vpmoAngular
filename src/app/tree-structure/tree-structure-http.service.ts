@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { INodeDto } from './tree-structure-model';
-import { Http, Response, RequestOptions, Headers } from '@angular/http';
 import { appConfig } from '../app.config';
 
 import { Observable } from '../../../node_modules/rxjs/Observable';
 import "rxjs"
+import { HttpClient, HttpHeaders } from '../../../node_modules/@angular/common/http';
+import { AuthenticationService } from 'app/_services';
 
 @Injectable({
   providedIn: 'root'
@@ -48,36 +49,36 @@ export class TreeStructureHttpService {
     ],
     "node_type": "Team"
   }];
-  private baseUrl: string;
 
-  constructor(private http: Http) {
-    this.baseUrl = `${appConfig.apiUrl}/project`;
+  private readonly teamsTreeUrl: string = `${appConfig.apiUrl}/teams_tree/`;
+
+  constructor(private http: HttpClient, private authUser: AuthenticationService) {
+
   }
+
+  httpOptions = {
+    headers: new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': 'JWT ' + this.authUser.getToken
+    })
+  };
 
   public deleteNode(id: string): any {
     console.log("removeNode ", id);
-    return this.http.delete(this.baseUrl + '/' + id).subscribe();
+    return this.http.delete(this.teamsTreeUrl + id).subscribe();
   }
   public updateNode(data: INodeDto): any {
     console.log("update ", data);
-    return this.http.put(this.baseUrl + '/' + data._id, data).subscribe(); 
+    return this.http.put(this.teamsTreeUrl + data._id, data).subscribe();
   }
 
   public addNode(data: INodeDto): any {
     console.log("addNode ", data);
-    return this.http.post(this.baseUrl, data).subscribe();
+    return this.http.post(this.teamsTreeUrl, data).subscribe();
   }
 
-  public getTree(cb): void {
-    this.http.get(this.baseUrl)
-      .catch(e => { 
-        console.log("errror getTree",this.dumpData);
-        cb(this.dumpData);
-        return Observable.throwError(e); 
-      })
-      .subscribe(res => {
-          cb(res.json());       
-      });
+  getTree(id: string): Observable<INodeDto[]> {
+    return this.http.get<INodeDto[]>(this.teamsTreeUrl + id, this.httpOptions);
   }
 }
 

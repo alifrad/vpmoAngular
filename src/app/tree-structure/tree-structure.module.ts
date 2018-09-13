@@ -6,29 +6,30 @@ import { TreeStructureService } from './tree-structure.service';
 import { TreeStructureHttpService } from './tree-structure-http.service';
 import { TreeModule } from 'angular-tree-component';
 import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
+
+//import { HttpClientModule } from '../../../node_modules/@angular/common/http';
+//import { HttpModule } from '@angular/http';
 
 
 const routes = [
   {
-      path     : 'tree',
-      component: TreeStructureComponent
+    path: 'tree',
+    component: TreeStructureComponent
   }
 ];
 
 @NgModule({
   imports: [
- TreeModule.forRoot(),
+    TreeModule.forRoot(),
     CommonModule,
     RouterModule.forChild(routes),
     TreeModule,
     FormsModule,
-    HttpModule
   ],
-  exports:[
+  exports: [
     TreeStructureComponent,
   ],
   declarations: [TreeStructureComponent],
-  providers:[TreeStructureService,TreeStructureHttpService]
+  providers: [TreeStructureService, TreeStructureHttpService]
 })
 export class TreeStructureModule { }

@@ -20,7 +20,7 @@ export class TreeStructureComponent implements OnInit {
   public editValue: string;
   public nodes = [];
 
-  public  options: ITreeOptions = {
+  public options: ITreeOptions = {
     idField: '_id',
     displayField: 'name',
     childrenField: 'children',
@@ -99,19 +99,17 @@ export class TreeStructureComponent implements OnInit {
   public onMoveNode($event) {
     let nodeM = this.tree.treeModel.getNodeById($event.node._id);
     this.treeStructureService.updateDataFields(nodeM);
-    this.treeStructureHttpService.updateNode($event.node)    
+    this.treeStructureHttpService.updateNode($event.node)
   }
 
-  public ngOnInit() {    
-    this.treeStructureHttpService.getTree((nodes)=>{
-      this.nodes =nodes;
-      setTimeout(() => {
-        this.tree.treeModel.expandAll();
-      }, 111);     
-    });
-  }
-
-  public ngAfterViewInit() {
-    
+  public ngOnInit() {
+    this.treeStructureHttpService.getTree('5b8c464900f0fa25849696bc')
+      .subscribe(
+        (data) => {
+          this.nodes = [data];
+        },
+        (err: any) => console.log('getTree ', err),
+        () => console.log('All done getting nodes.')
+      );
   }
 }

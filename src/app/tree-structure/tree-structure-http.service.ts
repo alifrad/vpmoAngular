@@ -77,8 +77,8 @@ export class TreeStructureHttpService {
     return this.http.post(this.teamsTreeUrl, data).subscribe();
   }
 
-  getTree(id: string): Observable<INodeDto[]> {
-    return this.http.get<INodeDto[]>(this.teamsTreeUrl + id, this.httpOptions);
+  public getTree(id: string): Observable<INodeDto[]> {
+    return this.http.get<INodeDto[]>(this.teamsTreeUrl + id+"/", this.httpOptions);
   }
 }
 

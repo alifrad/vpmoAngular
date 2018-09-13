@@ -65,16 +65,16 @@ export class TreeStructureHttpService {
 
   public deleteNode(id: string): any {
     console.log("removeNode ", id);
-    return this.http.delete(this.teamsTreeUrl + id).subscribe();
+    return this.http.delete(this.teamsTreeUrl + id, this.httpOptions).subscribe();
   }
   public updateNode(data: INodeDto): any {
     console.log("update ", data);
-    return this.http.put(this.teamsTreeUrl + data._id, data).subscribe();
+    return this.http.put(this.teamsTreeUrl + data._id, data, this.httpOptions).subscribe();
   }
 
   public addNode(data: INodeDto): any {
     console.log("addNode ", data);
-    return this.http.post(this.teamsTreeUrl, data).subscribe();
+    return this.http.post(this.teamsTreeUrl, data, this.httpOptions).subscribe();
   }
 
   public getTree(id: string): Observable<INodeDto[]> {

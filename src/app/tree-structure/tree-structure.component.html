@@ -1,7 +1,7 @@
 <tree-root [nodes]="nodes" [options]="options" (moveNode)="onMoveNode($event)">
-  <ng-template #treeNodeTemplate let-node let-index="index">
+  <ng-template #treeNodeTemplate let-node let-index="index">    
       <div class="edit my-container" *ngIf="node.data.isEditing">
-        <inputclass="node-name-input"  type="text" [(ngModel)]="editValue">
+        <input class="node-name-input"  type="text" [(ngModel)]="editValue">
         <div class="buttons">
           <a (click)="saveNode(node)">
             save

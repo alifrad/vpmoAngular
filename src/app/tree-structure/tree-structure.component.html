@@ -1,30 +1,30 @@
 <tree-root [nodes]="nodes" [options]="options" (moveNode)="onMoveNode($event)">
-  <ng-template #treeNodeTemplate let-node let-index="index">    
-      <div class="edit my-container" *ngIf="node.data.isEditing">
-        <input class="node-name-input"  type="text" [(ngModel)]="editValue">
-        <div class="buttons">
-          <a (click)="saveNode(node)">
-            save
-          </a>
-          <a (click)="cancelNode(node)">
-            cancel
-          </a>
-        </div>
+  <ng-template #treeNodeTemplate let-node let-index="index">
+    <div class="edit my-container" *ngIf="node.data.isEditing">
+      <input class="node-name-input" type="text" [(ngModel)]="editValue">
+      <div class="buttons">
+        <a (click)="saveNode(node)">
+          save
+        </a>
+        <a (click)="cancelNode(node)">
+          cancel
+        </a>
       </div>
-      <div class="my-container" *ngIf="!node.data.isEditing"> 
-        <div class="node-name">{{ node.data.name }}</div>
-        <div class="buttons">
-          <a class="button-green" (click)="startAdd(node)">
-            <i class="material-icons"> add </i>
-          </a>
-          <a class="button-blue" (click)="startEditing(node)">
-            <i class="material-icons"> edit </i>
-          </a>
-          <a class="button-red" (click)="removeNode(node)">
-              <i class="material-icons"> clear </i>
-            </a> 
-        </div>
+    </div>
+    <div class="my-container" *ngIf="!node.data.isEditing">
+      <div class="node-name">{{ node.data.name }}</div>
+      <div class="buttons">
+        <a class="button-green" (click)="startAdd(node)">
+          <i class="material-icons"> add </i>
+        </a>
+        <a class="button-blue" (click)="startEditing(node)">
+          <i class="material-icons"> edit </i>
+        </a>
+        <a class="button-red" (click)="removeNode(node)">
+          <i class="material-icons"> clear </i>
+        </a>
       </div>
+    </div>
 
   </ng-template>
 </tree-root>'

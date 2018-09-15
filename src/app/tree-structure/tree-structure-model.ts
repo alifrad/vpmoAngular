@@ -7,4 +7,5 @@ export interface INodeDto
     node_type:string;
     isEditing?:boolean;
     children:Array<INodeDto>;
+    beforeUpdateData:any;
 }

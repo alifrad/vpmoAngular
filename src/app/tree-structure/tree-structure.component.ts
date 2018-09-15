@@ -37,6 +37,7 @@ export class TreeStructureComponent implements OnInit {
       index: -1,
       node_type: "Project",
 
+
     };
 
     this.saveNewNodeData = { parent: node.data, newNode: newNode };
@@ -48,6 +49,10 @@ export class TreeStructureComponent implements OnInit {
     }
     setTimeout(() => {
       let newNodeM = this.tree.treeModel.getNodeById(newNode._id);
+      newNodeM.data.beforeUpdateData = {
+        index: newNodeM.index,
+        parentId: newNodeM.parent.data._id
+      };
       this.tree.treeModel.setFocusedNode(newNodeM);
     }, 111);
   }
@@ -98,15 +103,19 @@ export class TreeStructureComponent implements OnInit {
 
   public onMoveNode($event) {
     let nodeM = this.tree.treeModel.getNodeById($event.node._id);
-    this.treeStructureService.updateDataFields(nodeM);
-    this.treeStructureHttpService.updateNode($event.node)
+    let updatedList = this.treeStructureService.updateModel(nodeM, this.tree.treeModel);
+    this.treeStructureHttpService.updateNodeList(updatedList);
   }
 
   public ngOnInit() {
+
     this.treeStructureHttpService.getTree('5b8c464900f0fa25849696bc')
       .subscribe(
         (data) => {
-          this.nodes = [data];
+          this.nodes = this.treeStructureService.preUploadData(data);
+          setTimeout(() => {
+            this.tree.treeModel.expandAll();
+          }, 111);
         },
         (err: any) => console.log('getTree ', err),
         () => console.log('All done getting nodes.')

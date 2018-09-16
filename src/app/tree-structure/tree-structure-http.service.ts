@@ -14,6 +14,7 @@ export class TreeStructureHttpService {
 
   //url for crud operation of teamTree
   private readonly teamsTreeUrl: string = `${appConfig.apiUrl}/teams_tree/`;
+  private readonly projectUrl: string = `${appConfig.apiUrl}/projects/`;
 
   constructor(private http: HttpClient, private authUser: AuthenticationService) { }
 
@@ -30,9 +31,12 @@ export class TreeStructureHttpService {
     return this.http.delete(this.teamsTreeUrl + nodeId, this.httpOptions).subscribe();
   }
 
-  public updateNode(node: INodeDto): any {
-    console.log("update ", node);
-    return this.http.put(this.teamsTreeUrl + node._id, node, this.httpOptions).subscribe();
+  public updateNode(data: INodeDto): any {
+    console.log('update ', data);
+    if (data.node_type === 'Project') {
+      return this.http.put(this.projectUrl + data._id + '/', data, this.httpOptions).subscribe();
+    }
+
   }
 
   //update bunch of nodes
@@ -50,4 +54,4 @@ export class TreeStructureHttpService {
     return this.http.get<IVisualNodeData[]>(this.teamsTreeUrl + teamId + "/", this.httpOptions);
   }
 }
-
+ 

@@ -72,8 +72,8 @@ export class TreeStructureHttpService {
     return this.http.put(this.teamsTreeUrl + data._id , data, this.httpOptions).subscribe();
   }
 
-  public updateNodeList(data: INodeDto[]): any {
-    return this.http.put(this.teamsTreeUrl , data, this.httpOptions).subscribe();
+  public updateNodeList(data: INodeDto[], id: string): any {
+    return this.http.put(this.teamsTreeUrl + id + "/", data, this.httpOptions).subscribe();
   }
 
   public addNode(data: INodeDto): any {

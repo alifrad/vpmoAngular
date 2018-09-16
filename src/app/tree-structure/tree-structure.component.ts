@@ -104,7 +104,7 @@ export class TreeStructureComponent implements OnInit {
   public onMoveNode($event) {
     let nodeM = this.tree.treeModel.getNodeById($event.node._id);
     let updatedList = this.treeStructureService.updateModel(nodeM, this.tree.treeModel);
-    this.treeStructureHttpService.updateNodeList(updatedList);
+    this.treeStructureHttpService.updateNodeList(updatedList, '5b8c464900f0fa25849696bc');
   }
 
   public ngOnInit() {

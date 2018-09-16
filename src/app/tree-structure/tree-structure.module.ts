@@ -7,10 +7,6 @@ import { TreeStructureHttpService } from './tree-structure-http.service';
 import { TreeModule } from 'angular-tree-component';
 import { FormsModule } from '@angular/forms';
 
-//import { HttpClientModule } from '../../../node_modules/@angular/common/http';
-//import { HttpModule } from '@angular/http';
-
-
 const routes = [
   {
     path: 'tree',

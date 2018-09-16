@@ -4,7 +4,7 @@ import { TreeStructureHttpService } from './tree-structure-http.service';
 import { TreeComponent, ITreeOptions } from '../../../node_modules/angular-tree-component';
 import { ITreeNode } from '../../../node_modules/angular-tree-component/dist/defs/api';
 import * as _ from 'lodash';
-import { INodeDto } from './tree-structure-model';
+import { IVisualNodeData } from './tree-structure-model';
 import { timeout } from '../../../node_modules/rxjs/operators';
 
 @Component({
@@ -15,11 +15,14 @@ import { timeout } from '../../../node_modules/rxjs/operators';
 export class TreeStructureComponent implements OnInit {
   @ViewChild(TreeComponent)
   private tree: TreeComponent;
-
+  //user the object for cancel or save created node
   private saveNewNodeData: { parent, newNode } = null;
+  //for editing visual tree
   public editValue: string;
+  // array of tree nodes
   public nodes = [];
 
+  //set options for tree
   public options: ITreeOptions = {
     idField: '_id',
     displayField: 'name',
@@ -28,6 +31,7 @@ export class TreeStructureComponent implements OnInit {
     allowDrag: true,
   };
 
+  //user start add new node
   public startAdd = (node: ITreeNode) => {
     this.cancelNewItemIfItNead();
     let newNode = {
@@ -36,17 +40,17 @@ export class TreeStructureComponent implements OnInit {
       _id: TreeStructureService.newGuid(),
       index: -1,
       node_type: "Project",
-
-
     };
 
     this.saveNewNodeData = { parent: node.data, newNode: newNode };
     this.editValue = "";
     node.data.children.push(<any>newNode);
     this.tree.treeModel.update();
+    //set focus on the create element
     if (node.isCollapsed) {
       node.toggleExpanded();
     }
+    // the setTimeout I need for give  a time for DOM to expanded parent node
     setTimeout(() => {
       let newNodeM = this.tree.treeModel.getNodeById(newNode._id);
       newNodeM.data.beforeUpdateData = {
@@ -57,33 +61,40 @@ export class TreeStructureComponent implements OnInit {
     }, 111);
   }
 
+  //user start edit node
   public startEditing = (node) => {
+    //prevent situation when user start edit this node before cancel privious node
     this.cancelNewItemIfItNead();
     node.data.isEditing = true;
     this.editValue = node.data.name;
   }
 
+  //save new or edited node
   public saveNode = (node) => {
     node.data.name = this.editValue;
     node.data.isEditing = false;
     this.treeStructureService.updateDataFields(node);
     this.tree.treeModel.update();
+    let dto = this.treeStructureService.converVisualNodeToDto(node.data, false);
     if (this.saveNewNodeData)
-      this.treeStructureHttpService.addNode(node.data);
+      this.treeStructureHttpService.addNode(dto);
     else
-      this.treeStructureHttpService.updateNode(node.data);
+      this.treeStructureHttpService.updateNode(dto);
     this.saveNewNodeData = null;
   }
 
+  //delete node
   public removeNode = (node) => {
+    //prevent situation when user start remove this node before cancel privious node
     this.cancelNewItemIfItNead();
     this.treeStructureHttpService.deleteNode(node.data._id);
-    _.remove(node.parent.data.children, (n: INodeDto) => {
+    _.remove(node.parent.data.children, (n: IVisualNodeData) => {
       return node.data._id === n._id;
     });
     this.tree.treeModel.update();
   }
 
+  //prevent situation when user start edit this node before cancel privious node
   public cancelNewItemIfItNead = () => {
     if (this.saveNewNodeData) {
       _.remove(this.saveNewNodeData.parent.children, (n: any) => {
@@ -93,8 +104,11 @@ export class TreeStructureComponent implements OnInit {
       this.tree.treeModel.update();
     }
   }
+
+  //cancel editing node
   public cancelNode = (node) => {
     this.cancelNewItemIfItNead();
+    //set flag of visual editing tree to false
     node.data.isEditing = false;
     this.tree.treeModel.update();
   }
@@ -102,17 +116,18 @@ export class TreeStructureComponent implements OnInit {
   constructor(private treeStructureService: TreeStructureService, private treeStructureHttpService: TreeStructureHttpService) { }
 
   public onMoveNode($event) {
-    let nodeM = this.tree.treeModel.getNodeById($event.node._id);
-    let updatedList = this.treeStructureService.updateModel(nodeM, this.tree.treeModel);
-    this.treeStructureHttpService.updateNodeList(updatedList, '5b8c464900f0fa25849696bc');
+    let movedNode: ITreeNode = this.tree.treeModel.getNodeById($event.node._id);
+    let updatedList: IVisualNodeData[] = this.treeStructureService.updateModel(movedNode, this.tree.treeModel);
+    let updatedListDto = this.treeStructureService.converVisualNodeToDtoList(updatedList, false);
+    this.treeStructureHttpService.updateNodeList(updatedListDto, '5b8c464900f0fa25849696bc');
   }
 
   public ngOnInit() {
-
     this.treeStructureHttpService.getTree('5b8c464900f0fa25849696bc')
       .subscribe(
         (data) => {
           this.nodes = this.treeStructureService.preUploadData(data);
+          //need time in order create dom for tree
           setTimeout(() => {
             this.tree.treeModel.expandAll();
           }, 111);

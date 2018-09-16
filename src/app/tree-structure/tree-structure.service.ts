@@ -1,20 +1,48 @@
 import { Injectable } from '@angular/core';
-import { INodeDto } from './tree-structure-model';
+import { IVisualNodeData, INodeDto } from './tree-structure-model';
 import { ITreeNode } from '../../../node_modules/angular-tree-component/dist/defs/api';
 import { TreeModel } from '../../../node_modules/angular-tree-component';
 import * as _ from "lodash";
+import { nodeChildrenAsMap } from '../../../node_modules/@angular/router/src/utils/tree';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TreeStructureService {
+
+  public converVisualNodeToDtoList(visulaNodeList: IVisualNodeData[], withChildren: boolean): INodeDto[] {
+    let dtoList = [];
+    visulaNodeList.forEach(node => {
+      dtoList.push(this.converVisualNodeToDto(node, withChildren));
+    });
+    return dtoList;
+  }
+
+  public converVisualNodeToDto(visulaNode: IVisualNodeData, withChildren: boolean): INodeDto {
+    let dto: INodeDto = {
+      _id: visulaNode._id,
+      path: visulaNode.path,
+      index: visulaNode.index,
+      name: visulaNode.name,
+      node_type: visulaNode.node_type,
+      children: []
+    }
+    if (withChildren) {
+      visulaNode.children.forEach(node => {
+        dto.children.push(this.converVisualNodeToDto(node, withChildren));
+      });
+    }
+    return dto;
+  }
+
+  //prepare data in order to use in tree
   public preUploadData(data: any): any {
     this.addBeforeUpdateData(data, null);
     let newData = [data];
     return newData
   }
 
-  private addBeforeUpdateData = (node: INodeDto, parentId) => {
+  private addBeforeUpdateData = (node: IVisualNodeData, parentId) => {
     node.beforeUpdateData = {
       index: node.index,
       parentId: parentId,
@@ -36,15 +64,15 @@ export class TreeStructureService {
   }
 
   public updateDataFields(node: ITreeNode): void {
-    let data: INodeDto = node.data;
+    let data: IVisualNodeData = node.data;
     data.path = this.getPath(node.parent);
     if ('isEditing' in data) {
       delete data.isEditing;
     }
-    node.data.index = node.parent.data.children.map((e: INodeDto) => { return e._id; }).indexOf(data._id);
+    node.data.index = node.parent.data.children.map((e: IVisualNodeData) => { return e._id; }).indexOf(data._id);
   }
 
-  public updateModel = (node: ITreeNode, treeModel: TreeModel): INodeDto[] => {
+  public updateModel = (node: ITreeNode, treeModel: TreeModel): IVisualNodeData[] => {
     //change parent
     //  index of children in preview parent (under moved element)
     //  index of children in new parent (under moved element)
@@ -65,7 +93,7 @@ export class TreeStructureService {
       return e;
     });
 
-    let changedNode: INodeDto[] = [];
+    let changedNode: IVisualNodeData[] = [];
     for (const nodeId of idChangedNodeList) {
       let x = treeModel.getNodeById(nodeId);
       changedNode.push(x.data);
@@ -74,7 +102,7 @@ export class TreeStructureService {
     return changedNode;
   }
 
-  private updateCildrenIndex(children: Array<INodeDto>, fromIndex: number, listUpdatedElement: Array<string>, treeModel: TreeModel): void {
+  private updateCildrenIndex(children: Array<IVisualNodeData>, fromIndex: number, listUpdatedElement: Array<string>, treeModel: TreeModel): void {
     for (let index = fromIndex; index < children.length; index++) {
       const child = children[index];
       let childIndex = treeModel.getNodeById(child._id).index;

@@ -19,6 +19,7 @@ export class TreeStructureComponent implements OnInit {
   private saveNewNodeData: { parent, newNode } = null;
   //for editing visual tree
   public editValue: string;
+  private editedNode: any = null;
   // array of tree nodes
   public nodes = [];
 
@@ -32,8 +33,8 @@ export class TreeStructureComponent implements OnInit {
   };
 
   //user start add new node
-  public startAdd = (node: ITreeNode) => {
-    this.cancelNewItemIfItNead();
+  public startAdd = (parentNodeForAdding: ITreeNode) => {
+    this.cancelEditing();
     let newNode = {
       name: '',
       isEditing: true,
@@ -42,29 +43,32 @@ export class TreeStructureComponent implements OnInit {
       node_type: "Project",
     };
 
-    this.saveNewNodeData = { parent: node.data, newNode: newNode };
+    this.saveNewNodeData = { parent: parentNodeForAdding.data, newNode: newNode };
     this.editValue = "";
-    node.data.children.push(<any>newNode);
+    parentNodeForAdding.data.children.push(<any>newNode);
     this.tree.treeModel.update();
+
     //set focus on the create element
-    if (node.isCollapsed) {
-      node.toggleExpanded();
+    // fix  issue with tre if parent node don't have children then don;t expand Node
+    parentNodeForAdding = this.tree.treeModel.getNodeById(parentNodeForAdding.data._id);
+    if (parentNodeForAdding.isCollapsed) {
+      parentNodeForAdding.toggleExpanded();
+      this.tree.treeModel.update();
     }
-    // the setTimeout I need for give  a time for DOM to expanded parent node
-    setTimeout(() => {
-      let newNodeM = this.tree.treeModel.getNodeById(newNode._id);
-      newNodeM.data.beforeUpdateData = {
-        index: newNodeM.index,
-        parentId: newNodeM.parent.data._id
-      };
-      this.tree.treeModel.setFocusedNode(newNodeM);
-    }, 111);
+    let newNodeM = this.tree.treeModel.getNodeById(newNode._id);
+    newNodeM.data.beforeUpdateData = {
+      index: newNodeM.index,
+      parentId: newNodeM.parent.data._id
+    };
+    this.tree.treeModel.setFocusedNode(newNodeM);
+
   }
 
   //user start edit node
   public startEditing = (node) => {
     //prevent situation when user start edit this node before cancel privious node
-    this.cancelNewItemIfItNead();
+    this.cancelEditing();
+    this.editedNode = node;
     node.data.isEditing = true;
     this.editValue = node.data.name;
   }
@@ -81,12 +85,13 @@ export class TreeStructureComponent implements OnInit {
     else
       this.treeStructureHttpService.updateNode(dto);
     this.saveNewNodeData = null;
+    this.editedNode = null;
   }
 
   //delete node
   public removeNode = (node) => {
     //prevent situation when user start remove this node before cancel privious node
-    this.cancelNewItemIfItNead();
+    this.cancelEditing();
     this.treeStructureHttpService.deleteNode(node.data._id);
     _.remove(node.parent.data.children, (n: IVisualNodeData) => {
       return node.data._id === n._id;
@@ -95,7 +100,7 @@ export class TreeStructureComponent implements OnInit {
   }
 
   //prevent situation when user start edit this node before cancel privious node
-  public cancelNewItemIfItNead = () => {
+  public cancelEditing = () => {
     if (this.saveNewNodeData) {
       _.remove(this.saveNewNodeData.parent.children, (n: any) => {
         return this.saveNewNodeData.newNode._id === n._id;
@@ -103,13 +108,17 @@ export class TreeStructureComponent implements OnInit {
       this.saveNewNodeData = null;
       this.tree.treeModel.update();
     }
+
+    if (this.editedNode) {
+      //set flag of visual editing tree to false
+      this.editedNode.data.isEditing = false;
+      this.editedNode = null;
+    }
   }
 
   //cancel editing node
   public cancelNode = (node) => {
-    this.cancelNewItemIfItNead();
-    //set flag of visual editing tree to false
-    node.data.isEditing = false;
+    this.cancelEditing();
     this.tree.treeModel.update();
   }
 

@@ -90,7 +90,7 @@ export class TreeStructureComponent implements OnInit {
     this.editedNode = null;
   }
 
-  //delete node
+  // delete node
   public removeNode = (node) => {
     // prevent situation when user start remove this node before cancel previous node
     this.cancelEditing();
@@ -98,8 +98,7 @@ export class TreeStructureComponent implements OnInit {
     _.remove(node.parent.data.children, (n: IVisualNodeData) => {
       return node.data._id === n._id;
     });
-    this.tree.treeModel.
-    ();
+    this.tree.treeModel.update();
   }
 
   // prevent situation when user start edit this node before cancel previous node

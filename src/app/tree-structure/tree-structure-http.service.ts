@@ -45,9 +45,9 @@ export class TreeStructureHttpService {
     return this.http.put(this.teamsTreeUrl + teamId + "/", nodeList, this.httpOptions).subscribe();
   }
 
-  public addNode(node: INodeDto): any {
+  public addNode(node: INodeDto): Observable<INodeDto> {
     console.log("addNode ", node);
-    return this.http.post(this.projectUrl + 'add/', node, this.httpOptions).subscribe();
+    return this.http.post<INodeDto>(this.projectUrl + 'add/', node, this.httpOptions);
   }
 
   public getTree(teamId: string): Observable<INodeDto[]> {

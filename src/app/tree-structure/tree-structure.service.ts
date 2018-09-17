@@ -4,11 +4,27 @@ import { ITreeNode } from '../../../node_modules/angular-tree-component/dist/def
 import { TreeModel } from '../../../node_modules/angular-tree-component';
 import * as _ from "lodash";
 import { nodeChildrenAsMap } from '../../../node_modules/@angular/router/src/utils/tree';
+import { TreeStructureHttpService } from './tree-structure-http.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TreeStructureService {
+  constructor(private treeStructureHttpService: TreeStructureHttpService) { }
+
+  public saveNewNode(visualNode: IVisualNodeData, tree: TreeModel): any {
+    let dto = this.converVisualNodeToDto(visualNode, false);
+    delete dto._id;
+    this.treeStructureHttpService.addNode(dto).subscribe((res => {
+      let node = tree.getNodeById(visualNode._id);
+      node.data._id = res._id;
+    }));
+  }
+
+  public updateNode(node: IVisualNodeData): any {
+    let dto = this.converVisualNodeToDto(node, false);
+    this.treeStructureHttpService.updateNode(dto);
+  }
 
   public converVisualNodeToDtoList(visulaNodeList: IVisualNodeData[], withChildren: boolean): INodeDto[] {
     let dtoList = [];
@@ -130,5 +146,4 @@ export class TreeStructureService {
     });
   }
 
-  constructor() { }
 }

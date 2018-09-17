@@ -38,13 +38,16 @@ export class TreeStructureComponent implements OnInit {
     let newNode = {
       name: '',
       isEditing: true,
-      // _id: TreeStructureService.newGuid(),
+      //tempory node it will be replaced after post request to server 
+      _id: TreeStructureService.newGuid(),
       index: -1,
       node_type: 'Project',
     };
 
     this.saveNewNodeData = { parent: parentNodeForAdding.data, newNode: newNode };
     this.editValue = '';
+    if(!parentNodeForAdding.data.children)
+      parentNodeForAdding.data.children=[];
     parentNodeForAdding.data.children.push(<any>newNode);
     this.tree.treeModel.update();
 
@@ -79,12 +82,11 @@ export class TreeStructureComponent implements OnInit {
     node.data.isEditing = false;
     this.treeStructureService.updateDataFields(node);
     this.tree.treeModel.update();
-    let dto = this.treeStructureService.converVisualNodeToDto(node.data, false);
     if (this.saveNewNodeData) {
-      this.treeStructureHttpService.addNode(dto);
+      this.treeStructureService.saveNewNode(node.data,this.tree.treeModel);
     }
     else {
-      this.treeStructureHttpService.updateNode(dto);
+      this.treeStructureService.updateNode(node.data);
     }
     this.saveNewNodeData = null;
     this.editedNode = null;

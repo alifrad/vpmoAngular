@@ -15,15 +15,15 @@ import { timeout } from '../../../node_modules/rxjs/operators';
 export class TreeStructureComponent implements OnInit {
   @ViewChild(TreeComponent)
   private tree: TreeComponent;
-  //user the object for cancel or save created node
+  // user the object for cancel or save created node
   private saveNewNodeData: { parent, newNode } = null;
-  //for editing visual tree
+  // for editing visual tree
   public editValue: string;
   private editedNode: any = null;
   // array of tree nodes
   public nodes = [];
 
-  //set options for tree
+  // set options for tree
   public options: ITreeOptions = {
     idField: '_id',
     displayField: 'name',
@@ -66,7 +66,7 @@ export class TreeStructureComponent implements OnInit {
 
   // user start edit node
   public startEditing = (node) => {
-    //prevent situation when user start edit this node before cancel privious node
+    // prevent situation when user start edit this node before cancel previous node
     this.cancelEditing();
     this.editedNode = node;
     node.data.isEditing = true;
@@ -92,16 +92,17 @@ export class TreeStructureComponent implements OnInit {
 
   //delete node
   public removeNode = (node) => {
-    //prevent situation when user start remove this node before cancel privious node
+    // prevent situation when user start remove this node before cancel previous node
     this.cancelEditing();
     this.treeStructureHttpService.deleteNode(node.data._id);
     _.remove(node.parent.data.children, (n: IVisualNodeData) => {
       return node.data._id === n._id;
     });
-    this.tree.treeModel.update();
+    this.tree.treeModel.
+    ();
   }
 
-  //prevent situation when user start edit this node before cancel privious node
+  // prevent situation when user start edit this node before cancel previous node
   public cancelEditing = () => {
     if (this.saveNewNodeData) {
       _.remove(this.saveNewNodeData.parent.children, (n: any) => {
@@ -112,13 +113,13 @@ export class TreeStructureComponent implements OnInit {
     }
 
     if (this.editedNode) {
-      //set flag of visual editing tree to false
+      // set flag of visual editing tree to false
       this.editedNode.data.isEditing = false;
       this.editedNode = null;
     }
   }
 
-  //cancel editing node
+  // cancel editing node
   public cancelNode = (node) => {
     this.cancelEditing();
     this.tree.treeModel.update();
@@ -138,7 +139,7 @@ export class TreeStructureComponent implements OnInit {
       .subscribe(
         (data) => {
           this.nodes = this.treeStructureService.preUploadData(data);
-          //need time in order create dom for tree
+          // need time in order create dom for tree
           setTimeout(() => {
             this.tree.treeModel.expandAll();
           }, 111);

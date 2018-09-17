@@ -73,7 +73,7 @@ export class TreeStructureService {
   }
 
   public updateModel = (node: ITreeNode, treeModel: TreeModel): IVisualNodeData[] => {
-    //change parent
+    // change parent
     //  index of children in preview parent (under moved element)
     //  index of children in new parent (under moved element)
     //  change PATH  MOVED element
@@ -122,7 +122,7 @@ export class TreeStructureService {
     });
   }
 
-  
+
   public static newGuid() {
     return 'xxxxxxxxxxxxxxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
       var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);

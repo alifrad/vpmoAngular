@@ -32,24 +32,24 @@ export class TreeStructureComponent implements OnInit {
     allowDrag: true,
   };
 
-  //user start add new node
+  // user start add new node
   public startAdd = (parentNodeForAdding: ITreeNode) => {
     this.cancelEditing();
     let newNode = {
       name: '',
       isEditing: true,
-      _id: TreeStructureService.newGuid(),
+      // _id: TreeStructureService.newGuid(),
       index: -1,
-      node_type: "Project",
+      node_type: 'Project',
     };
 
     this.saveNewNodeData = { parent: parentNodeForAdding.data, newNode: newNode };
-    this.editValue = "";
+    this.editValue = '';
     parentNodeForAdding.data.children.push(<any>newNode);
     this.tree.treeModel.update();
 
-    //set focus on the create element
-    // fix  issue with tre if parent node don't have children then don;t expand Node
+    // set focus on the create element
+    // fix  issue with tree if parent node doesn't have children then don't expand Node
     parentNodeForAdding = this.tree.treeModel.getNodeById(parentNodeForAdding.data._id);
     if (parentNodeForAdding.isCollapsed) {
       parentNodeForAdding.toggleExpanded();
@@ -64,7 +64,7 @@ export class TreeStructureComponent implements OnInit {
 
   }
 
-  //user start edit node
+  // user start edit node
   public startEditing = (node) => {
     //prevent situation when user start edit this node before cancel privious node
     this.cancelEditing();
@@ -73,17 +73,19 @@ export class TreeStructureComponent implements OnInit {
     this.editValue = node.data.name;
   }
 
-  //save new or edited node
+  // save new or edited node
   public saveNode = (node) => {
     node.data.name = this.editValue;
     node.data.isEditing = false;
     this.treeStructureService.updateDataFields(node);
     this.tree.treeModel.update();
     let dto = this.treeStructureService.converVisualNodeToDto(node.data, false);
-    if (this.saveNewNodeData)
+    if (this.saveNewNodeData) {
       this.treeStructureHttpService.addNode(dto);
-    else
+    }
+    else {
       this.treeStructureHttpService.updateNode(dto);
+    }
     this.saveNewNodeData = null;
     this.editedNode = null;
   }

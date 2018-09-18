@@ -30,6 +30,9 @@ export class TreeStructureComponent implements OnInit {
     childrenField: 'children',
     //
     allowDrag: true,
+    allowDrop: (element, to: { parent: ITreeNode, index }): boolean => {
+      return (!to.parent.isRoot);
+    },
   };
 
   // user start add new node
@@ -46,8 +49,8 @@ export class TreeStructureComponent implements OnInit {
 
     this.saveNewNodeData = { parent: parentNodeForAdding.data, newNode: newNode };
     this.editValue = '';
-    if(!parentNodeForAdding.data.children)
-      parentNodeForAdding.data.children=[];
+    if (!parentNodeForAdding.data.children)
+      parentNodeForAdding.data.children = [];
     parentNodeForAdding.data.children.push(<any>newNode);
     this.tree.treeModel.update();
 
@@ -83,7 +86,7 @@ export class TreeStructureComponent implements OnInit {
     this.treeStructureService.updateDataFields(node);
     this.tree.treeModel.update();
     if (this.saveNewNodeData) {
-      this.treeStructureService.saveNewNode(node.data,this.tree.treeModel);
+      this.treeStructureService.saveNewNode(node.data, this.tree.treeModel);
     }
     else {
       this.treeStructureService.updateNode(node.data);

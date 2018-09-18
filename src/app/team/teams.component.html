@@ -6,3 +6,14 @@
     </tr>
   </table>
 </div>
+<mat-nav-list>
+        <mat-list-item *ngFor='let team of teams'> 
+          <p matLine>
+            <span> {{team.name}}  </span>
+            <button mat-icon-button (click)="teamTree(team._id)">
+                <mat-icon>team</mat-icon>
+            </button>
+          </p>
+        </mat-list-item>
+</mat-nav-list>
+

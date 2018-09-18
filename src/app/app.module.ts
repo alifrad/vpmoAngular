@@ -88,7 +88,7 @@ export function tokenGetter() {
         FuseSharedModule,
         FuseMainModule,
         FuseSampleModule,
-        
+        TeamModule,
         UserModule,
         ProjectModule,
         // ReactiveFormsModule,

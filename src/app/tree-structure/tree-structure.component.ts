@@ -31,7 +31,7 @@ export class TreeStructureComponent implements OnInit {
     //
     allowDrag: true,
     allowDrop: (element, to: { parent: ITreeNode, index }): boolean => {
-      return (!to.parent.isRoot);
+      return !to.parent.data.virtual;
     },
   };
 

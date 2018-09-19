@@ -1,17 +1,17 @@
 export const navigation = [
     {
-        'id'      : 'ORGANISATIONS',
-        'title'   : 'ORGANISATIONS',
+        'id'      : 'TEAM',
+        'title'   : 'TEAM',
         // 'translate': 'NAV.ORGANISATIONS',
         'type'    : 'group',
         'children': [
             {
-                'id'   : 'sample',
-                'title': 'ABC Corp.',
+                'id'   : 'TeamTree',
+                'title': 'Team Tree (see projects)',
                 'translate': 'NAV.SAMPLE.TITLE',
                 'type' : 'item',
                 'icon' : 'business_center',
-                'url'  : '/sample',
+                'url'  : '/tree',
                 'badge': {
                     'title': 25,
                     'translate': 'NAV.SAMPLE.BADGE',
@@ -20,25 +20,25 @@ export const navigation = [
                 }
             },
             {
-                'id'   : 'AddOrganisation',
-                'title': 'Create Organisation',
+                'id'   : 'TeamMembers',
+                'title': 'People',
                 // 'translate': 'NAV.AddOrganisation.TITLE',
                 'type' : 'item',
                 'icon' : 'add_box',
-                'url'  : '/orgs/add',
+                'url'  : '/team/members/',
             },
             {
-                'id'   : 'MyOrganisations',
-                'title': 'My Organisations',
+                'id'   : 'MyTeams',
+                'title': 'My Teams',
                 // 'translate': 'NAV.AddOrganisation.TITLE',
                 'type' : 'item',
                 'icon' : 'list',
-                'url'  : '/orgs/all',
+                'url'  : '/team/all/',
             }
         ]
     },
     {
-        'id'      : 'PROJECTS',
+        'id'      : 'PROJECT',
         'title'   : 'PROJECTS',
         // 'translate': 'NAV.ORGANISATIONS',
         'type'    : 'group',

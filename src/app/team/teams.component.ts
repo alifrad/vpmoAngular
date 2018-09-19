@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthenticationService } from 'app/_services/authentication.service';
 import { TeamService } from './team.service';
 import { Team } from './team';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-teams',
@@ -15,14 +16,21 @@ export class TeamsComponent implements OnInit {
   constructor(
       private authenticationService: AuthenticationService,
       private teamService: TeamService,
-  ) 
-  { 
-    
+      private router: Router
+  ) { }
+
+  teamTree(id: string) {
+    localStorage.setItem('team', id);
+    this.router.navigate(['/tree']);
   }
+
 
   ngOnInit() {
     this.teamService.getTeams().subscribe(
-      teams =>  this.teams = teams ,
+      teams =>  
+      {
+        this.teams = teams;
+      },
       error => this.errorMessage = <any>error
     );
   }

@@ -24,9 +24,16 @@ export class TeamService {
   ) {
 
   }
-
+  
+  getCurrentTeam(): Observable<any> {
+    if (!localStorage.getItem('currentUser')) {
+        console.log('user has not logged in!');
+    } else {
+        return Observable.of(localStorage.getItem('team'));
+    }
+}
  
-  getTeams() {
+  getTeams(): Observable<Team[]> {
     return this.http.get<Team[]>(appConfig.apiUrl + `/filtered_organisations/`);
   }
 

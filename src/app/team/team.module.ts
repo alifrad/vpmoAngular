@@ -3,10 +3,18 @@ import { AppModule } from '../app.module';
 import { TeamsComponent } from './teams.component';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
+import { AuthGuard } from '../_guards/auth.guard';
+import {
+    MatButtonModule,
+    MatCardModule,
+    MatListModule,
+    MatIconModule,
+  } from '@angular/material';
 
 const TeamRoutes: Routes = [
     {
         path: 'team',
+        canActivate: [ AuthGuard ],
         // component: UserComponent,
         children: [
             // { path: 'tree', component: SignUpComponent },
@@ -19,7 +27,10 @@ const TeamRoutes: Routes = [
     imports: [
         CommonModule,
         RouterModule.forChild(TeamRoutes),
-        
+        MatButtonModule,
+        MatCardModule,
+        MatListModule,
+        MatIconModule,
     ],
     exports: [
         TeamsComponent,
@@ -38,3 +49,4 @@ const TeamRoutes: Routes = [
 })
 
 export class TeamModule {}
+

@@ -28,6 +28,7 @@ import { AppRoutingModule } from './shared/app.routing';
 import { MessageService } from './shared/message.service';
 import { AlertComponent } from './_directives/alert.component';
 import { AlertService } from './_services/alert.service';
+import { AuthGuard } from './_guards/auth.guard';
 import { AuthenticationService } from './_services/authentication.service';
 import { HttpCacheService } from './_services/http-cache.service';
 import { CacheInterceptor } from './_services/cache.interceptor';
@@ -35,15 +36,45 @@ import { appConfig } from './app.config';
 import { JwtInterceptor } from './_helpers/jwt.interceptor';
 
 import { ReactiveFormsModule } from '@angular/forms';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatChipsModule } from '@angular/material/chips';
-import { MatDatepickerModule } from '@angular/material/datepicker';
 import { TeamModule } from './team/team.module';
 import { TreeStructureModule } from './tree-structure/tree-structure.module';
-
+import {
+    MatAutocompleteModule,
+    MatBadgeModule,
+    MatBottomSheetModule,
+    MatButtonModule,
+    MatButtonToggleModule,
+    MatCardModule,
+    MatCheckboxModule,
+    MatChipsModule,
+    MatDatepickerModule,
+    MatDialogModule,
+    MatDividerModule,
+    MatExpansionModule,
+    MatGridListModule,
+    MatIconModule,
+    MatInputModule,
+    MatListModule,
+    MatMenuModule,
+    MatNativeDateModule,
+    MatPaginatorModule,
+    MatProgressBarModule,
+    MatProgressSpinnerModule,
+    MatRadioModule,
+    MatRippleModule,
+    MatSelectModule,
+    MatSidenavModule,
+    MatSliderModule,
+    MatSlideToggleModule,
+    MatSnackBarModule,
+    MatSortModule,
+    MatStepperModule,
+    MatTableModule,
+    MatTabsModule,
+    MatToolbarModule,
+    MatTooltipModule,
+    MatTreeModule,
+  } from '@angular/material';
 
 const appRoutes: Routes = [
     {
@@ -91,13 +122,6 @@ export function tokenGetter() {
         TeamModule,
         UserModule,
         ProjectModule,
-        // ReactiveFormsModule,
-        // MatInputModule,
-        // MatSelectModule,
-        // MatButtonModule,
-        // MatCheckboxModule,
-        // MatChipsModule,
-        // MatDatepickerModule,
 
         TreeStructureModule,
 
@@ -117,13 +141,17 @@ export function tokenGetter() {
     // The subset of declarations that should be visible and 
     // usable in the component templatesof other NgModules
     exports: [
-        
+        MatButtonModule,
+        MatCardModule,
+        MatListModule,
+        MatIconModule,
     ],
     // Creators of services that this NgModule contributes to the global
     // collection of services; they become accessible in all parts of the app
     providers: [
         MessageService,
         AuthenticationService,
+        AuthGuard,
         AlertService,
         HttpCacheService,
         { provide: ErrorHandler, useFactory: errorHandlerFactory },

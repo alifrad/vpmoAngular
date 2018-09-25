@@ -9,7 +9,7 @@ import { FormsModule } from '@angular/forms';
 
 const routes = [
   {
-    path: 'tree',
+    path: 'team/tree',
     component: TreeStructureComponent
   }
 ];

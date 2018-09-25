@@ -15,6 +15,8 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 
 export class AuthenticationService {
     tempUser: any;
+    redirectUrl: string;
+
     private user = new BehaviorSubject<any>('');
     // currentUser = this.user.asObservable();
     // private loggedIn = new BehaviorSubject<boolean>(false);
@@ -26,14 +28,19 @@ export class AuthenticationService {
                 ) 
                 { }
 
-    get isLoggedIn(): Observable<boolean> {
-        if (!localStorage.getItem('currentUser')) {
-            return Observable.of(false);
-        } else {
-            return Observable.of(true);
-        }
 
-        // return this.loggedIn.asObservable(); // {2}
+    isLoggedIn(): Observable<boolean> {
+        const token = this.getToken();
+        return this.http.post<any>(appConfig.apiAuthUrl + '/token-verify/', { token: token })
+            .pipe(map(res => {
+                if (res.token) {
+                    console.log('user token is verified');
+                    return true;
+                } else {
+                    console.log('user token is not valid');
+                    return false;
+                }
+            }));
     }
 
     getUserName(): Observable<any> {
@@ -56,19 +63,34 @@ export class AuthenticationService {
     }
 
     getToken(): string {
-        this.tempUser = JSON.parse(localStorage.getItem('currentUser'));
+        try{
+            this.tempUser = JSON.parse(localStorage.getItem('currentUser'));
+        }
+        catch (err) {
+            console.log('Error: ' + err);
+            this.logout();
+            return ('Error: ' + err);
+        }
+        console.log('token: ' +  this.tempUser.token);
         return this.tempUser.token;
     }
 
 
-    isAuthenticated(): boolean {
+    isAuthenticated() {
         // get the token
         const token = this.getToken();
-        // return a boolean reflecting 
-        // whether or not the token is expired
-        // true or false
-        // return !this.jwtHelper.isTokenExpired();
-        return true;
+        
+        return this.http.post<any>(appConfig.apiAuthUrl + '/token-verify/', { token: token })
+            .pipe(map(res => {
+                if (res && res.token) {
+                    console.log('user is authenticated');
+                    return true;
+                } else {
+                    console.log('user is NOT authenticated');
+                    return false;
+                }
+            }
+        ));
     }
 
 

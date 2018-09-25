@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/catch';
@@ -8,16 +8,26 @@ import { appConfig } from '../app.config';
 
 import { IProject } from './project';
 import { HttpErrorResponse } from '@angular/common/http/src/response';
+import { AuthenticationService } from '../_services';
 
 @Injectable()
 export class ProjectService {
-  private _projectUrl = 'http://127.0.0.1:8000/vpmoapp/projects';
 
-  constructor(private http: HttpClient) { }
+  // url for crud operation of teamTree
+  private readonly projectsUrl: string = `${appConfig.apiUrl}/projects/`;
+  private httpOptions = {
+    // for auntification
+    headers: new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': 'JWT ' + this.authUser.getToken
+    })
+  };
+
+  constructor(private http: HttpClient, private authUser: AuthenticationService) { }
 
   getProjects(): Observable<IProject[]> {
-    return this.http.get<IProject[]>(this._projectUrl)
-        .do(data => console.log('All: ' + JSON.stringify(data)))
+    return this.http.get<IProject[]>(this.projectsUrl , this.httpOptions)
+        // .do(data => console.log('All Projects: ' + JSON.stringify(data)))
         .catch(this.handleError);
   }
 
@@ -27,6 +37,6 @@ export class ProjectService {
   }
 
   create(project: IProject) {
-    return this.http.post(appConfig.apiUrl + '/projects/add', project);
+    return this.http.post(this.projectsUrl + '/add', project);
   }
 }

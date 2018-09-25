@@ -55,7 +55,7 @@ const UserRoutes: Routes = [
     providers: [
         UserService,
         AuthenticationService,
-        // AuthGuard,
+        AuthGuard,
     ],
     schemas: [
         CUSTOM_ELEMENTS_SCHEMA,

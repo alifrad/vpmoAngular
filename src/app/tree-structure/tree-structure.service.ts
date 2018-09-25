@@ -51,7 +51,7 @@ export class TreeStructureService {
     return dto;
   }
 
-  //prepare data in order to use in tree
+  // prepare data in order to use in tree
   public preUploadData(data: any): any {
     this.addBeforeUpdateData(data, null);
     let newData = [data];
@@ -62,7 +62,7 @@ export class TreeStructureService {
     node.beforeUpdateData = {
       index: node.index,
       parentId: parentId,
-    }
+    };
     for (const childNode of node.children) {
       this.addBeforeUpdateData(childNode, node._id);
     }

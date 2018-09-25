@@ -8,15 +8,19 @@ import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 import { ProjectAddComponent } from './project-add.component';
 import { ProjectService } from './project.service';
 import { ProjectComponent } from './project.component';
-import { MatDatepickerModule, MatNativeDateModule, MatFormFieldModule, MatIconModule, MatInputModule } from '@angular/material';
+import { MatDatepickerModule, MatNativeDateModule, MatFormFieldModule, MatIconModule, MatInputModule, MatButtonModule, MatCardModule, MatListModule } from '@angular/material';
+import { AuthGuard } from '../_guards/auth.guard';
+import { ProjectListComponent } from './project-list.component';
 // import { MzButtonModule, MzInputModule, MzDatepickerModule } from 'ng2-materialize';
 
 const ProjectRoutes: Routes = [
   {
-      // path: 'project',
+      path: 'projects',
+      canActivate: [ AuthGuard ],
       // component: ProjectComponent,
       children: [
           { path: 'add', component: ProjectAddComponent },
+          { path: '', component: ProjectListComponent },
       ]
   },
 ];
@@ -26,19 +30,22 @@ const ProjectRoutes: Routes = [
   imports: [
     CommonModule,
     FormsModule,
-    RouterModule.forChild([
-      { path: 'Projectadd', component: ProjectAddComponent },
-    ]),
+    RouterModule.forChild(ProjectRoutes),
     HttpClientModule,
     MatDatepickerModule,
     MatNativeDateModule,
     MatIconModule,
     MatFormFieldModule,
     MatInputModule,
+    MatButtonModule,
+    MatCardModule,
+    MatListModule,
+    MatIconModule,
   ],
   declarations: [
     ProjectComponent,
     ProjectAddComponent,
+    ProjectListComponent,
   ],
   providers: [
     ProjectService,

@@ -13,6 +13,8 @@ import { timeout } from '../../../node_modules/rxjs/operators';
   styleUrls: ['./tree-structure.component.scss']
 })
 export class TreeStructureComponent implements OnInit {
+  treeRoot: any;
+  treeType: any;
   @ViewChild(TreeComponent)
   private tree: TreeComponent;
   // user the object for cancel or save created node
@@ -38,10 +40,10 @@ export class TreeStructureComponent implements OnInit {
   // user start add new node
   public startAdd = (parentNodeForAdding: ITreeNode) => {
     this.cancelEditing();
-    let newNode = {
+    const newNode = {
       name: '',
       isEditing: true,
-      //tempory node it will be replaced after post request to server 
+      // tempory node it will be replaced after post request to server 
       _id: TreeStructureService.newGuid(),
       index: -1,
       node_type: 'Project',
@@ -49,8 +51,9 @@ export class TreeStructureComponent implements OnInit {
 
     this.saveNewNodeData = { parent: parentNodeForAdding.data, newNode: newNode };
     this.editValue = '';
-    if (!parentNodeForAdding.data.children)
+    if (!parentNodeForAdding.data.children) {
       parentNodeForAdding.data.children = [];
+    }
     parentNodeForAdding.data.children.push(<any>newNode);
     this.tree.treeModel.update();
 
@@ -61,6 +64,7 @@ export class TreeStructureComponent implements OnInit {
       parentNodeForAdding.toggleExpanded();
       this.tree.treeModel.update();
     }
+    // tslint:disable-next-line:prefer-const
     let newNodeM = this.tree.treeModel.getNodeById(newNode._id);
     newNodeM.data.beforeUpdateData = {
       index: newNodeM.index,
@@ -131,15 +135,84 @@ export class TreeStructureComponent implements OnInit {
 
   constructor(private treeStructureService: TreeStructureService, private treeStructureHttpService: TreeStructureHttpService) { }
 
+  // IMPORTANT update is needed
   public onMoveNode($event) {
-    let movedNode: ITreeNode = this.tree.treeModel.getNodeById($event.node._id);
-    let updatedList: IVisualNodeData[] = this.treeStructureService.updateModel(movedNode, this.tree.treeModel);
-    let updatedListDto = this.treeStructureService.converVisualNodeToDtoList(updatedList, false);
-    this.treeStructureHttpService.updateNodeList(updatedListDto, '5b8c464900f0fa25849696bc');
+    const movedNode: ITreeNode = this.tree.treeModel.getNodeById($event.node._id);
+    const updatedList: IVisualNodeData[] = this.treeStructureService.updateModel(movedNode, this.tree.treeModel);
+    const updatedListDto = this.treeStructureService.converVisualNodeToDtoList(updatedList, false);
+    // this line should change to accomodate the changes to structure when the top node is a project
+    this.treeStructureHttpService.updateNodeList(updatedListDto, this.getTeam());
   }
 
+
+  getTeam(): string {
+    try{
+        this.treeRoot = (localStorage.getItem('team'));
+    }
+    catch (err) {
+        console.log('Error: ' + err);
+        return ('Error: ' + err);
+    }
+    console.log('team: ' +  this.treeRoot);
+    return this.treeRoot;
+  }
+
+
+  getTopNode(): string {
+    if (this.getTreeType() === 'Team'){
+      try{
+        this.treeRoot = (localStorage.getItem('team'));
+      }
+      catch (err) {
+          console.log('Error: ' + err);
+          return ('Error: ' + err);
+      }
+      console.log('team: ' +  this.treeRoot);
+      return this.treeRoot;
+    } else if (this.getTreeType() === 'Project'){
+      try{
+        this.treeRoot = (localStorage.getItem('project'));
+      }
+      catch (err) {
+          console.log('Error: ' + err);
+          return ('Error: ' + err);
+      }
+      console.log('project: ' +  this.treeRoot);
+      return this.treeRoot;
+    } 
+
+  }
+
+  getTreeType(): string {
+    try{
+        this.treeType = (localStorage.getItem('treeType'));
+    }
+    catch (err) {
+        console.log('Error: ' + err);
+        return ('Error: ' + err);
+    }
+    return this.treeType;
+  }
+
+  public viewDetail = (node) => {
+    const nodeType = node.data.node_type;
+    const nodeId = node.data._id;
+
+    if (nodeType === 'Team'){
+
+    } else if (nodeType === 'Project') {
+      localStorage.setItem('project', nodeId);
+      localStorage.setItem('treeType', nodeType);
+      this.ngOnInit();
+    } else {
+      localStorage.setItem('topic', nodeId);
+    }
+
+  }
+
+
   public ngOnInit() {
-    this.treeStructureHttpService.getTree('5b8c464900f0fa25849696bc')
+    this.treeStructureHttpService.getTree(this.getTreeType(), this.getTopNode())
       .subscribe(
         (data) => {
           this.nodes = this.treeStructureService.preUploadData(data);

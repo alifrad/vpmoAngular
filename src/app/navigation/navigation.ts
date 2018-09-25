@@ -11,7 +11,7 @@ export const navigation = [
                 'translate': 'NAV.SAMPLE.TITLE',
                 'type' : 'item',
                 'icon' : 'business_center',
-                'url'  : '/tree',
+                'url'  : '/team/tree',
                 'badge': {
                     'title': 25,
                     'translate': 'NAV.SAMPLE.BADGE',
@@ -65,7 +65,7 @@ export const navigation = [
                 // 'translate': 'NAV.AddOrganisation.TITLE',
                 'type' : 'item',
                 'icon' : 'view_module',
-                'url'  : '/projects/all',
+                'url'  : '/projects/',
             }
         ]
     }

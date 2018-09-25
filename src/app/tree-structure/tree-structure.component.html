@@ -1,7 +1,7 @@
 <tree-root [nodes]="nodes" [options]="options" (moveNode)="onMoveNode($event)">
   <ng-template #treeNodeTemplate let-node let-index="index">
     <div class="edit my-container" *ngIf="node.data.isEditing">
-      you are adding a new project
+      
       <input class="node-name-input" type="text" [(ngModel)]="editValue">
       <div class="buttons">
         <a (click)="saveNode(node)">
@@ -13,13 +13,19 @@
       </div>
     </div>
     <div class="my-container" *ngIf="!node.data.isEditing">
-      <div class="node-name">{{ node.data.name }}</div>
+      <img *ngIf="node.data.node_type=='Team'" src="../../assets/icons/Team-T-Icon.svg" height="15" width="15"/>
+      <img *ngIf="node.data.node_type=='Project'" src="../../assets/icons/Project-P-Icon.png" height="15" width="15"/>
+      
+      <div class="node-name ml-4 pl-4">{{ node.data.name }}</div>
       <div class="buttons">
         <a class="button-green" (click)="startAdd(node)">
           <i class="material-icons"> add </i>
         </a>
         <a class="button-blue" (click)="startEditing(node)">
           <i class="material-icons"> edit </i>
+        </a>
+        <a class="button-blue" (click)="viewDetail(node)">
+          <i class="material-icons"> play_arrow </i>
         </a>
         <!-- <a class="button-red" (click)="removeNode(node)">
           <i class="material-icons"> clear </i>

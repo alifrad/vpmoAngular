@@ -36,3 +36,22 @@ jobs:
       # run tests!
       - run: yarn ng build --prod
       - run: yarn ng test --single-run
+  deploy:
+    docker:
+      - image: buildpack-deps:trusty
+      - checkout
+      - run:
+          name: Deploy Master to Heroku
+          command: |
+            git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$gingercomms.git master
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - build
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master

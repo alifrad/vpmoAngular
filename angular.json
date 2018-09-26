@@ -131,5 +131,9 @@
             }
         }
     },
-    "defaultProject": "fuse"
+    "defaultProject": "fuse",
+    "environments": {
+        "dev": "path/to/dev/env",
+        "prod": "path/to/prod/env"
+    }
 }

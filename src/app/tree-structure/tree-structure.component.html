@@ -16,17 +16,17 @@
       <img *ngIf="node.data.node_type=='Team'" src="../../assets/icons/Team-T-Icon.svg" height="15" width="15"/>
       <img *ngIf="node.data.node_type=='Project'" src="../../assets/icons/Project-P-Icon.png" height="15" width="15"/>
       
-      <div class="node-name ml-4 pl-4">{{ node.data.name }}</div>
-      <div class="buttons">
-        <a class="button-green" (click)="startAdd(node)">
-          <i class="material-icons"> add </i>
-        </a>
-        <a class="button-blue" (click)="startEditing(node)">
-          <i class="material-icons"> edit </i>
-        </a>
-        <a class="button-blue" (click)="viewDetail(node)">
-          <i class="material-icons"> play_arrow </i>
-        </a>
+      <div class="node-name">{{ node.data.name }}</div>
+      <div>
+        <button mat-icon-button (click)="startAdd(node)">
+          <mat-icon> add </mat-icon>
+        </button>
+        <button mat-icon-button class="white-icon" (click)="startEditing(node)">
+          <mat-icon> edit </mat-icon>
+        </button>
+        <button mat-icon-button class="white-icon" (click)="viewDetail(node)">
+          <mat-icon> navigate_next </mat-icon>
+        </button>
         <!-- <a class="button-red" (click)="removeNode(node)">
           <i class="material-icons"> clear </i>
         </a> -->
@@ -34,4 +34,4 @@
     </div>
 
   </ng-template>
-</tree-root>'
+</tree-root>

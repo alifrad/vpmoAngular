@@ -6,6 +6,7 @@ import { TreeStructureService } from './tree-structure.service';
 import { TreeStructureHttpService } from './tree-structure-http.service';
 import { TreeModule } from 'angular-tree-component';
 import { FormsModule } from '@angular/forms';
+import { MatIconModule } from '@angular/material';
 
 const routes = [
   {
@@ -21,6 +22,7 @@ const routes = [
     RouterModule.forChild(routes),
     TreeModule,
     FormsModule,
+    MatIconModule,
   ],
   exports: [
     TreeStructureComponent,

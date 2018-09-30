@@ -15,6 +15,7 @@ export class ProjectService {
 
   // url for crud operation of teamTree
   private readonly projectsUrl: string = `${appConfig.apiUrl}/projects/`;
+  private readonly projectsUpdateUrl: string = `${appConfig.apiUrl}/update_project/`
   private httpOptions = {
     // for auntification
     headers: new HttpHeaders({
@@ -31,6 +32,12 @@ export class ProjectService {
         .catch(this.handleError);
   }
 
+  partialUpdateProject (projectId: string, projectContent: string): Observable<IProject[]> {
+
+    return this.http.patch<IProject[]>(this.projectsUpdateUrl+projectId+"/", {content: projectContent}, this.httpOptions)
+      .catch(this.handleError)
+  }
+
   private handleError(err: HttpErrorResponse) {
     console.log(err.message);
     return Observable.throw(err.message);
@@ -39,4 +46,5 @@ export class ProjectService {
   create(project: IProject) {
     return this.http.post(this.projectsUrl + '/add', project);
   }
+
 }

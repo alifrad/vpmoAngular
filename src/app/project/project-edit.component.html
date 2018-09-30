@@ -1,0 +1,6 @@
+<div>
+  <H1>Editting Project: {{ project.name }}</H1>
+  <button mat-button class="white-icon" (click)="saveContent()">Save</button>
+</div>
+
+<quill-editor [(ngModel)]="projectContent"></quill-editor>

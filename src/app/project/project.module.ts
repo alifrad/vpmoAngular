@@ -6,11 +6,13 @@ import { HttpClientModule } from '@angular/common/http';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 
 import { ProjectAddComponent } from './project-add.component';
+import { ProjectEditComponent } from './project-edit.component';
 import { ProjectService } from './project.service';
 import { ProjectComponent } from './project.component';
 import { MatDatepickerModule, MatNativeDateModule, MatFormFieldModule, MatIconModule, MatInputModule, MatButtonModule, MatCardModule, MatListModule } from '@angular/material';
 import { AuthGuard } from '../_guards/auth.guard';
 import { ProjectListComponent } from './project-list.component';
+import { QuillModule } from 'ngx-quill'
 // import { MzButtonModule, MzInputModule, MzDatepickerModule } from 'ng2-materialize';
 
 const ProjectRoutes: Routes = [
@@ -21,6 +23,7 @@ const ProjectRoutes: Routes = [
       children: [
           { path: 'add', component: ProjectAddComponent },
           { path: '', component: ProjectListComponent },
+          { path: 'edit', component: ProjectEditComponent }
       ]
   },
 ];
@@ -41,11 +44,13 @@ const ProjectRoutes: Routes = [
     MatCardModule,
     MatListModule,
     MatIconModule,
+    QuillModule
   ],
   declarations: [
     ProjectComponent,
     ProjectAddComponent,
     ProjectListComponent,
+    ProjectEditComponent
   ],
   providers: [
     ProjectService,

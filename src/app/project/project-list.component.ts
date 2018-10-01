@@ -35,8 +35,8 @@ export class ProjectListComponent implements OnInit {
   }
 
   editProject (project: any) {
-    localStorage.setItem('project', JSON.stringify(project))
-    this.router.navigate(['/projects/edit'])
+    localStorage.setItem('project', JSON.stringify(project));
+    this.router.navigate(['/projects/edit']);
   }
   
-  }
+}

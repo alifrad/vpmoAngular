@@ -21,10 +21,10 @@ export class ProjectEditComponent implements OnInit {
   projectContent: string;
 
   ngOnInit(): void {
-    this.project = JSON.parse(localStorage.getItem('project'))
+    this.project = JSON.parse(localStorage.getItem('project'));
     if (this.project.content !== null) {
-      this.projectContent = this.project.content
-      console.log("NOT NULL!", this.projectContent)
+      this.projectContent = this.project.content;
+      console.log('NOT NULL!', this.projectContent);
     }
   }
 
@@ -32,7 +32,7 @@ export class ProjectEditComponent implements OnInit {
     this._projectService.partialUpdateProject(this.project._id, this.projectContent)
       .subscribe(
         project => this.project = project 
-      )
+      );
   }
   
 }

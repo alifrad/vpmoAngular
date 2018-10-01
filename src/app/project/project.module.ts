@@ -12,7 +12,7 @@ import { ProjectComponent } from './project.component';
 import { MatDatepickerModule, MatNativeDateModule, MatFormFieldModule, MatIconModule, MatInputModule, MatButtonModule, MatCardModule, MatListModule } from '@angular/material';
 import { AuthGuard } from '../_guards/auth.guard';
 import { ProjectListComponent } from './project-list.component';
-import { QuillModule } from 'ngx-quill'
+import { QuillModule } from 'ngx-quill';
 // import { MzButtonModule, MzInputModule, MzDatepickerModule } from 'ng2-materialize';
 
 const ProjectRoutes: Routes = [

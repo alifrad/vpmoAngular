@@ -22,7 +22,8 @@ export class ProjectAddComponent implements OnInit {
     this.project = {
       id: null,
       name: '',
-      description: '',
+      description: '',  
+      content: '',
       start: null, // use formatSubmit format to set datepicker value
       owner: 0,
     };

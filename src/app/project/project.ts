@@ -4,6 +4,7 @@ export interface IProject {
     description: string;
     start: Date;
     owner: number;
+    content: string;
     // projectuser?: string;
     // comments[]: string;
 }

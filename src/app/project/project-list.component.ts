@@ -39,4 +39,8 @@ export class ProjectListComponent implements OnInit {
     this.router.navigate(['/projects/edit']);
   }
   
+  openChat (node: any) {
+    localStorage.setItem('node', node)
+    this.router.navigate(["/chat"])
+  }
 }

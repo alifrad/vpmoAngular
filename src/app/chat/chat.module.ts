@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { Injectable, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -9,6 +9,7 @@ import { MatDatepickerModule, MatNativeDateModule, MatFormFieldModule, MatIconMo
 // import { ChatRoomComponent } from "./chat-room.component"
 import { AuthGuard } from '../_guards/auth.guard';
 import { ChatComponent } from './chat.component';
+import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 
 const ChatRoutes: Routes = [
   {
@@ -16,6 +17,10 @@ const ChatRoutes: Routes = [
     component: ChatComponent
   }
 ];
+
+const config: SocketIoConfig = { url: '127.0.0.1:8000', options: {path: '/ws/chat/'+localStorage.getItem('node')+'/',
+  transports: ['websocket']} };
+
 
 @NgModule({
 
@@ -33,11 +38,13 @@ const ChatRoutes: Routes = [
     MatCardModule,
     MatListModule,
     MatIconModule,
+    SocketIoModule.forRoot(config)
   ],
   declarations: [
     ChatComponent,
   ],
   providers: [
   ],
+  bootstrap: [ChatComponent]
 })
 export class ChatModule { }

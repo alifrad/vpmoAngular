@@ -65,7 +65,9 @@
     "rxjs-compat": "6.1.0",
     "tinymce": "^4.8.3",
     "web-animations-js": "2.3.1",
-    "zone.js": "0.8.26"
+    "zone.js": "0.8.26",
+    "express":"*",
+    "body-parser":"*"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "0.6.0",

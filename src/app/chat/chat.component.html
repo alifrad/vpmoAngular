@@ -1,3 +1,13 @@
 <p>
   Chat
 </p>
+
+<div class="container-fluid">
+	<mat-list>
+		<mat-list-item *ngFor="let message of messages"> {{ message.content }}</mat-list-item>
+	</mat-list>
+
+	<mat-form-field>
+	    <input #msgInput matInput placeholder="Message" value="" (keyup.enter)="sendMessage(msgInput.value)">
+	</mat-form-field>
+</div>

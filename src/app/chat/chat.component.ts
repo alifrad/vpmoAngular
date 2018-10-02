@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 // import { Socket } from 'ngx-socket-io';
 import { ChatService } from './chat.service';
+import { AuthenticationService } from '../_services';
 
 @Component({
   selector: 'app-chat',
@@ -14,7 +15,8 @@ export class ChatComponent implements OnInit {
   constructor(
   	// private socket: Socket,
   	private router: Router,
-    private _chatService: ChatService
+    private _chatService: ChatService,
+    private authUser: AuthenticationService
   ) { }
 
   messages: string[] = [];
@@ -22,8 +24,11 @@ export class ChatComponent implements OnInit {
   chatSocket: any;
 
   ngOnInit() {
+    var cookie = this.authUser.getToken()
     this.chatSocket = new WebSocket(
-        'ws://127.0.0.1:8000/ws/chat/'+localStorage.getItem('node')+'/');
+        'ws://127.0.0.1:8000/ws/chat/'+localStorage.getItem('node')+'/',
+        cookie
+    );
 
     this.node = localStorage.getItem("node")
   	this._chatService.getMessages(this.node)

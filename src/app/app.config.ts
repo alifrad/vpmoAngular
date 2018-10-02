@@ -1,4 +1,4 @@
 export const appConfig = {
-    apiUrl: 'http://127.0.0.1:8000/vpmoapp/api',
-    apiAuthUrl: 'http://127.0.0.1:8000/vpmoauth/api'
+    apiUrl: 'https://floating-tundra-71276.herokuapp.com/vpmoapp/api',
+    apiAuthUrl: 'https://floating-tundra-71276.herokuapp.com/vpmoauth/api'
 };

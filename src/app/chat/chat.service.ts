@@ -27,9 +27,15 @@ export class ChatService {
 
   constructor(private http: HttpClient, private authUser: AuthenticationService) { }
 
-  getMessages (node: string): Observable<any> {
-    return this.http.get(this.messageListUrl+node+'/' , this.httpOptions)
+  getMessages (node: string, earlierThan?: string): Observable<any> {
+    if (earlierThan) {
+      return this.http.get(this.messageListUrl+node+'/?earlier_than='+earlierThan , this.httpOptions)
         .catch(this.handleError);
+    } else {
+      return this.http.get(this.messageListUrl+node+'/' , this.httpOptions)
+        .catch(this.handleError);
+    }
+    
   }
 
   private handleError(err: HttpErrorResponse) {

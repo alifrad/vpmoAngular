@@ -4,7 +4,7 @@
 
 <div class="container-fluid">
 	<mat-list>
-		<mat-list-item *ngFor="let message of messages"> {{ message.content }}</mat-list-item>
+		<mat-list-item *ngFor="let message of messages"> {{ message.author }}: {{ message.content }}</mat-list-item>
 	</mat-list>
 
 	<mat-form-field>

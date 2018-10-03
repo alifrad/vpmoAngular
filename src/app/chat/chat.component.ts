@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 // import { Socket } from 'ngx-socket-io';
 import { ChatService } from './chat.service';
@@ -10,7 +10,7 @@ import { AuthenticationService } from '../_services';
   styleUrls: ['./chat.component.css']
 })
 
-export class ChatComponent implements OnInit {
+export class ChatComponent implements OnInit, OnDestroy {
 
   constructor(
   	// private socket: Socket,
@@ -22,12 +22,17 @@ export class ChatComponent implements OnInit {
   messages: string[] = [];
   node: any;
   chatSocket: any;
+  maxMessageLength: 20;
+
+
+  ngOnDestroy () {
+    this.chatSocket.close()
+  }
 
   ngOnInit() {
     var cookie = this.authUser.getToken()
     this.chatSocket = new WebSocket(
-        'ws://127.0.0.1:8000/ws/chat/'+localStorage.getItem('node')+'/',
-        cookie
+        'ws://127.0.0.1:8000/ws/chat/'+localStorage.getItem('node')+'/?'+this.authUser.getToken()
     );
 
     this.node = localStorage.getItem("node")
@@ -35,6 +40,7 @@ export class ChatComponent implements OnInit {
       .subscribe(
         messages => this.messages = messages
       );
+    console.log("Receivde messages", this.messages)
 
     var currentThis = this
     this.chatSocket.onmessage = function (e) {

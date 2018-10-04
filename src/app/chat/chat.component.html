@@ -1,0 +1,32 @@
+<style>
+	.chat-container {
+		height: 70%;
+		overflow: scroll;
+		position: relative;
+	}
+
+	.chat-container mat-list {
+		max-height: 100%;
+	}
+
+	.chat-inp {
+		width: 100%;
+	}
+
+</style>
+
+<p>
+  Chat
+</p>
+
+<div style="height: 100%;">
+	<div #chatContainer class="chat-container" (scroll)="onScroll($event)">
+		<mat-list>
+			<mat-list-item *ngFor="let message of messages"> {{ message.author }}: {{ message.content }} {{ message.sent_on }}</mat-list-item>
+		</mat-list>
+	</div>
+
+	<mat-form-field class="chat-inp">
+	    <input #msgInput matInput placeholder="Message" value="" (keyup.enter)="sendMessage(msgInput.value)">
+	</mat-form-field>
+</div>

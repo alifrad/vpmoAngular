@@ -103,6 +103,12 @@ export class AuthenticationService {
                 if (user && user.token) {
                     // store user details and jwt token in local storage to keep user logged in between page refreshes
                     localStorage.setItem('currentUser', JSON.stringify(user));
+                    localStorage.setItem('nodeID', '');
+                    localStorage.setItem('nodeType', '');
+                    localStorage.setItem('nodePermission', '');
+                    localStorage.setItem('teamID', '');
+                    localStorage.setItem('projectID', '');
+                    localStorage.setItem('topicID', '');
                     this.user.next(JSON.parse(localStorage.getItem('currentUser')));
                     // this.loggedIn.next(true);
                     return user;
@@ -116,7 +122,8 @@ export class AuthenticationService {
 
     logout() {
         // remove user from local storage to log user out
-        localStorage.removeItem('currentUser');
+        // localStorage.removeItem('currentUser');
+        localStorage.clear();
         // this.loggedIn.next(false);
         this.router.navigate(['/user/login']);
     }

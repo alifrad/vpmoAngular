@@ -29,18 +29,24 @@ export class ProjectListComponent implements OnInit {
     }
 
   projectTree(id: string) {
-    localStorage.setItem('project', id);
-    localStorage.setItem('treeType', 'Project');
+    // localStorage.setItem('project', id);
+    // localStorage.setItem('treeType', 'Project');
+    localStorage.setItem('projectID', id);
+    localStorage.setItem('nodeID', id);
+    localStorage.setItem('nodeType', 'Project');
     this.router.navigate(['/team/tree']);
   }
 
   editProject (project: any) {
+    localStorage.setItem('node', JSON.stringify(project));
     localStorage.setItem('project', JSON.stringify(project));
-    this.router.navigate(['/projects/edit']);
+    localStorage.setItem('nodeID', project._id);
+    this.router.navigate(['/node/details']);
   }
   
   openChat (node: any) {
-    localStorage.setItem('node', node)
-    this.router.navigate(["/chat"])
+    // localStorage.setItem('node', node);
+    localStorage.setItem('nodeID', node);
+    this.router.navigate(['/chat']);
   }
 }

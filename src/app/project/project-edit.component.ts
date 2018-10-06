@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 
 
 @Component({
+  selector: 'node-details',
   templateUrl: './project-edit.component.html',
 })
 

@@ -19,7 +19,7 @@ const ChatRoutes: Routes = [
   }
 ];
 
-//const config: SocketIoConfig = { url: '127.0.0.1:8000', options: {path: '/ws/chat/'+localStorage.getItem('node')+'/',
+// const config: SocketIoConfig = { url: '127.0.0.1:8000', options: {path: '/ws/chat/'+localStorage.getItem('node')+'/',
 // transports: ['websocket']} };
 
 
@@ -46,6 +46,9 @@ const ChatRoutes: Routes = [
   ],
   providers: [
     ChatService
+  ],
+  exports: [
+    ChatComponent,
   ],
   bootstrap: [ChatComponent]
 })

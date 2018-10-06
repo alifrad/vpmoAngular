@@ -13,13 +13,13 @@ import { AuthenticationService } from '../_services';
 export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   constructor(
-  	// private socket: Socket,
-  	private router: Router,
+    // private socket: Socket,
+    private router: Router,
     private _chatService: ChatService,
     private authUser: AuthenticationService,
   ) { }
 
-  @ViewChild('chatContainer') chatContainer
+  @ViewChild('chatContainer') chatContainer;
 
   messages: any[] = [];
   node: any;
@@ -32,21 +32,21 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   ngOnInit() {
-    var cookie = this.authUser.getToken()
+    var cookie = this.authUser.getToken();
     this.chatSocket = new WebSocket(
-        'ws://127.0.0.1:8000/ws/chat/'+localStorage.getItem('node')+'/?'+this.authUser.getToken()
+        'ws://127.0.0.1:8000/ws/chat/' + localStorage.getItem('nodeID') + '/?' + this.authUser.getToken()
     );
 
-    this.node = localStorage.getItem("node")
-  	this._chatService.getMessages(this.node)
+    this.node = localStorage.getItem('nodeID');
+    this._chatService.getMessages(this.node)
       .subscribe(
         messages => this.messages = messages
       );
 
-    var currentThis = this
+    var currentThis = this;
     this.chatSocket.onmessage = function (e) {
-      var data = JSON.parse(e.data).message
-      currentThis.messages.push(data)
+      var data = JSON.parse(e.data).message;
+      currentThis.messages.push(data);
     }
 
     this.chatContainer.nativeElement.scrollTop = this.chatContainer.nativeElement.scrollHeight;
@@ -57,14 +57,14 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   private onScroll (e) {
-    if (e.target.scrollTop == 0 && this.messages.length > 0) {
-      var olderMessages = []
+    if (e.target.scrollTop === 0 && this.messages.length > 0) {
+      var olderMessages = [];
       this._chatService.getMessages(this.node, this.messages[0]._id)
       .subscribe(
         messages => {
           for (var i = messages.length; i >= 0; i--) {
-            if (messages[i] != undefined) {
-              this.messages.unshift(messages[i])
+            if (messages[i] !== undefined) {
+              this.messages.unshift(messages[i]);
             } 
           }
         }
@@ -78,7 +78,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
       'sent_on': new Date()
     }
 
-    this.chatSocket.send(JSON.stringify(data))
+    this.chatSocket.send(JSON.stringify(data));
   }
 
 }

@@ -38,6 +38,7 @@ import { JwtInterceptor } from './_helpers/jwt.interceptor';
 
 import { ReactiveFormsModule } from '@angular/forms';
 import { TeamModule } from './team/team.module';
+import { NodeModule } from './node/node.module';
 import { TreeStructureModule } from './tree-structure/tree-structure.module';
 import {
     MatAutocompleteModule,
@@ -76,6 +77,7 @@ import {
     MatTooltipModule,
     MatTreeModule,
   } from '@angular/material';
+
 
 const appRoutes: Routes = [
     {
@@ -125,6 +127,7 @@ export function tokenGetter() {
         ProjectModule,
         ChatModule,
         TreeStructureModule,
+        NodeModule,
 
     ],
     // The components, directives, and pipes that belong to this NgModule
@@ -133,6 +136,7 @@ export function tokenGetter() {
         HomeComponent,
         ErrorComponent,
         AlertComponent,
+
     ],
     // The main application view, called the root component, which hosts all other app views
     // Only the root NgModule should set the bootstrap property

@@ -49,4 +49,9 @@ export class ProjectListComponent implements OnInit {
     localStorage.setItem('nodeID', node);
     this.router.navigate(['/chat']);
   }
+
+  openPermissions (node: any) {
+    localStorage.setItem('nodeID', node);
+    this.router.navigate(['/permissions'])
+  }
 }

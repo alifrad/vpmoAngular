@@ -5,9 +5,10 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 
-import { MatDatepickerModule, MatNativeDateModule, MatFormFieldModule, MatIconModule, MatInputModule, MatButtonModule, MatCardModule, MatListModule } from '@angular/material';
+import { MatDatepickerModule, MatNativeDateModule, MatFormFieldModule, MatIconModule, MatInputModule, MatButtonModule, MatCardModule, MatListModule, MatTableModule } from '@angular/material';
 import { AuthGuard } from '../_guards/auth.guard';
 import { PermissionsComponent } from './permissions.component';
+import { PermissionsService } from './permissions.service';
 
 
 const PermissionsRoutes: Routes = [
@@ -32,11 +33,13 @@ const PermissionsRoutes: Routes = [
     MatCardModule,
     MatListModule,
     MatIconModule,
+    MatTableModule
   ],
   declarations: [
     PermissionsComponent,
   ],
   providers: [
+    PermissionsService
   ],
   exports: [
     PermissionsComponent,

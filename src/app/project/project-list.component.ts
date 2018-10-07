@@ -52,6 +52,7 @@ export class ProjectListComponent implements OnInit {
 
   openPermissions (node: any) {
     localStorage.setItem('nodeID', node);
+    localStorage.setItem('nodeType', 'Project')
     this.router.navigate(['/permissions'])
   }
 }

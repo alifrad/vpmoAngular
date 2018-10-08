@@ -18,16 +18,29 @@ export class PermissionsComponent implements OnInit {
     private _permissionsService: PermissionsService
   ) { }
 
-  nodePermissions: any[] = [];
+  userList: any[] = [];
+  currentUserPermissions: string[] = [];
+  currentUserRole: string;
   displayedColumns: string[] = ['username', 'role']
 
   ngOnInit() {
     console.log("Permissions Module initialized")
     var nodeID = localStorage.getItem('nodeID')
     var nodeType = localStorage.getItem('nodeType')
-    this._permissionsService.getPermissions(nodeID, nodeType)
+
+    this._permissionsService.getUserPermissions(nodeID, nodeType)
       .subscribe(
-        permissions => this.nodePermissions = permissions
+        userPermissions => {
+          this.currentUserPermissions = userPermissions.permissions
+          this.currentUserRole = userPermissions.role
+        }
+      )
+
+    this._permissionsService.getPermissionsList(nodeID, nodeType)
+      .subscribe(
+        permissions => {
+          this.userList = permissions
+        }
       )
   }
 }

@@ -16,19 +16,25 @@ export class PermissionsService {
 
   private readonly apiUrl: string = `${appConfig.apiUrl}`;
   private readonly permissionsListUrl: string = `${appConfig.apiUrl}/node_permissions/`;
+  private readonly permissionsDetailUrl: string = `${appConfig.apiAuthUrl}/user_node_permissions/`;
   private httpOptions = {
     // for auntification
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': 'JWT ' + this.authUser.getToken
+      'Authorization': 'JWT ' + this.authUser.getToken()
     })
   };
 
   constructor(private http: HttpClient, private authUser: AuthenticationService) { }
 
-  getPermissions (node: string, nodeType: string): Observable<any> {
-    return this.http.get(this.permissionsListUrl+node+'/?nodeType='+nodeType , this.httpOptions)
+  getPermissionsList (node: string, nodeType: string): Observable<any> {
+    return this.http.get(this.permissionsListUrl+node+'/?nodeType='+nodeType, this.httpOptions)
       .catch(this.handleError);
+  }
+
+  getUserPermissions (node: string, nodeType: string): Observable<any> {
+    return this.http.get(this.permissionsDetailUrl+node+'/?nodeType='+nodeType, this.httpOptions)
+      .catch(this.handleError)
   }
 
   private handleError(err: HttpErrorResponse) {

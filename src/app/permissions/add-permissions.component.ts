@@ -30,6 +30,14 @@ export class AddPermissionsComponent implements OnInit {
 	}
 
 	addUser () {
-		console.log(this.selectedUser)
+		if (this.nodeType == 'Project') {
+			var role = 'project_viewer'
+		} else {
+			var role = 'team_member'
+		}
+		this._permissionsService.assignUserToNode(this.nodeID, this.nodeType, this.selectedUser, role)
+			.subscribe(
+				response => this.usersList = this.usersList.filter(item => item._id !== this.selectedUser)
+			)
 	}
 }

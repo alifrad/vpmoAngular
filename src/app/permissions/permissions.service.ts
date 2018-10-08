@@ -18,6 +18,8 @@ export class PermissionsService {
   private readonly permissionsListUrl: string = `${appConfig.apiUrl}/node_permissions/`;
   private readonly permissionsDetailUrl: string = `${appConfig.apiAuthUrl}/user_node_permissions/`;
   private readonly permissionsRemoveUrl: string = `${appConfig.apiAuthUrl}/remove_user_role/`;
+  private readonly assignableUsersUrl: string = `${appConfig.apiAuthUrl}/assignable_users/`;
+
   private httpOptions = {
     // for auntification
     headers: new HttpHeaders({
@@ -41,6 +43,11 @@ export class PermissionsService {
   removeUserPermissions (node: string, nodeType: string, userID: string): Observable<any> {
     return this.http.delete(this.permissionsRemoveUrl+node+'/?nodeType='+nodeType+'&user='+userID, this.httpOptions)
       .catch(this.handleError);
+  }
+
+  getAssignableUsers (node: string, nodeType: string): Observable<any> {
+    return this.http.get(this.assignableUsersUrl+node+"?nodeType="+nodeType, this.httpOptions)
+      .catch(this.handleError)
   }
 
   private handleError(err: HttpErrorResponse) {

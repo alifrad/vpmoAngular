@@ -1,0 +1,15 @@
+<div>
+	<h3>{{ nodeType }}</h3>
+
+	<mat-form-field>
+	  	<mat-select placeholder="Choose User" [(ngModel)]="selectedUser">
+	    	<mat-option *ngFor="let user of usersList" [value]="user._id">
+	      		{{user.email}}
+	    	</mat-option>
+	 	</mat-select>
+	</mat-form-field>
+
+	<div style="text-align: center;">
+		<button (click)="addUser()" mat-raised-button matTooltip="Adds the SelectedUser as a viewer-rank role">Add User</button>
+	</div>
+</div>

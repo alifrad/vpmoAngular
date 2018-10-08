@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AddPermissionsComponent } from './add-permissions.component';
 import { AuthenticationService } from '../_services';
 import { PermissionsService } from './permissions.service';
+import {MatDialog, MatDialogConfig} from "@angular/material";
 
 @Component({
   selector: 'app-permissions',
@@ -15,7 +17,8 @@ export class PermissionsComponent implements OnInit {
 
   constructor(
     private authUser: AuthenticationService,
-    private _permissionsService: PermissionsService
+    private _permissionsService: PermissionsService,
+    private dialog: MatDialog
   ) { }
 
   userList: any[] = [];
@@ -49,10 +52,23 @@ export class PermissionsComponent implements OnInit {
     this.nodeType = nodeType
   }
 
+  openAddDialog () {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.autoFocus = true;
+    dialogConfig.width = '350';
+    dialogConfig.height = '500';
+
+    this.dialog.open(AddPermissionsComponent, dialogConfig);
+  }
+
   private removeUserPermissions (user) {
     this._permissionsService.removeUserPermissions(this.nodeID, this.nodeType, user._id)
        .subscribe(
-        response => this.userList.splice(this.userList.indexOf(user), 1)
-       )
+        response => {
+          console.log(user, this.userList.indexOf(user))
+          this.userList.splice(this.userList.indexOf(user), 1)
+        }
+      )
   }
 }

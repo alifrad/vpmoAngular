@@ -5,9 +5,11 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 
-import { MatDatepickerModule, MatNativeDateModule, MatFormFieldModule, MatIconModule, MatInputModule, MatButtonModule, MatCardModule, MatListModule, MatTableModule } from '@angular/material';
+import { MatFormFieldModule, MatIconModule, MatInputModule, MatButtonModule, MatCardModule,
+  MatListModule, MatTableModule, MatDialogModule, MatSelectModule, MatTooltipModule } from '@angular/material';
 import { AuthGuard } from '../_guards/auth.guard';
 import { PermissionsComponent } from './permissions.component';
+import { AddPermissionsComponent } from './add-permissions.component';
 import { PermissionsService } from './permissions.service';
 
 
@@ -24,8 +26,6 @@ const PermissionsRoutes: Routes = [
     FormsModule,
     RouterModule.forChild(PermissionsRoutes),
     HttpClientModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
     MatIconModule,
     MatFormFieldModule,
     MatInputModule,
@@ -33,17 +33,23 @@ const PermissionsRoutes: Routes = [
     MatCardModule,
     MatListModule,
     MatIconModule,
-    MatTableModule
+    MatTableModule,
+    MatDialogModule,
+    MatSelectModule,
+    MatTooltipModule
   ],
   declarations: [
     PermissionsComponent,
+    AddPermissionsComponent
   ],
   providers: [
     PermissionsService
   ],
   exports: [
     PermissionsComponent,
+    AddPermissionsComponent
   ],
-  bootstrap: [PermissionsComponent]
+  bootstrap: [PermissionsComponent],
+  entryComponents: [AddPermissionsComponent]
 })
 export class PermissionsModule { }

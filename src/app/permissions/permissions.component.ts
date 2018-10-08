@@ -19,9 +19,11 @@ export class PermissionsComponent implements OnInit {
   ) { }
 
   userList: any[] = [];
+  nodeID: string;
+  nodeType: string;
   currentUserPermissions: string[] = [];
   currentUserRole: string;
-  displayedColumns: string[] = ['username', 'role']
+  displayedColumns: string[] = ['username', 'role', 'controlsColumn']
 
   ngOnInit() {
     console.log("Permissions Module initialized")
@@ -42,5 +44,15 @@ export class PermissionsComponent implements OnInit {
           this.userList = permissions
         }
       )
+
+    this.nodeID = nodeID
+    this.nodeType = nodeType
+  }
+
+  private removeUserPermissions (user) {
+    this._permissionsService.removeUserPermissions(this.nodeID, this.nodeType, user._id)
+       .subscribe(
+        response => this.userList.splice(this.userList.indexOf(user), 1)
+       )
   }
 }

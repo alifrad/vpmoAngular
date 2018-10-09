@@ -202,7 +202,7 @@ export class TreeStructureComponent implements OnInit {
   public viewDetail = (node) => {
     const nodeType = node.data.node_type;
     const nodeId = node.data._id;
-
+    console.log("Opening Node", node)
     localStorage.setItem('nodeID', nodeId);
     localStorage.setItem('nodeType', nodeType);
     if (nodeType === 'Team'){

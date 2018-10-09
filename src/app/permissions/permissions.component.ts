@@ -24,9 +24,13 @@ export class PermissionsComponent implements OnInit {
   userList: any[] = [];
   nodeID: string;
   nodeType: string;
+  // Permissions the current user has for the node
   currentUserPermissions: string[] = [];
+  // Role of the current user for the node
   currentUserRole: string;
   displayedColumns: string[] = ['username', 'role', 'controlsColumn']
+  // The roles assignable by the user
+  assignableRoles: string[] = [];
 
   ngOnInit() {
     var nodeID = localStorage.getItem('nodeID')
@@ -35,6 +39,8 @@ export class PermissionsComponent implements OnInit {
     this.getUserPermissions(nodeID, nodeType)
 
     this.getPermissionsList(nodeID, nodeType)
+
+    this.getAssignableRoles(nodeID, nodeType)
 
     this.nodeID = nodeID
     this.nodeType = nodeType
@@ -59,6 +65,23 @@ export class PermissionsComponent implements OnInit {
       )
   }
 
+  getAssignableRoles (nodeID, nodeType) {
+    this._permissionsService.getAssignableRoles(nodeID, nodeType)
+      .subscribe(
+        roles => {
+          this.assignableRoles = roles
+        }
+      )
+  }
+
+  assignRole (newRole, user) {
+    console.log(newRole, user)
+    this._permissionsService.assignUserToNode(this.nodeID, this.nodeType, user._id, newRole)
+      .subscribe(
+        response => console.log('Role updated for ' + user.username + ' to ' + newRole)
+      )
+  }
+
   openAddDialog () {
     const dialogConfig = new MatDialogConfig();
 
@@ -66,11 +89,15 @@ export class PermissionsComponent implements OnInit {
     dialogConfig.width = '350';
     dialogConfig.height = '500';
 
+    localStorage.setItem('assignableRoles', JSON.stringify(this.assignableRoles))
     var dialogRef = this.dialog.open(AddPermissionsComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(result => {
       this.getPermissionsList(this.nodeID, this.nodeType)
     });
   }
+
+  // TODO: Get a list of assignable users by current user to current node, and pass that to add-permissions as well
+  // Use it in add permissions to set the base role when adding a user
 
   removeUserPermissions (user) {
     this._permissionsService.removeUserPermissions(this.nodeID, this.nodeType, user._id)

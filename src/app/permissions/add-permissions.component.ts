@@ -19,10 +19,12 @@ export class AddPermissionsComponent implements OnInit {
 	nodeType: string;
 	usersList: any[] = [];
 	selectedUser: any;
+	assignableRoles: any[] = [];
 
 	ngOnInit () {
 		this.nodeType = localStorage.getItem('nodeType')
 		this.nodeID = localStorage.getItem('nodeID')
+		this.assignableRoles = JSON.parse(localStorage.getItem('assignableRoles'))
 		this._permissionsService.getAssignableUsers(this.nodeID, this.nodeType)
 			.subscribe(
 				users => this.usersList = users
@@ -30,11 +32,7 @@ export class AddPermissionsComponent implements OnInit {
 	}
 
 	addUser () {
-		if (this.nodeType == 'Project') {
-			var role = 'project_viewer'
-		} else {
-			var role = 'team_member'
-		}
+		var role = this.assignableRoles[0]
 		this._permissionsService.assignUserToNode(this.nodeID, this.nodeType, this.selectedUser, role)
 			.subscribe(
 				response => this.usersList = this.usersList.filter(item => item._id !== this.selectedUser)

@@ -19,6 +19,7 @@ export class PermissionsService {
   private readonly permissionsDetailUrl: string = `${appConfig.apiAuthUrl}/user_node_permissions/`;
   private readonly permissionsRemoveUrl: string = `${appConfig.apiAuthUrl}/remove_user_role/`;
   private readonly assignableUsersUrl: string = `${appConfig.apiAuthUrl}/assignable_users/`;
+  private readonly assignableRolesUrl: string = `${appConfig.apiUrl}/assignable_roles/`;
   private readonly assignUserToNodeUrl: string = `${appConfig.apiAuthUrl}/assign_role/`;
 
   private httpOptions = {
@@ -48,6 +49,11 @@ export class PermissionsService {
 
   getAssignableUsers (node: string, nodeType: string): Observable<any> {
     return this.http.get(this.assignableUsersUrl+node+"/?nodeType="+nodeType, this.httpOptions)
+      .catch(this.handleError)
+  }
+
+  getAssignableRoles (node: string, nodeType: string): Observable<any> {
+    return this.http.get(this.assignableRolesUrl+node+"/?nodeType="+nodeType, this.httpOptions)
       .catch(this.handleError)
   }
 

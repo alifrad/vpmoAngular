@@ -32,6 +32,15 @@ export class PermissionsComponent implements OnInit {
     var nodeID = localStorage.getItem('nodeID')
     var nodeType = localStorage.getItem('nodeType')
 
+    this.getUserPermissions(nodeID, nodeType)
+
+    this.getPermissionsList(nodeID, nodeType)
+
+    this.nodeID = nodeID
+    this.nodeType = nodeType
+  }
+
+  getUserPermissions (nodeID, nodeType) {
     this._permissionsService.getUserPermissions(nodeID, nodeType)
       .subscribe(
         userPermissions => {
@@ -39,16 +48,15 @@ export class PermissionsComponent implements OnInit {
           this.currentUserRole = userPermissions.role
         }
       )
+  }
 
+  getPermissionsList (nodeID, nodeType) {
     this._permissionsService.getPermissionsList(nodeID, nodeType)
       .subscribe(
         permissions => {
           this.userList = permissions
         }
       )
-
-    this.nodeID = nodeID
-    this.nodeType = nodeType
   }
 
   openAddDialog () {
@@ -58,14 +66,18 @@ export class PermissionsComponent implements OnInit {
     dialogConfig.width = '350';
     dialogConfig.height = '500';
 
-    this.dialog.open(AddPermissionsComponent, dialogConfig);
+    var dialogRef = this.dialog.open(AddPermissionsComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(result => {
+      this.getPermissionsList(this.nodeID, this.nodeType)
+    });
   }
 
-  private removeUserPermissions (user) {
+  removeUserPermissions (user) {
     this._permissionsService.removeUserPermissions(this.nodeID, this.nodeType, user._id)
        .subscribe(
         response => {
-          this.userList.splice(this.userList.indexOf(user), 1)
+          this.userList = this.userList.filter(item => item._id != user._id)
+          // this.userList.splice(this.userList.indexOf(user), 1)
         }
       )
   }

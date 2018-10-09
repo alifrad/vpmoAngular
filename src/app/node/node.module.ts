@@ -20,6 +20,7 @@ import { ProjectModule } from '../project/project.module';
 import { ChatModule } from '../chat/chat.module';
 import { TreeStructureModule } from '../tree-structure/tree-structure.module';
 import { NodeEditComponent } from './node-edit.component';
+import { PermissionsModule } from '../permissions/permissions.module'
 
 const NodeRoutes: Routes = [
   {
@@ -50,6 +51,7 @@ const NodeRoutes: Routes = [
     MatTabsModule,
     ProjectModule,
     ChatModule,
+    PermissionsModule,
     TreeStructureModule,
   ],
   declarations: [

@@ -44,6 +44,7 @@ export class PermissionsComponent implements OnInit {
 
     this.nodeID = nodeID
     this.nodeType = nodeType
+    console.log("Init Node Permissions", this.nodeID, this.nodeType, this.currentUserRole)
   }
 
   getUserPermissions (nodeID, nodeType) {

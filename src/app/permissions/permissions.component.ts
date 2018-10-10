@@ -28,6 +28,7 @@ export class PermissionsComponent implements OnInit {
   currentUserPermissions: string[] = [];
   // Role of the current user for the node
   currentUserRole: string;
+  currentUserID: string;
   displayedColumns: string[] = ['username', 'role', 'controlsColumn']
   // The roles assignable by the user
   assignableRoles: string[] = [];
@@ -53,6 +54,7 @@ export class PermissionsComponent implements OnInit {
         userPermissions => {
           this.currentUserPermissions = userPermissions.permissions
           this.currentUserRole = userPermissions.role
+          this.currentUserID = userPermissions._id
         }
       )
   }

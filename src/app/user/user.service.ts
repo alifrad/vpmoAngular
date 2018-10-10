@@ -10,22 +10,27 @@ import 'rxjs/add/operator/map';
 import { User } from './user';
 import { MessageService } from '../shared/message.service';
 import { appConfig } from '../app.config';
+import { AuthenticationService } from '../_services';
 
-const httpOptions = {
-  headers: new HttpHeaders({ 
-    'Content-Type': 'application/json',
-    'Authorization': 'JWT'
-  })
-};
+
 
 @Injectable()
 export class UserService {
 
+  const httpOptions = {
+    headers: new HttpHeaders({ 
+      'Content-Type': 'application/json',
+      'Authorization': 'JWT'
+    })
+  };
 
   constructor(
     private http: HttpClient,
-    private messageService: MessageService ) { }
+    private messageService: MessageService,
+    private authUser: AuthenticationService,
+    ) { }
 
+ 
   // private extractData(res: Response) {
   //   let body = res.json();
   //   return body.fields || { };
@@ -57,8 +62,8 @@ export class UserService {
   }
 
   update(_id: number, user: User) {
-      const url = appConfig.apiAuthUrl + '/users/' + _id + '/update';
-      return this.http.put(url, user);
+      const url = appConfig.apiAuthUrl + '/users/update/' + _id + '/';
+      return this.http.patch(url, user, this.httpOptions);
   }
 
   /**

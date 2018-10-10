@@ -15,18 +15,32 @@
 
 </style>
 
-<p>
-  Chat
-</p>
-
-<div style="height: 100%;">
+<mat-card>
 	<div #chatContainer class="chat-container" (scroll)="onScroll($event)">
 		<mat-list>
-			<mat-list-item *ngFor="let message of messages"> {{ message.author }}: {{ message.content }} {{ message.sent_on }}</mat-list-item>
+		<!-- <ng-template let-item let-i="index" let-last="last" ngFor [ngForOf]="let message of messages"> -->
+		
+			<mat-list-item *ngFor="let message of messages; let i = index; let last = last">
+				
+					<img matListAvatar src="http://lorempixel.com/40/40/people/{{i}}" />
+					
+					
+						<h3 matLine class="cursor-pointer"> {{ message.author }} </h3>
+						<p matLine>
+							<span>{{ message.content }}</span>
+						</p>
+					
+						<h5>{{ message.sent_on | date:'dd-MMM-yyyy @ h:mma' }}</h5>
+
+					<mat-divider *ngIf="!last"></mat-divider>
+				
+			</mat-list-item>
+		
+		<!-- </ng-template> -->
 		</mat-list>
 	</div>
 
 	<mat-form-field class="chat-inp">
 	    <input #msgInput matInput placeholder="Message" value="" (keyup.enter)="sendMessage(msgInput.value)">
 	</mat-form-field>
-</div>
+</mat-card>

@@ -23,6 +23,7 @@ export class ProjectEditComponent implements OnInit {
 
   ngOnInit(): void {
     this.project = JSON.parse(localStorage.getItem('project'));
+    
     if (this.project.content !== null) {
       this.projectContent = this.project.content;
       console.log('NOT NULL!', this.projectContent);

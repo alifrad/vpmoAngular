@@ -28,7 +28,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
 
 
   ngOnDestroy () {
-    this.chatSocket.close()
+    this.chatSocket.close();
   }
 
   ngOnInit() {

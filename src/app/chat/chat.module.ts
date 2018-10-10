@@ -5,11 +5,21 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 
-import { MatDatepickerModule, MatNativeDateModule, MatFormFieldModule, MatIconModule, MatInputModule, MatButtonModule, MatCardModule, MatListModule } from '@angular/material';
+import { 
+  MatDatepickerModule, 
+  MatNativeDateModule, 
+  MatFormFieldModule, 
+  MatIconModule, 
+  MatInputModule, 
+  MatButtonModule, 
+  MatCardModule, 
+  MatListModule, 
+  MatDividerModule 
+} from '@angular/material';
 // import { ChatRoomComponent } from "./chat-room.component"
 import { AuthGuard } from '../_guards/auth.guard';
 import { ChatComponent } from './chat.component';
-//import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+// import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 import { ChatService } from './chat.service';
 
 const ChatRoutes: Routes = [
@@ -39,7 +49,8 @@ const ChatRoutes: Routes = [
     MatCardModule,
     MatListModule,
     MatIconModule,
-    //SocketIoModule.forRoot(config)
+    MatDividerModule,
+    // SocketIoModule.forRoot(config)
   ],
   declarations: [
     ChatComponent,

@@ -34,7 +34,7 @@ export class TeamService {
 }
  
   getTeams(): Observable<Team[]> {
-    return this.http.get<Team[]>(appConfig.apiUrl + `/filtered_organisations/`);
+    return this.http.get<Team[]>(appConfig.apiUrl + `/nodes/` + '?nodeType=Team');
   }
 
   getUserTeamPerm(_id, team: number) {

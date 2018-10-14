@@ -164,6 +164,9 @@ export class TreeStructureComponent implements OnInit {
 
 
   getTopNode(): string {
+    this.treeRoot = localStorage.getItem('nodeID')
+    return this.treeRoot
+    /*
     if (this.getNodeType() === 'Team'){
       try{
         this.treeRoot = (localStorage.getItem('teamID'));
@@ -185,7 +188,7 @@ export class TreeStructureComponent implements OnInit {
       console.log('project: ' +  this.treeRoot);
       return this.treeRoot;
     } 
-
+    */
   }
 
   getNodeType(): string {
@@ -205,6 +208,9 @@ export class TreeStructureComponent implements OnInit {
     console.log("Opening Node", node)
     localStorage.setItem('nodeID', nodeId);
     localStorage.setItem('nodeType', nodeType);
+
+    this.router.navigate(['node/details']);
+    /*
     if (nodeType === 'Team'){
 
     } else if (nodeType === 'Project') {
@@ -216,7 +222,7 @@ export class TreeStructureComponent implements OnInit {
       localStorage.setItem('topicID', nodeId);
       this.router.navigate(['node/details']);
     }
-
+    */
   }
 
 

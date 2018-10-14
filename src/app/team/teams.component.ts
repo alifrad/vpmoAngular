@@ -20,7 +20,7 @@ export class TeamsComponent implements OnInit {
   ) { }
 
   teamTree(id: string) {
-    localStorage.setItem('teamID', id);
+    localStorage.setItem('nodeID', id);
     localStorage.setItem('nodeType', 'Team');
     this.router.navigate(['/team/tree']);
   }

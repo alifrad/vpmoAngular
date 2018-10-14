@@ -1,5 +1,5 @@
 <div>
-	<h1>Permissions - {{ currentUserRole }}</h1>
+	<h1>Permissions - {{ currentUserRole }} - {{ currentUserPermissions }}</h1>
 </div>
 
 <!-- TODO: Add the add user functionality -->
@@ -17,14 +17,14 @@
 	        		On select change, assign the new selected role to the user
 	       	-->
 	        <td mat-cell *matCellDef="let user">
-	        	<mat-form-field *ngIf="assignableRoles.indexOf(user.role) >= 0 && currentUserPermissions.indexOf('edit_role') >= 0 && user._id !== currentUserID">
+	        	<mat-form-field *ngIf="canEditUserRoles()">
 				  <mat-select [(value)]="user.role" (selectionChange)="assignRole($event.value, user)">
 				    <mat-option *ngFor="let role of assignableRoles" [value]="role">
 				      {{ role }}
 				    </mat-option>
 				  </mat-select>
 				</mat-form-field>
-				<span *ngIf="assignableRoles.indexOf(user.role) < 0">
+				<span *ngIf="!canEditUserRoles()">
 	        		{{ user.role }}
 	        	</span>
 	    	</td>
@@ -32,12 +32,12 @@
 
 	    <ng-container matColumnDef="controlsColumn" >
 	    	<th mat-header-cell *matHeaderCellDef>
-	    		<button mat-icon-button class="white-icon" (click)="openAddDialog()" *ngIf="currentUserPermissions.indexOf('add_user') >= 0 || currentUserRole == 'project_admin'" >
+	    		<button mat-icon-button class="white-icon" (click)="openAddDialog()" *ngIf="canAddUser()" >
 			        <mat-icon> add </mat-icon>
 			    </button>
 	    	</th>
 	    	<td mat-cell *matCellDef="let user">
-			    <button mat-icon-button class="white-icon" (click)="removeUserPermissions(user)" *ngIf="currentUserPermissions.indexOf('remove_user') >= 0 && user.role !== currentUserRole">
+			    <button mat-icon-button class="white-icon" (click)="removeUserPermissions(user)" *ngIf="canRemoveUsers()">
 			        <mat-icon> delete </mat-icon>
 			    </button>
 	    	</td>

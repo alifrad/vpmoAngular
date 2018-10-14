@@ -55,6 +55,7 @@ export class PermissionsComponent implements OnInit {
           this.currentUserPermissions = userPermissions.permissions
           this.currentUserRole = userPermissions.role
           this.currentUserID = userPermissions._id
+          console.log('New Perms', this.currentUserPermissions)
         }
       )
   }
@@ -78,11 +79,47 @@ export class PermissionsComponent implements OnInit {
   }
 
   assignRole (newRole, user) {
-    console.log(newRole, user)
+    var self = this
     this._permissionsService.assignUserToNode(this.nodeID, this.nodeType, user._id, newRole)
       .subscribe(
-        response => console.log('Role updated for ' + user.username + ' to ' + newRole)
+        response => {
+          console.log('Role updated for ' + user.username + ' to ' + newRole)
+          if(user._id === self.currentUserID) {
+            self.getUserPermissions(self.nodeID, self.nodeType)
+          }
+        }
       )
+  }
+
+  canAddUser () {
+    var addPerms = [];
+    this.currentUserPermissions.forEach(function (i) {
+      if (i.indexOf('add_') >= 0) {
+        addPerms.push(i)
+      }
+    })
+    return addPerms.length >= 1
+  }
+
+  canRemoveUsers () {
+    var removePerms = [];
+    this.currentUserPermissions.forEach(function (i) {
+      if (i.indexOf('remove_') >= 0) {
+        removePerms.push(i)
+      }
+    })
+    return removePerms.length >= 1
+  }
+
+  canEditUserRoles () {
+    var editPerms = [];
+    var self = this
+    this.currentUserPermissions.forEach(function (i) {
+      if (i == 'update_'+self.nodeType.toLowerCase()+'_user_role') {
+        editPerms.push(i)
+      }
+    })
+    return editPerms.length >= 1
   }
 
   openAddDialog () {

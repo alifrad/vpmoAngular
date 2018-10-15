@@ -11,6 +11,7 @@ export interface IVisualNodeData {
     children: Array<IVisualNodeData>;
     // need for trace changes when node is moved
     beforeUpdateData: any;
+    parent: any;
 }
 
 // for get\put api request
@@ -22,5 +23,6 @@ export interface INodeDto {
     name: string;
     node_type: string;
     children: Array<INodeDto>;
+    parent: any;
 }
 

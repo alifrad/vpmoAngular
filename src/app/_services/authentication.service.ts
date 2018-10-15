@@ -9,7 +9,7 @@ import { of } from 'rxjs';
 import 'rxjs/add/observable/of';
 import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
-
+import { HttpCacheService } from './http-cache.service';
 
 @Injectable()
 
@@ -25,6 +25,7 @@ export class AuthenticationService {
 
     constructor(private http: HttpClient, 
                 private router: Router,
+                private cacheService: HttpCacheService
                 // public jwtHelper: JwtHelperService
                 ) 
                 { }
@@ -70,9 +71,7 @@ export class AuthenticationService {
                 return this.tempUser.token;
             }
         } else {
-            return false;  
-            throw new Error('Could not file currentUser.token in localStorage!');
-            
+            return false;              
         }
               
     }
@@ -102,7 +101,8 @@ export class AuthenticationService {
 
     login(email: string, password: string) {
         console.log('Logging In...');
-        
+        this.cacheService.invalidateCache()
+        localStorage.clear()
         return this.http.post<any>(appConfig.apiAuthUrl + '/users/login/', { email: email, password: password })
             .pipe(map(user => {
                 // login successful if there's a jwt token in the response
@@ -129,7 +129,9 @@ export class AuthenticationService {
     logout() {
         // remove user from local storage to log user out
         // localStorage.removeItem('currentUser');
+        this.cacheService.invalidateCache()
         localStorage.clear();
+        console.log('Cleared Cache and localStorage')
         // this.loggedIn.next(false);
         this.router.navigate(['/user/login']);
     }

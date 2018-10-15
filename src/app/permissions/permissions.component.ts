@@ -45,7 +45,6 @@ export class PermissionsComponent implements OnInit {
 
     this.nodeID = nodeID
     this.nodeType = nodeType
-    console.log("Init Node Permissions", this.nodeID, this.nodeType, this.currentUserRole)
   }
 
   getUserPermissions (nodeID, nodeType) {
@@ -55,7 +54,6 @@ export class PermissionsComponent implements OnInit {
           this.currentUserPermissions = userPermissions.permissions
           this.currentUserRole = userPermissions.role
           this.currentUserID = userPermissions._id
-          console.log('New Perms', this.currentUserPermissions)
         }
       )
   }
@@ -83,7 +81,6 @@ export class PermissionsComponent implements OnInit {
     this._permissionsService.assignUserToNode(this.nodeID, this.nodeType, user._id, newRole)
       .subscribe(
         response => {
-          console.log('Role updated for ' + user.username + ' to ' + newRole)
           if(user._id === self.currentUserID) {
             self.getUserPermissions(self.nodeID, self.nodeType)
           }

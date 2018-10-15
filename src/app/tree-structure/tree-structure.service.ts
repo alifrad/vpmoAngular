@@ -13,8 +13,10 @@ export class TreeStructureService {
   constructor(private treeStructureHttpService: TreeStructureHttpService) { }
 
   public saveNewNode(visualNode: IVisualNodeData, tree: TreeModel): any {
+    console.log('Adding node', visualNode, tree)
     let dto = this.converVisualNodeToDto(visualNode, false);
     delete dto._id;
+    delete dto.path;
     this.treeStructureHttpService.addNode(dto).subscribe((res => {
       let node = tree.getNodeById(visualNode._id);
       node.data._id = res._id;
@@ -41,7 +43,8 @@ export class TreeStructureService {
       index: visulaNode.index,
       name: visulaNode.name,
       node_type: visulaNode.node_type,
-      children: []
+      children: [],
+      parent: visulaNode.beforeUpdateData.parentId
     }
     if (withChildren) {
       visulaNode.children.forEach(node => {

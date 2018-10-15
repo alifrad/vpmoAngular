@@ -152,7 +152,7 @@ export class TreeStructureComponent implements OnInit {
 
   getTeam(): string {
     try{
-        this.treeRoot = (localStorage.getItem('teamID'));
+        this.treeRoot = (localStorage.getItem('nodeID'));
     }
     catch (err) {
         console.log('Error: ' + err);
@@ -164,7 +164,7 @@ export class TreeStructureComponent implements OnInit {
 
 
   getTopNode(): string {
-    this.treeRoot = localStorage.getItem('nodeID')
+    this.treeRoot = localStorage.getItem('nodeID');
     return this.treeRoot
     /*
     if (this.getNodeType() === 'Team'){

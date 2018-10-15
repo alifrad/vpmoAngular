@@ -16,6 +16,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 export class AuthenticationService {
     tempUser: any;
     redirectUrl: string;
+    token: string;
 
     private user = new BehaviorSubject<any>('');
     // currentUser = this.user.asObservable();
@@ -62,25 +63,27 @@ export class AuthenticationService {
         }
     }
 
-    getToken(): string {
-        try{
+    getToken() {
+        if (localStorage.getItem('currentUser')) {
             this.tempUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (this.tempUser.token) {
+                return this.tempUser.token;
+            }
+        } else {
+            return false;  
+            throw new Error('Could not file currentUser.token in localStorage!');
+            
         }
-        catch (err) {
-            console.log('Error: ' + err);
-            this.logout();
-            return ('Error: ' + err);
-        }
-        console.log('token: ' +  this.tempUser.token);
-        return this.tempUser.token;
+              
     }
 
 
     isAuthenticated() {
         // get the token
-        const token = this.getToken();
-        
-        return this.http.post<any>(appConfig.apiAuthUrl + '/token-verify/', { token: token })
+        if (this.getToken()) {
+            this.token = this.getToken();
+
+            return this.http.post<any>(appConfig.apiAuthUrl + '/token-verify/', { token: this.token })
             .pipe(map(res => {
                 if (res && res.token) {
                     console.log('user is authenticated');
@@ -90,7 +93,10 @@ export class AuthenticationService {
                     return false;
                 }
             }
-        ));
+            ));
+        } else {
+            return false;
+        }
     }
 
 

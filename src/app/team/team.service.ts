@@ -31,7 +31,7 @@ export class TeamService {
     } else {
         return Observable.of(localStorage.getItem('team'));
     }
-}
+  }
  
   getTeams(): Observable<Team[]> {
     return this.http.get<Team[]>(appConfig.apiUrl + `/nodes/` + '?nodeType=Team');

@@ -16,7 +16,8 @@ import { PermissionsService } from './permissions.service';
 const PermissionsRoutes: Routes = [
   {
     path: 'permissions',
-    component: PermissionsComponent
+    component: PermissionsComponent,
+    canActivate: [ AuthGuard ]
   }
 ];
 @NgModule({

@@ -109,7 +109,7 @@ export class FuseToolbarComponent implements OnInit {
                 (err: any) => console.log(err),
                 // () => console.log('getUser read properly')
             );
-        this.authService.isLoggedIn()
+        this.authService.isAuthenticated()
             .subscribe(
                 (data: boolean) => { this.isLoggedIn = data, console.log(`isLoggedIn: ${this.isLoggedIn}`); },
                 (err: any) => console.log(`error in reading isLoggedIn from Auth component" ${err}`),

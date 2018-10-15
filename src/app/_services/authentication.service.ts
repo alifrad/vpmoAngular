@@ -78,7 +78,7 @@ export class AuthenticationService {
     }
 
 
-    isAuthenticated() {
+    isAuthenticated(): Observable<boolean> {
         // get the token
         if (this.getToken()) {
             this.token = this.getToken();
@@ -95,7 +95,7 @@ export class AuthenticationService {
             }
             ));
         } else {
-            return false;
+            return Observable.of(false);
         }
     }
 

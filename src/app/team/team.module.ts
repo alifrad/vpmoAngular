@@ -41,6 +41,7 @@ const TeamRoutes: Routes = [
         
     ],
     providers: [
+        
 
     ],
     schemas: [

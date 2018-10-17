@@ -29,10 +29,10 @@ export class ChatService {
 
   getMessages (node: string, earlierThan?: string): Observable<any> {
     if (earlierThan) {
-      return this.http.get(this.messageListUrl+node+'/?earlier_than='+earlierThan , this.httpOptions)
+      return this.http.get(this.messageListUrl + node + '/?earlier_than=' + earlierThan , this.httpOptions)
         .catch(this.handleError);
     } else {
-      return this.http.get(this.messageListUrl+node+'/' , this.httpOptions)
+      return this.http.get(this.messageListUrl + node + '/' , this.httpOptions)
         .catch(this.handleError);
     }
     

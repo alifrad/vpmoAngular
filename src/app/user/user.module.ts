@@ -13,7 +13,8 @@ import { AuthenticationService } from '../_services/authentication.service';
 import { AuthGuard } from '../_guards/auth.guard';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { UserProfileComponent } from './profile/userProfile.component';
-import { MatInputModule, MatButtonModule } from '@angular/material';
+import { MatInputModule, MatButtonModule, MatCardModule } from '@angular/material';
+import { TeamCardComponent } from './dashboard/team-card.component';
 
 const UserRoutes: Routes = [
     {
@@ -39,6 +40,8 @@ const UserRoutes: Routes = [
         LoginModule,
         MatInputModule,
         MatButtonModule,
+        MatCardModule,
+
     ],
     exports: [
         SignUpComponent,
@@ -50,11 +53,12 @@ const UserRoutes: Routes = [
         SignUpComponent,
         DashboardComponent,
         UserProfileComponent,
+        TeamCardComponent,
 
     ],
     providers: [
         UserService,
-        AuthenticationService,
+        
         AuthGuard,
     ],
     schemas: [

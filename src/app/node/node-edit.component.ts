@@ -22,6 +22,7 @@ export class NodeEditComponent implements OnInit {
     if (localStorage.getItem('nodeType') === 'Team'){
 
     } else if (localStorage.getItem('nodeType') === 'Project'){
+        console.log("Project.................")
         this.project = JSON.parse(localStorage.getItem('project'));
         if (this.project.content !== null) {
           this.content = this.project.content;

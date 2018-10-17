@@ -32,12 +32,12 @@ export class UserProfileComponent implements OnInit {
         const fullname = new FormControl(this.currentUser.fullname, [Validators.required]);
         const username = new FormControl(this.currentUser.username, [Validators.required]);
         const email = new FormControl(this.currentUser.email, [Validators.required, Validators.email]);
-        const id = new FormControl(this.currentUser.id);
+        // const id = new FormControl(this.currentUser._id);
         this.userProfileForm = this.fb.group({
             fullname: fullname,
             username: username,
             email: email,
-            id: id,
+            // id: id,
         });
     }
 
@@ -46,7 +46,7 @@ export class UserProfileComponent implements OnInit {
     }
 
     saveProfile(formValues) {
-        this.userService.update(this.currentUser.id, formValues)
+        this.userService.update(this.currentUser._id, formValues)
             .subscribe(
                 data => {
                     this.authService.updateLocalStorage(formValues.fullname, formValues.username, formValues.email);

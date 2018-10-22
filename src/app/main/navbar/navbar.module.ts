@@ -7,6 +7,7 @@ import { FuseSharedModule } from '@fuse/shared.module';
 
 import { FuseNavbarComponent } from 'app/main/navbar/navbar.component';
 import { FuseNavigationModule } from '@fuse/components';
+import { NodeModule } from '../../node/node.module';
 
 @NgModule({
     declarations: [
@@ -19,7 +20,8 @@ import { FuseNavigationModule } from '@fuse/components';
         MatIconModule,
 
         FuseSharedModule,
-        FuseNavigationModule
+        FuseNavigationModule,
+        NodeModule,
     ],
     exports     : [
         FuseNavbarComponent

@@ -7,6 +7,7 @@ import { FuseSidebarService } from '@fuse/components/sidebar/sidebar.service';
 
 import { navigation } from 'app/navigation/navigation';
 import { AuthenticationService } from 'app/_services/authentication.service';
+import { GlobalService } from '../../_services/global2.service';
 import { Observable } from 'rxjs';
 
 
@@ -26,6 +27,7 @@ export class FuseToolbarComponent implements OnInit {
     navigation: any;
     title = 'app';
     isLoggedIn: boolean;
+    user: any;
     fullname: any;
 
 
@@ -35,6 +37,7 @@ export class FuseToolbarComponent implements OnInit {
         private sidebarService: FuseSidebarService,
         private translate: TranslateService,
         private authService: AuthenticationService,
+        private globalService: GlobalService,
     )
     {
         this.userStatusOptions = [
@@ -99,16 +102,31 @@ export class FuseToolbarComponent implements OnInit {
 
         this.navigation = navigation;
 
+        this.globalService.currentUserValue.subscribe(
+            (user) => {
+                this.user = user;
+                this.user = JSON.parse(this.user);
+                this.fullname = this.user.token;            
+            },
+            (err: any) => console.log(err),
+        );
+
 
     }
 
     ngOnInit() {
+        // debugger;
+
         this.authService.getUserName()
             .subscribe(
-                user => this.fullname = user,
-                (err: any) => console.log(err),
-                // () => console.log('getUser read properly')
+                (data: string) => {
+                    this.fullname = data;
+                    console.log(`username:' ${this.fullname}`);
+                },
+                (err: any) => console.log('toolbar oninit: could not retrieve user fullname')
+
             );
+
         this.authService.isAuthenticated()
             .subscribe(
                 (data: boolean) => { this.isLoggedIn = data, console.log(`isLoggedIn: ${this.isLoggedIn}`); },
@@ -116,7 +134,8 @@ export class FuseToolbarComponent implements OnInit {
                 () => console.log('isLoggedIn function read properly')
             );
         console.log('ngOnInit complete');
-          }
+
+    }
 
     toggleSidebarOpened(key)
     {

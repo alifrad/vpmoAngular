@@ -7,11 +7,14 @@ import { TreeStructureHttpService } from './tree-structure-http.service';
 import { TreeModule } from 'angular-tree-component';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material';
+import { AuthGuard } from '../_guards/auth.guard';
 
 const routes = [
   {
     path: 'team/tree',
-    component: TreeStructureComponent
+    component: TreeStructureComponent,
+    canActivate: [ AuthGuard ],
+    
   }
 ];
 
@@ -27,7 +30,12 @@ const routes = [
   exports: [
     TreeStructureComponent,
   ],
-  declarations: [TreeStructureComponent],
-  providers: [TreeStructureService, TreeStructureHttpService]
+  declarations: [
+    TreeStructureComponent,
+  ],
+  providers: [
+    TreeStructureService, 
+    TreeStructureHttpService,
+  ]
 })
 export class TreeStructureModule { }

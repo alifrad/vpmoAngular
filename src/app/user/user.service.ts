@@ -17,20 +17,18 @@ import { AuthenticationService } from '../_services';
 @Injectable()
 export class UserService {
 
-  const httpOptions = {
-    headers: new HttpHeaders({ 
-      'Content-Type': 'application/json',
-      'Authorization': 'JWT'
-    })
-  };
-
   constructor(
     private http: HttpClient,
     private messageService: MessageService,
     private authUser: AuthenticationService,
     ) { }
 
- 
+  httpOptions = {
+    headers: new HttpHeaders({ 
+      'Content-Type': 'application/json',
+      'Authorization': 'JWT'
+    })
+  };
   // private extractData(res: Response) {
   //   let body = res.json();
   //   return body.fields || { };

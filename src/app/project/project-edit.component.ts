@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { IProject } from './project';
 import { ProjectService } from './project.service';
 import { Router } from '@angular/router';
+import { GlobalService } from '../../app/_services/global.service';
 
 
 @Component({
@@ -16,6 +17,7 @@ export class ProjectEditComponent implements OnInit {
   constructor(
           private _projectService: ProjectService,
           private router: Router,
+          private global: GlobalService,
         ) {}
 
   project: any;
@@ -31,7 +33,13 @@ export class ProjectEditComponent implements OnInit {
   }
 
   saveContent () {
-    this._projectService.partialUpdateProject(this.project._id, this.projectContent)
+    let id: string;
+
+    this.global.projectId().subscribe(
+      (data) => { id = data; },
+      (err: any) => console.log('error: project id')
+    );
+    this._projectService.partialUpdateProject(id, this.projectContent)
       .subscribe(
         project => this.project = project 
       );

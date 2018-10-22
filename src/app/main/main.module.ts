@@ -15,6 +15,7 @@ import { FuseMainComponent } from './main.component';
 
 
 
+
 @NgModule({
     
     imports     : [
@@ -35,6 +36,7 @@ import { FuseMainComponent } from './main.component';
         FuseNavbarModule,
         FuseQuickPanelModule,
         FuseToolbarModule,
+        
     ],
 
     declarations: [

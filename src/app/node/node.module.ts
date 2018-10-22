@@ -13,14 +13,16 @@ import {
   MatButtonModule, 
   MatCardModule, 
   MatListModule,
-  MatTabsModule, 
+  MatTabsModule,
+  MatExpansionModule, 
 } from '@angular/material';
 import { ProjectEditComponent } from '../project/project-edit.component';
 import { ProjectModule } from '../project/project.module';
 import { ChatModule } from '../chat/chat.module';
 import { TreeStructureModule } from '../tree-structure/tree-structure.module';
 import { NodeEditComponent } from './node-edit.component';
-import { PermissionsModule } from '../permissions/permissions.module'
+import { PermissionsModule } from '../permissions/permissions.module';
+import { NodeNavigationComponent } from './node-navigation.component'
 
 const NodeRoutes: Routes = [
   {
@@ -49,6 +51,7 @@ const NodeRoutes: Routes = [
     MatListModule,
     MatIconModule,
     MatTabsModule,
+    MatExpansionModule,
     ProjectModule,
     ChatModule,
     PermissionsModule,
@@ -57,10 +60,12 @@ const NodeRoutes: Routes = [
   declarations: [
     NodepageComponent,
     NodeEditComponent,
+    NodeNavigationComponent,
 
   ],
   exports: [
     NodepageComponent,
+    NodeNavigationComponent,
   ],
 })
 export class NodeModule { }

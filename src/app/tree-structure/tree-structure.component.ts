@@ -7,6 +7,8 @@ import * as _ from 'lodash';
 import { IVisualNodeData } from './tree-structure-model';
 import { timeout } from '../../../node_modules/rxjs/operators';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { GlobalService } from '../_services/global.service';
 
 @Component({
   selector: 'app-tree-structure',
@@ -16,6 +18,8 @@ import { Router } from '@angular/router';
 export class TreeStructureComponent implements OnInit {
   treeRoot: any;
   nodeType: any;
+  node: any;
+  team: any;
   @ViewChild(TreeComponent)
   private tree: TreeComponent;
   // user the object for cancel or save created node
@@ -138,7 +142,17 @@ export class TreeStructureComponent implements OnInit {
         private treeStructureService: TreeStructureService, 
         private treeStructureHttpService: TreeStructureHttpService,
         private router: Router,
-        ) { }
+        private globalService: GlobalService,
+        ) { 
+          globalService.teamValue.subscribe(
+            (nextValue) => {
+              this.team = nextValue;
+          });
+          globalService.nodeValue.subscribe(
+            (nextValue) => {
+              this.node = nextValue;
+          });
+        }
 
   // IMPORTANT update is needed
   public onMoveNode($event) {
@@ -152,7 +166,7 @@ export class TreeStructureComponent implements OnInit {
 
   getTeam(): string {
     try{
-        this.treeRoot = (localStorage.getItem('nodeID'));
+        this.treeRoot = JSON.parse(this.node)._id;
     }
     catch (err) {
         console.log('Error: ' + err);
@@ -164,8 +178,8 @@ export class TreeStructureComponent implements OnInit {
 
 
   getTopNode(): string {
-    this.treeRoot = localStorage.getItem('nodeID');
-    return this.treeRoot
+    this.treeRoot = JSON.parse(localStorage.getItem('node'));
+    return this.treeRoot._id;
     /*
     if (this.getNodeType() === 'Team'){
       try{
@@ -194,20 +208,27 @@ export class TreeStructureComponent implements OnInit {
   getNodeType(): string {
     try{
         this.nodeType = (localStorage.getItem('nodeType'));
+        return this.nodeType;
     }
     catch (err) {
         console.log('Error: ' + err);
-        return ('Error: ' + err);
+        return ('');
     }
-    return this.nodeType;
   }
 
   public viewDetail = (node) => {
     const nodeType = node.data.node_type;
     const nodeId = node.data._id;
-    console.log("Opening Node", node)
+    console.log('Opening Node', node);
     localStorage.setItem('nodeID', nodeId);
     localStorage.setItem('nodeType', nodeType);
+    if (nodeType === 'Team') {
+      localStorage.setItem('teamID', nodeId);
+    } else if (nodeType === 'Project') {
+      localStorage.setItem('projectID', nodeId);
+    } else {
+      localStorage.setItem('topicID', nodeId);
+    }
 
     this.router.navigate(['node/details']);
     /*
@@ -227,6 +248,7 @@ export class TreeStructureComponent implements OnInit {
 
 
   public ngOnInit() {
+    
     this.treeStructureHttpService.getTree(this.getNodeType(), this.getTopNode())
       .subscribe(
         (data) => {

@@ -28,13 +28,14 @@ import { NodeModule } from '../node/node.module';
 const ProjectRoutes: Routes = [
   {
       path: 'projects',
-      canActivate: [ AuthGuard ],
+      
       // component: ProjectComponent,
       children: [
           { path: 'add', component: ProjectAddComponent },
           { path: '', component: ProjectListComponent },
           { path: 'edit', component: ProjectEditComponent }
-      ]
+      ],
+      canActivate: [ AuthGuard ],
   },
 ];
 

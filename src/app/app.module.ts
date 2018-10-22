@@ -78,7 +78,7 @@ import {
     MatTooltipModule,
     MatTreeModule,
   } from '@angular/material';
-
+import { GlobalService } from './_services/global.service';
 
 const appRoutes: Routes = [
     {
@@ -143,7 +143,8 @@ export function tokenGetter() {
     // The main application view, called the root component, which hosts all other app views
     // Only the root NgModule should set the bootstrap property
     bootstrap   : [
-        AppComponent
+        AppComponent,
+        
     ],
     // The subset of declarations that should be visible and 
     // usable in the component templatesof other NgModules
@@ -158,6 +159,7 @@ export function tokenGetter() {
     providers: [
         MessageService,
         AuthenticationService,
+        GlobalService,
         AuthGuard,
         AlertService,
         HttpCacheService,

@@ -14,12 +14,12 @@ import {
 const TeamRoutes: Routes = [
     {
         path: 'team',
-        canActivate: [ AuthGuard ],
         // component: UserComponent,
         children: [
             // { path: 'tree', component: SignUpComponent },
             { path: 'all', component: TeamsComponent },
-        ]
+        ],
+        canActivate: [ AuthGuard ],
     },
 ];
 

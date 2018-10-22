@@ -9,6 +9,7 @@ import { FuseSidebarService } from '@fuse/components/sidebar/sidebar.service';
 import { navigation } from 'app/navigation/navigation';
 import { FuseNavigationService } from '@fuse/components/navigation/navigation.service';
 import { FuseSidebarComponent } from '@fuse/components/sidebar/sidebar.component';
+import { GlobalService } from '../../_services/global.service';
 
 @Component({
     selector     : 'fuse-navbar',
@@ -41,18 +42,29 @@ export class FuseNavbarComponent implements OnInit, OnDestroy
     navigation: any;
     navigationServiceWatcher: Subscription;
     fusePerfectScrollbarUpdateTimeout;
+    team: any;
 
     constructor(
         private sidebarService: FuseSidebarService,
         private navigationService: FuseNavigationService,
-        private router: Router
+        private router: Router,
+        private globalService: GlobalService,
     )
     {
         // Navigation data
-        this.navigation = navigation;
+        // this.navigation = navigation;
 
         // Default layout
         this.layout = 'vertical';
+
+        globalService.teamValue.subscribe((nextValue) => {
+            this.team = nextValue;
+          });
+        
+        
+        globalService.navigationValue.subscribe((nextValue) => {
+            this.navigation = nextValue;
+        });   
     }
 
     ngOnInit()

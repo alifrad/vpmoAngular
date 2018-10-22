@@ -10,6 +10,7 @@ import 'rxjs/add/observable/of';
 import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { HttpCacheService } from './http-cache.service';
+// import { GlobalService } from './global2.service';
 
 @Injectable()
 
@@ -18,17 +19,32 @@ export class AuthenticationService {
     redirectUrl: string;
     token: string;
 
-    private user = new BehaviorSubject<any>('');
+    user = new BehaviorSubject<any>('');
+   
     // currentUser = this.user.asObservable();
-    // private loggedIn = new BehaviorSubject<boolean>(false);
+    loggedIn = new BehaviorSubject<boolean>(false);
+    
     // userLoggedIn = this.loggedIn.asObservable();
 
     constructor(private http: HttpClient, 
                 private router: Router,
-                private cacheService: HttpCacheService
+                private cacheService: HttpCacheService,
+                // private globalService: GlobalService,
                 // public jwtHelper: JwtHelperService
                 ) 
-                { }
+                { 
+                    // globalService.currentUserValue.subscribe(
+                    //     nextValue => {
+                    //         this.tempUser = nextValue;
+                    //         this.tempUser = JSON.parse(this.tempUser);
+                    //         this.token = this.tempUser.token;
+                    //     },
+                    //     error => {
+                    //         console.log('token or currentUser are not recognised....');
+                    //         this.logout();
+                    //     }
+                    // );
+                }
 
 
     isLoggedIn(): Observable<boolean> {
@@ -45,7 +61,43 @@ export class AuthenticationService {
             }));
     }
 
-    getUserName(): Observable<any> {
+
+    isAuthenticated(): Observable<boolean> {
+        // get the token
+        // debugger;
+        if (this.getToken()) {
+            
+            const token = this.getToken();
+            return this.http.post<any>(appConfig.apiAuthUrl + '/token-verify/', { token: token })
+                .pipe(map(res => {
+                    if (res && res.token) {
+                        console.log('user is authenticated');
+                        return true;
+                    } else {
+                        console.log('user is NOT authenticated');
+                        this.logout();
+                        return false;
+                    }
+                })
+            );
+        } else {
+            this.logout();
+            return Observable.of(false);
+
+        }
+    }
+
+
+    getUserName(): Observable<string> {
+        // this.user.subscribe(
+        //     (data) => {
+        //         return data.fullname;
+        //     },
+        //     (err: any) => {
+        //         console.log('Error getUser(): could not get user fullname!');
+        //         return '';
+        //     }
+        // );       
         if (!localStorage.getItem('currentUser')) {
             console.log('user has not logged in!');
         } else {
@@ -54,60 +106,54 @@ export class AuthenticationService {
         }
     }
 
-    getUser(): Observable<any> {
-        if (!localStorage.getItem('currentUser')) {
-            console.log('user has not logged in!');
-            throw new Error('user has not logged in!');
-        } else {
-            this.tempUser = JSON.parse(localStorage.getItem('currentUser'));
-            return Observable.of(this.tempUser);
-        }
+    getUser() {
+        this.user.subscribe(
+            (data) => {
+                return data;
+            },
+            (err: any) => {console.log('Error getUser(): could not get user information!');
+        });
+        // if (!localStorage.getItem('currentUser')) {
+        //     console.log('user has not logged in!');
+        //     throw new Error('user has not logged in!');
+        // } else {
+        //     this.tempUser = JSON.parse(localStorage.getItem('currentUser'));
+        //     return Observable.of(this.tempUser);
+        // }
     }
 
-    getToken() {
+    getToken(): Observable<string> {
         if (localStorage.getItem('currentUser')) {
             this.tempUser = JSON.parse(localStorage.getItem('currentUser'));
             if (this.tempUser.token) {
                 return this.tempUser.token;
             }
         } else {
-            return false;              
+            this.logout();
+            throw new Error('token or currentUser is not accessible!');
         }
               
-    }
-
-
-    isAuthenticated(): Observable<boolean> {
-        // get the token
-        if (this.getToken()) {
-            this.token = this.getToken();
-
-            return this.http.post<any>(appConfig.apiAuthUrl + '/token-verify/', { token: this.token })
-            .pipe(map(res => {
-                if (res && res.token) {
-                    console.log('user is authenticated');
-                    return true;
-                } else {
-                    console.log('user is NOT authenticated');
-                    return false;
-                }
-            }
-            ));
-        } else {
-            return Observable.of(false);
-        }
-    }
+    }  
 
 
     login(email: string, password: string) {
         console.log('Logging In...');
-        this.cacheService.invalidateCache()
-        localStorage.clear()
+        this.cacheService.invalidateCache();
+        localStorage.clear();
         return this.http.post<any>(appConfig.apiAuthUrl + '/users/login/', { email: email, password: password })
             .pipe(map(user => {
                 // login successful if there's a jwt token in the response
                 if (user && user.token) {
                     // store user details and jwt token in local storage to keep user logged in between page refreshes
+                   
+                    // this.globalService.currentUser = JSON.stringify(user);
+                    // this.globalService.nodeId = '';
+                    // this.globalService.nodePermissoin = '';
+                    // this.globalService.teamId = '';
+                    // this.globalService.projectId = '';
+                    // this.globalService.topicId = '';
+                    
+                    this.user.next(JSON.stringify(user));
                     localStorage.setItem('currentUser', JSON.stringify(user));
                     localStorage.setItem('nodeID', '');
                     localStorage.setItem('nodeType', '');
@@ -115,11 +161,12 @@ export class AuthenticationService {
                     localStorage.setItem('teamID', '');
                     localStorage.setItem('projectID', '');
                     localStorage.setItem('topicID', '');
-                    this.user.next(JSON.parse(localStorage.getItem('currentUser')));
-                    // this.loggedIn.next(true);
+                    
+                    // this.isLoggedIn.next(true);
                     return user;
                 } else {
                     console.log('could not log in, either email or password is wrong!');
+                    // this.globalService.currentUser = '';
                     localStorage.removeItem('currentUser');
                     throw new Error('Email and/or Password is wrong!');
                 }
@@ -129,9 +176,15 @@ export class AuthenticationService {
     logout() {
         // remove user from local storage to log user out
         // localStorage.removeItem('currentUser');
-        this.cacheService.invalidateCache()
+        this.cacheService.invalidateCache();
         localStorage.clear();
-        console.log('Cleared Cache and localStorage')
+        // this.globalService.currentUser = '';
+        // this.globalService.nodeId = '';
+        // this.globalService.nodePermissoin = '';
+        // this.globalService.teamId = '';
+        // this.globalService.projectId = '';
+        // this.globalService.topicId = '';       
+        console.log('Cleared Cache and localStorage');
         // this.loggedIn.next(false);
         this.router.navigate(['/user/login']);
     }

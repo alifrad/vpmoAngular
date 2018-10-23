@@ -63,7 +63,7 @@ export class FuseNavbarComponent implements OnInit, OnDestroy
         
         
         globalService.navigationValue.subscribe((nextValue) => {
-            this.navigation = nextValue;
+            this.navigation = JSON.parse(nextValue);
         });   
     }
 

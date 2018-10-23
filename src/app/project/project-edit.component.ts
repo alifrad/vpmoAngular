@@ -35,8 +35,8 @@ export class ProjectEditComponent implements OnInit {
   saveContent () {
     let id: string;
 
-    this.global.projectId().subscribe(
-      (data) => { id = data; },
+    this.global.projectValue.subscribe(
+      (data) => { id = data.id; },
       (err: any) => console.log('error: project id')
     );
     this._projectService.partialUpdateProject(id, this.projectContent)

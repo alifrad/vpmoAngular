@@ -13,36 +13,115 @@ export class GlobalService {
   teamValue = new BehaviorSubject<any>(null);
   projectValue = new BehaviorSubject<any>(null);
   topicValue = new BehaviorSubject<any>(null);
-  
-  nav: any[];
 
-  constructor(  )
-  { this.nav = navigation; }
-  
-  navigationValue = new BehaviorSubject<any[]>([ {
-    'id'      : 'TEAM',
-    'title'   : 'TEAMS',
+  navStr: string;
+  nav: any;
+  navInit: any = [ 
+    {
+    'id'      : 'teamGroup',
+    'title'   : 'TEAM',
     'type'    : 'group',
-    'icon' : 'business_center',
-    'url'  : '/team/all',
+    // 'icon' : 'business_center',
+    'url'  : '',
     'children': [
       {
-          'id'   : 'TeamTree',
-          'title': 'Team Tree (see projects)',
+          'id'   : 'teams',
+          'title': 'My Teams',
           // 'translate': 'NAV.SAMPLE.TITLE',
           'type' : 'item',
           'icon' : 'business_center',
-          'url'  : '/team/tree',
+          'url'  : '/team/all',
           'hidden' : false,
-          'badge': {
-              'title': 25,
-              'translate': 'NAV.SAMPLE.BADGE',
-              'bg'   : '#F44336',
-              'fg'   : '#FFFFFF'
-          }
-      }
-    ]
-  }]);
+      },
+      {
+        'id'   : 'focusTeam',
+        'title': 'ABC Co.',
+        'type' : 'item',
+        'icon' : 'business_center',
+        'url'  : '',
+        'hidden' : true,
+    },
+    ]},
+    {
+      'id'      : 'projectGroup',
+      'title'   : 'PROJECTS',
+      'type'    : 'group',
+      // 'icon' : 'business_center',
+      'url'  : '',
+      'children': [
+        {
+            'id'   : 'project',
+            'title': 'My Projects',
+            // 'translate': 'NAV.SAMPLE.TITLE',
+            'type' : 'item',
+            // 'icon' : 'business_center',
+            'url'  : '',
+            'hidden' : true,
+        },
+        {
+          'id'   : 'focusProject',
+          'title': 'Test Project',
+          'type' : 'item',
+          'icon' : 'business_center',
+          'url'  : '',
+          'hidden' : true,
+      },
+      ]},
+      {
+        'id'      : 'topicGroup',
+        'title'   : 'TOPIC',
+        'type'    : 'group',
+        // 'icon' : 'business_center',
+        'url'  : '',
+        'hidden' : true,
+        'children': [
+          {
+              'id'   : 'topics',
+              'title': 'My sub-projects and Topics',
+              // 'translate': 'NAV.SAMPLE.TITLE',
+              'type' : 'item',
+              // 'icon' : 'business_center',
+              'url'  : '',
+              'hidden' : true,
+          },
+          {
+            'id'   : 'focusTopic',
+            'title': 'Issue 123',
+            'type' : 'item',
+            // 'icon' : 'business_center',
+            'url'  : '',
+            'hidden' : true,
+        },
+        ]},
+        {
+          'id'      : 'favouritsGroup',
+          'title'   : 'FAVOURITES',
+          'type'    : 'group',
+          // 'icon' : 'business_center',
+          'url'  : '',
+          'children': [
+            {
+                'id'   : 'fav001',
+                'title': 'Issue 123',
+                // 'translate': 'NAV.SAMPLE.TITLE',
+                'type' : 'item',
+                // 'icon' : 'business_center',
+                'url'  : '',
+            },
+            {
+              'id'   : 'fav002',
+              'title': 'Project XYZ',
+              'type' : 'item',
+              // 'icon' : 'business_center',
+              'url'  : '',
+          },
+          ]},
+  
+  ];
+  navigationValue = new BehaviorSubject<any>(JSON.stringify(this.navInit));
+
+  constructor(  )
+  {}
 
   set node(value) {
     this.nodeValue.next(value);
@@ -56,6 +135,15 @@ export class GlobalService {
   set team(value) {
     this.teamValue.next(value);
     localStorage.setItem('team', value);
+    this.navigationValue.subscribe(nextValue => this.nav = JSON.parse(nextValue));
+    this.nav
+      .find(item => item.id === 'teamGroup').children
+      .find(item => item.id === 'focusTeam').hidden = false;
+    this.nav
+      .find(item => item.id === 'teamGroup').children
+      .find(item => item.id === 'focusTeam').title = JSON.parse(this.team).title;
+    this.navStr = JSON.stringify(this.nav);
+    this.navigation = this.navStr;
   }
 
   get team() {

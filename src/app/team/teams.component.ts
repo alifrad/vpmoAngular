@@ -22,11 +22,9 @@ export class TeamsComponent implements OnInit {
   ) { }
 
   teamTree(team: Team) {
-    // localStorage.setItem('nodeID', JSON.stringify(team._id));
     localStorage.setItem('nodeType', 'Team');
     this.globalService.team = JSON.stringify(team);
     this.globalService.node = JSON.stringify(team);
-    // localStorage.setItem('teamID', id);
     this.router.navigate(['/team/tree']);
   }
 

@@ -155,12 +155,13 @@ export class AuthenticationService {
                     
                     this.user.next(JSON.stringify(user));
                     localStorage.setItem('currentUser', JSON.stringify(user));
-                    localStorage.setItem('nodeID', '');
+                    localStorage.setItem('node', '');
                     localStorage.setItem('nodeType', '');
                     localStorage.setItem('nodePermission', '');
-                    localStorage.setItem('teamID', '');
-                    localStorage.setItem('projectID', '');
-                    localStorage.setItem('topicID', '');
+                    localStorage.setItem('team', '');
+                    localStorage.setItem('project', '');
+                    localStorage.setItem('topic', '');
+                    localStorage.setItem('navigation', '');
                     
                     // this.isLoggedIn.next(true);
                     return user;

@@ -22,7 +22,7 @@ export class UserProfileComponent implements OnInit {
                 private fb: FormBuilder) { }
 
     ngOnInit() {
-        this.authService.getUser()
+        this.authService.user
             .subscribe(
                 user => this.currentUser = user,
                 (err: any) => console.log(err)

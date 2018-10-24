@@ -79,6 +79,7 @@ import {
     MatTreeModule,
   } from '@angular/material';
 import { GlobalService } from './_services/global.service';
+import { NavigationComponent } from './navigation/navigation.component';
 
 const appRoutes: Routes = [
     {
@@ -138,6 +139,7 @@ export function tokenGetter() {
         HomeComponent,
         ErrorComponent,
         AlertComponent,
+        NavigationComponent,
 
     ],
     // The main application view, called the root component, which hosts all other app views

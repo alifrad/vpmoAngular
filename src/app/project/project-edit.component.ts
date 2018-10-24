@@ -28,17 +28,18 @@ export class ProjectEditComponent implements OnInit {
     
     if (this.project.content !== null) {
       this.projectContent = this.project.content;
-      console.log('NOT NULL!', this.projectContent);
+      // console.log('NOT NULL!', this.projectContent);
     }
   }
 
   saveContent () {
     let id: string;
 
-    this.global.projectValue.subscribe(
-      (data) => { id = data.id; },
-      (err: any) => console.log('error: project id')
-    );
+    id = JSON.parse(localStorage.getItem('project'))._id;
+    // this.global.projectValue.subscribe(
+    //   (data) => { id = JSON.parse(data)._id; },
+    //   (err: any) => console.log('error: project id')
+    // );
     this._projectService.partialUpdateProject(id, this.projectContent)
       .subscribe(
         project => this.project = project 

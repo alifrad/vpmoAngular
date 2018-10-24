@@ -1,74 +1,103 @@
-export const navigation = [
+export const navigation = [ 
     {
-        'id'      : 'TEAM',
-        'title'   : 'TEAMS',
-        // 'translate': 'NAV.ORGANISATIONS',
-        'type'    : 'group',
+    'id'      : 'teamGroup',
+    'title'   : 'TEAM',
+    'type'    : 'group',
+    // 'icon' : 'business_center',
+    'url'  : '',
+    'children': [
+      {
+          'id'   : 'teams',
+          'title': 'My Teams',
+          // 'translate': 'NAV.SAMPLE.TITLE',
+          'type' : 'item',
+          'icon' : 'business_center',
+          'url'  : '/team/all',
+          'hidden' : false,
+      },
+      {
+        'id'   : 'focusTeam',
+        'title': 'ABC Co.',
+        'type' : 'item',
         'icon' : 'business_center',
-        'url'  : '/team/all',
-        'children': [
-            // {
-            //     'id'   : 'TeamTree',
-            //     'title': 'Team Tree (see projects)',
-            //     'translate': 'NAV.SAMPLE.TITLE',
-            //     'type' : 'item',
-            //     'icon' : 'business_center',
-            //     'url'  : '/team/tree',
-            //     'badge': {
-            //         'title': 25,
-            //         'translate': 'NAV.SAMPLE.BADGE',
-            //         'bg'   : '#F44336',
-            //         'fg'   : '#FFFFFF'
-            //     }
-            // },
-            // {
-            //     'id'   : 'TeamMembers',
-            //     'title': 'People',
-            //     // 'translate': 'NAV.AddOrganisation.TITLE',
-            //     'type' : 'item',
-            //     'icon' : 'add_box',
-            //     'url'  : '/team/members/',
-            // },
-            // {
-            //     'id'   : 'MyTeams',
-            //     'title': 'My Teams',
-            //     // 'translate': 'NAV.AddOrganisation.TITLE',
-            //     'type' : 'item',
-            //     'icon' : 'list',
-            //     'url'  : '/team/all/',
-            // }
-        ]
+        'url'  : '',
+        'hidden' : true,
     },
+    ]},
     {
-        'id'      : 'FAVOURITES',
-        'title'   : 'FAVOURITES',
-        // 'translate': 'NAV.ORGANISATIONS',
+      'id'      : 'projectGroup',
+      'title'   : 'PROJECTS',
+      'type'    : 'group',
+      'hidden' : true,
+      // 'icon' : 'business_center',
+      'url'  : '',
+      'children': [
+        {
+            'id'   : 'projects',
+            'title': 'My Projects',
+            // 'translate': 'NAV.SAMPLE.TITLE',
+            'type' : 'item',
+            // 'icon' : 'business_center',
+            'url'  : 'project/all',
+            'hidden' : true,
+        },
+        {
+          'id'   : 'focusProject',
+          'title': 'Test Project',
+          'type' : 'item',
+          'icon' : 'business_center',
+          'url'  : 'focusproject_url',
+          'hidden' : true,
+      },
+      ]},
+      {
+        'id'      : 'topicGroup',
+        'title'   : 'TOPIC',
         'type'    : 'group',
+        // 'icon' : 'business_center',
+        'url'  : '',
+        'hidden' : true,
         'children': [
+          {
+              'id'   : 'topics',
+              'title': 'My sub-projects and Topics',
+              // 'translate': 'NAV.SAMPLE.TITLE',
+              'type' : 'item',
+              // 'icon' : 'business_center',
+              'url'  : 'topic/all',
+              'hidden' : true,
+          },
+          {
+            'id'   : 'focusTopic',
+            'title': 'Issue 123',
+            'type' : 'item',
+            // 'icon' : 'business_center',
+            'url'  : 'focusTopic_url',
+            'hidden' : true,
+        },
+        ]},
+        {
+          'id'      : 'favouritsGroup',
+          'title'   : 'FAVOURITES',
+          'type'    : 'group',
+          // 'icon' : 'business_center',
+          'url'  : '',
+          'children': [
             {
-                'id'   : '000000001',
-                'title': 'Project ABC',
+                'id'   : 'fav001',
+                'title': 'Issue 123',
                 // 'translate': 'NAV.SAMPLE.TITLE',
                 'type' : 'item',
-                'icon' : 'visibility',
-                'url'  : '/projects/abc',
+                // 'icon' : 'business_center',
+                'url'  : '',
             },
             {
-                'id'   : '000000002',
-                'title': 'Issue 127',
-                // 'translate': 'NAV.AddOrganisation.TITLE',
-                'type' : 'item',
-                'icon' : 'add_box',
-                'url'  : '/projects/add',
-            },
-            {
-                'id'   : '000000003',
-                'title': 'Team ABC',
-                // 'translate': 'NAV.AddOrganisation.TITLE',
-                'type' : 'item',
-                'icon' : 'view_module',
-                'url'  : '/projects/',
-            }
-        ]
-    }
-];
+              'id'   : 'fav002',
+              'title': 'Project XYZ',
+              'type' : 'item',
+              // 'icon' : 'business_center',
+              'url'  : '',
+          },
+          ]},
+  
+  ];

@@ -13,113 +13,11 @@ export class GlobalService {
   teamValue = new BehaviorSubject<any>(null);
   projectValue = new BehaviorSubject<any>(null);
   topicValue = new BehaviorSubject<any>(null);
-
+  navigationValue = new BehaviorSubject<any>(null);
+  
   navStr: string;
   nav: any;
-  navInit: any = [ 
-    {
-    'id'      : 'teamGroup',
-    'title'   : 'TEAM',
-    'type'    : 'group',
-    // 'icon' : 'business_center',
-    'url'  : '',
-    'children': [
-      {
-          'id'   : 'teams',
-          'title': 'My Teams',
-          // 'translate': 'NAV.SAMPLE.TITLE',
-          'type' : 'item',
-          'icon' : 'business_center',
-          'url'  : '/team/all',
-          'hidden' : false,
-      },
-      {
-        'id'   : 'focusTeam',
-        'title': 'ABC Co.',
-        'type' : 'item',
-        'icon' : 'business_center',
-        'url'  : '',
-        'hidden' : true,
-    },
-    ]},
-    {
-      'id'      : 'projectGroup',
-      'title'   : 'PROJECTS',
-      'type'    : 'group',
-      // 'icon' : 'business_center',
-      'url'  : '',
-      'children': [
-        {
-            'id'   : 'project',
-            'title': 'My Projects',
-            // 'translate': 'NAV.SAMPLE.TITLE',
-            'type' : 'item',
-            // 'icon' : 'business_center',
-            'url'  : '',
-            'hidden' : true,
-        },
-        {
-          'id'   : 'focusProject',
-          'title': 'Test Project',
-          'type' : 'item',
-          'icon' : 'business_center',
-          'url'  : '',
-          'hidden' : true,
-      },
-      ]},
-      {
-        'id'      : 'topicGroup',
-        'title'   : 'TOPIC',
-        'type'    : 'group',
-        // 'icon' : 'business_center',
-        'url'  : '',
-        'hidden' : true,
-        'children': [
-          {
-              'id'   : 'topics',
-              'title': 'My sub-projects and Topics',
-              // 'translate': 'NAV.SAMPLE.TITLE',
-              'type' : 'item',
-              // 'icon' : 'business_center',
-              'url'  : '',
-              'hidden' : true,
-          },
-          {
-            'id'   : 'focusTopic',
-            'title': 'Issue 123',
-            'type' : 'item',
-            // 'icon' : 'business_center',
-            'url'  : '',
-            'hidden' : true,
-        },
-        ]},
-        {
-          'id'      : 'favouritsGroup',
-          'title'   : 'FAVOURITES',
-          'type'    : 'group',
-          // 'icon' : 'business_center',
-          'url'  : '',
-          'children': [
-            {
-                'id'   : 'fav001',
-                'title': 'Issue 123',
-                // 'translate': 'NAV.SAMPLE.TITLE',
-                'type' : 'item',
-                // 'icon' : 'business_center',
-                'url'  : '',
-            },
-            {
-              'id'   : 'fav002',
-              'title': 'Project XYZ',
-              'type' : 'item',
-              // 'icon' : 'business_center',
-              'url'  : '',
-          },
-          ]},
   
-  ];
-  navigationValue = new BehaviorSubject<any>(JSON.stringify(this.navInit));
-
   constructor(  )
   {}
 
@@ -141,7 +39,22 @@ export class GlobalService {
       .find(item => item.id === 'focusTeam').hidden = false;
     this.nav
       .find(item => item.id === 'teamGroup').children
-      .find(item => item.id === 'focusTeam').title = JSON.parse(this.team).title;
+      .find(item => item.id === 'focusTeam').title = JSON.parse(value).name;
+    this.nav
+      .find(item => item.id === 'teamGroup').children
+      .find(item => item.id === 'focusTeam').url = '/team/tree';
+    this.nav.find(item => item.id === 'projectGroup').hidden = false;
+    this.nav
+      .find(item => item.id === 'projectGroup').children
+      .find(item => item.id === 'focusProject').hidden = true;
+    this.nav
+      .find(item => item.id === 'projectGroup').children
+      .find(item => item.id === 'projects').hidden = false;
+    this.nav.find(item => item.id === 'topicGroup').hidden = true;
+
+    localStorage.setItem('project', '');
+    localStorage.setItem('topic', '');
+
     this.navStr = JSON.stringify(this.nav);
     this.navigation = this.navStr;
   }
@@ -153,6 +66,29 @@ export class GlobalService {
   set project(value) {
     this.projectValue.next(value);
     localStorage.setItem('project', value);
+
+    this.navigationValue.subscribe(nextValue => this.nav = JSON.parse(nextValue));
+    this.nav
+      .find(item => item.id === 'projectGroup').children
+      .find(item => item.id === 'focusProject').hidden = false;
+    this.nav
+      .find(item => item.id === 'projectGroup').children
+      .find(item => item.id === 'focusProject').title = JSON.parse(value).name;
+    this.nav
+      .find(item => item.id === 'projectGroup').children
+      .find(item => item.id === 'focusProject').url = 'project url';
+    this.nav.find(item => item.id === 'topicGroup').hidden = false;
+    this.nav
+      .find(item => item.id === 'topicGroup').children
+      .find(item => item.id === 'focusTopic').hidden = true;
+    this.nav
+      .find(item => item.id === 'topicGroup').children
+      .find(item => item.id === 'topics').hidden = false,
+    
+    localStorage.setItem('topic', '');
+    
+    this.navStr = JSON.stringify(this.nav);
+    this.navigation = this.navStr;
   }
 
   get project() {
@@ -162,6 +98,20 @@ export class GlobalService {
   set topic(value) {
     this.topicValue.next(value);
     localStorage.setItem('topic', value);
+
+    this.navigationValue.subscribe(nextValue => this.nav = JSON.parse(nextValue));
+    this.nav
+      .find(item => item.id === 'topicGroup').children
+      .find(item => item.id === 'focusTopic').hidden = false;
+    this.nav
+      .find(item => item.id === 'topicGroup').children
+      .find(item => item.id === 'focusTopic').title = JSON.parse(value).name;
+    this.nav
+      .find(item => item.id === 'topicGroup').children
+      .find(item => item.id === 'focusTopic').url = 'topicurl';
+    
+    this.navStr = JSON.stringify(this.nav);
+    this.navigation = this.navStr;
   }
 
   get topic() {
@@ -178,13 +128,5 @@ export class GlobalService {
     return localStorage.getItem('navigation');
   }
 
-  updateNavigation() {
     
-    if (this.teamValue != null ) {
-
-    }
-  }
-
-
-  
 }

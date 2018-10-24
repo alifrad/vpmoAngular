@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { AddPermissionsComponent } from './add-permissions.component';
 import { AuthenticationService } from '../_services';
 import { PermissionsService } from './permissions.service';
-import {MatDialog, MatDialogConfig} from "@angular/material";
+import {MatDialog, MatDialogConfig} from '@angular/material';
 
 @Component({
   selector: 'app-permissions',
@@ -29,94 +29,94 @@ export class PermissionsComponent implements OnInit {
   // Role of the current user for the node
   currentUserRole: string;
   currentUserID: string;
-  displayedColumns: string[] = ['username', 'role', 'controlsColumn']
+  displayedColumns: string[] = ['username', 'role', 'controlsColumn'];
   // The roles assignable by the user
   assignableRoles: string[] = [];
 
   ngOnInit() {
-    var nodeID = localStorage.getItem('nodeID')
-    var nodeType = localStorage.getItem('nodeType')
+    const nodeID = JSON.parse(localStorage.getItem('node'))._id;
+    const nodeType = localStorage.getItem('nodeType');
 
-    this.getUserPermissions(nodeID, nodeType)
+    this.getUserPermissions(nodeID, nodeType);
 
-    this.getPermissionsList(nodeID, nodeType)
+    this.getPermissionsList(nodeID, nodeType);
 
-    this.getAssignableRoles(nodeID, nodeType)
+    this.getAssignableRoles(nodeID, nodeType);
 
-    this.nodeID = nodeID
-    this.nodeType = nodeType
+    this.nodeID = nodeID;
+    this.nodeType = nodeType;
   }
 
   getUserPermissions (nodeID, nodeType) {
     this._permissionsService.getUserPermissions(nodeID, nodeType)
       .subscribe(
         userPermissions => {
-          this.currentUserPermissions = userPermissions.permissions
-          this.currentUserRole = userPermissions.role
-          this.currentUserID = userPermissions._id
+          this.currentUserPermissions = userPermissions.permissions;
+          this.currentUserRole = userPermissions.role;
+          this.currentUserID = userPermissions._id;
         }
-      )
+      );
   }
 
   getPermissionsList (nodeID, nodeType) {
     this._permissionsService.getPermissionsList(nodeID, nodeType)
       .subscribe(
         permissions => {
-          this.userList = permissions
+          this.userList = permissions;
         }
-      )
+      );
   }
 
   getAssignableRoles (nodeID, nodeType) {
     this._permissionsService.getAssignableRoles(nodeID, nodeType)
       .subscribe(
         roles => {
-          this.assignableRoles = roles
+          this.assignableRoles = roles;
         }
-      )
+      );
   }
 
   assignRole (newRole, user) {
-    var self = this
+    const self = this;
     this._permissionsService.assignUserToNode(this.nodeID, this.nodeType, user._id, newRole)
       .subscribe(
         response => {
-          if(user._id === self.currentUserID) {
-            self.getUserPermissions(self.nodeID, self.nodeType)
+          if (user._id === self.currentUserID) {
+            self.getUserPermissions(self.nodeID, self.nodeType);
           }
         }
-      )
+      );
   }
 
   canAddUser () {
-    var addPerms = [];
+    const addPerms = [];
     this.currentUserPermissions.forEach(function (i) {
       if (i.indexOf('add_') >= 0) {
-        addPerms.push(i)
+        addPerms.push(i);
       }
-    })
-    return addPerms.length >= 1
+    });
+    return addPerms.length >= 1;
   }
 
   canRemoveUsers () {
-    var removePerms = [];
+    const removePerms = [];
     this.currentUserPermissions.forEach(function (i) {
       if (i.indexOf('remove_') >= 0) {
-        removePerms.push(i)
+        removePerms.push(i);
       }
-    })
-    return removePerms.length >= 1
+    });
+    return removePerms.length >= 1;
   }
 
   canEditUserRoles () {
-    var editPerms = [];
-    var self = this
+    const editPerms = [];
+    const self = this;
     this.currentUserPermissions.forEach(function (i) {
-      if (i == 'update_'+self.nodeType.toLowerCase()+'_user_role') {
-        editPerms.push(i)
+      if (i === 'update_' + self.nodeType.toLowerCase() + '_user_role') {
+        editPerms.push(i);
       }
-    })
-    return editPerms.length >= 1
+    });
+    return editPerms.length >= 1;
   }
 
   openAddDialog () {
@@ -126,10 +126,10 @@ export class PermissionsComponent implements OnInit {
     dialogConfig.width = '350';
     dialogConfig.height = '500';
 
-    localStorage.setItem('assignableRoles', JSON.stringify(this.assignableRoles))
-    var dialogRef = this.dialog.open(AddPermissionsComponent, dialogConfig);
+    localStorage.setItem('assignableRoles', JSON.stringify(this.assignableRoles));
+    const dialogRef = this.dialog.open(AddPermissionsComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(result => {
-      this.getPermissionsList(this.nodeID, this.nodeType)
+      this.getPermissionsList(this.nodeID, this.nodeType);
     });
   }
 
@@ -140,9 +140,9 @@ export class PermissionsComponent implements OnInit {
     this._permissionsService.removeUserPermissions(this.nodeID, this.nodeType, user._id)
        .subscribe(
         response => {
-          this.userList = this.userList.filter(item => item._id != user._id)
+          this.userList = this.userList.filter(item => item._id !== user._id);
           // this.userList.splice(this.userList.indexOf(user), 1)
         }
-      )
+      );
   }
 }

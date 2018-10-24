@@ -22,7 +22,7 @@ import { ChatModule } from '../chat/chat.module';
 import { TreeStructureModule } from '../tree-structure/tree-structure.module';
 import { NodeEditComponent } from './node-edit.component';
 import { PermissionsModule } from '../permissions/permissions.module';
-import { NodeNavigationComponent } from './node-navigation.component'
+import { NodeNavigationComponent } from './node-navigation.component';
 
 const NodeRoutes: Routes = [
   {

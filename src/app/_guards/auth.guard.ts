@@ -37,7 +37,7 @@ export class AuthGuard implements CanActivate {
                         return error;
                     }
 
-                )
+                );
     }
 
     checklogedIn(url: string): boolean {

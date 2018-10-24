@@ -10,6 +10,8 @@ import { IProject } from '../project/project';
 })
 export class NodeEditComponent implements OnInit {
 
+
+  
   project: any;
   content: string;
 
@@ -19,15 +21,19 @@ export class NodeEditComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    if (localStorage.getItem('nodeType') === 'Team'){
+    const nodeId = JSON.parse(localStorage.getItem('node'))._Id;
+    const nodeType = localStorage.getItem('nodeType');
 
-    } else if (localStorage.getItem('nodeType') === 'Project'){
+    if (nodeType === 'Team') {
+
+    } else if (nodeType === 'Project') {
         console.log("Project.................")
         this.project = JSON.parse(localStorage.getItem('project'));
         if (this.project.content !== null) {
           this.content = this.project.content;
           console.log('NOT NULL!', this.content);
-    } else if (localStorage.getItem('nodeType') === 'Deliverable'){
+        }
+    } else if (nodeType === 'Deliverable'){
 
     }
 

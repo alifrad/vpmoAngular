@@ -20,6 +20,8 @@ export class TreeStructureComponent implements OnInit {
   nodeType: any;
   node: any;
   team: any;
+  project: any;
+  topic: any;
   @ViewChild(TreeComponent)
   private tree: TreeComponent;
   // user the object for cancel or save created node
@@ -148,6 +150,14 @@ export class TreeStructureComponent implements OnInit {
             (nextValue) => {
               this.team = nextValue;
           });
+          globalService.projectValue.subscribe(
+            (nextValue) => {
+              this.project = nextValue;
+          });
+          globalService.topicValue.subscribe(
+            (nextValue) => {
+              this.topic = nextValue;
+          });
           globalService.nodeValue.subscribe(
             (nextValue) => {
               this.node = nextValue;
@@ -219,15 +229,19 @@ export class TreeStructureComponent implements OnInit {
   public viewDetail = (node) => {
     const nodeType = node.data.node_type;
     const nodeId = node.data._id;
+    const nodeName = node.data.name;
     console.log('Opening Node', node);
-    localStorage.setItem('nodeID', nodeId);
+    // localStorage.setItem('nodeID', nodeId);
     localStorage.setItem('nodeType', nodeType);
+    this.globalService.node = JSON.stringify({ _id: nodeId, name: nodeName });
+    
     if (nodeType === 'Team') {
-      localStorage.setItem('teamID', nodeId);
+      this.globalService.team = JSON.stringify({ _id: nodeId, name: nodeName });
+      // localStorage.setItem('teamID', nodeId);
     } else if (nodeType === 'Project') {
-      localStorage.setItem('projectID', nodeId);
+      this.globalService.project = JSON.stringify({ _id: nodeId, name: nodeName });
     } else {
-      localStorage.setItem('topicID', nodeId);
+      this.globalService.topic = JSON.stringify({ _id: nodeId, name: nodeName });
     }
 
     this.router.navigate(['node/details']);

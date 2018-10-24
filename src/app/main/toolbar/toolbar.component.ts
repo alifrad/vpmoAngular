@@ -130,8 +130,8 @@ export class FuseToolbarComponent implements OnInit {
         this.authService.isAuthenticated()
             .subscribe(
                 (data: boolean) => { this.isLoggedIn = data, console.log(`isLoggedIn: ${this.isLoggedIn}`); },
-                (err: any) => console.log(`error in reading isLoggedIn from Auth component" ${err}`),
-                () => console.log('isLoggedIn function read properly')
+                (err: any) => console.log(`error in reading isAuthenticated from Auth component ${err}`),
+                () => console.log('isAuthenticated function read properly')
             );
         console.log('ngOnInit complete');
 

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { IVisualNodeData, INodeDto } from './tree-structure-model';
 import { ITreeNode } from '../../../node_modules/angular-tree-component/dist/defs/api';
 import { TreeModel } from '../../../node_modules/angular-tree-component';
-import * as _ from "lodash";
+import * as _ from 'lodash';
 import { nodeChildrenAsMap } from '../../../node_modules/@angular/router/src/utils/tree';
 import { TreeStructureHttpService } from './tree-structure-http.service';
 
@@ -13,18 +13,18 @@ export class TreeStructureService {
   constructor(private treeStructureHttpService: TreeStructureHttpService) { }
 
   public saveNewNode(visualNode: IVisualNodeData, tree: TreeModel): any {
-    console.log('Adding node', visualNode, tree)
-    let dto = this.converVisualNodeToDto(visualNode, false);
+    console.log('Adding node', visualNode, tree);
+    const dto = this.converVisualNodeToDto(visualNode, false);
     delete dto._id;
     delete dto.path;
     this.treeStructureHttpService.addNode(dto).subscribe((res => {
-      let node = tree.getNodeById(visualNode._id);
+      const node = tree.getNodeById(visualNode._id);
       node.data._id = res._id;
     }));
   }
 
   public updateNode(node: IVisualNodeData): any {
-    let dto = this.converVisualNodeToDto(node, false);
+    const dto = this.converVisualNodeToDto(node, false);
     this.treeStructureHttpService.updateNode(dto);
   }
 
@@ -45,7 +45,7 @@ export class TreeStructureService {
       node_type: visulaNode.node_type,
       children: [],
       parent: visulaNode.beforeUpdateData.parentId
-    }
+    };
     if (withChildren) {
       visulaNode.children.forEach(node => {
         dto.children.push(this.converVisualNodeToDto(node, withChildren));
@@ -58,7 +58,7 @@ export class TreeStructureService {
   public preUploadData(data: any): any {
     this.addBeforeUpdateData(data, null);
     let newData = [data];
-    return newData
+    return newData;
   }
 
   private addBeforeUpdateData = (node: IVisualNodeData, parentId) => {
@@ -88,7 +88,9 @@ export class TreeStructureService {
     if ('isEditing' in data) {
       delete data.isEditing;
     }
-    node.data.index = node.parent.data.children.map((e: IVisualNodeData) => { return e._id; }).indexOf(data._id);
+    node.data.index = node.parent.data.children
+      .map((e: IVisualNodeData) => e._id )
+      .indexOf(data._id);
   }
 
   public updateModel = (node: ITreeNode, treeModel: TreeModel): IVisualNodeData[] => {
@@ -99,10 +101,10 @@ export class TreeStructureService {
     //  change PATH all children MOVED element
 
     let listUpdatedElement: Array<string> = [];
-    if (node.data.beforeUpdateData.parentId != node.parent.data._id) {
+    if (node.data.beforeUpdateData.parentId !== node.parent.data._id) {
       let oldParentNode = treeModel.getNodeById(node.data.beforeUpdateData.parentId);
       this.updateCildrenIndex(oldParentNode.data.children, node.data.beforeUpdateData.index, listUpdatedElement, treeModel);
-      this.updatePathWithChildren(node, listUpdatedElement)
+      this.updatePathWithChildren(node, listUpdatedElement);
       node.data.beforeUpdateData.parentId = node.parent.data._id;
     }
     //
@@ -126,7 +128,7 @@ export class TreeStructureService {
       const child = children[index];
       let childIndex = treeModel.getNodeById(child._id).index;
       child.beforeUpdateData.index = childIndex;
-      if (child.index != childIndex) {
+      if (child.index !== childIndex) {
         child.index = childIndex;
         listUpdatedElement.push(child._id);
       }
@@ -144,7 +146,7 @@ export class TreeStructureService {
 
   public static newGuid() {
     return 'xxxxxxxxxxxxxxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-      var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+      var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
       return v.toString(16);
     });
   }

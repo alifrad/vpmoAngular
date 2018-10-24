@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
-import { map, filter, scan } from 'rxjs/operators';
+import { catchError, map, filter, scan } from 'rxjs/operators';
 import { User } from '../user/user';
 import { appConfig } from '../app.config';
 import { BehaviorSubject } from 'rxjs/index';
@@ -10,6 +10,8 @@ import 'rxjs/add/observable/of';
 import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { HttpCacheService } from './http-cache.service';
+import { GlobalService } from './global.service';
+import { navigation } from '../navigation/navigation';
 // import { GlobalService } from './global2.service';
 
 @Injectable()
@@ -18,6 +20,7 @@ export class AuthenticationService {
     tempUser: any;
     redirectUrl: string;
     token: string;
+    navigation: any;
 
     user = new BehaviorSubject<any>('');
    
@@ -29,10 +32,12 @@ export class AuthenticationService {
     constructor(private http: HttpClient, 
                 private router: Router,
                 private cacheService: HttpCacheService,
-                // private globalService: GlobalService,
+                private globalService: GlobalService,
+                
                 // public jwtHelper: JwtHelperService
                 ) 
                 { 
+                    this.navigation = navigation;
                     // globalService.currentUserValue.subscribe(
                     //     nextValue => {
                     //         this.tempUser = nextValue;
@@ -47,19 +52,19 @@ export class AuthenticationService {
                 }
 
 
-    isLoggedIn(): Observable<boolean> {
-        const token = this.getToken();
-        return this.http.post<any>(appConfig.apiAuthUrl + '/token-verify/', { token: token })
-            .pipe(map(res => {
-                if (res.token) {
-                    console.log('user token is verified');
-                    return true;
-                } else {
-                    console.log('user token is not valid');
-                    return false;
-                }
-            }));
-    }
+    // isLoggedIn(): Observable<boolean> {
+    //     const token = this.getToken();
+    //     return this.http.post<any>(appConfig.apiAuthUrl + '/token-verify/', { token: token })
+    //         .pipe(map(res => {
+    //             if (res.token) {
+    //                 console.log('user token is verified');
+    //                 return true;
+    //             } else {
+    //                 console.log('user token is not valid');
+    //                 return false;
+    //             }
+    //         }));
+    // }
 
 
     isAuthenticated(): Observable<boolean> {
@@ -69,17 +74,20 @@ export class AuthenticationService {
             
             const token = this.getToken();
             return this.http.post<any>(appConfig.apiAuthUrl + '/token-verify/', { token: token })
-                .pipe(map(res => {
-                    if (res && res.token) {
-                        console.log('user is authenticated');
+                .pipe(
+                    map(res => {
+                    if (res.token) {
+                        console.log('isAuthenticated: user is authenticated');
                         return true;
                     } else {
-                        console.log('user is NOT authenticated');
+                        console.log('isAuthenticated: user is NOT authenticated');
                         this.logout();
                         return false;
                     }
-                })
-            );
+                    }),
+                    catchError(err => of(false))
+                );
+            
         } else {
             this.logout();
             return Observable.of(false);
@@ -145,13 +153,6 @@ export class AuthenticationService {
                 // login successful if there's a jwt token in the response
                 if (user && user.token) {
                     // store user details and jwt token in local storage to keep user logged in between page refreshes
-                   
-                    // this.globalService.currentUser = JSON.stringify(user);
-                    // this.globalService.nodeId = '';
-                    // this.globalService.nodePermissoin = '';
-                    // this.globalService.teamId = '';
-                    // this.globalService.projectId = '';
-                    // this.globalService.topicId = '';
                     
                     this.user.next(JSON.stringify(user));
                     localStorage.setItem('currentUser', JSON.stringify(user));
@@ -161,6 +162,7 @@ export class AuthenticationService {
                     localStorage.setItem('team', '');
                     localStorage.setItem('project', '');
                     localStorage.setItem('topic', '');
+                    this.globalService.navigation = JSON.stringify(this.navigation);
                     localStorage.setItem('navigation', '');
                     
                     // this.isLoggedIn.next(true);
@@ -179,12 +181,7 @@ export class AuthenticationService {
         // localStorage.removeItem('currentUser');
         this.cacheService.invalidateCache();
         localStorage.clear();
-        // this.globalService.currentUser = '';
-        // this.globalService.nodeId = '';
-        // this.globalService.nodePermissoin = '';
-        // this.globalService.teamId = '';
-        // this.globalService.projectId = '';
-        // this.globalService.topicId = '';       
+  
         console.log('Cleared Cache and localStorage');
         // this.loggedIn.next(false);
         this.router.navigate(['/user/login']);

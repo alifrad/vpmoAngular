@@ -14,14 +14,20 @@ export class TeamsComponent implements OnInit {
 
   teams: Team[] = [];
   errorMessage: string;
+  node: any;
+  team: any;
+
   constructor(
       private authenticationService: AuthenticationService,
       private teamService: TeamService,
       private router: Router,
       private globalService: GlobalService,
-  ) { }
+  ) { 
+  
+  }
 
   teamTree(team: Team) {
+    // debugger;
     localStorage.setItem('nodeType', 'Team');
     this.globalService.team = JSON.stringify(team);
     this.globalService.node = JSON.stringify(team);

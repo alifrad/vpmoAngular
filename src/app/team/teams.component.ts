@@ -31,7 +31,7 @@ export class TeamsComponent implements OnInit {
     localStorage.setItem('nodeType', 'Team');
     this.globalService.team = JSON.stringify(team);
     this.globalService.node = JSON.stringify(team);
-    this.router.navigate(['/team/tree']);
+    this.router.navigate(['/node/Team/' + team._id]);
   }
 
 

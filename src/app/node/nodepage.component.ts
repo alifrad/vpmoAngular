@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { GlobalService } from '../_services/global.service';
 
 @Component({
@@ -9,19 +9,38 @@ import { GlobalService } from '../_services/global.service';
 })
 export class NodepageComponent implements OnInit {
   errorMessage: string;
-  node: string;
+  node: any;
+  nodeType: string;
 
   constructor(
           private router: Router,
+          private route: ActivatedRoute,
           private globalService: GlobalService,
-  ) {
-    globalService.nodeValue.subscribe(
-      (nextValue) => {
-        this.node = nextValue;
-    });
-   }
+          ) { 
+              globalService.nodeValue.subscribe(
+                (nextValue) => {
+                  this.node = JSON.parse(nextValue);
+              });
+          }
+
+  updateGlobal(nodeType) {
+    if (nodeType === 'Team') {
+      this.globalService.team = localStorage.getItem('team');
+      this.globalService.node = localStorage.getItem('team');
+      localStorage.setItem('nodeType', 'Team');
+    
+    }
+  }
 
   ngOnInit() {
+    this.route.params.subscribe(
+      params => { 
+        this.nodeType = params['type'];
+        this.updateGlobal(this.nodeType);
+      }
+    );
+    
+    // this.nodeType = localStorage.getItem('nodeType');
     
   }
 

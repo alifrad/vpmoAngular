@@ -42,7 +42,7 @@ export class GlobalService {
       .find(item => item.id === 'focusTeam').title = JSON.parse(value).name;
     this.nav
       .find(item => item.id === 'teamGroup').children
-      .find(item => item.id === 'focusTeam').url = '/team/tree';
+      .find(item => item.id === 'focusTeam').url = '/node/Team/' + JSON.parse(value)._id;
     this.nav.find(item => item.id === 'projectGroup').hidden = false;
     this.nav
       .find(item => item.id === 'projectGroup').children
@@ -76,7 +76,7 @@ export class GlobalService {
       .find(item => item.id === 'focusProject').title = JSON.parse(value).name;
     this.nav
       .find(item => item.id === 'projectGroup').children
-      .find(item => item.id === 'focusProject').url = 'project url';
+      .find(item => item.id === 'focusProject').url = '/node/Project/' + JSON.parse(value)._id;
     this.nav.find(item => item.id === 'topicGroup').hidden = false;
     this.nav
       .find(item => item.id === 'topicGroup').children
@@ -108,7 +108,7 @@ export class GlobalService {
       .find(item => item.id === 'focusTopic').title = JSON.parse(value).name;
     this.nav
       .find(item => item.id === 'topicGroup').children
-      .find(item => item.id === 'focusTopic').url = 'topicurl';
+      .find(item => item.id === 'focusTopic').url = '/node/Topic/' + JSON.parse(value)._id;
     
     this.navStr = JSON.stringify(this.nav);
     this.navigation = this.navStr;

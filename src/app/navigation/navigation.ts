@@ -60,7 +60,7 @@ export const navigation = [
         'children': [
           {
               'id'   : 'topics',
-              'title': 'My sub-projects and Topics',
+              'title': 'My Topics',
               // 'translate': 'NAV.SAMPLE.TITLE',
               'type' : 'item',
               // 'icon' : 'business_center',

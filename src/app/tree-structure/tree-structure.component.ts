@@ -6,7 +6,7 @@ import { ITreeNode } from '../../../node_modules/angular-tree-component/dist/def
 import * as _ from 'lodash';
 import { IVisualNodeData } from './tree-structure-model';
 import { timeout } from '../../../node_modules/rxjs/operators';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { GlobalService } from '../_services/global.service';
 
@@ -144,23 +144,26 @@ export class TreeStructureComponent implements OnInit {
         private treeStructureService: TreeStructureService, 
         private treeStructureHttpService: TreeStructureHttpService,
         private router: Router,
+        private route: ActivatedRoute,
         private globalService: GlobalService,
         ) { 
           globalService.teamValue.subscribe(
             (nextValue) => {
-              this.team = nextValue;
+              this.team = JSON.parse(nextValue);
           });
           globalService.projectValue.subscribe(
             (nextValue) => {
-              this.project = nextValue;
+              this.project = JSON.parse(nextValue);
           });
           globalService.topicValue.subscribe(
             (nextValue) => {
-              this.topic = nextValue;
+              this.topic = JSON.parse(nextValue);
           });
           globalService.nodeValue.subscribe(
             (nextValue) => {
-              this.node = nextValue;
+              this.node = JSON.parse(nextValue);
+              this.getTree(this.getNodeType(), JSON.parse(nextValue)._id);
+
           });
         }
 
@@ -188,8 +191,8 @@ export class TreeStructureComponent implements OnInit {
 
 
   getTopNode(): string {
-    this.treeRoot = JSON.parse(localStorage.getItem('node'));
-    return this.treeRoot._id;
+    // this.treeRoot = JSON.parse(localStorage.getItem('node'));
+    return this.node._id;
     /*
     if (this.getNodeType() === 'Team'){
       try{
@@ -244,7 +247,10 @@ export class TreeStructureComponent implements OnInit {
       this.globalService.topic = JSON.stringify({ _id: nodeId, name: nodeName });
     }
 
-    this.router.navigate(['node/details']);
+    // this.router.navigate(['node/details']);
+    console.log('node/' + nodeType + '/' + nodeId);
+    this.router.navigate(['node/' + nodeType + '/' + nodeId]);
+
     /*
     if (nodeType === 'Team'){
 
@@ -260,10 +266,8 @@ export class TreeStructureComponent implements OnInit {
     */
   }
 
-
-  public ngOnInit() {
-    
-    this.treeStructureHttpService.getTree(this.getNodeType(), this.getTopNode())
+  getTree(nodeType, nodeId) {
+    this.treeStructureHttpService.getTree(nodeType, nodeId)
       .subscribe(
         (data) => {
           this.nodes = this.treeStructureService.preUploadData(data);
@@ -275,5 +279,27 @@ export class TreeStructureComponent implements OnInit {
         (err: any) => console.log('getTree ', err),
         () => console.log('All done getting nodes.')
       );
+  }
+  
+
+  public ngOnInit() {
+    this.route.params.subscribe(
+      params => { 
+        this.getTree(params['type'], params['id']);
+      }
+    );
+
+    // this.treeStructureHttpService.getTree(this.getNodeType(), this.getTopNode())
+    //   .subscribe(
+    //     (data) => {
+    //       this.nodes = this.treeStructureService.preUploadData(data);
+    //       // need time in order create dom for tree
+    //       setTimeout(() => {
+    //         this.tree.treeModel.expandAll();
+    //       }, 111);
+    //     },
+    //     (err: any) => console.log('getTree ', err),
+    //     () => console.log('All done getting nodes.')
+    //   );
   }
 }

@@ -11,7 +11,8 @@ import { AuthGuard } from '../_guards/auth.guard';
 
 const routes = [
   {
-    path: 'team/tree',
+    // path: 'team/tree',
+    path: 'tree/:type/:id',
     component: TreeStructureComponent,
     canActivate: [ AuthGuard ],
     

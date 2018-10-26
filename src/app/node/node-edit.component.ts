@@ -27,7 +27,7 @@ export class NodeEditComponent implements OnInit {
     if (nodeType === 'Team') {
 
     } else if (nodeType === 'Project') {
-        console.log("Project.................")
+        console.log('Project.................');
         this.project = JSON.parse(localStorage.getItem('project'));
         if (this.project.content !== null) {
           this.content = this.project.content;
@@ -38,6 +38,6 @@ export class NodeEditComponent implements OnInit {
     }
 
     }
-  }
-
 }
+
+

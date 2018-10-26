@@ -37,7 +37,5 @@ export class NodeEditComponent implements OnInit {
 
     }
 
-    }
   }
-
 }

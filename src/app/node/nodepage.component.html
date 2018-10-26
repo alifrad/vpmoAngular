@@ -2,6 +2,7 @@
   <h2>{{node.name}}</h2>
 </div>
 <mat-tab-group [selectedIndex]="1">
+  <!--
   <mat-tab label="Tree"> 
     <app-tree-structure></app-tree-structure> 
   </mat-tab>
@@ -11,7 +12,10 @@
   <mat-tab label="Conversation"> 
     <app-chat></app-chat> 
   </mat-tab>
-  <mat-tab label="Tasks"> list of tasks (not built yet!) </mat-tab>
+-->
+  <mat-tab label="Tasks"> 
+    <app-tasks></app-tasks>
+  </mat-tab>
   <mat-tab label="Documents"> tiles of Documents (not built yet!) </mat-tab>
   <mat-tab label="Permissions">
   	<app-permissions></app-permissions>

@@ -11,6 +11,7 @@ import { MatFormFieldModule, MatIconModule, MatInputModule, MatButtonModule, Mat
 import { AuthGuard } from '../_guards/auth.guard';
 import { TasksComponent } from './tasks.component';
 import { CreateTasksComponent } from './create-tasks.component';
+import { ReassignTaskComponent } from './reassign-task.component';
 import { TasksService } from './tasks.service';
 
 const TasksRoutes: Routes = [
@@ -45,16 +46,18 @@ const TasksRoutes: Routes = [
   ],
   declarations: [
     TasksComponent,
-    CreateTasksComponent
+    CreateTasksComponent,
+    ReassignTaskComponent
   ],
   providers: [
   	TasksService
   ],
   exports: [
     TasksComponent,
-    CreateTasksComponent
+    CreateTasksComponent,
+    ReassignTaskComponent
   ],
   bootstrap: [TasksComponent],
-  entryComponents: [CreateTasksComponent]
+  entryComponents: [CreateTasksComponent, ReassignTaskComponent]
 })
 export class TasksModule { }

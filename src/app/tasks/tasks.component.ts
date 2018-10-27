@@ -5,6 +5,7 @@ import { TasksService } from './tasks.service';
 import {MatDialog, MatDialogConfig} from '@angular/material';
 
 import { CreateTasksComponent } from './create-tasks.component';
+import { ReassignTaskComponent } from './reassign-task.component';
 
 @Component({
   selector: 'app-tasks',
@@ -57,6 +58,20 @@ export class TasksComponent implements OnInit {
     dialogConfig.height = '500';
 
     const dialogRef = this.dialog.open(CreateTasksComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(result => {
+      this.getAssignedTasks();
+    });
+  }
+
+  openReassignDialog (task) {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.autoFocus = true;
+    dialogConfig.width = '350';
+    dialogConfig.height = '500';
+
+    localStorage.setItem('taskID', task._id)
+    const dialogRef = this.dialog.open(ReassignTaskComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(result => {
       this.getAssignedTasks();
     });

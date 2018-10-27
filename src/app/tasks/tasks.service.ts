@@ -76,6 +76,16 @@ export class TasksService {
 			.catch(this.handleError)
 	}
 
+	reassignTask (nodeID: string, nodeType: string, taskID: string, assigneeUsername: string): Observable<any> {
+		var data = {
+			node: nodeID,
+			assignee: assigneeUsername,
+			task: taskID
+		}
+		return this.http.put(this.createDeleteUpdateTaskUrl+'?nodeType='+nodeType, data, this.httpOptions)
+			.catch(this.handleError)
+	}
+
 	private handleError(err: HttpErrorResponse) {
     console.log(err.message);
     return Observable.throw(err.message);

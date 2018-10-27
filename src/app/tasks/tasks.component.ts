@@ -27,7 +27,7 @@ export class TasksComponent implements OnInit {
   currentUser: any;
 
   assignedTasks: any[] = [];
-  displayedColumns: string[] = ['title', 'status'];
+  displayedColumns: string[] = ['title', 'status', 'utils'];
   taskStatusList: any[] = [
     {value: 'NEW', text: 'New'},
     {value: 'IN_PROGRESS', text: 'In Progress'},
@@ -66,6 +66,15 @@ export class TasksComponent implements OnInit {
     this._tasksService.updateTaskStatus(this.nodeID, this.nodeType, task._id, newStatus)
       .subscribe(
         resp => console.log('Task Status for ' + task.title + ' updated to ' + resp.status)
+      )
+  }
+
+  deleteTask (task) {
+    this._tasksService.deleteTask(this.nodeID, this.nodeType, task._id)
+      .subscribe(
+        resp => {
+          this.assignedTasks = this.assignedTasks.filter(item => item._id !== task._id)
+        }
       )
   }
 

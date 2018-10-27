@@ -24,11 +24,19 @@ export class TasksComponent implements OnInit {
 
   nodeID: string;
   nodeType: string;
+  currentUser: any;
 
   assignedTasks: any[] = [];
   displayedColumns: string[] = ['title', 'status'];
+  taskStatusList: any[] = [
+    {value: 'NEW', text: 'New'},
+    {value: 'IN_PROGRESS', text: 'In Progress'},
+    {value: 'COMPLETE', text: 'Complete'}
+  ];
 
   ngOnInit () {
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser'))
+
     this.nodeID = JSON.parse(localStorage.getItem('node'))._id;
     this.nodeType = localStorage.getItem('nodeType');
 
@@ -52,6 +60,13 @@ export class TasksComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       this.getAssignedTasks();
     });
+  }
+
+  changeTaskStatus (newStatus, task) {
+    this._tasksService.updateTaskStatus(this.nodeID, this.nodeType, task._id, newStatus)
+      .subscribe(
+        resp => console.log('Task Status for ' + task.title + ' updated to ' + resp.status)
+      )
   }
 
 }

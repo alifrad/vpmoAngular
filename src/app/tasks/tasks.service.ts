@@ -16,7 +16,7 @@ export class TasksService {
 	private readonly apiUrl: string = `${appConfig.apiUrl}`;
 	private readonly getAssignedTasksUrl: string = this.apiUrl + '/list_assigned_tasks/';
 	private readonly getAssignableUsersUrl: string = this.apiUrl + '/assignable_task_users/';
-	private readonly createTaskUrl: string = this.apiUrl + '/patch_create_task/';
+	private readonly createUpdateTaskUrl: string = this.apiUrl + '/update_create_task/';
 
 	private httpOptions = {
 	    // for auntification
@@ -48,7 +48,18 @@ export class TasksService {
 			title: taskTitle,
 			'assignee': assignee
 		}
-		return this.http.post(this.createTaskUrl+'?nodeType='+nodeType, data, this.httpOptions)
+		return this.http.post(this.createUpdateTaskUrl+'?nodeType='+nodeType, data, this.httpOptions)
+			.catch(this.handleError)
+	}
+
+	updateTaskStatus (nodeID: string, nodeType: string, taskID: string, status: string): Observable<any> {
+		// Sends a Patch request for updating the task status for the given task
+		var data = {
+			node: nodeID,
+			task: taskID,
+			'status': status
+		}
+		return this.http.patch(this.createUpdateTaskUrl+'?nodeType='+nodeType, data, this.httpOptions)
 			.catch(this.handleError)
 	}
 

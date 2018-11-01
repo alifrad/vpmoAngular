@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 // import { Socket } from 'ngx-socket-io';
 import { ChatService } from './chat.service';
 import { AuthenticationService } from '../_services';
+import { appConfig } from '../app.config';
+
 
 @Component({
   selector: 'app-chat',
@@ -35,7 +37,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
     const cookie = this.authUser.getToken();
     this.node = JSON.parse(localStorage.getItem('node'))._id;
     this.chatSocket = new WebSocket(
-        'ws://127.0.0.1:8000/ws/chat/' + this.node + '/?' + this.authUser.getToken()
+        appConfig.wsUrl + '/chat/' + this.node + '/?' + this.authUser.getToken()
     );
 
     

@@ -28,7 +28,7 @@ export class DocumentsListComponent implements OnInit {
   nodeType: string;
   uploadedDocuments: any[] = [];
   currentUserPermissions: any[] = [];
-  displayedColumns: string[] = ['document_name', 'document_size', 'uploaded_by'];
+  displayedColumns: string[] = ['document_name', 'document_size', 'uploaded_by', "uploaded_at"];
 
   ngOnInit() {
     this.nodeID = JSON.parse(localStorage.getItem('node'))._id;
@@ -39,7 +39,9 @@ export class DocumentsListComponent implements OnInit {
 
   getDocuments () {
     this._documentsService.getUploadedDocuments(this.nodeID, this.nodeType)
-      .subscribe(documents => this.uploadedDocuments = documents)
+      .subscribe(documents => {
+        this.uploadedDocuments = documents
+      })
   }
 
   getUserPermissions (nodeID, nodeType) {
@@ -72,8 +74,8 @@ export class DocumentsListComponent implements OnInit {
       self._documentsService.getFileUploadUrl(self.nodeID, self.nodeType, file.name).subscribe(response => {
         var documentName = response.file_name
         self._documentsService.uploadFileS3(response.url, file, file.type).subscribe(uploadResponse => {
-          self._documentsService.createDocument(self.nodeID, self.nodeType, documentName).subscribe(createResponse => {
-            alerT('Doc added - refresh.')
+          self._documentsService.createDocument(self.nodeID, self.nodeType, documentName).subscribe(currentDocuments => {
+            self.uploadedDocuments = currentDocuments
           })
         })
       })

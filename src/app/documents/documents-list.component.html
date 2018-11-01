@@ -17,9 +17,13 @@
 	        <td mat-cell *matCellDef="let doc"> {{ doc.document_size }} B </td>
 	    </ng-container>
 
-	    <ng-container matColumnDef="uploaded_by" >
+	    <ng-container matColumnDef="uploaded_by">
 	    	<th mat-header-cell *matHeaderCellDef> Uploaded By </th>
 	        <td mat-cell *matCellDef="let doc"> {{ doc.uploaded_by }} </td>
+	    </ng-container>
+	    <ng-container matColumnDef="uploaded_at">
+	    	<th mat-header-cell *matHeaderCellDef> Uploaded At </th>
+	        <td mat-cell *matCellDef="let doc"> {{ doc.uploaded_at }} </td>
 	    </ng-container>
 
 	    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

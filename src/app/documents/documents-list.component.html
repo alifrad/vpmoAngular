@@ -26,8 +26,30 @@
 	        <td mat-cell *matCellDef="let doc"> {{ doc.uploaded_at }} </td>
 	    </ng-container>
 
+	    <ng-container matColumnDef="utils">
+	    	<th mat-header-cell *matHeaderCellDef> Utils </th>
+	        <td mat-cell *matCellDef="let doc">
+	        	<button mat-icon-button class="white-icon" (click)="deleteDocument(doc)" *ngIf="canUploadDocuments()">
+			        <mat-icon> delete </mat-icon>
+			    </button>
+			    <button mat-icon-button class="white-icon" (click)="openRenameDialog(renameDialog, doc)" *ngIf="canUploadDocuments()">
+			        <mat-icon> edit </mat-icon>
+			    </button>
+	        </td>
+	    </ng-container>
+
 	    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
 	    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
 
 	</table>
+	<ng-template #renameDialog>
+        <h4>Renaming {{ renamingDocument.document_name }}</h4>
+        <mat-form-field class="full-width">
+	    	<input [(ngModel)]="renamingDocument.document_name" matInput />
+	  	</mat-form-field>
+
+	  	<div style="text-align: center;" class="full-width">
+			<button (click)="renameDocument(renamingDocument)" mat-raised-button matTooltip="Renameds the document in storage">Rename Doc</button>
+		</div>
+    </ng-template>
 </div>

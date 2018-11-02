@@ -18,6 +18,7 @@ export class DocumentsService {
   private readonly getDocumentsUrl: string = this.apiUrl + '/node_documents/'
   private readonly docManagementUrl: string = this.apiUrl + '/document_management_view/';
   private readonly docCreationUrl: string = this.apiUrl + '/create_document/';
+  private readonly docDeleteUrl: string = this.apiUrl + '/delete_document/';
 
   private httpOptions = {
     // for authentication
@@ -56,6 +57,19 @@ export class DocumentsService {
     }
     return this.http.post(this.docCreationUrl + nodeID + '/?nodeType=' + nodeType, data, this.httpOptions)
       .catch(this.handleError)
+  }
+
+  deleteDocument (nodeID: string, nodeType: string, docID: string): Observable<any> {
+    return this.http.delete(this.docDeleteUrl + nodeID + '/' + docID + '/?nodeType=' + nodeType, this.httpOptions)
+      .catch(this.handleError)
+  }
+
+  renameDocument (nodeID: string, nodeType: string, docID: string, newName: string): Observable<any> {
+    var data = {
+      'newName': newName
+    }
+    return this.http.put(this.docManagementUrl+nodeID+'/?nodeType='+nodeType+'&docID='+docID, data,
+      this.httpOptions).catch(this.handleError)
   }
 
   private handleError(err: HttpErrorResponse) {

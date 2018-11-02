@@ -28,7 +28,8 @@ export class DocumentsListComponent implements OnInit {
   nodeType: string;
   uploadedDocuments: any[] = [];
   currentUserPermissions: any[] = [];
-  displayedColumns: string[] = ['document_name', 'document_size', 'uploaded_by', "uploaded_at"];
+  displayedColumns: string[] = ['document_name', 'document_size', 'uploaded_by', "uploaded_at", "utils"];
+  renamingDocument: any;
 
   ngOnInit() {
     this.nodeID = JSON.parse(localStorage.getItem('node'))._id;
@@ -80,10 +81,42 @@ export class DocumentsListComponent implements OnInit {
         })
       })
     }
-
   }
 
-  openDocumentUploadDialog () {
-    console.log('File Upload')
+  deleteDocument (doc) {
+    var self = this
+    this._documentsService.deleteDocument(this.nodeID, this.nodeType, doc._id)
+      .subscribe(response => {
+        self.uploadedDocuments = self.uploadedDocuments.filter(item => item !== doc)
+      })
+  }
+
+  openRenameDialog (templateRef, document) {
+    this.renamingDocument = {
+      _id: document._id,
+      document_name: document.document_name
+    }
+
+    let dialogRef = this.dialog.open(templateRef, {
+        width: '250px',
+    });
+
+    var self = this
+    dialogRef.afterClosed().subscribe(result => {
+      self.renamingDocument = null
+    });
+  }
+
+  renameDocument (document) {
+    var self = this
+    this._documentsService.renameDocument(this.nodeID, this.nodeType, document._id, document.document_name)
+      .subscribe(response => {
+        self.uploadedDocuments.forEach(function (i) {
+          if (i._id === document._id) {
+            i.document_name = document.document_name
+            alert('Document Renamed')
+          }
+        }) 
+      })
   }
 }

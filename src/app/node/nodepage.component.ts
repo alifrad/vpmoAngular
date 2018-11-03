@@ -20,15 +20,15 @@ export class NodepageComponent implements OnInit {
               globalService.nodeValue.subscribe(
                 (nextValue) => {
                   this.node = JSON.parse(nextValue);
+                  localStorage.setItem('nodeID', this.node._id)
               });
           }
 
   updateGlobal(nodeType) {
+    localStorage.setItem('nodeType', nodeType)
     if (nodeType === 'Team') {
       this.globalService.team = localStorage.getItem('team');
       this.globalService.node = localStorage.getItem('team');
-      localStorage.setItem('nodeType', 'Team');
-    
     }
   }
 

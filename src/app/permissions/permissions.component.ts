@@ -45,6 +45,8 @@ export class PermissionsComponent implements OnInit {
 
     this.nodeID = nodeID;
     this.nodeType = nodeType;
+    localStorage.setItem('nodeID', nodeID)
+    localStorage.setItem('nodeType', nodeType)
   }
 
   getUserPermissions (nodeID, nodeType) {

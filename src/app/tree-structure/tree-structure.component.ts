@@ -9,6 +9,8 @@ import { timeout } from '../../../node_modules/rxjs/operators';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { GlobalService } from '../_services/global.service';
+import { MatDialog, MatDialogConfig } from '@angular/material';
+import { CreateNodeComponent } from './create-node.component';
 
 @Component({
   selector: 'app-tree-structure',
@@ -46,39 +48,14 @@ export class TreeStructureComponent implements OnInit {
 
   // user start add new node
   public startAdd = (parentNodeForAdding: ITreeNode) => {
-    this.cancelEditing();
-    const newNode = {
-      name: '',
-      isEditing: true,
-      // tempory node it will be replaced after post request to server 
-      _id: TreeStructureService.newGuid(),
-      index: -1,
-      node_type: 'Project',
-    };
+    const dialogRef = this.dialog.open(CreateNodeComponent, {
+      width: '350',
+      data: {parentNode: parentNodeForAdding}
+    })
 
-    this.saveNewNodeData = { parent: parentNodeForAdding.data, newNode: newNode };
-    this.editValue = '';
-    if (!parentNodeForAdding.data.children) {
-      parentNodeForAdding.data.children = [];
-    }
-    parentNodeForAdding.data.children.push(<any>newNode);
-    this.tree.treeModel.update();
-
-    // set focus on the create element
-    // fix  issue with tree if parent node doesn't have children then don't expand Node
-    parentNodeForAdding = this.tree.treeModel.getNodeById(parentNodeForAdding.data._id);
-    if (parentNodeForAdding.isCollapsed) {
-      parentNodeForAdding.toggleExpanded();
-      this.tree.treeModel.update();
-    }
-    // tslint:disable-next-line:prefer-const
-    let newNodeM = this.tree.treeModel.getNodeById(newNode._id);
-    newNodeM.data.beforeUpdateData = {
-      index: newNodeM.index,
-      parentId: newNodeM.parent.data._id
-    };
-    this.tree.treeModel.setFocusedNode(newNodeM);
-
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('Dialog Closed')
+    })
   }
 
   // user start edit node
@@ -146,6 +123,7 @@ export class TreeStructureComponent implements OnInit {
         private router: Router,
         private route: ActivatedRoute,
         private globalService: GlobalService,
+        private dialog: MatDialog
         ) { 
           globalService.teamValue.subscribe(
             (nextValue) => {

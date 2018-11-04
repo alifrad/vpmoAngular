@@ -12,6 +12,10 @@
   <H1>my teams</H1>
 </div>
 
+<div>
+    <button (click)="openTeamCreateDialog(createTeamDialog)" mat-raised-button>Create Team</button>
+</div>
+
 <mat-card class="example-card" *ngFor='let team of teams'>
   <mat-card-header>
     <mat-card-title>
@@ -33,3 +37,14 @@
     <!-- <button mat-button>SHARE</button> -->
   </mat-card-actions>
 </mat-card>
+
+<ng-template #createTeamDialog>
+  <h4>Create Team</h4>
+  <mat-form-field class="full-width">
+    <input [(ngModel)]="newTeamName" matInput />
+  </mat-form-field>
+
+  <div style="text-align: center;" class="full-width">
+    <button (click)="createNewTeam()" mat-raised-button matTooltip="Creates the team">Create Team</button>
+  </div>
+</ng-template>

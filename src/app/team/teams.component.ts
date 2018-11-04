@@ -4,6 +4,7 @@ import { TeamService } from './team.service';
 import { Team } from './team';
 import { Router } from '@angular/router';
 import { GlobalService } from '../_services/global.service';
+import {MatDialog, MatDialogConfig} from '@angular/material';
 
 @Component({
   selector: 'app-teams',
@@ -16,12 +17,15 @@ export class TeamsComponent implements OnInit {
   errorMessage: string;
   node: any;
   team: any;
+  newTeamName: string;
+  dialogRef: any;
 
   constructor(
       private authenticationService: AuthenticationService,
       private teamService: TeamService,
       private router: Router,
       private globalService: GlobalService,
+      private dialog: MatDialog
   ) { 
   
   }
@@ -36,6 +40,10 @@ export class TeamsComponent implements OnInit {
 
 
   ngOnInit() {
+    this.getTeams()
+  }
+
+  getTeams () {
     this.teamService.getTeams().subscribe(
       teams =>  
       {
@@ -45,5 +53,32 @@ export class TeamsComponent implements OnInit {
     );
   }
 
+  openTeamCreateDialog (templateRef) {
+    let dialogRef = this.dialog.open(templateRef, {
+        width: '250px',
+    });
+    this.dialogRef = dialogRef
+
+    var self = this
+    dialogRef.afterClosed().subscribe(result => {
+      self.newTeamName = ''
+      self.dialogRef = null
+      self.getTeams()
+    });
+  }
+
+  createNewTeam () {
+    if (!this.newTeamName) {
+      alert('Please type in a team name')
+      return
+    }
+
+    var self = this
+    this.teamService.createTeam(this.newTeamName)
+      .subscribe(createdTeam => {
+        alert('Team Created')
+        self.dialogRef.close()
+      })
+  }
   
 }

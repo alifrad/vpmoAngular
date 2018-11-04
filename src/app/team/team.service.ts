@@ -10,6 +10,8 @@ import { Team } from './team';
 import { MessageService } from '../shared/message.service';
 import { appConfig } from '../app.config';
 import { AuthenticationService } from '../_services';
+import { HttpErrorResponse } from '@angular/common/http/src/response';
+
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +19,13 @@ import { AuthenticationService } from '../_services';
 export class TeamService {
 
   token: string;
+  private httpOptions = {
+    // for auntification
+    headers: new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': 'JWT ' + this.authUser.getToken()
+    })
+  };
 
   constructor(
     private http: HttpClient,
@@ -45,6 +54,18 @@ export class TeamService {
     return this.http.post<any>(appConfig.apiUrl + '/users_perm', { user: _id, team: team, permission: 'contribute_obj'});
   }
 
+  createTeam (teamName: string): Observable<any> {
+    var data = {
+      name: teamName
+    }
+    return this.http.post(appConfig.apiUrl+'/teams/add/', data, this.httpOptions)
+      .catch(this.handleError)
+  }
+
+  private handleError(err: HttpErrorResponse) {
+    console.log(err.message);
+    return Observable.throw(err.message);
+  }
 }
 
 

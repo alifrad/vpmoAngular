@@ -67,22 +67,6 @@ export class TreeStructureComponent implements OnInit {
     this.editValue = node.data.name;
   }
 
-  // save new or edited node
-  public saveNode = (node) => {
-    node.data.name = this.editValue;
-    node.data.isEditing = false;
-    this.treeStructureService.updateDataFields(node);
-    this.tree.treeModel.update();
-    if (this.saveNewNodeData) {
-      this.treeStructureService.saveNewNode(node.data, this.tree.treeModel);
-    }
-    else {
-      this.treeStructureService.updateNode(node.data);
-    }
-    this.saveNewNodeData = null;
-    this.editedNode = null;
-  }
-
   // delete node
   public removeNode = (node) => {
     // prevent situation when user start remove this node before cancel previous node

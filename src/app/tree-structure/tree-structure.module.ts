@@ -8,7 +8,8 @@ import { TreeStructureHttpService } from './tree-structure-http.service';
 import { TreeModule } from 'angular-tree-component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule, MatDialogModule, MatFormFieldModule,
-          MatInputModule, MatButtonModule, MatTooltipModule  } from '@angular/material';
+          MatInputModule, MatButtonModule, MatTooltipModule,
+          MatDatepickerModule, MatNativeDateModule, MatSelectModule  } from '@angular/material';
 import { AuthGuard } from '../_guards/auth.guard';
 
 const routes = [
@@ -34,7 +35,10 @@ const routes = [
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatSelectModule
   ],
   exports: [
     TreeStructureComponent,

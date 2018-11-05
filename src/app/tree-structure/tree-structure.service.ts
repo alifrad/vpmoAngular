@@ -12,17 +12,6 @@ import { TreeStructureHttpService } from './tree-structure-http.service';
 export class TreeStructureService {
   constructor(private treeStructureHttpService: TreeStructureHttpService) { }
 
-  public saveNewNode(visualNode: IVisualNodeData, tree: TreeModel): any {
-    console.log('Adding node', visualNode, tree);
-    const dto = this.converVisualNodeToDto(visualNode, false);
-    delete dto._id;
-    delete dto.path;
-    this.treeStructureHttpService.addNode(dto).subscribe((res => {
-      const node = tree.getNodeById(visualNode._id);
-      node.data._id = res._id;
-    }));
-  }
-
   public updateNode(node: IVisualNodeData): any {
     const dto = this.converVisualNodeToDto(node, false);
     this.treeStructureHttpService.updateNode(dto);

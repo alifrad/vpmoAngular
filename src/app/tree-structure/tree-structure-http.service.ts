@@ -16,6 +16,7 @@ export class TreeStructureHttpService {
   private readonly teamsTreeUrl: string = `${appConfig.apiUrl}/teams_tree/`;
   private readonly projectsTreeUrl: string = `${appConfig.apiUrl}/project_tree/`;
   private readonly projectUrl: string = `${appConfig.apiUrl}/projects/`;
+  private readonly nodeUrl: string = `${appConfig.apiUrl}/create_node/`;
 
   constructor(private http: HttpClient, private authUser: AuthenticationService) { }
 
@@ -46,9 +47,8 @@ export class TreeStructureHttpService {
     return this.http.put(this.teamsTreeUrl + teamId + '/', nodeList, this.httpOptions).subscribe();
   }
 
-  public addNode(node: INodeDto): Observable<INodeDto> {
-    console.log('addNode ', node);
-    return this.http.post<INodeDto>(this.projectUrl + 'add/', node, this.httpOptions);
+  public addNode(formData: any, nodeType: string): Observable<any> {
+    return this.http.post(this.nodeUrl + nodeType + '/', formData, this.httpOptions)
   }
 
   public getTree(nodeType: string, Id: string): Observable<INodeDto[]> {

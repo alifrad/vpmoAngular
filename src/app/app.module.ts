@@ -24,6 +24,7 @@ import { UserModule } from './user/user.module';
 import { ProjectModule } from './project/project.module';
 import { ChatModule } from './chat/chat.module';
 import { PermissionsModule } from './permissions/permissions.module';
+import { TasksModule } from './tasks/tasks.module';
 import { HomeComponent } from './home/home.component';
 import { ErrorComponent } from './error/error.component';
 import { AppRoutingModule } from './shared/app.routing';
@@ -129,6 +130,7 @@ export function tokenGetter() {
         ProjectModule,
         ChatModule,
         PermissionsModule,
+        TasksModule,
         TreeStructureModule,
         NodeModule,
 

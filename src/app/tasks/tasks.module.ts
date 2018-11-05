@@ -6,17 +6,18 @@ import { HttpClientModule } from '@angular/common/http';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 
 import { MatFormFieldModule, MatIconModule, MatInputModule, MatButtonModule, MatCardModule,
-  MatListModule, MatTableModule, MatDialogModule, MatSelectModule, MatTooltipModule  } from '@angular/material';
+  MatListModule, MatTableModule, MatDialogModule, MatSelectModule, MatTooltipModule,
+  MatDatepickerModule, MatNativeDateModule, MatAutocompleteModule } from '@angular/material';
 import { AuthGuard } from '../_guards/auth.guard';
-import { PermissionsComponent } from './permissions.component';
-import { AddPermissionsComponent } from './add-permissions.component';
-import { PermissionsService } from './permissions.service';
+import { TasksComponent } from './tasks.component';
+import { CreateTasksComponent } from './create-tasks.component';
+import { ReassignTaskComponent } from './reassign-task.component';
+import { TasksService } from './tasks.service';
 
-
-const PermissionsRoutes: Routes = [
+const TasksRoutes: Routes = [
   {
-    path: 'permissions',
-    component: PermissionsComponent,
+    path: 'tasks',
+    component: TasksComponent,
     canActivate: [ AuthGuard ]
   }
 ];
@@ -26,7 +27,7 @@ const PermissionsRoutes: Routes = [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    RouterModule.forChild(PermissionsRoutes),
+    RouterModule.forChild(TasksRoutes),
     HttpClientModule,
     MatIconModule,
     MatFormFieldModule,
@@ -38,20 +39,25 @@ const PermissionsRoutes: Routes = [
     MatTableModule,
     MatDialogModule,
     MatSelectModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatAutocompleteModule
   ],
   declarations: [
-    PermissionsComponent,
-    AddPermissionsComponent
+    TasksComponent,
+    CreateTasksComponent,
+    ReassignTaskComponent
   ],
   providers: [
-    PermissionsService
+  	TasksService
   ],
   exports: [
-    PermissionsComponent,
-    AddPermissionsComponent
+    TasksComponent,
+    CreateTasksComponent,
+    ReassignTaskComponent
   ],
-  bootstrap: [PermissionsComponent],
-  entryComponents: [AddPermissionsComponent]
+  bootstrap: [TasksComponent],
+  entryComponents: [CreateTasksComponent, ReassignTaskComponent]
 })
-export class PermissionsModule { }
+export class TasksModule { }

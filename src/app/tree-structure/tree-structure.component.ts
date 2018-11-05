@@ -53,6 +53,10 @@ export class TreeStructureComponent implements OnInit {
       data: {parentNode: parentNodeForAdding}
     })
 
+    dialogRef.componentInstance.onCreate.subscribe(createdNode => {
+      this.ngOnInit();
+    })
+
     dialogRef.afterClosed().subscribe(result => {
       console.log('Dialog Closed')
     })

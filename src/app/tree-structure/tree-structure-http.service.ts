@@ -47,7 +47,7 @@ export class TreeStructureHttpService {
     return this.http.put(this.teamsTreeUrl + teamId + '/', nodeList, this.httpOptions).subscribe();
   }
 
-  public addNode(formData: any, nodeType: string): Observable<any> {
+  public createNode(formData: any, nodeType: string): Observable<any> {
     return this.http.post(this.nodeUrl + nodeType + '/', formData, this.httpOptions)
   }
 

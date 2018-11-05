@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Inject } from '@angular/core';
+import { Component, OnInit, ViewChild, Inject, EventEmitter } from '@angular/core';
 import { TreeStructureHttpService } from './tree-structure-http.service';
 import { MAT_DIALOG_DATA } from '@angular/material';
 
@@ -22,6 +22,8 @@ export class CreateNodeComponent implements OnInit {
 	
 	createNodeFormData: any;
 
+	onCreate = new EventEmitter();
+
 	ngOnInit () {
 		console.log('Init Create Node', this.data.parentNode)
 		this.parentNode = this.data.parentNode.data
@@ -40,21 +42,24 @@ export class CreateNodeComponent implements OnInit {
 			this.createNodeFormData = {
 				name: '',
 				description: '',
-				start: ''
+				start: '',
+				parentID: this.parentNode._id
 			}
 		} else {
 			this.createNodeFormData = {
 				name: '',
-				due_date: ''
+				due_date: '',
+				parentID: this.parentNode._id
 			}
 		}
 		console.log('Create Node Form Data')
 	}
 
 	createNode () {
-		this.treeStructureHttpService.addNode(this.createNodeFormData, this.selectedNodeType)
+		var self = this
+		this.treeStructureHttpService.createNode(this.createNodeFormData, this.selectedNodeType)
 			.subscribe(response => {
-				console.log(response)
+				self.onCreate.emit(response)
 			})
 	}
 

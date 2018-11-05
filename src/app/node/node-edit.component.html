@@ -1,3 +1,5 @@
-<p>
-  node-edit works!
-</p>
+<div>
+  <button mat-button class="white-icon" (click)="saveContent()">Save</button>
+</div>
+
+<quill-editor [(ngModel)]="content"></quill-editor>

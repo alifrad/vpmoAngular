@@ -38,6 +38,12 @@ export class ProjectService {
       .catch(this.handleError);
   }
 
+  getProject (projectId: string): Observable<IProject> {
+
+    return this.http.get<IProject>(this.projectsUpdateUrl + projectId + '/', this.httpOptions)
+      .catch(this.handleError);
+  }
+
   private handleError(err: HttpErrorResponse) {
     console.log(err.message);
     return Observable.throw(err.message);

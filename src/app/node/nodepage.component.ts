@@ -11,7 +11,7 @@ export class NodepageComponent implements OnInit {
   errorMessage: string;
   node: any;
   nodeType: string;
-
+  
   constructor(
           private router: Router,
           private route: ActivatedRoute,
@@ -25,7 +25,7 @@ export class NodepageComponent implements OnInit {
           }
 
   updateGlobal(nodeType) {
-    localStorage.setItem('nodeType', nodeType)
+    localStorage.setItem('nodeType', nodeType);
     if (nodeType === 'Team') {
       this.globalService.team = localStorage.getItem('team');
       this.globalService.node = localStorage.getItem('team');

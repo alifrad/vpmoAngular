@@ -24,6 +24,8 @@ import { NodeEditComponent } from './node-edit.component';
 import { PermissionsModule } from '../permissions/permissions.module';
 import { TasksModule } from '../tasks/tasks.module';
 import { DocumentsModule } from '../documents/documents.module';
+import { QuillModule } from 'ngx-quill';
+import { FormsModule } from '@angular/forms';
 
 const NodeRoutes: Routes = [
   {
@@ -40,6 +42,7 @@ const NodeRoutes: Routes = [
 @NgModule({
   imports: [
     CommonModule,
+    FormsModule,
     HttpClientModule,
     RouterModule.forChild(NodeRoutes),
     MatDatepickerModule,
@@ -59,6 +62,7 @@ const NodeRoutes: Routes = [
     TasksModule,
     DocumentsModule,
     TreeStructureModule,
+    QuillModule,
   ],
   declarations: [
     NodepageComponent,
@@ -68,6 +72,7 @@ const NodeRoutes: Routes = [
   ],
   exports: [
     NodepageComponent,
+    NodeEditComponent,
     
   ],
 })

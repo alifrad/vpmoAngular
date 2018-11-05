@@ -1,18 +1,18 @@
 <tree-root [nodes]="nodes" [options]="options" (moveNode)="onMoveNode($event)">
   <ng-template #treeNodeTemplate let-node let-index="index">
-    <div class="edit my-container" *ngIf="node.data.isEditing">
+    <div class="edit my-container" *ngIf="node.data.isRenaming">
       
-      <input class="node-name-input" type="text" [(ngModel)]="editValue">
+      <input class="node-name-input" type="text" [(ngModel)]="newNodeName">
       <div class="buttons">
-        <a (click)="saveNode(node)">
+        <a (click)="renameNode(node)">
           save
         </a>
-        <a (click)="cancelNode(node)">
+        <a (click)="cancelRenameNode(node)">
           cancel
         </a>
       </div>
     </div>
-    <div class="my-container" *ngIf="!node.data.isEditing">
+    <div class="my-container" *ngIf="!node.data.isRenaming">
       <img *ngIf="node.data.node_type=='Team'" src="../../assets/icons/Team-T-Icon.svg" height="15" width="15"/>
       <img *ngIf="node.data.node_type=='Project'" src="../../assets/icons/Project-P-Icon.png" height="15" width="15"/>
       
@@ -21,7 +21,7 @@
         <button mat-icon-button (click)="startAdd(node)">
           <mat-icon> add </mat-icon>
         </button>
-        <button mat-icon-button class="white-icon" (click)="startEditing(node)">
+        <button mat-icon-button class="white-icon" (click)="startRenaming(node)">
           <mat-icon> edit </mat-icon>
         </button>
         <button mat-icon-button class="white-icon" (click)="viewDetail(node)">

@@ -16,7 +16,8 @@ export class TreeStructureHttpService {
   private readonly teamsTreeUrl: string = `${appConfig.apiUrl}/teams_tree/`;
   private readonly projectsTreeUrl: string = `${appConfig.apiUrl}/project_tree/`;
   private readonly projectUrl: string = `${appConfig.apiUrl}/projects/`;
-  private readonly nodeUrl: string = `${appConfig.apiUrl}/create_node/`;
+  private readonly nodeCreateUrl: string = `${appConfig.apiUrl}/create_node/`;
+  private readonly nodeUpdateUrl: string = `${appConfig.apiUrl}/update_node/`;
 
   constructor(private http: HttpClient, private authUser: AuthenticationService) { }
 
@@ -33,12 +34,9 @@ export class TreeStructureHttpService {
     return this.http.delete(this.teamsTreeUrl + nodeId, this.httpOptions).subscribe();
   }
 
-  public updateNode(data: INodeDto): any {
-    console.log('update ', data);
-    if (data.node_type === 'Project') {
-      return this.http.put(this.projectUrl + data._id + '/', data, this.httpOptions).subscribe();
-    }
-
+  public updateNode(nodeID: string, nodeType: string, updateData: any): Observable<any> {
+    console.log('update ', updateData);
+    return this.http.patch(this.nodeUpdateUrl + nodeType + '/' + nodeID + '/', updateData, this.httpOptions)
   }
 
   // update bunch of nodes
@@ -48,7 +46,7 @@ export class TreeStructureHttpService {
   }
 
   public createNode(formData: any, nodeType: string): Observable<any> {
-    return this.http.post(this.nodeUrl + nodeType + '/', formData, this.httpOptions)
+    return this.http.post(this.nodeCreateUrl + nodeType + '/', formData, this.httpOptions)
   }
 
   public getTree(nodeType: string, Id: string): Observable<INodeDto[]> {

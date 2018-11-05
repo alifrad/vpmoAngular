@@ -29,8 +29,8 @@ export class TreeStructureComponent implements OnInit {
   // user the object for cancel or save created node
   private saveNewNodeData: { parent, newNode } = null;
   // for editing visual tree
-  public editValue: string;
-  private editedNode: any = null;
+  public newNodeName: string;
+  private renamingNode: any = null;
   // array of tree nodes
   public nodes = [];
 
@@ -63,46 +63,38 @@ export class TreeStructureComponent implements OnInit {
   }
 
   // user start edit node
-  public startEditing = (node) => {
+  public startRenaming = (node) => {
     // prevent situation when user start edit this node before cancel previous node
-    this.cancelEditing();
-    this.editedNode = node;
-    node.data.isEditing = true;
-    this.editValue = node.data.name;
+    this.resetRenameAttrs();
+    this.renamingNode = node;
+    node.data.isRenaming = true;
+    this.newNodeName = node.data.name;
   }
 
-  // delete node
-  public removeNode = (node) => {
-    // prevent situation when user start remove this node before cancel previous node
-    this.cancelEditing();
-    this.treeStructureHttpService.deleteNode(node.data._id);
-    _.remove(node.parent.data.children, (n: IVisualNodeData) => {
-      return node.data._id === n._id;
-    });
-    this.tree.treeModel.update();
-  }
-
-  // prevent situation when user start edit this node before cancel previous node
-  public cancelEditing = () => {
-    if (this.saveNewNodeData) {
-      _.remove(this.saveNewNodeData.parent.children, (n: any) => {
-        return this.saveNewNodeData.newNode._id === n._id;
-      });
-      this.saveNewNodeData = null;
-      this.tree.treeModel.update();
-    }
-
-    if (this.editedNode) {
-      // set flag of visual editing tree to false
-      this.editedNode.data.isEditing = false;
-      this.editedNode = null;
+  resetRenameAttrs () {
+    if (this.renamingNode) {
+      this.renamingNode.data.isRenaming = false;
+      this.renamingNode = null;
     }
   }
 
   // cancel editing node
-  public cancelNode = (node) => {
-    this.cancelEditing();
+  public cancelRenameNode = (node) => {
+    this.resetRenameAttrs()
     this.tree.treeModel.update();
+  }
+
+  renameNode (node) {
+    node.data.name = this.newNodeName
+    node.data.isRenaming = false
+    this.tree.treeModel.update();
+
+    var updateData = { name: this.newNodeName }
+    this.treeStructureHttpService.updateNode(this.renamingNode.data._id, this.renamingNode.data.node_type, updateData)
+      .subscribe(response => {
+        console.log('Node Rename successful')
+      })
+    this.cancelRenameNode(node)
   }
 
   constructor(
@@ -159,29 +151,6 @@ export class TreeStructureComponent implements OnInit {
   getTopNode(): string {
     // this.treeRoot = JSON.parse(localStorage.getItem('node'));
     return this.node._id;
-    /*
-    if (this.getNodeType() === 'Team'){
-      try{
-        this.treeRoot = (localStorage.getItem('teamID'));
-      }
-      catch (err) {
-          console.log('Error: ' + err);
-          return ('Error: ' + err);
-      }
-      console.log('team: ' +  this.treeRoot);
-      return this.treeRoot;
-    } else if (this.getNodeType() === 'Project'){
-      try{
-        this.treeRoot = (localStorage.getItem('projectID'));
-      }
-      catch (err) {
-          console.log('Error: ' + err);
-          return ('Error: ' + err);
-      }
-      console.log('project: ' +  this.treeRoot);
-      return this.treeRoot;
-    } 
-    */
   }
 
   getNodeType(): string {
@@ -254,18 +223,5 @@ export class TreeStructureComponent implements OnInit {
         this.getTree(params['type'], params['id']);
       }
     );
-
-    // this.treeStructureHttpService.getTree(this.getNodeType(), this.getTopNode())
-    //   .subscribe(
-    //     (data) => {
-    //       this.nodes = this.treeStructureService.preUploadData(data);
-    //       // need time in order create dom for tree
-    //       setTimeout(() => {
-    //         this.tree.treeModel.expandAll();
-    //       }, 111);
-    //     },
-    //     (err: any) => console.log('getTree ', err),
-    //     () => console.log('All done getting nodes.')
-    //   );
   }
 }

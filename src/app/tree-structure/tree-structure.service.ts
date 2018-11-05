@@ -12,11 +12,6 @@ import { TreeStructureHttpService } from './tree-structure-http.service';
 export class TreeStructureService {
   constructor(private treeStructureHttpService: TreeStructureHttpService) { }
 
-  public updateNode(node: IVisualNodeData): any {
-    const dto = this.converVisualNodeToDto(node, false);
-    this.treeStructureHttpService.updateNode(dto);
-  }
-
   public converVisualNodeToDtoList(visulaNodeList: IVisualNodeData[], withChildren: boolean): INodeDto[] {
     let dtoList = [];
     visulaNodeList.forEach(node => {

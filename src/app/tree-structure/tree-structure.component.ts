@@ -120,8 +120,10 @@ export class TreeStructureComponent implements OnInit {
           globalService.nodeValue.subscribe(
             (nextValue) => {
               this.node = JSON.parse(nextValue);
-              this.getTree(this.getNodeType(), JSON.parse(nextValue)._id);
-
+              var nodeType = this.getNodeType()
+              if (nodeType != 'Topic') {
+                this.getTree(this.getNodeType(), JSON.parse(nextValue)._id);
+              }
           });
         }
 
@@ -171,34 +173,12 @@ export class TreeStructureComponent implements OnInit {
     console.log('Opening Node', node);
     localStorage.setItem('nodeID', nodeId);
     localStorage.setItem('nodeType', nodeType);
-    this.globalService.node = JSON.stringify({ _id: nodeId, name: nodeName });
     
-    if (nodeType === 'Team') {
-      this.globalService.team = JSON.stringify({ _id: nodeId, name: nodeName });
-      // localStorage.setItem('teamID', nodeId);
-    } else if (nodeType === 'Project') {
-      this.globalService.project = JSON.stringify({ _id: nodeId, name: nodeName });
-    } else {
-      this.globalService.topic = JSON.stringify({ _id: nodeId, name: nodeName });
-    }
+    this.globalService.node = JSON.stringify({ _id: nodeId, name: nodeName });
 
     // this.router.navigate(['node/details']);
     console.log('node/' + nodeType + '/' + nodeId);
     this.router.navigate(['node/' + nodeType + '/' + nodeId]);
-
-    /*
-    if (nodeType === 'Team'){
-
-    } else if (nodeType === 'Project') {
-      localStorage.setItem('projectID', nodeId);
-      this.ngOnInit();
-      this.router.navigate(['node/details']);
-      
-    } else {
-      localStorage.setItem('topicID', nodeId);
-      this.router.navigate(['node/details']);
-    }
-    */
   }
 
   getTree(nodeType, nodeId) {

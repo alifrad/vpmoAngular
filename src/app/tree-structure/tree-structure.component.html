@@ -18,7 +18,7 @@
       
       <div class="node-name">{{ node.data.name }}</div>
       <div>
-        <button mat-icon-button (click)="startAdd(node)">
+        <button *ngIf="node.data.node_type!='Topic'" mat-icon-button (click)="startAdd(node)">
           <mat-icon> add </mat-icon>
         </button>
         <button mat-icon-button class="white-icon" (click)="startRenaming(node)">

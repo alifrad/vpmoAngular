@@ -6,6 +6,7 @@ import { Observable } from '../../../node_modules/rxjs/Observable';
 import 'rxjs';
 import { HttpClient, HttpHeaders } from '../../../node_modules/@angular/common/http';
 import { AuthenticationService } from 'app/_services';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -46,7 +47,15 @@ export class TreeStructureHttpService {
   }
 
   public createNode(formData: any, nodeType: string): Observable<any> {
-    return this.http.post(this.nodeCreateUrl + nodeType + '/', formData, this.httpOptions)
+    return this.http.post<any>(this.nodeCreateUrl + nodeType + '/', formData, this.httpOptions)
+              .pipe(map(node => {
+                 if (node) {
+                  return node;
+                } else {
+                  throw new Error('coud not create the node');
+                }
+              })
+              )
   }
 
   public getTree(nodeType: string, Id: string): Observable<INodeDto[]> {

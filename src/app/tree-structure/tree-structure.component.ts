@@ -120,8 +120,8 @@ export class TreeStructureComponent implements OnInit {
           globalService.nodeValue.subscribe(
             (nextValue) => {
               this.node = JSON.parse(nextValue);
-              var nodeType = this.getNodeType()
-              if (nodeType != 'Topic') {
+              const nodeType = this.getNodeType();
+              if (nodeType !== 'Topic') {
                 this.getTree(this.getNodeType(), JSON.parse(nextValue)._id);
               }
           });
@@ -129,6 +129,7 @@ export class TreeStructureComponent implements OnInit {
 
   // IMPORTANT update is needed
   public onMoveNode($event) {
+    
     const movedNode: ITreeNode = this.tree.treeModel.getNodeById($event.node._id);
     const updatedList: IVisualNodeData[] = this.treeStructureService.updateModel(movedNode, this.tree.treeModel);
     const updatedListDto = this.treeStructureService.converVisualNodeToDtoList(updatedList, false);
@@ -139,7 +140,7 @@ export class TreeStructureComponent implements OnInit {
 
   getTeam(): string {
     try{
-        this.treeRoot = JSON.parse(this.node)._id;
+        this.treeRoot = this.team._id;
     }
     catch (err) {
         console.log('Error: ' + err);

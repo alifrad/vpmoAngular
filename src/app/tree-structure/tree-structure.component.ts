@@ -133,7 +133,7 @@ export class TreeStructureComponent implements OnInit {
     const updatedList: IVisualNodeData[] = this.treeStructureService.updateModel(movedNode, this.tree.treeModel);
     const updatedListDto = this.treeStructureService.converVisualNodeToDtoList(updatedList, false);
     // this line should change to accomodate the changes to structure when the top node is a project
-    this.treeStructureHttpService.updateNodeList(updatedListDto, this.getTeam());
+    this.treeStructureHttpService.updateNodeList(updatedListDto, this.getTopNode());
   }
 
 

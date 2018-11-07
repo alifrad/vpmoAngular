@@ -5,8 +5,8 @@
   <mat-tab *ngIf="nodeType !== 'Topic'" label="Tree"> 
     <app-tree-structure></app-tree-structure> 
   </mat-tab>
-  <mat-tab label="Content"> 
-    <node-details></node-details> 
+  <mat-tab label="Content" *ngIf="nodeType !== 'Team'" >  
+    <app-node-edit></app-node-edit> 
   </mat-tab>
   <mat-tab label="Conversation"> 
     <!--<app-chat></app-chat>-->

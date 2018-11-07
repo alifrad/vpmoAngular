@@ -174,8 +174,16 @@ export class TreeStructureComponent implements OnInit {
     console.log('Opening Node', node);
     localStorage.setItem('nodeID', nodeId);
     localStorage.setItem('nodeType', nodeType);
-    
     this.globalService.node = JSON.stringify({ _id: nodeId, name: nodeName });
+    
+    if (nodeType === 'Team') {
+      this.globalService.team = JSON.stringify({ _id: nodeId, name: nodeName });
+      // localStorage.setItem('teamID', nodeId);
+    } else if (nodeType === 'Project') {
+      this.globalService.project = JSON.stringify({ _id: nodeId, name: nodeName });
+    } else {
+      this.globalService.topic = JSON.stringify({ _id: nodeId, name: nodeName });
+    }
 
     // this.router.navigate(['node/details']);
     console.log('node/' + nodeType + '/' + nodeId);

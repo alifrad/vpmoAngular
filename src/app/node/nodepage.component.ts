@@ -25,18 +25,21 @@ export class NodepageComponent implements OnInit {
           }
 
   updateGlobal(nodeType) {
-    localStorage.setItem('nodeType', nodeType)
+    localStorage.setItem('nodeType', nodeType);
     if (nodeType === 'Team') {
       this.globalService.team = localStorage.getItem('team');
       this.globalService.node = localStorage.getItem('team');
     }
   }
 
+  
+
   ngOnInit() {
     this.route.params.subscribe(
       params => { 
         this.nodeType = params['type'];
         this.updateGlobal(this.nodeType);
+        this.globalService.node = params['id'];
       }
     );
     

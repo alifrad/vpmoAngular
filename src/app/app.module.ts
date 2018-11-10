@@ -26,6 +26,7 @@ import { ChatModule } from './chat/chat.module';
 import { PermissionsModule } from './permissions/permissions.module';
 import { TasksModule } from './tasks/tasks.module';
 import { DocumentsModule } from './documents/documents.module';
+import { NodeBreadcrumbsModule } from './node-breadcrumbs/node-breadcrumbs.module';
 import { HomeComponent } from './home/home.component';
 import { ErrorComponent } from './error/error.component';
 import { AppRoutingModule } from './shared/app.routing';
@@ -133,6 +134,7 @@ export function tokenGetter() {
         PermissionsModule,
         TasksModule,
         DocumentsModule,
+        // NodeBreadcrumbsModule,
         TreeStructureModule,
         NodeModule,
     ],

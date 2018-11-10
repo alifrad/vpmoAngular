@@ -5,6 +5,7 @@ import { DocumentsService } from './documents.service';
 import { PermissionsService } from '../permissions/permissions.service'
 import {MatDialog, MatDialogConfig} from '@angular/material';
 import { ChangeDetectorRef } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-documents-list',
@@ -21,7 +22,8 @@ export class DocumentsListComponent implements OnInit {
     private _documentsService: DocumentsService,
     private _permissionsService: PermissionsService,
     private dialog: MatDialog,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private route: ActivatedRoute
   ) { }
 
   nodeID: string;
@@ -32,10 +34,14 @@ export class DocumentsListComponent implements OnInit {
   renamingDocument: any;
 
   ngOnInit() {
-    this.nodeID = JSON.parse(localStorage.getItem('node'))._id;
-    this.nodeType = localStorage.getItem('nodeType');
-    this.getDocuments()
-    this.getUserPermissions(this.nodeID, this.nodeType)
+    this.route.params.subscribe(
+      params => { 
+        this.nodeType = params['type']
+        this.nodeID = params['id']
+        this.getDocuments()
+        this.getUserPermissions(this.nodeID, this.nodeType)
+      }
+    );
   }
 
   getDocuments () {

@@ -23,6 +23,7 @@ import { TreeStructureModule } from '../tree-structure/tree-structure.module';
 import { NodeEditComponent } from './node-edit.component';
 import { PermissionsModule } from '../permissions/permissions.module';
 import { TasksModule } from '../tasks/tasks.module';
+import { NodeBreadcrumbsModule } from '../node-breadcrumbs/node-breadcrumbs.module';
 import { DocumentsModule } from '../documents/documents.module';
 import { QuillModule } from 'ngx-quill';
 import { FormsModule } from '@angular/forms';
@@ -63,6 +64,7 @@ const NodeRoutes: Routes = [
     DocumentsModule,
     TreeStructureModule,
     QuillModule,
+    NodeBreadcrumbsModule
   ],
   declarations: [
     NodepageComponent,

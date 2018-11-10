@@ -129,6 +129,7 @@ export class TreeStructureComponent implements OnInit {
     console.log('Opening Node', node);
     localStorage.setItem('nodeID', nodeId);
     localStorage.setItem('nodeType', nodeType);
+    /*
     this.globalService.node = JSON.stringify({ _id: nodeId, name: nodeName });
     
     if (nodeType === 'Team') {
@@ -139,6 +140,7 @@ export class TreeStructureComponent implements OnInit {
     } else {
       this.globalService.topic = JSON.stringify({ _id: nodeId, name: nodeName });
     }
+    */
 
     // this.router.navigate(['node/details']);
     console.log('node/' + nodeType + '/' + nodeId);

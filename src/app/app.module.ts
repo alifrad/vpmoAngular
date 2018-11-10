@@ -134,7 +134,7 @@ export function tokenGetter() {
         PermissionsModule,
         TasksModule,
         DocumentsModule,
-        // NodeBreadcrumbsModule,
+        NodeBreadcrumbsModule,
         TreeStructureModule,
         NodeModule,
     ],

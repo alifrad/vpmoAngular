@@ -1,3 +1,25 @@
 :host {
 	width: 100%;
 }
+
+ul {
+	list-style: none;
+	padding: 0;
+}
+
+ul li {
+	display: inline;
+	color: grey;
+}
+
+ul :last-child {
+	color: #ffd301;
+}
+
+li + li:before {
+	content: '\00BB';
+	vertical-align:middle;
+	display:inline-block;
+	padding:0 0.25em;
+	color: grey;
+}

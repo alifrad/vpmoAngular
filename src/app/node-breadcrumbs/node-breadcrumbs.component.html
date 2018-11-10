@@ -1,1 +1,28 @@
-Breadcrumbs
+<ul *ngIf="nodeParents.length < 4">
+	<li *ngFor="let breadcrumb of nodeParents" (click)="switchToNode(breadcrumb._id, breadcrumb.node_type)">
+		{{ breadcrumb.name }}
+	</li>
+</ul>
+
+<ul *ngIf="nodeParents.length >= 4">
+	<li (click)="switchToNode(breadcrumb._id, breadcrumb.node_type)">
+		{{ nodeParents[0].name }}
+	</li>
+	<li (click)="openNodeParentsPanel(nodeParentsPanel)">
+		...
+	</li>
+	<li (click)="switchToNode(breadcrumb._id, breadcrumb.node_type)">
+		{{ nodeParents[nodeParents.length-2].name }}
+	</li>
+	<li (click)="switchToNode(breadcrumb._id, breadcrumb.node_type)">
+		{{ nodeParents[nodeParents.length-1].name }}
+	</li>
+</ul>
+
+<ng-template #nodeParentsPanel>
+    <mat-nav-list>
+	  	<a *ngFor="let breadcrumb of nodeParents"mat-list-item (click)="switchToNode(breadcrumb._id, breadcrumb.node_type)">
+		    <span mat-line>{{ breadcrumb.name }}</span>
+		</a>
+	</mat-nav-list>
+</ng-template>

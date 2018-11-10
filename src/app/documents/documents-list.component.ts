@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { AuthenticationService } from '../_services';
 import { DocumentsService } from './documents.service';
 import { PermissionsService } from '../permissions/permissions.service'
 import {MatDialog, MatDialogConfig} from '@angular/material';
 import { ChangeDetectorRef } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-documents-list',

@@ -5,14 +5,15 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
-import { MatFormFieldModule, MatIconModule, MatInputModule, MatButtonModule } from '@angular/material';
+import { MatFormFieldModule, MatIconModule, MatInputModule, MatButtonModule,
+        MatListModule, MatBottomSheetModule } from '@angular/material';
 import { AuthGuard } from '../_guards/auth.guard';
 import { NodeBreadcrumbsComponent } from './node-breadcrumbs.component';
-// import { NodeBreadcrumbsService } from './node-breadcrumbs.service';
+import { NodeBreadcrumbsService } from './node-breadcrumbs.service';
 
 const NodeBreadcrumbsRoutes: Routes = [
   {
-    path: ':type/:id',
+    path: 'node-breadcrumbs/:type/:id',
     component: NodeBreadcrumbsComponent,
     canActivate: [ AuthGuard ]
   }
@@ -29,12 +30,14 @@ const NodeBreadcrumbsRoutes: Routes = [
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
+    MatListModule,
+    MatBottomSheetModule
   ],
   declarations: [
     NodeBreadcrumbsComponent
   ],
   providers: [
-  	// NodeBreadcrumbsService
+  	NodeBreadcrumbsService
   ],
   exports: [
     NodeBreadcrumbsComponent

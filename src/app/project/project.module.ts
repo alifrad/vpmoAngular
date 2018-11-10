@@ -33,7 +33,7 @@ const ProjectRoutes: Routes = [
       children: [
           { path: 'add', component: ProjectAddComponent },
           { path: '', component: ProjectListComponent },
-          { path: 'edit', component: ProjectEditComponent }
+          { path: 'edit/:type/:id', component: ProjectEditComponent }
       ],
       canActivate: [ AuthGuard ],
   },

@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { PermissionsService } from './permissions.service';
+import { MAT_DIALOG_DATA } from '@angular/material'
 
 @Component({
   selector: 'add-permissions',
@@ -12,7 +13,8 @@ export class AddPermissionsComponent implements OnInit {
 	title = 'Add Permissions';
 
 	constructor(
-		private _permissionsService: PermissionsService
+		private _permissionsService: PermissionsService,
+		@Inject(MAT_DIALOG_DATA) public data: any
 	){ }
 
 	nodeID: string;
@@ -22,8 +24,8 @@ export class AddPermissionsComponent implements OnInit {
 	assignableRoles: any[] = [];
 
 	ngOnInit () {
-		this.nodeType = localStorage.getItem('nodeType')
-		this.nodeID = localStorage.getItem('nodeID')
+		this.nodeType = this.data.nodeType
+		this.nodeID = this.data.nodeID
 		this.assignableRoles = JSON.parse(localStorage.getItem('assignableRoles'))
 		this._permissionsService.getAssignableUsers(this.nodeID, this.nodeType)
 			.subscribe(

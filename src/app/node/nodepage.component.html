@@ -8,8 +8,9 @@
     <app-tree-structure></app-tree-structure> 
   </mat-tab>
   <mat-tab label="Content" *ngIf="nodeType === 'Project'" >  
-    <app-node-edit></app-node-edit> 
+    <app-project-edit></app-project-edit> 
   </mat-tab>
+  <!-- Add more mat tabs here for different node Types -->
   <mat-tab label="Conversation"> 
     <!--<app-chat></app-chat>-->
   </mat-tab>

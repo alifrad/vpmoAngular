@@ -20,7 +20,6 @@ import { ProjectEditComponent } from '../project/project-edit.component';
 import { ProjectModule } from '../project/project.module';
 import { ChatModule } from '../chat/chat.module';
 import { TreeStructureModule } from '../tree-structure/tree-structure.module';
-import { NodeEditComponent } from './node-edit.component';
 import { PermissionsModule } from '../permissions/permissions.module';
 import { TasksModule } from '../tasks/tasks.module';
 import { NodeBreadcrumbsModule } from '../node-breadcrumbs/node-breadcrumbs.module';
@@ -67,10 +66,7 @@ const NodeRoutes: Routes = [
     NodeBreadcrumbsModule
   ],
   declarations: [
-    NodepageComponent,
-    NodeEditComponent,
-    
-
+    NodepageComponent
   ],
   exports: [
     NodepageComponent,

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { AddPermissionsComponent } from './add-permissions.component';
 import { AuthenticationService } from '../_services';
 import { PermissionsService } from './permissions.service';
@@ -18,7 +18,8 @@ export class PermissionsComponent implements OnInit {
   constructor(
     private authUser: AuthenticationService,
     private _permissionsService: PermissionsService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private route: ActivatedRoute
   ) { }
 
   userList: any[] = [];
@@ -34,19 +35,18 @@ export class PermissionsComponent implements OnInit {
   assignableRoles: string[] = [];
 
   ngOnInit() {
-    const nodeID = JSON.parse(localStorage.getItem('node'))._id;
-    const nodeType = localStorage.getItem('nodeType');
+    this.route.params.subscribe(
+      params => { 
+        this.nodeType = params['type']
+        this.nodeID = params['id']
 
-    this.getUserPermissions(nodeID, nodeType);
+        this.getUserPermissions(this.nodeID, this.nodeType);
 
-    this.getPermissionsList(nodeID, nodeType);
+        this.getPermissionsList(this.nodeID, this.nodeType);
 
-    this.getAssignableRoles(nodeID, nodeType);
-
-    this.nodeID = nodeID;
-    this.nodeType = nodeType;
-    localStorage.setItem('nodeID', nodeID)
-    localStorage.setItem('nodeType', nodeType)
+        this.getAssignableRoles(this.nodeID, this.nodeType);
+      }
+    );
   }
 
   getUserPermissions (nodeID, nodeType) {
@@ -129,7 +129,12 @@ export class PermissionsComponent implements OnInit {
     dialogConfig.height = '500';
 
     localStorage.setItem('assignableRoles', JSON.stringify(this.assignableRoles));
-    const dialogRef = this.dialog.open(AddPermissionsComponent, dialogConfig);
+    const dialogRef = this.dialog.open(AddPermissionsComponent, {
+      'autoFocus': true,
+      width: '350',
+      height: '500',
+      data: {nodeType: this.nodeType, nodeID: this.nodeID}
+    });
     dialogRef.afterClosed().subscribe(result => {
       this.getPermissionsList(this.nodeID, this.nodeType);
     });

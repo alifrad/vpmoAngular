@@ -15,7 +15,7 @@ export class ProjectService {
 
   // url for crud operation of teamTree
   private readonly projectsUrl: string = `${appConfig.apiUrl}/projects/`;
-  private readonly nodeUpdateUrl: string = `${appConfig.apiUrl}/node/`;
+  private readonly nodeRetrieveUpdateUrl: string = `${appConfig.apiUrl}/node/`;
   private httpOptions = {
     // for auntification
     headers: new HttpHeaders({
@@ -34,12 +34,12 @@ export class ProjectService {
 
   partialUpdateProject (projectId: string, projectContent: string): Observable<IProject[]> {
 
-    return this.http.patch<IProject[]>(this.nodeUpdateUrl + 'Project/' + projectId + '/', {content: projectContent}, this.httpOptions)
+    return this.http.patch<IProject[]>(this.nodeRetrieveUpdateUrl + projectId + '/', {content: projectContent}, this.httpOptions)
       .catch(this.handleError);
   }
 
   getProject (projectId: string): Observable<IProject> {
-    return this.http.get<IProject>(this.nodeUpdateUrl + 'Project/' + projectId + '/', this.httpOptions)
+    return this.http.get<IProject>(this.nodeRetrieveUpdateUrl + projectId + '/', this.httpOptions)
      .catch(this.handleError);
  }
 

@@ -12,28 +12,44 @@
   <H1>my teams</H1>
 </div>
 
-<div>
+<!-- <div>
     <button (click)="openTeamCreateDialog(createTeamDialog)" mat-raised-button>Create Team</button>
-</div>
+</div> -->
+
+<mat-card class="example-card">
+  <mat-card-header>
+    <mat-card-title>
+      <img src="../../assets/icons/Team-T-Icon.svg" height="15" width="15">
+      <span class="pl-4">need to add a new team?</span>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <div>
+      this is for the time you need to establish a new organisaiton or new group of people working on projects
+    </div>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-button (click)="openTeamCreateDialog(createTeamDialog)">Create Team</button>
+  </mat-card-actions>
+</mat-card>
+
 
 <mat-card class="example-card" *ngFor='let team of teams'>
   <mat-card-header>
     <mat-card-title>
       <img src="../../assets/icons/Team-T-Icon.svg" height="15" width="15">
-      <!-- <span class="pl-4"><b>{{team.name}}</b></span> -->
+      <span class="pl-4"><b>{{team.name}}</b></span>
     </mat-card-title>
-    <!-- <mat-card-subtitle>Dog Breed</mat-card-subtitle> -->
+    <mat-card-subtitle># members</mat-card-subtitle>
   </mat-card-header>
   <!-- <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu"> -->
   <mat-card-content>
-    <!-- <p>
-      The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-      A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-      bred for hunting.
-    </p> -->
+      <div>
+          number of projects = [X]
+      </div>
   </mat-card-content>
   <mat-card-actions>
-    <button mat-button (click)="teamTree(team)">{{team.name}}</button>
+    <button mat-button (click)="teamTree(team)">View Details</button>
     <!-- <button mat-button>SHARE</button> -->
   </mat-card-actions>
 </mat-card>

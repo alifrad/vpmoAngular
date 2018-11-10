@@ -12,7 +12,7 @@ import 'rxjs/add/operator/do';
 })
 export class NodeService {
 
-  private readonly apiUrl: string = `${appConfig.docApiUrl}`;
+  private readonly apiUrl: string = `${appConfig.apiUrl}`;
   
   constructor(
     private http: HttpClient, 
@@ -46,8 +46,8 @@ export class NodeService {
     }
   }
 
-  getNodeParents (nodeID: string): Observable<any> {
-    return this.http.get(this.apiUrl + 'node_parents/' + nodeID + '/', this.httpOptions)
+  getNodeParents(nodeID: string): Observable<any> {
+    return this.http.get(this.apiUrl + '/node_parents/' + nodeID + '/', this.httpOptions)
       .catch(this.handleError);
   }
 

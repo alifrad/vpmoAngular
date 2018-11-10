@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { GlobalService } from '../_services/global.service';
+import { NodeService } from './node.service';
 
 @Component({
   selector: 'app-nodepage',
@@ -16,33 +17,42 @@ export class NodepageComponent implements OnInit {
           private router: Router,
           private route: ActivatedRoute,
           private globalService: GlobalService,
+          private nodeService: NodeService,
           ) { 
               globalService.nodeValue.subscribe(
                 (nextValue) => {
                   this.node = JSON.parse(nextValue);
-                  localStorage.setItem('nodeID', this.node._id)
               });
           }
 
-  updateGlobal(nodeType) {
+  updateGlobal(nodeType, nodeId) {
     localStorage.setItem('nodeType', nodeType);
-    if (nodeType === 'Team') {
-      this.globalService.team = localStorage.getItem('team');
-      this.globalService.node = localStorage.getItem('team');
-    }
+    
+    this.nodeService.getNodeParents(nodeId)
+      .subscribe(
+        params => {
+          // this.globalService.team = JSON.stringify(params.root);
+          // this.globalService.project = JSON.stringify(params.immediate_parent);
+          this.globalService.node = JSON.stringify(params.node);
+          console.log('node parents: ' + JSON.stringify(params));
+        },
+        err => console.error('getNodeParents service error: ' + err)
+      );
   }
 
-  
-
   ngOnInit() {
+    let nodeType: string;
+    let nodeId: string;
     this.route.params.subscribe(
       params => { 
-        this.nodeType = params['type'];
-        this.updateGlobal(this.nodeType);
-        this.globalService.node = params['id'];
+        nodeType = params['type'];
+        nodeId = params['id'];
+        this.updateGlobal(nodeType, nodeId);
+        console.log(params);
       }
     );
-    
+
+   
     // this.nodeType = localStorage.getItem('nodeType');
     
   }

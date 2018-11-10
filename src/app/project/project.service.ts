@@ -39,7 +39,7 @@ export class ProjectService {
   }
 
   getProject (projectId: string): Observable<IProject> {
-    return this.http.get<IProject>(this.nodeUpdateUrl + 'Project/' + projectId + '/', this.httpOptions)
+    return this.http.get<IProject>(this.nodeUpdateUrl + projectId + '/', this.httpOptions)
      .catch(this.handleError);
  }
 

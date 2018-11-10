@@ -12,7 +12,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { HttpCacheService } from './http-cache.service';
 import { GlobalService } from './global.service';
 import { navigation } from '../navigation/navigation';
-// import { GlobalService } from './global2.service';
+
 
 @Injectable()
 

@@ -15,7 +15,7 @@ export class ProjectService {
 
   // url for crud operation of teamTree
   private readonly projectsUrl: string = `${appConfig.apiUrl}/projects/`;
-  private readonly nodeUpdateUrl: string = `${appConfig.apiUrl}/update_node/`;
+  private readonly nodeUpdateUrl: string = `${appConfig.apiUrl}/node/`;
   private httpOptions = {
     // for auntification
     headers: new HttpHeaders({

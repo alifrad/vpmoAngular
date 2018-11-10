@@ -20,10 +20,8 @@ import { CreateNodeComponent } from './create-node.component';
 export class TreeStructureComponent implements OnInit {
   treeRoot: any;
   nodeType: any;
-  node: any;
-  team: any;
-  project: any;
-  topic: any;
+  nodeID: any;
+
   @ViewChild(TreeComponent)
   private tree: TreeComponent;
   // user the object for cancel or save created node
@@ -105,31 +103,12 @@ export class TreeStructureComponent implements OnInit {
         private globalService: GlobalService,
         private dialog: MatDialog
         ) { 
-          globalService.teamValue.subscribe(
-            (nextValue) => {
-              this.team = JSON.parse(nextValue);
-          });
-          globalService.projectValue.subscribe(
-            (nextValue) => {
-              this.project = JSON.parse(nextValue);
-          });
-          globalService.topicValue.subscribe(
-            (nextValue) => {
-              this.topic = JSON.parse(nextValue);
-          });
-          globalService.nodeValue.subscribe(
-            (nextValue) => {
-              this.node = JSON.parse(nextValue);
-              const nodeType = this.getNodeType();
-              if (nodeType !== 'Topic') {
-                this.getTree(this.getNodeType(), JSON.parse(nextValue)._id);
-              }
-          });
+
         }
 
   // IMPORTANT update is needed
   public onMoveNode($event) {
-    
+    console.log('On Move', $event.node)
     const movedNode: ITreeNode = this.tree.treeModel.getNodeById($event.node._id);
     const updatedList: IVisualNodeData[] = this.treeStructureService.updateModel(movedNode, this.tree.treeModel);
     const updatedListDto = this.treeStructureService.converVisualNodeToDtoList(updatedList, false);
@@ -137,34 +116,10 @@ export class TreeStructureComponent implements OnInit {
     this.treeStructureHttpService.updateNodeList(updatedListDto, this.getTopNode());
   }
 
-
-  getTeam(): string {
-    try{
-        this.treeRoot = this.team._id;
-    }
-    catch (err) {
-        console.log('Error: ' + err);
-        return ('Error: ' + err);
-    }
-    console.log('team: ' +  this.treeRoot);
-    return this.treeRoot;
-  }
-
-
   getTopNode(): string {
     // this.treeRoot = JSON.parse(localStorage.getItem('node'));
-    return this.node._id;
-  }
-
-  getNodeType(): string {
-    try{
-        this.nodeType = (localStorage.getItem('nodeType'));
-        return this.nodeType;
-    }
-    catch (err) {
-        console.log('Error: ' + err);
-        return ('');
-    }
+    console.log('Top Node', this.nodeID)
+    return this.nodeID;
   }
 
   public viewDetail = (node) => {
@@ -210,6 +165,8 @@ export class TreeStructureComponent implements OnInit {
     this.route.params.subscribe(
       params => { 
         this.getTree(params['type'], params['id']);
+        this.nodeType = params['type']
+        this.nodeID = params['id']
       }
     );
   }

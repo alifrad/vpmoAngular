@@ -16,7 +16,7 @@ import { TasksService } from './tasks.service';
 
 const TasksRoutes: Routes = [
   {
-    path: 'tasks',
+    path: 'tasks/:type/:id',
     component: TasksComponent,
     canActivate: [ AuthGuard ]
   }

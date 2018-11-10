@@ -16,7 +16,7 @@ export class TreeStructureHttpService {
   // url for crud operation of teamTree
   private readonly nodesTreeUrl: string = `${appConfig.apiUrl}/nodes_tree/`;
   private readonly nodeCreateUrl: string = `${appConfig.apiUrl}/create_node/`;
-  private readonly nodeUpdateUrl: string = `${appConfig.apiUrl}/update_node/`;
+  private readonly nodeUpdateUrl: string = `${appConfig.apiUrl}/node/`;
 
   constructor(private http: HttpClient, private authUser: AuthenticationService) { }
 

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { AuthenticationService } from '../_services';
 import { TasksService } from './tasks.service';
 import {MatDialog, MatDialogConfig} from '@angular/material';
@@ -21,6 +21,7 @@ export class TasksComponent implements OnInit {
     private authUser: AuthenticationService,
     private _tasksService: TasksService,
     private dialog: MatDialog,
+    private route: ActivatedRoute
   ) { }
 
   nodeID: string;
@@ -38,10 +39,13 @@ export class TasksComponent implements OnInit {
   ngOnInit () {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'))
 
-    this.nodeID = JSON.parse(localStorage.getItem('node'))._id;
-    this.nodeType = localStorage.getItem('nodeType');
-
-  	this.getAssignedTasks()
+   this.route.params.subscribe(
+      params => { 
+        this.nodeType = params['type']
+        this.nodeID = params['id']
+        this.getAssignedTasks()
+      }
+    );
   }
 
   getAssignedTasks () {
@@ -57,7 +61,12 @@ export class TasksComponent implements OnInit {
     dialogConfig.width = '350';
     dialogConfig.height = '500';
 
-    const dialogRef = this.dialog.open(CreateTasksComponent, dialogConfig);
+    const dialogRef = this.dialog.open(CreateTasksComponent, {
+      width: '350',
+      height: '500',
+      data: {nodeID: this.nodeID, nodeType: this.nodeType}
+    });
+
     dialogRef.afterClosed().subscribe(result => {
       this.getAssignedTasks();
     });
@@ -70,8 +79,11 @@ export class TasksComponent implements OnInit {
     dialogConfig.width = '350';
     dialogConfig.height = '500';
 
-    localStorage.setItem('taskID', task._id)
-    const dialogRef = this.dialog.open(ReassignTaskComponent, dialogConfig);
+    const dialogRef = this.dialog.open(ReassignTaskComponent, {
+      width: '350',
+      height: '500',
+      data: {nodeID: this.nodeID, nodeType: this.nodeType, taskID: task._id}
+    });
     dialogRef.afterClosed().subscribe(result => {
       this.getAssignedTasks();
     });

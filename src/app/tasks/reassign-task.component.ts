@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { TasksService } from './tasks.service';
+import { MAT_DIALOG_DATA } from '@angular/material';
 
 @Component({
   selector: 'reassign-task',
@@ -12,7 +13,8 @@ export class ReassignTaskComponent implements OnInit {
 	title = 'Reassign Task';
 
 	constructor(
-		private _tasksService: TasksService
+		private _tasksService: TasksService,
+		@Inject(MAT_DIALOG_DATA) public data: any
 	){ }
 
 	nodeID: string;
@@ -23,9 +25,9 @@ export class ReassignTaskComponent implements OnInit {
 	selectedUser: any;
 
 	ngOnInit () {
-		this.nodeID = JSON.parse(localStorage.getItem('node'))._id;
-   		this.nodeType = localStorage.getItem('nodeType');
-   		this.taskID = localStorage.getItem('taskID')
+		this.nodeID = this.data.nodeID
+   		this.nodeType = this.data.nodeType
+   		this.taskID = this.data.taskID
 	}
 
 	filterUsers (e) {

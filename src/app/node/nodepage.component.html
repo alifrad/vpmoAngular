@@ -1,11 +1,11 @@
 <div>
-  <h2>{{node.name}}</h2>
+  <h2>{{nodeID}}</h2>
 </div>
 <mat-tab-group [selectedIndex]="1">
   <mat-tab *ngIf="nodeType !== 'Topic'" label="Tree"> 
     <app-tree-structure></app-tree-structure> 
   </mat-tab>
-  <mat-tab label="Content" *ngIf="nodeType !== 'Team'" >  
+  <mat-tab label="Content" *ngIf="nodeType === 'Project'" >  
     <app-node-edit></app-node-edit> 
   </mat-tab>
   <mat-tab label="Conversation"> 

@@ -5,16 +5,16 @@
 </ul>
 
 <ul *ngIf="nodeParents.length >= 4">
-	<li (click)="switchToNode(breadcrumb._id, breadcrumb.node_type)">
+	<li (click)="switchToNode(nodeParents[0]._id, nodeParents[0].node_type)">
 		{{ nodeParents[0].name }}
 	</li>
 	<li (click)="openNodeParentsPanel(nodeParentsPanel)">
 		...
 	</li>
-	<li (click)="switchToNode(breadcrumb._id, breadcrumb.node_type)">
+	<li (click)="switchToNode(nodeParents[nodeParents.length-2]._id, nodeParents[nodeParents.length-2].node_type)">
 		{{ nodeParents[nodeParents.length-2].name }}
 	</li>
-	<li (click)="switchToNode(breadcrumb._id, breadcrumb.node_type)">
+	<li (click)="switchToNode(nodeParents[nodeParents.length-1]._id, nodeParents[nodeParents.length-1].node_type)">
 		{{ nodeParents[nodeParents.length-1].name }}
 	</li>
 </ul>

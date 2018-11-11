@@ -29,7 +29,7 @@ export class NodeBreadcrumbsComponent implements OnInit {
   nodeType: string;
   currentUser: any;
 
-  nodeParents: any;
+  nodeParents: any = [];
 
   ngOnInit () {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'))

@@ -32,6 +32,7 @@ export class EditTaskComponent implements OnInit {
    		this.taskID = this.data.taskID
    		this.newTitle = this.data.taskTitle
    		this.newDueDate = this.data.taskDueDate
+   		this.selectedUser = this.data.taskAssignee
 	}
 
 	filterUsers (e) {

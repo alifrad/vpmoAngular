@@ -29,7 +29,7 @@ export class TasksComponent implements OnInit {
   currentUser: any;
 
   assignedTasks: any[] = [];
-  displayedColumns: string[] = ['title', 'assignee_name', 'status', 'utils'];
+  displayedColumns: string[] = ['title', 'assignee_name', 'due_date', 'status', 'utils'];
   taskStatusList: any[] = [
     {value: 'NEW', text: 'New'},
     {value: 'IN_PROGRESS', text: 'In Progress'},
@@ -82,7 +82,8 @@ export class TasksComponent implements OnInit {
     const dialogRef = this.dialog.open(EditTaskComponent, {
       width: '350',
       height: '500',
-      data: {nodeID: this.nodeID, nodeType: this.nodeType, taskID: task._id, taskTitle: task.title, taskDueDate: task.due_date}
+      data: {nodeID: this.nodeID, nodeType: this.nodeType, taskID: task._id, taskTitle: task.title,
+            taskDueDate: task.due_date, taskAssignee: task.assignee.username}
     });
     dialogRef.afterClosed().subscribe(result => {
       this.getAssignedTasks();

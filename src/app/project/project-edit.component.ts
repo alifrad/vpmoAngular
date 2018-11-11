@@ -34,12 +34,12 @@ export class ProjectEditComponent implements OnInit {
   }
 
   getProject (nodeID) {
+    this.projectContent = '';
     this._projectService.getProject(nodeID)
       .subscribe(project => {
         this.project = project
         if (this.project.content !== null) {
           this.projectContent = this.project.content;
-          // console.log('NOT NULL!', this.projectContent);
         }
       })
   }

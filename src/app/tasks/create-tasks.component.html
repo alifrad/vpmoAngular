@@ -24,6 +24,6 @@
 		</mat-form-field>
 	</div>
 	<div>
-		<button mat-flat-button color="primary" (click)="createTask()">Create Task</button>
+		<button [disabled]="filteredAssignableUsers.length == 0" mat-flat-button color="primary" (click)="createTask()">Create Task</button>
 	</div>
 </div>

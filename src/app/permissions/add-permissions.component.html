@@ -1,15 +1,16 @@
 <div>
 	<h3>{{ nodeType }}</h3>
 
-	<mat-form-field>
-	  	<mat-select placeholder="Choose User" [(ngModel)]="selectedUser">
-	    	<mat-option *ngFor="let user of usersList" [value]="user._id">
-	      		{{ user.username }}
-	    	</mat-option>
-	 	</mat-select>
-	</mat-form-field>
+	<mat-form-field class="full-width">
+    	<input (input)="filterUsers($event.target.value)" type="text" placeholder="Username" matInput [matAutocomplete]="auto" [(ngModel)]="selectedUser">
+	    <mat-autocomplete #auto="matAutocomplete">
+	      <mat-option *ngFor="let option of usersList" [value]="option.username">
+	        {{option.username}}
+	      </mat-option>
+	    </mat-autocomplete>
+  	</mat-form-field>
 
 	<div style="text-align: center;">
-		<button (click)="addUser()" mat-raised-button matTooltip="Adds the SelectedUser as a viewer-rank role">Add User</button>
+		<button [disabled]="usersList.length == 0" (click)="addUser()" mat-raised-button matTooltip="Adds the SelectedUser as a viewer-rank role">Add User</button>
 	</div>
 </div>

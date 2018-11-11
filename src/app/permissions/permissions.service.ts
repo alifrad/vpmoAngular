@@ -47,8 +47,8 @@ export class PermissionsService {
       .catch(this.handleError);
   }
 
-  getAssignableUsers (node: string, nodeType: string): Observable<any> {
-    return this.http.get(this.assignableUsersUrl+node+"/?nodeType="+nodeType, this.httpOptions)
+  getAssignableUsers (node: string, nodeType: string, usernameQuery: string): Observable<any> {
+    return this.http.get(this.assignableUsersUrl+node+"/?nodeType="+nodeType+"&search="+usernameQuery, this.httpOptions)
       .catch(this.handleError)
   }
 
@@ -57,11 +57,11 @@ export class PermissionsService {
       .catch(this.handleError)
   }
 
-  assignUserToNode (node: string, nodeType: string, userID: string, role: string): Observable<any> {
+  assignUserToNode (node: string, nodeType: string, username: string, role: string): Observable<any> {
     var data = {
       'nodeID': node,
       'nodeType': nodeType,
-      'userID': userID,
+      'user': username,
       'role': role
     }
     return this.http.put(this.assignUserToNodeUrl, data, this.httpOptions)

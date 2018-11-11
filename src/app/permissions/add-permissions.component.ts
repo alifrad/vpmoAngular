@@ -22,22 +22,31 @@ export class AddPermissionsComponent implements OnInit {
 	usersList: any[] = [];
 	selectedUser: any;
 	assignableRoles: any[] = [];
+	filteredAssignableUsers: any[] = [];
 
 	ngOnInit () {
 		this.nodeType = this.data.nodeType
 		this.nodeID = this.data.nodeID
 		this.assignableRoles = JSON.parse(localStorage.getItem('assignableRoles'))
-		this._permissionsService.getAssignableUsers(this.nodeID, this.nodeType)
-			.subscribe(
-				users => this.usersList = users
-			)
 	}
 
 	addUser () {
 		var role = this.assignableRoles[0]
 		this._permissionsService.assignUserToNode(this.nodeID, this.nodeType, this.selectedUser, role)
 			.subscribe(
-				response => this.usersList = this.usersList.filter(item => item._id !== this.selectedUser)
+				response => {
+				 	this.usersList = this.usersList.filter(item => item._id !== this.selectedUser)
+				 	alert('User Added')
+				 }
 			)
+	}
+
+	filterUsers (username) {
+		if (username.length >= 3) {
+			this._permissionsService.getAssignableUsers(this.nodeID, this.nodeType, username)
+				.subscribe(
+					users => this.usersList = users
+				)
+		}
 	}
 }

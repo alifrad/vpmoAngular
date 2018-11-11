@@ -80,7 +80,7 @@ export class PermissionsComponent implements OnInit {
 
   assignRole (newRole, user) {
     const self = this;
-    this._permissionsService.assignUserToNode(this.nodeID, this.nodeType, user._id, newRole)
+    this._permissionsService.assignUserToNode(this.nodeID, this.nodeType, user.username, newRole)
       .subscribe(
         response => {
           if (user._id === self.currentUserID) {

@@ -40,7 +40,7 @@ export class CreateTasksComponent implements OnInit {
 	}
 
 	filterUsers (e) {
-		if (e.length < 5) {
+		if (e.length < 3) {
 			return
 		}
 		this._tasksService.getAssignableUsers(this.nodeID, this.nodeType, e)

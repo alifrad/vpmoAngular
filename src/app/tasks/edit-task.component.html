@@ -1,0 +1,28 @@
+<div>
+	<h3>Reassign Task</h3>
+
+	<mat-form-field class="full-width">
+	    <input [(ngModel)]="newTitle" matInput placeholder="Task Title">
+	</mat-form-field>
+
+	<mat-form-field class="full-width">
+    	<input (input)="filterUsers($event.target.value)" type="text" placeholder="Task Assignee" matInput [matAutocomplete]="auto" [(ngModel)]="selectedUser">
+	    <mat-autocomplete #auto="matAutocomplete">
+	      <mat-option *ngFor="let option of filteredAssignableUsers" [value]="option.username">
+	        {{option.username}}
+	      </mat-option>
+	    </mat-autocomplete>
+  	</mat-form-field>
+
+  	<div>
+		<mat-form-field class="full-width">
+		  	<input matInput [matDatepicker]="picker" placeholder="Due Date" [(ngModel)]="newDueDate">
+		  	<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+		  	<mat-datepicker #picker></mat-datepicker>
+		</mat-form-field>
+	</div>
+
+  	<div>
+		<button mat-flat-button color="primary" (click)="editTask()">Reassign Task</button>
+	</div>
+</div>

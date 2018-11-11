@@ -5,7 +5,7 @@ import { TasksService } from './tasks.service';
 import {MatDialog, MatDialogConfig} from '@angular/material';
 
 import { CreateTasksComponent } from './create-tasks.component';
-import { ReassignTaskComponent } from './reassign-task.component';
+import { EditTaskComponent } from './edit-task.component';
 
 @Component({
   selector: 'app-tasks',
@@ -29,7 +29,7 @@ export class TasksComponent implements OnInit {
   currentUser: any;
 
   assignedTasks: any[] = [];
-  displayedColumns: string[] = ['title', 'status', 'utils'];
+  displayedColumns: string[] = ['title', 'assignee_name', 'status', 'utils'];
   taskStatusList: any[] = [
     {value: 'NEW', text: 'New'},
     {value: 'IN_PROGRESS', text: 'In Progress'},
@@ -72,17 +72,17 @@ export class TasksComponent implements OnInit {
     });
   }
 
-  openReassignDialog (task) {
+  openEditDialog (task) {
     const dialogConfig = new MatDialogConfig();
 
     dialogConfig.autoFocus = true;
     dialogConfig.width = '350';
     dialogConfig.height = '500';
 
-    const dialogRef = this.dialog.open(ReassignTaskComponent, {
+    const dialogRef = this.dialog.open(EditTaskComponent, {
       width: '350',
       height: '500',
-      data: {nodeID: this.nodeID, nodeType: this.nodeType, taskID: task._id}
+      data: {nodeID: this.nodeID, nodeType: this.nodeType, taskID: task._id, taskTitle: task.title, taskDueDate: task.due_date}
     });
     dialogRef.afterClosed().subscribe(result => {
       this.getAssignedTasks();

@@ -42,47 +42,46 @@ export class TasksService {
 	createTask (nodeID: string, nodeType: string, dueDate: any, assignee: string, taskTitle: string): Observable<any> {
 		// Sends a post request with given data to create the task
 		var data = {
-			node: nodeID,
 			due_date: dueDate,
 			state: 'NEW',
 			title: taskTitle,
 			'assignee': assignee
 		}
-		return this.http.post(this.createDeleteUpdateTaskUrl+'?nodeType='+nodeType, data, this.httpOptions)
+		return this.http.post(this.createDeleteUpdateTaskUrl+'?nodeType='+nodeType+'&nodeID='+nodeID, data, this.httpOptions)
 			.catch(this.handleError)
 	}
 
 	updateTaskStatus (nodeID: string, nodeType: string, taskID: string, status: string): Observable<any> {
 		// Sends a Patch request for updating the task status for the given task
 		var data = {
-			node: nodeID,
-			task: taskID,
+			_id: taskID,
 			'status': status
 		}
-		return this.http.patch(this.createDeleteUpdateTaskUrl+'?nodeType='+nodeType, data, this.httpOptions)
+		return this.http.patch(this.createDeleteUpdateTaskUrl+'?nodeType='+nodeType+'&nodeID='+nodeID, data, this.httpOptions)
 			.catch(this.handleError)
 	}
 
 	deleteTask (nodeID: string, nodeType: string, taskID: string): Observable<any> {
 		var data = {
-			node: nodeID,
-			task: taskID
+			_id: taskID
 		}
 		var options = { 
 		    body: data,
 		    headers : this.httpOptions.headers
 		};
-		return this.http.request('delete', this.createDeleteUpdateTaskUrl+'?nodeType='+nodeType, options)
+		return this.http.request('delete', this.createDeleteUpdateTaskUrl+'?nodeType='+nodeType+'&nodeID='+nodeID, options)
 			.catch(this.handleError)
 	}
 
-	reassignTask (nodeID: string, nodeType: string, taskID: string, assigneeUsername: string): Observable<any> {
+	// TODO: Add ability for user to edit other task details here (due date, name etc.)
+	editTask (nodeID: string, nodeType: string, taskID: string, assigneeUsername: string, taskTitle: string, dueDate: string): Observable<any> {
 		var data = {
-			node: nodeID,
 			assignee: assigneeUsername,
-			task: taskID
+			_id: taskID,
+			title: taskTitle,
+			due_date: dueDate
 		}
-		return this.http.put(this.createDeleteUpdateTaskUrl+'?nodeType='+nodeType, data, this.httpOptions)
+		return this.http.put(this.createDeleteUpdateTaskUrl+'?nodeType='+nodeType+'&nodeID='+nodeID, data, this.httpOptions)
 			.catch(this.handleError)
 	}
 

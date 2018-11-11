@@ -3,14 +3,14 @@ import { TasksService } from './tasks.service';
 import { MAT_DIALOG_DATA } from '@angular/material';
 
 @Component({
-  selector: 'reassign-task',
-  templateUrl: './reassign-task.component.html',
-  styleUrls: ['./reassign-task.component.css']
+  selector: 'edit-task',
+  templateUrl: './edit-task.component.html',
+  styleUrls: ['./edit-task.component.css']
 })
 
 
-export class ReassignTaskComponent implements OnInit {
-	title = 'Reassign Task';
+export class EditTaskComponent implements OnInit {
+	title = 'Edit Task';
 
 	constructor(
 		private _tasksService: TasksService,
@@ -23,23 +23,27 @@ export class ReassignTaskComponent implements OnInit {
 
 	filteredAssignableUsers: any = [];
 	selectedUser: any;
+	newTitle: string;
+	newDueDate: string;
 
 	ngOnInit () {
 		this.nodeID = this.data.nodeID
    		this.nodeType = this.data.nodeType
    		this.taskID = this.data.taskID
+   		this.newTitle = this.data.taskTitle
+   		this.newDueDate = this.data.taskDueDate
 	}
 
 	filterUsers (e) {
-		if (e.length < 5) {
+		if (e.length < 3) {
 			return
 		}
 		this._tasksService.getAssignableUsers(this.nodeID, this.nodeType, e)
 			.subscribe(assignableUsers => this.filteredAssignableUsers = assignableUsers)
 	}
 
-	reassignTask () {
-		this._tasksService.reassignTask(this.nodeID, this.nodeType, this.taskID, this.selectedUser)
+	editTask () {
+		this._tasksService.editTask(this.nodeID, this.nodeType, this.taskID, this.selectedUser, this.newTitle, this.newDueDate)
 			.subscribe(
 				resp => alert('Task Reassigned')
 			)

@@ -13,7 +13,7 @@ import 'rxjs/add/operator/do';
 export class NodeService {
 
   private readonly apiUrl: string = `${appConfig.apiUrl}`;
-  private readonly nodeRetrieveUpdateUrl: string = this.apiUrl + '/node/'
+  private readonly nodeRetrieveUpdateUrl: string = this.apiUrl + '/node/';
   
   constructor(
     private http: HttpClient, 
@@ -30,7 +30,7 @@ export class NodeService {
 
   getNodeDetails (nodeID: string): Observable<any> {
     return this.http.get(this.nodeRetrieveUpdateUrl + nodeID + '/', this.httpOptions)
-      .catch(this.handleError)
+      .catch(this.handleError);
   }
 
   partialUpdateNode (nodeID: string, nodeContent: string): Observable<any> {

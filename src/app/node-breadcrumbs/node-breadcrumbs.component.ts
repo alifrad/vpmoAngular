@@ -22,7 +22,7 @@ export class NodeBreadcrumbsComponent implements OnInit {
     private _permissionsService: PermissionsService,
     private route: ActivatedRoute,
     private router: Router,
-    private bottomSheet: MatBottomSheet
+    private bottomSheet: MatBottomSheet,
   ) { }
 
   nodeID: string;
@@ -40,17 +40,18 @@ export class NodeBreadcrumbsComponent implements OnInit {
         this.nodeID = params['id']
         this._breadcrumbsService.getNodeParents(this.nodeID)
           .subscribe(nodeParents => {
-            this.nodeParents = nodeParents
-          })
+            this.nodeParents = nodeParents;
+          });
       }
     );
   }
 
   switchToNode (nodeID, nodeType) {
+    localStorage.setItem('nodeID', nodeID);
     this.router.navigate(['node/' + nodeType + '/' + nodeID]);
   }
 
   openNodeParentsPanel(panel) {
-    this.bottomSheet.open(panel)
+    this.bottomSheet.open(panel);
   }
 }

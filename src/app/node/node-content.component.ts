@@ -27,7 +27,7 @@ export class NodeContentComponent implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe(
       params => { 
-        this.getNodeDetail(params['id'])
+        this.getNodeDetail(params['id']);
       }
     );    
     
@@ -37,14 +37,15 @@ export class NodeContentComponent implements OnInit {
     this.nodeContent = '';
     this._nodeService.getNodeDetails(nodeID)
       .subscribe(node => {
-        this.node = node
+        this.node = node;
         if (this.node.content !== null) {
           this.nodeContent = this.node.content;
         }
-      })
+      });
   }
 
   saveContent () {
+    // debugger;
     this._nodeService.partialUpdateNode(this.node._id, this.nodeContent)
       .subscribe(
         node => this.node = node 

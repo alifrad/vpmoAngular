@@ -16,7 +16,6 @@ import {
   MatTabsModule,
   MatExpansionModule, 
 } from '@angular/material';
-import { ProjectEditComponent } from '../project/project-edit.component';
 import { ProjectModule } from '../project/project.module';
 import { ChatModule } from '../chat/chat.module';
 import { TreeStructureModule } from '../tree-structure/tree-structure.module';
@@ -26,6 +25,8 @@ import { NodeBreadcrumbsModule } from '../node-breadcrumbs/node-breadcrumbs.modu
 import { DocumentsModule } from '../documents/documents.module';
 import { QuillModule } from 'ngx-quill';
 import { FormsModule } from '@angular/forms';
+import { NodeService } from './node.service';
+import { NodeContentComponent } from './node-content.component';
 
 const NodeRoutes: Routes = [
   {
@@ -33,7 +34,7 @@ const NodeRoutes: Routes = [
       canActivate: [ AuthGuard ],
       children: [
           { path: ':type/:id', component: NodepageComponent },
-
+          { path: 'edit/:type/:id', component: NodeContentComponent }
       ]
   },
 ];
@@ -65,12 +66,16 @@ const NodeRoutes: Routes = [
     QuillModule,
     NodeBreadcrumbsModule
   ],
+  providers: [
+    NodeService
+  ],
   declarations: [
-    NodepageComponent
+    NodepageComponent,
+    NodeContentComponent
   ],
   exports: [
     NodepageComponent,
-    
+    NodeContentComponent
   ],
 })
 export class NodeModule { }

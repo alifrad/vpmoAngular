@@ -6,7 +6,6 @@ import { HttpClientModule } from '@angular/common/http';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 
 import { ProjectAddComponent } from './project-add.component';
-import { ProjectEditComponent } from './project-edit.component';
 import { ProjectService } from './project.service';
 import { ProjectComponent } from './project.component';
 import { 
@@ -33,7 +32,6 @@ const ProjectRoutes: Routes = [
       children: [
           { path: 'add', component: ProjectAddComponent },
           { path: '', component: ProjectListComponent },
-          { path: 'edit/:type/:id', component: ProjectEditComponent }
       ],
       canActivate: [ AuthGuard ],
   },
@@ -61,14 +59,12 @@ const ProjectRoutes: Routes = [
   declarations: [
     ProjectComponent,
     ProjectAddComponent,
-    ProjectListComponent,
-    ProjectEditComponent,
+    ProjectListComponent
   ],
   providers: [
     ProjectService,
   ],
   exports: [
-    ProjectEditComponent,
   ],
 })
 export class ProjectModule { }

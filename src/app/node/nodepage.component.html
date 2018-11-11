@@ -7,8 +7,8 @@
   <mat-tab *ngIf="nodeType !== 'Topic'" label="Tree"> 
     <app-tree-structure></app-tree-structure> 
   </mat-tab>
-  <mat-tab label="Content" *ngIf="nodeType === 'Project'" >  
-    <app-project-edit></app-project-edit> 
+  <mat-tab label="Content" *ngIf="nodeType != 'Team'" >  
+    <app-node-content></app-node-content> 
   </mat-tab>
   <!-- Add more mat tabs here for different node Types -->
   <mat-tab label="Conversation"> 

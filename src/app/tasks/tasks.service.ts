@@ -45,7 +45,8 @@ export class TasksService {
 			due_date: dueDate,
 			state: 'NEW',
 			title: taskTitle,
-			'assignee': assignee
+			'assignee': assignee,
+			node: nodeID
 		}
 		return this.http.post(this.createDeleteUpdateTaskUrl+'?nodeType='+nodeType+'&nodeID='+nodeID, data, this.httpOptions)
 			.catch(this.handleError)
@@ -73,7 +74,6 @@ export class TasksService {
 			.catch(this.handleError)
 	}
 
-	// TODO: Add ability for user to edit other task details here (due date, name etc.)
 	editTask (nodeID: string, nodeType: string, taskID: string, assigneeUsername: string, taskTitle: string, dueDate: string): Observable<any> {
 		var data = {
 			assignee: assigneeUsername,

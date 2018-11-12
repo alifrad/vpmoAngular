@@ -11,6 +11,7 @@ export class NodepageComponent implements OnInit {
   errorMessage: string;
   nodeID: any;
   nodeType: string;
+  selectedIndex: any;
 
   constructor(
           private router: Router,
@@ -28,6 +29,10 @@ export class NodepageComponent implements OnInit {
     
     // this.nodeType = localStorage.getItem('nodeType');
     
+  }
+
+  onTabChanged (e) {
+    this.selectedIndex = e.index
   }
 
 }

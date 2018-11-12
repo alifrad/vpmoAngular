@@ -22,20 +22,21 @@ export class NodeContentComponent implements OnInit {
         ) {}
 
   node: any;
+  nodeID: string;
   nodeContent: string;
 
   ngOnInit(): void {
     this.route.params.subscribe(
       params => { 
-        this.getNodeDetail(params['id']);
+        this.nodeID = params['id']
+        this.getNodeDetail()
       }
-    );    
-    
+    )
   }
 
-  getNodeDetail (nodeID) {
+  getNodeDetail () {
     this.nodeContent = '';
-    this._nodeService.getNodeDetails(nodeID)
+    this._nodeService.getNodeDetails(this.nodeID)
       .subscribe(node => {
         this.node = node;
         if (this.node.content !== null) {

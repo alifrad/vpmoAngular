@@ -3,12 +3,12 @@
 <div>
   <h2>{{nodeID}}</h2>
 </div>
-<mat-tab-group [selectedIndex]="1">
+<mat-tab-group (selectedTabChange)="onTabChanged($event)" [selectedIndex]="0" dynamicHeight>
   <mat-tab *ngIf="nodeType !== 'Topic'" label="Tree"> 
     <app-tree-structure></app-tree-structure> 
   </mat-tab>
   <mat-tab label="Content" *ngIf="nodeType != 'Team'" >  
-    <app-node-content></app-node-content> 
+    <app-node-content *ngIf="selectedIndex == 1"></app-node-content> 
   </mat-tab>
   <!-- Add more mat tabs here for different node Types -->
   <mat-tab label="Conversation"> 

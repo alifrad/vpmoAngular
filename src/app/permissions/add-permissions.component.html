@@ -5,7 +5,10 @@
     	<input (input)="filterUsers($event.target.value)" type="text" placeholder="Username" matInput [matAutocomplete]="auto" [(ngModel)]="selectedUser">
 	    <mat-autocomplete #auto="matAutocomplete">
 	      <mat-option *ngFor="let option of usersList" [value]="option.username">
-	        {{option.username}}
+					<span>{{option.fullname}}</span> |
+					<small>email: {{option.email}} |
+					username: {{option.username}}
+					</small>
 	      </mat-option>
 	    </mat-autocomplete>
   	</mat-form-field>

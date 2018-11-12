@@ -35,8 +35,8 @@ export class AddPermissionsComponent implements OnInit {
 		this._permissionsService.assignUserToNode(this.nodeID, this.nodeType, this.selectedUser, role)
 			.subscribe(
 				response => {
-				 	this.usersList = this.usersList.filter(item => item._id !== this.selectedUser)
-				 	alert('User Added')
+				 	this.usersList = this.usersList.filter(item => item._id !== this.selectedUser);
+				 	alert('User Added');
 				 }
 			)
 	}
@@ -46,7 +46,7 @@ export class AddPermissionsComponent implements OnInit {
 			this._permissionsService.getAssignableUsers(this.nodeID, this.nodeType, username)
 				.subscribe(
 					users => this.usersList = users
-				)
+				);
 		}
 	}
 }

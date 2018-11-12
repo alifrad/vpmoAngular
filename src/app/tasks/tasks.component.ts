@@ -37,13 +37,13 @@ export class TasksComponent implements OnInit {
   ];
 
   ngOnInit () {
-    this.currentUser = JSON.parse(localStorage.getItem('currentUser'))
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
 
    this.route.params.subscribe(
       params => { 
-        this.nodeType = params['type']
-        this.nodeID = params['id']
-        this.getAssignedTasks()
+        this.nodeType = params['type'];
+        this.nodeID = params['id'];
+        this.getAssignedTasks();
       }
     );
   }
@@ -51,7 +51,7 @@ export class TasksComponent implements OnInit {
   getAssignedTasks () {
     this._tasksService.getAssignedTasks(this.nodeID).subscribe(
       tasks => this.assignedTasks = tasks
-    )
+    );
   }
 
   openCreateTasksDialog () {

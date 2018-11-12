@@ -33,6 +33,8 @@ export class EditTaskComponent implements OnInit {
    		this.newTitle = this.data.taskTitle
    		this.newDueDate = this.data.taskDueDate
    		this.selectedUser = this.data.taskAssignee
+   		// Filtering the assignable users so that the options list can be populated
+   		this.filterUsers(this.selectedUser)
 	}
 
 	filterUsers (e) {

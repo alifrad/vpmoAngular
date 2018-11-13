@@ -15,27 +15,21 @@ import { HttpErrorResponse } from '@angular/common/http/src/response';
 export class ChatService {
 
   // url for crud operation of teamTree
-  private readonly apiUrl: string = `${appConfig.apiUrl}`;
-  private readonly messageListUrl: string = `${appConfig.apiUrl}/messages/`;
+  private readonly apiUrl: string = `${appConfig.chatUrl}`;
+  private readonly tokenUrl: string = this.apiUrl + '/token/';
   private httpOptions = {
     // for auntification
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': 'JWT ' + this.authUser.getToken
+      'Authorization': 'JWT ' + this.authUser.getToken()
     })
   };
 
   constructor(private http: HttpClient, private authUser: AuthenticationService) { }
 
-  getMessages (node: string, earlierThan?: string): Observable<any> {
-    if (earlierThan) {
-      return this.http.get(this.messageListUrl + node + '/?earlier_than=' + earlierThan , this.httpOptions)
-        .catch(this.handleError);
-    } else {
-      return this.http.get(this.messageListUrl + node + '/' , this.httpOptions)
-        .catch(this.handleError);
-    }
-    
+  getToken (): Observable<any> {
+    return this.http.get(this.tokenUrl, this.httpOptions)
+      .catch(this.handleError)
   }
 
   private handleError(err: HttpErrorResponse) {

@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy, ViewChild, AfterViewChecked } from '@angular/core';
-import { Router } from '@angular/router';
-// import { Socket } from 'ngx-socket-io';
+import { Router, ActivatedRoute } from '@angular/router';
 import { ChatService } from './chat.service';
 import { AuthenticationService } from '../_services';
 import { appConfig } from '../app.config';
 
+declare const Twilio: any
 
 @Component({
   selector: 'app-chat',
@@ -15,42 +15,30 @@ import { appConfig } from '../app.config';
 export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   constructor(
-    // private socket: Socket,
     private router: Router,
     private _chatService: ChatService,
     private authUser: AuthenticationService,
+    private route: ActivatedRoute
   ) { }
 
   @ViewChild('chatContainer') chatContainer;
 
   messages: any[] = [];
-  node: any;
-  chatSocket: any;
-  maxMessageLength: 20;
-
+  nodeID: string;
+  chatToken: string;
+  chatClient: any;
+  channel: any;
 
   ngOnDestroy () {
-    this.chatSocket.close();
   }
 
   ngOnInit() {
-    const cookie = this.authUser.getToken();
-    this.node = JSON.parse(localStorage.getItem('node'))._id;
-    this.chatSocket = new WebSocket(
-        appConfig.wsUrl + '/chat/' + this.node + '/?' + this.authUser.getToken()
+    this.route.params.subscribe(
+      params => { 
+        this.nodeID = params['id'];
+        this.connectToChat()
+      }
     );
-
-    
-    this._chatService.getMessages(this.node)
-      .subscribe(
-        messages => this.messages = messages
-      );
-
-    const currentThis = this;
-    this.chatSocket.onmessage = function (e) {
-      const data = JSON.parse(e.data).message;
-      currentThis.messages.push(data);
-    }
 
     this.chatContainer.nativeElement.scrollTop = this.chatContainer.nativeElement.scrollHeight;
   }
@@ -59,7 +47,42 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
     
   }
 
+  connectToChat () {
+    this._chatService.getToken()
+      .subscribe(response => {
+        this.chatToken = response.token
+        Twilio.Chat.Client.create(this.chatToken)
+          .then(client => {
+            this.chatClient = client
+            var that = this
+            this.chatClient.getSubscribedChannels().then(function (resp) {
+              that.getChannel()
+            })
+          })
+      })
+  }
+
+  getChannel () {
+    var that = this
+    this.chatClient.getChannelByUniqueName(this.nodeID)
+      .then(function (channel) {
+        that.channel = channel
+        that.setupChannel()
+      })
+  }
+
+  setupChannel () {
+    this.channel.join().then(function (channel) {
+      console.log('Joined Channel', channel)
+    })
+
+    this.channel.on('messageAdded', function (message) {
+      console.log('Message added', message)
+    })
+  }
+
   private onScroll (e) {
+    /*
     if (e.target.scrollTop === 0 && this.messages.length > 0) {
       const olderMessages = [];
       this._chatService.getMessages(this.node, this.messages[0]._id)
@@ -73,15 +96,11 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
         }
       );
     }
+    */
   }
 
   private sendMessage (msg) {
-    var data = {
-      'content': msg,
-      'sent_on': new Date()
-    }
-
-    this.chatSocket.send(JSON.stringify(data));
+    this.channel.sendMessage(msg)
   }
 
 }

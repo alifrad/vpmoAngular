@@ -16,21 +16,17 @@ import {
   MatListModule, 
   MatDividerModule 
 } from '@angular/material';
-// import { ChatRoomComponent } from "./chat-room.component"
+
 import { AuthGuard } from '../_guards/auth.guard';
 import { ChatComponent } from './chat.component';
-// import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 import { ChatService } from './chat.service';
 
 const ChatRoutes: Routes = [
   {
-    path: 'chat',
+    path: 'chat/:type/:id',
     component: ChatComponent
   }
 ];
-
-// const config: SocketIoConfig = { url: '127.0.0.1:8000', options: {path: '/ws/chat/'+localStorage.getItem('node')+'/',
-// transports: ['websocket']} };
 
 
 @NgModule({
@@ -50,7 +46,6 @@ const ChatRoutes: Routes = [
     MatListModule,
     MatIconModule,
     MatDividerModule,
-    // SocketIoModule.forRoot(config)
   ],
   declarations: [
     ChatComponent,

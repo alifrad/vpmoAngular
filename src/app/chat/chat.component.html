@@ -1,46 +1,40 @@
-<style>
-	.chat-container {
-		height: 70%;
-		overflow: scroll;
-		position: relative;
-	}
-
-	.chat-container mat-list {
-		max-height: 100%;
-	}
-
-	.chat-inp {
-		width: 100%;
-	}
-
-</style>
-
-<mat-card>
-	<div #chatContainer class="chat-container" (scroll)="onScroll($event)">
-		<mat-list>
-		<!-- <ng-template let-item let-i="index" let-last="last" ngFor [ngForOf]="let message of messages"> -->
-		
-			<!--
-			<mat-list-item *ngFor="let message of messages; let i = index; let last = last">
+<div class="chat-container">
+	<!--
+	<mat-list>		
+		<mat-list-item *ngFor="let message of messages; let i = index; let last = last">
+			
+				<img matListAvatar src="http://lorempixel.com/40/40/people/{{i}}" />
 				
-					<img matListAvatar src="http://lorempixel.com/40/40/people/{{i}}" />
-					
-					
-						<h3 matLine class="cursor-pointer"> {{ message.author }} </h3>
-						<p matLine>
-							<span>{{ message.content }}</span>
-						</p>
-					
-						<h5>{{ message.sent_on | date:'dd-MMM-yyyy @ h:mma' }}</h5>
-
-					<mat-divider *ngIf="!last"></mat-divider>
 				
-			</mat-list-item>
-			-->
-		</mat-list>
+					<h3 matLine class="cursor-pointer"> {{ message.author }} </h3>
+					<p matLine>
+						<span>{{ message.content }}</span>
+					</p>
+				
+					<h5>{{ message.sent_on | date:'dd-MMM-yyyy @ h:mma' }}</h5>
+
+				<mat-divider *ngIf="!last"></mat-divider>
+			
+		</mat-list-item>
+	</mat-list>
+-->
+	<div id="device">
+	  	<div #chatContainer class="chat" (scroll)="onScroll($event)">
+		    <div class="message" [ngClass]="{'me': message.author == currentUser}" *ngFor="let message of messages;">
+		        <img src="../../assets/icons/Team-T-Icon.svg" height="72" width="72"/>
+		        <!-- message.author available here as well -->
+		        <div><p>{{ message.body }}</p></div>
+		    </div>
+		    <!-- add class me if user is currentuser
+		    <div class="message">
+		        <img src="../../assets/icons/Team-T-Icon.svg" height="72" width="72"/>
+		        <div><p>Aliquam gravida semper pharetra.</p></div>
+		    </div>
+		    -->
+		</div>
 	</div>
+</div>
 
-	<mat-form-field class="chat-inp">
-	    <input #msgInput matInput placeholder="Message" value="" (keyup.enter)="sendMessage(msgInput.value)">
-	</mat-form-field>
-</mat-card>
+<mat-form-field class="chat-inp full-width">
+    <input #msgInput matInput placeholder="Message" value="" (keyup.enter)="sendMessage(msgInput.value); msgInput.value = ''">
+</mat-form-field>

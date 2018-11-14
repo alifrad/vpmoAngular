@@ -9,7 +9,7 @@ declare const Twilio: any
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
-  styleUrls: ['./chat.component.css']
+  styleUrls: ['./chat.component.less']
 })
 
 export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
@@ -28,23 +28,28 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
   chatToken: string;
   chatClient: any;
   channel: any;
+  currentUser: any;
 
   ngOnDestroy () {
   }
 
   ngOnInit() {
+    this.authUser.getUser().subscribe(data => {
+      this.currentUser = data.username
+      console.log(this.currentUser)
+    })
+    
     this.route.params.subscribe(
-      params => { 
+      params => {
         this.nodeID = params['id'];
         this.connectToChat()
       }
     );
 
-    this.chatContainer.nativeElement.scrollTop = this.chatContainer.nativeElement.scrollHeight;
   }
 
   ngAfterViewChecked () {
-    
+    this.scrollBottom()
   }
 
   connectToChat () {
@@ -71,32 +76,46 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
       })
   }
 
+  scrollBottom () {
+    console.log('Scrolling')
+    this.chatContainer.nativeElement.scrollTop = this.chatContainer.nativeElement.scrollHeight;
+  }
+
+  getMessages (fromIndex) {
+    var pageSize = 15
+    var that = this
+    if (fromIndex == null) {
+      that.channel.getMessages(pageSize).then(function (messages) {
+        that.messages = messages.items
+      })
+    } else {
+      that.channel.getMessages(pageSize, fromIndex).then(function (messages) {
+        if (messages.items.length > 0) {
+          for (var i = messages.items.length-1; i >= 0; i--) {
+            that.messages.unshift(messages.items[i])
+          }
+        }
+      })
+    }
+  }
+
   setupChannel () {
-    this.channel.join().then(function (channel) {
-      console.log('Joined Channel', channel)
-    })
+    var that = this
+
+    this.getMessages(null)
 
     this.channel.on('messageAdded', function (message) {
-      console.log('Message added', message)
+      console.log(message)
+      that.messages.push(message)
+      console.log(that.chatContainer)
     })
   }
 
   private onScroll (e) {
-    /*
     if (e.target.scrollTop === 0 && this.messages.length > 0) {
       const olderMessages = [];
-      this._chatService.getMessages(this.node, this.messages[0]._id)
-      .subscribe(
-        messages => {
-          for ( let i = messages.length; i >= 0; i--) {
-            if (messages[i] !== undefined) {
-              this.messages.unshift(messages[i]);
-            } 
-          }
-        }
-      );
+      this.getMessages(this.messages[0].index-1)
     }
-    */
   }
 
   private sendMessage (msg) {

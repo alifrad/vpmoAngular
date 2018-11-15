@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, AfterViewChecked } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, AfterViewChecked, AfterViewInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ChatService } from './chat.service';
 import { AuthenticationService } from '../_services';
@@ -12,7 +12,7 @@ declare const Twilio: any
   styleUrls: ['./chat.component.less']
 })
 
-export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
+export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked, AfterViewInit {
 
   constructor(
     private router: Router,
@@ -49,6 +49,10 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   ngAfterViewChecked () {
+    // this.scrollBottom()
+  }
+
+  ngAfterViewInit () {
     this.scrollBottom()
   }
 
@@ -78,6 +82,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   scrollBottom () {
     console.log('Scrolling')
+    // This should force scroll to bottom
     this.chatContainer.nativeElement.scrollTop = this.chatContainer.nativeElement.scrollHeight;
   }
 
@@ -86,7 +91,12 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
     var that = this
     if (fromIndex == null) {
       that.channel.getMessages(pageSize).then(function (messages) {
-        that.messages = messages.items
+        if (messages.items.length > 0) {
+          for (var i = messages.items.length-1; i >= 0; i--) {
+            that.messages.unshift(messages.items[i])
+            that.scrollBottom()
+          }
+        }
       })
     } else {
       that.channel.getMessages(pageSize, fromIndex).then(function (messages) {
@@ -105,9 +115,8 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.getMessages(null)
 
     this.channel.on('messageAdded', function (message) {
-      console.log(message)
       that.messages.push(message)
-      console.log(that.chatContainer)
+      that.scrollBottom()
     })
   }
 

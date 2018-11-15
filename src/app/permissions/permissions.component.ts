@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { AddPermissionsComponent } from './add-permissions.component';
 import { AuthenticationService } from '../_services';
 import { PermissionsService } from './permissions.service';
-import {MatDialog, MatDialogConfig} from '@angular/material';
+import { MatDialog, MatDialogConfig } from '@angular/material';
 
 @Component({
   selector: 'app-permissions',

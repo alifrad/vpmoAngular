@@ -32,7 +32,7 @@ export class GlobalService {
 
   set team(value) {
     this.teamValue.next(value);
-    localStorage.setItem('team', value);
+    localStorage.setItem('team', JSON.stringify(value));
     this.navigationValue.subscribe(nextValue => this.nav = JSON.parse(nextValue));
     this.nav
       .find(item => item.id === 'teamGroup').children
@@ -65,7 +65,7 @@ export class GlobalService {
 
   set project(value) {
     this.projectValue.next(value);
-    localStorage.setItem('project', value);
+    localStorage.setItem('project', JSON.stringify(value));
 
     this.navigationValue.subscribe(nextValue => this.nav = JSON.parse(nextValue));
     this.nav
@@ -97,7 +97,7 @@ export class GlobalService {
 
   set topic(value) {
     this.topicValue.next(value);
-    localStorage.setItem('topic', value);
+    localStorage.setItem('topic', JSON.stringify(value));
 
     this.navigationValue.subscribe(nextValue => this.nav = JSON.parse(nextValue));
     this.nav

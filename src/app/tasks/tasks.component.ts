@@ -6,6 +6,7 @@ import {MatDialog, MatDialogConfig} from '@angular/material';
 
 import { CreateTasksComponent } from './create-tasks.component';
 import { ReassignTaskComponent } from './reassign-task.component';
+import { GlobalService } from 'app/_services/global.service';
 
 @Component({
   selector: 'app-tasks',
@@ -16,16 +17,25 @@ import { ReassignTaskComponent } from './reassign-task.component';
 export class TasksComponent implements OnInit {
   
   title = 'Tasks';
+  nodeID: string;
+  nodeType: string;
+  currentUser: any;
+  node: any;
 
   constructor(
     private authUser: AuthenticationService,
     private _tasksService: TasksService,
     private dialog: MatDialog,
-  ) { }
-
-  nodeID: string;
-  nodeType: string;
-  currentUser: any;
+    private globalService: GlobalService,
+  ) { 
+    globalService.nodeValue.subscribe(
+      (nextValue) => {
+    
+        this.node = JSON.parse(nextValue);
+        this.nodeID = this.node._id;
+        this.getAssignedTasks();
+    });
+  }
 
   assignedTasks: any[] = [];
   displayedColumns: string[] = ['title', 'status', 'utils'];
@@ -36,18 +46,19 @@ export class TasksComponent implements OnInit {
   ];
 
   ngOnInit () {
-    this.currentUser = JSON.parse(localStorage.getItem('currentUser'))
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
 
-    this.nodeID = JSON.parse(localStorage.getItem('node'))._id;
+    this.nodeID = this.node._id;
     this.nodeType = localStorage.getItem('nodeType');
 
-  	this.getAssignedTasks()
+    this.getAssignedTasks();
   }
 
   getAssignedTasks () {
     this._tasksService.getAssignedTasks(this.nodeID).subscribe(
-      tasks => this.assignedTasks = tasks
-    )
+      tasks => this.assignedTasks = tasks,
+      err => console.error('Error getting tasks list ' + err),
+    );
   }
 
   openCreateTasksDialog () {

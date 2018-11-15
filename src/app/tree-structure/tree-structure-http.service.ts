@@ -6,6 +6,7 @@ import { Observable } from '../../../node_modules/rxjs/Observable';
 import 'rxjs';
 import { HttpClient, HttpHeaders } from '../../../node_modules/@angular/common/http';
 import { AuthenticationService } from 'app/_services';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -13,9 +14,9 @@ import { AuthenticationService } from 'app/_services';
 export class TreeStructureHttpService {
 
   // url for crud operation of teamTree
-  private readonly teamsTreeUrl: string = `${appConfig.apiUrl}/teams_tree/`;
-  private readonly projectsTreeUrl: string = `${appConfig.apiUrl}/project_tree/`;
-  private readonly projectUrl: string = `${appConfig.apiUrl}/projects/`;
+  private readonly nodesTreeUrl: string = `${appConfig.apiUrl}/nodes_tree/`;
+  private readonly nodeCreateUrl: string = `${appConfig.apiUrl}/create_node/`;
+  private readonly nodeUpdateUrl: string = `${appConfig.apiUrl}/update_node/`;
 
   constructor(private http: HttpClient, private authUser: AuthenticationService) { }
 
@@ -27,37 +28,38 @@ export class TreeStructureHttpService {
     })
   };
 
+  /*
   public deleteNode(nodeId: string): any {
     console.log('removeNode ', nodeId);
     return this.http.delete(this.teamsTreeUrl + nodeId, this.httpOptions).subscribe();
   }
+  */
 
-  public updateNode(data: INodeDto): any {
-    console.log('update ', data);
-    if (data.node_type === 'Project') {
-      return this.http.put(this.projectUrl + data._id + '/', data, this.httpOptions).subscribe();
-    }
-
+  public updateNode(nodeID: string, nodeType: string, updateData: any): Observable<any> {
+    console.log('update ', updateData);
+    return this.http.patch(this.nodeUpdateUrl + nodeType + '/' + nodeID + '/', updateData, this.httpOptions)
   }
 
   // update bunch of nodes
   public updateNodeList(nodeList: INodeDto[], teamId: string): any {
     console.log('updateNodeList ', nodeList);
-    return this.http.put(this.teamsTreeUrl + teamId + '/', nodeList, this.httpOptions).subscribe();
+    return this.http.put(this.nodesTreeUrl + teamId + '/', nodeList, this.httpOptions).subscribe();
   }
 
-  public addNode(node: INodeDto): Observable<INodeDto> {
-    console.log('addNode ', node);
-    return this.http.post<INodeDto>(this.projectUrl + 'add/', node, this.httpOptions);
+  public createNode(formData: any, nodeType: string): Observable<any> {
+    return this.http.post<any>(this.nodeCreateUrl + nodeType + '/', formData, this.httpOptions)
+              .pipe(map(node => {
+                 if (node) {
+                  return node;
+                } else {
+                  throw new Error('coud not create the node');
+                }
+              })
+              )
   }
 
   public getTree(nodeType: string, Id: string): Observable<INodeDto[]> {
-    if (nodeType === 'Team') {
-      return this.http.get<IVisualNodeData[]>(this.teamsTreeUrl + Id + '/', this.httpOptions);
-    } else if (nodeType === 'Project') {
-      return this.http.get<IVisualNodeData[]>(this.projectsTreeUrl + Id + '/', this.httpOptions);
-    }
-    
+    return this.http.get<IVisualNodeData[]>(this.nodesTreeUrl + Id + '/', this.httpOptions);
   }
 }
  

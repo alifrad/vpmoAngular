@@ -4,11 +4,15 @@ import { TeamsComponent } from './teams.component';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from '../_guards/auth.guard';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
     MatButtonModule,
     MatCardModule,
     MatListModule,
     MatIconModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatInputModule
   } from '@angular/material';
 
 const TeamRoutes: Routes = [
@@ -31,6 +35,11 @@ const TeamRoutes: Routes = [
         MatCardModule,
         MatListModule,
         MatIconModule,
+        MatDialogModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatInputModule
     ],
     exports: [
         TeamsComponent,

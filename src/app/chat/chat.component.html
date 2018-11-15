@@ -18,6 +18,7 @@
 		</mat-list-item>
 	</mat-list>
 -->
+	<h5 style="margin: 0;">Unread Messages: {{ unreadMessageCount }}</h5>
 	<div id="device">
 	  	<div #chatContainer class="chat" (scroll)="onScroll($event)">
 		    <div class="message" [ngClass]="{'me': message.author == currentUser}" *ngFor="let message of messages;">

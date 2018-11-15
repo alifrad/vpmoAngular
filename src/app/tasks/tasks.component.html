@@ -3,7 +3,7 @@
         <mat-icon> add </mat-icon>
     </button>
 
-	<table mat-table [dataSource]="assignedTasks">
+	<table mat-table [dataSource]="assignedTasks" *ngIf="currentUser">
 		<ng-container matColumnDef="title">
 	        <th mat-header-cell *matHeaderCellDef> Title </th>
 	        <td mat-cell *matCellDef="let task"> {{ task.title }} </td>

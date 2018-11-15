@@ -29,6 +29,8 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked, After
   chatClient: any;
   channel: any;
   currentUser: any;
+  unreadMessageCount: any;
+  pageSize: any = 15;
 
   ngOnDestroy () {
   }
@@ -80,39 +82,26 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked, After
       })
   }
 
-  scrollBottom () {
-    console.log('Scrolling')
-    // This should force scroll to bottom
-    this.chatContainer.nativeElement.scrollTop = this.chatContainer.nativeElement.scrollHeight;
-  }
-
-  getMessages (fromIndex) {
-    var pageSize = 15
-    var that = this
-    if (fromIndex == null) {
-      that.channel.getMessages(pageSize).then(function (messages) {
-        if (messages.items.length > 0) {
-          for (var i = messages.items.length-1; i >= 0; i--) {
-            that.messages.unshift(messages.items[i])
-            that.scrollBottom()
-          }
-        }
-      })
-    } else {
-      that.channel.getMessages(pageSize, fromIndex).then(function (messages) {
-        if (messages.items.length > 0) {
-          for (var i = messages.items.length-1; i >= 0; i--) {
-            that.messages.unshift(messages.items[i])
-          }
-        }
-      })
-    }
-  }
-
   setupChannel () {
     var that = this
+    var lastSeenIndex = this.channel.lastConsumedMessageIndex || 0
 
-    this.getMessages(null)
+    if (lastSeenIndex == 0) {
+      this.getTotalMessageCount()
+    } else {
+      this.getUnconsumedMessageCount()
+    }
+
+    // Getting messages forwards from the last seen message
+    console.log('Last Message', lastSeenIndex, this.channel.lastMessage)
+    if (lastSeenIndex > this.channel.lastMessage.index-14) {
+      // If last seen index was in the last page, just get the last page
+      this.getMessages(this.channel.lastMessage.index-14, 'forwards')
+    } else {
+      // Otherwise, get from the last seen page
+      this.getMessages(lastSeenIndex, 'forwards')
+    }
+    
 
     this.channel.on('messageAdded', function (message) {
       that.messages.push(message)
@@ -120,10 +109,55 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked, After
     })
   }
 
+  getTotalMessageCount () {
+    var that = this
+    this.channel.getMessagesCount().then(function (c) {
+      that.unreadMessageCount = c - that.pageSize
+    })
+  }
+
+  getUnconsumedMessageCount () {
+    var that = this
+    this.channel.getUnconsumedMessagesCount().then(function (c) {
+      that.unreadMessageCount = c
+    })
+  }
+
+  scrollBottom () {
+    // This should force scroll to bottom
+    this.chatContainer.nativeElement.scrollTop = this.chatContainer.nativeElement.scrollHeight;
+  }
+
+  getMessages (fromIndex, direction) {
+    var that = this
+
+    that.channel.getMessages(that.pageSize, fromIndex, direction).then(function (messages) {
+      if (messages.items.length > 0) {
+        // Adding to the back of the array if we're scrolling up (lastPage)
+        if (direction == 'backwards') {
+          for (var i = messages.items.length-1; i >= 0; i--) {
+            that.messages.unshift(messages.items[i])
+          }
+        } else {
+          // Adding to the front of the array if we're scrolliing down (nextPage)
+          for (var i = 0; i < messages.items.length; i++) {
+            that.messages.push(messages.items[i])
+          }
+          // Updating the last seen message index
+          that.channel.updateLastConsumedMessageIndex(messages.items[messages.items.length-1].index).then(function (c) {
+            that.unreadMessageCount = c
+          })
+        }
+      }
+    })
+  }
+
   private onScroll (e) {
     if (e.target.scrollTop === 0 && this.messages.length > 0) {
       const olderMessages = [];
-      this.getMessages(this.messages[0].index-1)
+      this.getMessages(this.messages[0].index-1, "backwards")
+    } else if (e.target.scrollTop === e.target.scrollHeight - e.target.offsetHeight && this.messages.length > 0) {
+      this.getMessages(this.messages[this.messages.length-1].index+1, "forward")
     }
   }
 

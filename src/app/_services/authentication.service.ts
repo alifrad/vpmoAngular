@@ -115,19 +115,21 @@ export class AuthenticationService {
     }
 
     getUser() {
+        /*
         this.user.subscribe(
             (data) => {
                 return data;
             },
             (err: any) => {console.log('Error getUser(): could not get user information!');
         });
-        // if (!localStorage.getItem('currentUser')) {
-        //     console.log('user has not logged in!');
-        //     throw new Error('user has not logged in!');
-        // } else {
-        //     this.tempUser = JSON.parse(localStorage.getItem('currentUser'));
-        //     return Observable.of(this.tempUser);
-        // }
+        */
+        if (!localStorage.getItem('currentUser')) {
+            console.log('user has not logged in!');
+            throw new Error('user has not logged in!');
+        } else {
+            this.tempUser = JSON.parse(localStorage.getItem('currentUser'));
+            return Observable.of(this.tempUser);
+        }
     }
 
     getToken(): Observable<string> {

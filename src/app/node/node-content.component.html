@@ -1,6 +1,9 @@
-<div>
-  <!-- <H1>Editting Project: {{ project.name }}</H1> -->
-  <button mat-button class="white-icon" (click)="saveContent()">Save</button>
-</div>
 
-<quill-editor [(ngModel)]="nodeContent" (onEditorCreated)="getNodeDetail($event)" (onContentChanged)="getNodeDetail($event)"></quill-editor>
+  <div>
+    <!-- <H1>Editting Project: {{ project.name }}</H1> -->
+    <button mat-button class="white-icon" (click)="saveContent()">Save</button>
+  </div>
+
+  <quill-editor [(ngModel)]="nodeContent" (onEditorCreated)="getNodeDetail($event)" 
+    (onContentChanged)="getNodeDetail($event)">
+  </quill-editor>

@@ -12,6 +12,11 @@
             "element",
             "fuse",
             "kebab-case"
+        ],
+        "indent": [
+            true, 
+            "tabs",
+             4
         ]
     }
 }

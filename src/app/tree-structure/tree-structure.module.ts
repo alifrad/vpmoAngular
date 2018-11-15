@@ -9,7 +9,7 @@ import { TreeModule } from 'angular-tree-component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule, MatDialogModule, MatFormFieldModule,
           MatInputModule, MatButtonModule, MatTooltipModule,
-          MatDatepickerModule, MatNativeDateModule, MatSelectModule  } from '@angular/material';
+          MatDatepickerModule, MatNativeDateModule, MatSelectModule, MatAutocompleteModule  } from '@angular/material';
 import { AuthGuard } from '../_guards/auth.guard';
 
 const routes = [
@@ -38,7 +38,8 @@ const routes = [
     MatTooltipModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatSelectModule
+    MatSelectModule,
+    MatAutocompleteModule
   ],
   exports: [
     TreeStructureComponent,

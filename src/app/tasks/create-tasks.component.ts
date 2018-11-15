@@ -26,14 +26,14 @@ export class CreateTasksComponent implements OnInit {
 	selectedUser: any;
 
 	ngOnInit () {
-		this.nodeID = this.data.nodeID
-   		this.nodeType = this.data.nodeType
+		this.nodeID = this.data.nodeID;
+   		this.nodeType = this.data.nodeType;
 	}
 
 	createTask () {
 		if (!this.taskTitle || !this.taskDueDate || !this.selectedUser) {
 			alert('Missing Data')
-			return
+			return;
 		}
 		this._tasksService.createTask(this.nodeID, this.nodeType, this.taskDueDate, this.selectedUser, this.taskTitle)
 			.subscribe(resp => alert('Task Created'))
@@ -41,9 +41,9 @@ export class CreateTasksComponent implements OnInit {
 
 	filterUsers (e) {
 		if (e.length < 3) {
-			return
+			return;
 		}
 		this._tasksService.getAssignableUsers(this.nodeID, this.nodeType, e)
-			.subscribe(assignableUsers => this.filteredAssignableUsers = assignableUsers)
+			.subscribe(assignableUsers => this.filteredAssignableUsers = assignableUsers);
 	}
 }

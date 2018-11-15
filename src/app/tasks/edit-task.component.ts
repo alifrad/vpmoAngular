@@ -27,28 +27,28 @@ export class EditTaskComponent implements OnInit {
 	newDueDate: string;
 
 	ngOnInit () {
-		this.nodeID = this.data.nodeID
-   		this.nodeType = this.data.nodeType
-   		this.taskID = this.data.taskID
-   		this.newTitle = this.data.taskTitle
-   		this.newDueDate = this.data.taskDueDate
-   		this.selectedUser = this.data.taskAssignee
+		this.nodeID = this.data.nodeID;
+   		this.nodeType = this.data.nodeType;
+   		this.taskID = this.data.taskID;
+   		this.newTitle = this.data.taskTitle;
+   		this.newDueDate = this.data.taskDueDate;
+   		this.selectedUser = this.data.taskAssignee;
    		// Filtering the assignable users so that the options list can be populated
-   		this.filterUsers(this.selectedUser)
+   		this.filterUsers(this.selectedUser);
 	}
 
 	filterUsers (e) {
 		if (e.length < 3) {
-			return
+			return;
 		}
 		this._tasksService.getAssignableUsers(this.nodeID, this.nodeType, e)
-			.subscribe(assignableUsers => this.filteredAssignableUsers = assignableUsers)
+			.subscribe(assignableUsers => this.filteredAssignableUsers = assignableUsers);
 	}
 
 	editTask () {
 		this._tasksService.editTask(this.nodeID, this.nodeType, this.taskID, this.selectedUser, this.newTitle, this.newDueDate)
 			.subscribe(
 				resp => alert('Task Reassigned')
-			)
+			);
 	}
 }

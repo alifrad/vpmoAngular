@@ -96,7 +96,11 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked, After
     console.log('Last Message', lastSeenIndex, this.channel.lastMessage)
     if (this.channel.lastMessage && lastSeenIndex > this.channel.lastMessage.index-14) {
       // If last seen index was in the last page, just get the last page
-      this.getMessages(this.channel.lastMessage.index-14, 'forwards')
+      if (this.channel.lastMessage.index <= 15) {
+        this.getMessages(0, 'forwards')
+      } else {
+        this.getMessages(this.channel.lastMessage.index-14, 'forwards')
+      }
     } else {
       // Otherwise, get from the last seen page
       this.getMessages(lastSeenIndex, 'forwards')
@@ -112,7 +116,12 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked, After
   getTotalMessageCount () {
     var that = this
     this.channel.getMessagesCount().then(function (c) {
-      that.unreadMessageCount = c - that.pageSize
+      if (c <= 15) {
+        that.unreadMessageCount = 0
+      } else {
+        that.unreadMessageCount = c - 15
+      }
+      
     })
   }
 

@@ -94,7 +94,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked, After
 
     // Getting messages forwards from the last seen message
     console.log('Last Message', lastSeenIndex, this.channel.lastMessage)
-    if (lastSeenIndex > this.channel.lastMessage.index-14) {
+    if (this.channel.lastMessage && lastSeenIndex > this.channel.lastMessage.index-14) {
       // If last seen index was in the last page, just get the last page
       this.getMessages(this.channel.lastMessage.index-14, 'forwards')
     } else {

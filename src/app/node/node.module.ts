@@ -26,7 +26,7 @@ import { DocumentsModule } from '../documents/documents.module';
 import { QuillModule } from 'ngx-quill';
 import { FormsModule } from '@angular/forms';
 import { NodeService } from './node.service';
-import { NodeContentComponent } from './node-content.component';
+import { NodeEditComponent } from './node-edit.component';
 
 const NodeRoutes: Routes = [
   {
@@ -34,7 +34,7 @@ const NodeRoutes: Routes = [
       canActivate: [ AuthGuard ],
       children: [
           { path: ':type/:id', component: NodepageComponent },
-          { path: 'edit/:type/:id', component: NodeContentComponent }
+          { path: 'edit/:type/:id', component: NodeEditComponent }
       ]
   },
 ];
@@ -71,11 +71,11 @@ const NodeRoutes: Routes = [
   ],
   declarations: [
     NodepageComponent,
-    NodeContentComponent
+    NodeEditComponent
   ],
   exports: [
     NodepageComponent,
-    NodeContentComponent
+    NodeEditComponent
   ],
 })
 export class NodeModule { }

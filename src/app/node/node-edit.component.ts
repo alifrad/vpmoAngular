@@ -6,12 +6,12 @@ import { GlobalService } from '../../app/_services/global.service';
 
 
 @Component({
-  selector: 'app-node-content',
-  templateUrl: './node-content.component.html',
-  styleUrls: ['./node-content.component.css']
+  selector: 'app-node-edit',
+  templateUrl: './node-edit.component.html',
+  styleUrls: ['./node-edit.component.css']
 })
 
-export class NodeContentComponent implements OnInit {
+export class NodeEditComponent implements OnInit {
   errorMessage: string;
 
   constructor(
@@ -21,9 +21,8 @@ export class NodeContentComponent implements OnInit {
           private route: ActivatedRoute
         ) {}
 
-  node: any;
+  node: any = {};
   nodeID: string;
-  nodeContent: string;
 
   ngOnInit(): void {
     this.route.params.subscribe(
@@ -35,19 +34,20 @@ export class NodeContentComponent implements OnInit {
   }
 
   getNodeDetail () {
-    this.nodeContent = '';
     this._nodeService.getNodeDetails(this.nodeID)
       .subscribe(node => {
         this.node = node;
-        if (this.node.content !== null) {
-          this.nodeContent = this.node.content;
+        console.log('Content', this.node)
+        // Setting the content to an empty string if it's null
+        if (this.node.content == null) {
+          this.node.content = ''
         }
       });
   }
 
   saveContent () {
-    // debugger;
-    this._nodeService.partialUpdateNode(this.node._id, this.nodeContent)
+  console.log('saveContent', this.node)
+    this._nodeService.partialUpdateNode(this.node._id, this.node)
       .subscribe(
         node => this.node = node 
       );

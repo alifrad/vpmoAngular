@@ -1,0 +1,133 @@
+<!-- Team Edit Block -->
+<div *ngIf="node.node_type == 'Team'">
+
+	<div>
+		<mat-form-field>
+		  <input matInput placeholder="Node Name" [(ngModel)]="node.name">
+		</mat-form-field>
+	</div>
+
+	<div>
+		<mat-form-field>
+		  <input matInput placeholder="Node Name" [(ngModel)]="node.user_linked" disabled>
+		</mat-form-field>
+	</div>
+
+	<div>
+		<mat-form-field>
+		  <input matInput placeholder="User Team" [(ngModel)]="node.user_team">
+		</mat-form-field>
+	</div>
+	
+	<div>
+		<mat-form-field>
+		  <input matInput [matDatepicker]="picker" placeholder="Created At" [(ngModel)]="node.created_at" disabled>
+		  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+		  <mat-datepicker #picker></mat-datepicker>
+		</mat-form-field>
+	</div>
+
+</div>
+
+
+<!-- Project Edit Block -->
+<div *ngIf="node.node_type == 'Project'">
+
+	<div>
+		<mat-form-field>
+		  <input matInput placeholder="Node Name" [(ngModel)]="node.name">
+		</mat-form-field>
+	</div>
+
+	<div>
+		<mat-form-field>
+		  <input matInput placeholder="Node Description" [(ngModel)]="node.description">
+		</mat-form-field>
+	</div>
+
+	<div class="quill-container">
+		<label>Content</label>
+		<quill-editor [(ngModel)]="node.content"></quill-editor>
+	</div>
+
+	<div>
+		<mat-form-field>
+		  <input matInput [matDatepicker]="startPicker" placeholder="Planned Start" [(ngModel)]="node.start">
+		  <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+		  <mat-datepicker #startPicker></mat-datepicker>
+		</mat-form-field>
+	</div>
+
+	<div>
+		<mat-form-field>
+		  <input matInput [matDatepicker]="createdAtPicker" placeholder="Created At" [(ngModel)]="node.created_at" disabled>
+		  <mat-datepicker-toggle matSuffix [for]="createdAtPicker"></mat-datepicker-toggle>
+		  <mat-datepicker #createdAtPicker></mat-datepicker>
+		</mat-form-field>
+	</div>
+
+</div>
+
+
+<!-- Topic Edit Block -->
+
+<div *ngIf="node.node_type == 'Topic'">
+	<!-- Deliverable edit block -->
+	<div *ngIf="node.topic_type == 'Deliverable'">
+		<div>
+			<mat-form-field>
+			  <input matInput placeholder="Node Name" [(ngModel)]="node.name">
+			</mat-form-field>
+		</div>
+
+		<div class="quill-container">
+			<label>Content</label>
+			<quill-editor [(ngModel)]="node.content"></quill-editor>
+		</div>
+
+		<div>
+			<mat-form-field>
+			  <input matInput [matDatepicker]="picker" placeholder="Due Date" [(ngModel)]="node.due_date">
+			  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+			  <mat-datepicker #picker></mat-datepicker>
+			</mat-form-field>
+		</div>
+	</div>
+
+	<!-- Issue edit block -->
+	<div *ngIf="node.topic_type == 'Issue'">
+		<div>
+			<mat-form-field>
+			  <input matInput placeholder="Node Name" [(ngModel)]="node.name">
+			</mat-form-field>
+		</div>
+
+		<div class="quill-container">
+			<label>Content</label>
+			<quill-editor [(ngModel)]="node.content"></quill-editor>
+		</div>
+
+		<!-- TODO - create a assignee field (user select with a dropdown list search) -->
+
+		<div>
+			<mat-form-field>
+			  <input matInput placeholder="Severity" [(ngModel)]="node.severity">
+			</mat-form-field>
+		</div>
+
+		<div>
+			<mat-form-field>
+			  <input matInput [matDatepicker]="picker" placeholder="Due Date" [(ngModel)]="node.due_date">
+			  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+			  <mat-datepicker #picker></mat-datepicker>
+			</mat-form-field>
+		</div>
+	</div>
+
+</div>
+
+
+<div>
+	<button mat-raised-button color="primary" (click)="saveContent()">Save</button>
+</div>
+

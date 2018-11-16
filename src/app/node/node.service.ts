@@ -33,8 +33,8 @@ export class NodeService {
       .catch(this.handleError);
   }
 
-  partialUpdateNode (nodeID: string, nodeContent: string): Observable<any> {
-    return this.http.patch(this.nodeRetrieveUpdateUrl + nodeID + '/', {content: nodeContent}, this.httpOptions)
+  partialUpdateNode (nodeID: string, nodeData: any): Observable<any> {
+    return this.http.patch(this.nodeRetrieveUpdateUrl + nodeID + '/', nodeData, this.httpOptions)
       .catch(this.handleError);
   }
 

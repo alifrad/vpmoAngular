@@ -35,4 +35,12 @@ export class NodepageComponent implements OnInit {
     this.selectedIndex = e.index
   }
 
+  showContent () {
+    if (this.nodeType == 'Topic') {
+      return this.selectedIndex == 0 || this.selectedIndex == undefined || this.selectedIndex == null
+    } else {
+      return this.selectedIndex == 1
+    }
+  }
+
 }

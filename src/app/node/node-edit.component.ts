@@ -23,6 +23,11 @@ export class NodeEditComponent implements OnInit {
 
   node: any = {};
   nodeID: string;
+  severityList: any[] = [
+    {value: '1', text: 'Low'},
+    {value: '2', text: 'Medium'},
+    {value: '3', text: 'High'}
+  ];
 
   ngOnInit(): void {
     this.route.params.subscribe(

@@ -110,9 +110,13 @@
 		<!-- TODO - create a assignee field (user select with a dropdown list search) -->
 
 		<div>
-			<mat-form-field>
-			  <input matInput placeholder="Severity" [(ngModel)]="node.severity">
-			</mat-form-field>
+			<mat-form-field class="full-width">
+			<mat-select matInput placeholder="issue severity" [(ngModel)]="node.severity">
+				<mat-option *ngFor="let severity of severityList" [value]="severity.value">
+					{{ severity.text }}
+				</mat-option>
+			</mat-select>
+		</mat-form-field>
 		</div>
 
 		<div>

@@ -14,7 +14,8 @@ import {
   MatCardModule, 
   MatListModule,
   MatTabsModule,
-  MatExpansionModule, 
+  MatExpansionModule,
+  MatSelectModule 
 } from '@angular/material';
 import { ProjectModule } from '../project/project.module';
 import { ChatModule } from '../chat/chat.module';
@@ -57,6 +58,7 @@ const NodeRoutes: Routes = [
     MatIconModule,
     MatTabsModule,
     MatExpansionModule,
+    MatSelectModule,
     ProjectModule,
     ChatModule,
     PermissionsModule,

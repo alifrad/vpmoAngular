@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, AfterViewChecked, AfterViewInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, AfterViewChecked, AfterViewInit, IterableDiffers, DoCheck } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ChatService } from './chat.service';
 import { AuthenticationService } from '../_services';
@@ -12,17 +12,21 @@ declare const Twilio: any
   styleUrls: ['./chat.component.less']
 })
 
-export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked, AfterViewInit {
+export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked, AfterViewInit, DoCheck {
 
   constructor(
     private router: Router,
     private _chatService: ChatService,
     private authUser: AuthenticationService,
-    private route: ActivatedRoute
-  ) { }
+    private route: ActivatedRoute,
+    differs: IterableDiffers
+  ) {
+    this.differ = differs.find([]).create(null);
+  }
 
   @ViewChild('chatContainer') chatContainer;
 
+  differ: any;
   messages: any[] = [];
   nodeID: string;
   chatToken: string;
@@ -33,6 +37,25 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked, After
   pageSize: any = 15;
 
   ngOnDestroy () {
+  }
+
+  ngDoCheck () {
+    const change = this.differ.diff(this.messages);
+    if (change) {
+      // console.log('Scrolled')
+      // this.scrollToBottom()
+    }
+  }
+
+  scrollToBottom(){
+    if(this.chatContainer) {
+      // I can't remember why I added a short timeout, 
+      // the below works great though. 
+      if(this.chatContainer != undefined){
+        var that = this
+        setTimeout(() => { that.chatContainer.nativeElement.scrollTop = that.chatContainer.nativeElement.scrollHeight; }, 200);
+      }
+    }
   }
 
   ngOnInit() {
@@ -55,7 +78,6 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked, After
   }
 
   ngAfterViewInit () {
-    this.scrollBottom()
   }
 
   connectToChat () {
@@ -109,7 +131,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked, After
 
     this.channel.on('messageAdded', function (message) {
       that.messages.push(message)
-      that.scrollBottom()
+      that.scrollToBottom()
     })
   }
 
@@ -132,11 +154,6 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked, After
     })
   }
 
-  scrollBottom () {
-    // This should force scroll to bottom
-    this.chatContainer.nativeElement.scrollTop = this.chatContainer.nativeElement.scrollHeight;
-  }
-
   getMessages (fromIndex, direction) {
     var that = this
 
@@ -151,6 +168,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked, After
           // Adding to the front of the array if we're scrolliing down (nextPage)
           for (var i = 0; i < messages.items.length; i++) {
             that.messages.push(messages.items[i])
+            that.scrollToBottom()
           }
           // Updating the last seen message index
           that.channel.updateLastConsumedMessageIndex(messages.items[messages.items.length-1].index).then(function (c) {

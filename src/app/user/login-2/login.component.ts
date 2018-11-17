@@ -6,6 +6,7 @@ import { fuseAnimations } from '@fuse/animations';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthenticationService } from 'app/_services/authentication.service';
 import { AlertService } from 'app/_services/alert.service';
+import { LoadingService } from 'app/_services/loading.service';
 
 @Component({
     selector   : 'fuse-login',
@@ -31,6 +32,7 @@ export class LoginComponent implements OnInit
         private router: Router,
         private authenticationService: AuthenticationService,
         private alertService: AlertService,
+        private loadingService: LoadingService
     )
     {
         this.fuseConfig.setConfig({

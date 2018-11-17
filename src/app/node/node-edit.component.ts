@@ -51,7 +51,7 @@ export class NodeEditComponent implements OnInit {
   }
 
   saveContent () {
-  console.log('saveContent', this.node)
+    console.log('saveContent', this.node)
     this._nodeService.partialUpdateNode(this.node._id, this.node)
       .subscribe(
         node => this.node = node 

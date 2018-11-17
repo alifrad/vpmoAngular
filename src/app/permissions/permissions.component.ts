@@ -4,6 +4,7 @@ import { AddPermissionsComponent } from './add-permissions.component';
 import { AuthenticationService } from '../_services';
 import { PermissionsService } from './permissions.service';
 import { MatDialog, MatDialogConfig } from '@angular/material';
+import { LoadingService } from '../_services/loading.service';
 
 @Component({
   selector: 'app-permissions',
@@ -19,7 +20,8 @@ export class PermissionsComponent implements OnInit {
     private authUser: AuthenticationService,
     private _permissionsService: PermissionsService,
     private dialog: MatDialog,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private loadingService: LoadingService
   ) { }
 
   userList: any[] = [];
@@ -80,9 +82,11 @@ export class PermissionsComponent implements OnInit {
 
   assignRole (newRole, user) {
     const self = this;
+    this.loadingService.show()
     this._permissionsService.assignUserToNode(this.nodeID, this.nodeType, user.username, newRole)
       .subscribe(
         response => {
+          self.loadingService.hide()
           if (user._id === self.currentUserID) {
             self.getUserPermissions(self.nodeID, self.nodeType);
           }
@@ -144,9 +148,11 @@ export class PermissionsComponent implements OnInit {
   // Use it in add permissions to set the base role when adding a user
 
   removeUserPermissions (user) {
+    this.loadingService.show()
     this._permissionsService.removeUserPermissions(this.nodeID, this.nodeType, user._id)
        .subscribe(
         response => {
+          this.loadingService.hide()
           this.userList = this.userList.filter(item => item._id !== user._id);
           // this.userList.splice(this.userList.indexOf(user), 1)
         }

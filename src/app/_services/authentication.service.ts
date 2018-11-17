@@ -38,17 +38,6 @@ export class AuthenticationService {
                 ) 
                 { 
                     this.navigation = navigation;
-                    // globalService.currentUserValue.subscribe(
-                    //     nextValue => {
-                    //         this.tempUser = nextValue;
-                    //         this.tempUser = JSON.parse(this.tempUser);
-                    //         this.token = this.tempUser.token;
-                    //     },
-                    //     error => {
-                    //         console.log('token or currentUser are not recognised....');
-                    //         this.logout();
-                    //     }
-                    // );
                 }
 
 
@@ -96,39 +85,22 @@ export class AuthenticationService {
     }
 
 
-    getUserName(): Observable<string> {
-        // this.user.subscribe(
-        //     (data) => {
-        //         return data.fullname;
-        //     },
-        //     (err: any) => {
-        //         console.log('Error getUser(): could not get user fullname!');
-        //         return '';
-        //     }
-        // );       
+    getUserName(): Observable<string> {   
         if (!localStorage.getItem('currentUser')) {
             console.log('user has not logged in!');
         } else {
             this.tempUser = JSON.parse(localStorage.getItem('currentUser'));
-            return Observable.of(this.tempUser.fullname);
+            return this.tempUser.fullname
         }
     }
 
     getUser() {
-        /*
-        this.user.subscribe(
-            (data) => {
-                return data;
-            },
-            (err: any) => {console.log('Error getUser(): could not get user information!');
-        });
-        */
         if (!localStorage.getItem('currentUser')) {
             console.log('user has not logged in!');
             throw new Error('user has not logged in!');
         } else {
             this.tempUser = JSON.parse(localStorage.getItem('currentUser'));
-            return Observable.of(this.tempUser);
+            return this.tempUser
         }
     }
 

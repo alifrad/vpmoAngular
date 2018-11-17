@@ -17,6 +17,7 @@ import {
   MatExpansionModule,
   MatSelectModule 
 } from '@angular/material';
+import { UserModule } from '../user/user.module';
 import { ProjectModule } from '../project/project.module';
 import { ChatModule } from '../chat/chat.module';
 import { TreeStructureModule } from '../tree-structure/tree-structure.module';
@@ -66,7 +67,8 @@ const NodeRoutes: Routes = [
     DocumentsModule,
     TreeStructureModule,
     QuillModule,
-    NodeBreadcrumbsModule
+    NodeBreadcrumbsModule,
+    UserModule
   ],
   providers: [
     NodeService

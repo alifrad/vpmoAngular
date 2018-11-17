@@ -33,6 +33,8 @@ import { AppRoutingModule } from './shared/app.routing';
 import { MessageService } from './shared/message.service';
 import { AlertComponent } from './_directives/alert.component';
 import { AlertService } from './_services/alert.service';
+import { LoadingService } from './_services/loading.service';
+import { LoadingComponent } from './_directives/loading.component';
 import { AuthGuard } from './_guards/auth.guard';
 import { AuthenticationService } from './_services/authentication.service';
 import { HttpCacheService } from './_services/http-cache.service';
@@ -137,6 +139,7 @@ export function tokenGetter() {
         NodeBreadcrumbsModule,
         TreeStructureModule,
         NodeModule,
+        MatProgressSpinnerModule
     ],
     // The components, directives, and pipes that belong to this NgModule
     declarations: [
@@ -144,6 +147,7 @@ export function tokenGetter() {
         HomeComponent,
         ErrorComponent,
         AlertComponent,
+        LoadingComponent,
         NavigationComponent,
 
     ],
@@ -160,6 +164,7 @@ export function tokenGetter() {
         MatCardModule,
         MatListModule,
         MatIconModule,
+        MatProgressSpinnerModule
     ],
     // Creators of services that this NgModule contributes to the global
     // collection of services; they become accessible in all parts of the app
@@ -169,6 +174,7 @@ export function tokenGetter() {
         GlobalService,
         AuthGuard,
         AlertService,
+        LoadingService,
         HttpCacheService,
         { provide: ErrorHandler, useFactory: errorHandlerFactory },
         { provide: HTTP_INTERCEPTORS, useClass: CacheInterceptor , multi: true },

@@ -1,7 +1,8 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { PermissionsService } from './permissions.service';
-import { MAT_DIALOG_DATA } from '@angular/material'
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material'
 import { appConfig } from '../app.config';
+import { LoadingService } from '../_services/loading.service';
 
 @Component({
   selector: 'add-permissions',
@@ -15,6 +16,8 @@ export class AddPermissionsComponent implements OnInit {
 
 	constructor(
 		private _permissionsService: PermissionsService,
+		private dialogRef: MatDialogRef<AddPermissionsComponent>,
+		private loadingService: LoadingService,
 		@Inject(MAT_DIALOG_DATA) public data: any
 	){ }
 
@@ -39,11 +42,13 @@ export class AddPermissionsComponent implements OnInit {
 			alert('Please select a valid user')
 			return
 		}
+		this.loadingService.show()
 		this._permissionsService.assignUserToNode(this.nodeID, this.nodeType, this.selectedUser, role)
 			.subscribe(
 				response => {
+					this.loadingService.hide()
 				 	this.usersList = this.usersList.filter(item => item._id !== this.selectedUser);
-				 	alert('User Added');
+				 	this.dialogRef.close()
 				 }
 			)
 	}

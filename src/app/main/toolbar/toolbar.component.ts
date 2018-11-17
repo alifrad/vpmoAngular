@@ -117,15 +117,7 @@ export class FuseToolbarComponent implements OnInit {
     ngOnInit() {
         // debugger;
 
-        this.authService.getUserName()
-            .subscribe(
-                (data: string) => {
-                    this.fullname = data;
-                    console.log(`username:' ${this.fullname}`);
-                },
-                (err: any) => console.log('toolbar oninit: could not retrieve user fullname')
-
-            );
+        this.fullname = this.authService.getUserName()
 
         this.authService.isAuthenticated()
             .subscribe(

@@ -22,11 +22,8 @@ export class UserProfileComponent implements OnInit {
                 private fb: FormBuilder) { }
 
     ngOnInit() {
-        this.authService.user
-            .subscribe(
-                user => this.currentUser = user,
-                (err: any) => console.log(err)
-            );
+        this.currentUser = this.authService.getUser()
+
         console.log(this.currentUser.fullname + ' to be present');
 
         const fullname = new FormControl(this.currentUser.fullname, [Validators.required]);

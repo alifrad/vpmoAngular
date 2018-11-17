@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
+import { LoadingService } from '../_services/loading.service';
 
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/catch';
@@ -30,7 +31,11 @@ export class PermissionsService {
     })
   };
 
-  constructor(private http: HttpClient, private authUser: AuthenticationService) { }
+  constructor(
+    private http: HttpClient,
+    private authUser: AuthenticationService,
+    private loadingService: LoadingService
+  ) { }
 
   getPermissionsList (node: string, nodeType: string): Observable<any> {
     return this.http.get(this.permissionsListUrl+node+'/?nodeType='+nodeType, this.httpOptions)
@@ -70,6 +75,7 @@ export class PermissionsService {
 
   private handleError(err: HttpErrorResponse) {
     console.log(err.message);
+    this.loadingService.hide()
     return Observable.throw(err.message);
   }
 

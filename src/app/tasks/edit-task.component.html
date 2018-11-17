@@ -5,14 +5,7 @@
 	    <input [(ngModel)]="newTitle" matInput placeholder="Task Title">
 	</mat-form-field>
 
-	<mat-form-field class="full-width">
-    	<input (input)="filterUsers($event.target.value)" type="text" placeholder="Task Assignee" matInput [matAutocomplete]="auto" [(ngModel)]="selectedUser">
-	    <mat-autocomplete #auto="matAutocomplete">
-	      <mat-option *ngFor="let option of filteredAssignableUsers" [value]="option.username">
-	        {{option.username}}
-	      </mat-option>
-	    </mat-autocomplete>
-  	</mat-form-field>
+	<user-search [searchUrl]="searchUrl" [preselectedUser]="selectedUser" (userSelected)="userSelected($event)"></user-search>
 
   	<div>
 		<mat-form-field class="full-width">

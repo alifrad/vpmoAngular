@@ -1,6 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { PermissionsService } from './permissions.service';
 import { MAT_DIALOG_DATA } from '@angular/material'
+import { appConfig } from '../app.config';
 
 @Component({
   selector: 'add-permissions',
@@ -23,15 +24,21 @@ export class AddPermissionsComponent implements OnInit {
 	selectedUser: any;
 	assignableRoles: any[] = [];
 	filteredAssignableUsers: any[] = [];
+	searchUrl: string;
 
 	ngOnInit () {
 		this.nodeType = this.data.nodeType
 		this.nodeID = this.data.nodeID
 		this.assignableRoles = JSON.parse(localStorage.getItem('assignableRoles'))
+		this.searchUrl = `${appConfig.apiAuthUrl}/assignable_users/`+this.nodeID+'/?nodeType='+this.nodeType+'&search='
 	}
 
 	addUser () {
 		var role = this.assignableRoles[0]
+		if (!this.selectedUser || this.usersList.length == 0) {
+			alert('Please select a valid user')
+			return
+		}
 		this._permissionsService.assignUserToNode(this.nodeID, this.nodeType, this.selectedUser, role)
 			.subscribe(
 				response => {
@@ -41,12 +48,8 @@ export class AddPermissionsComponent implements OnInit {
 			)
 	}
 
-	filterUsers (username) {
-		if (username.length >= 3) {
-			this._permissionsService.getAssignableUsers(this.nodeID, this.nodeType, username)
-				.subscribe(
-					users => this.usersList = users
-				);
-		}
+	userSelected (e) {
+		this.usersList = e.filteredUsers
+		this.selectedUser = e.selectedUser
 	}
 }

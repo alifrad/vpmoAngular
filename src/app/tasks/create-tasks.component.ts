@@ -1,6 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { TasksService } from './tasks.service';
-import { MAT_DIALOG_DATA } from '@angular/material'
+import { MAT_DIALOG_DATA } from '@angular/material';
+import { appConfig } from '../app.config';
 
 @Component({
   selector: 'create-tasks',
@@ -24,14 +25,16 @@ export class CreateTasksComponent implements OnInit {
 	taskDueDate: any;
 	filteredAssignableUsers: any = [];
 	selectedUser: any;
+	searchUrl: string;
 
 	ngOnInit () {
 		this.nodeID = this.data.nodeID;
    		this.nodeType = this.data.nodeType;
+   		this.searchUrl = `${appConfig.apiUrl}` + '/assignable_task_users/' + this.nodeID +'/' + '?nodeType='+this.nodeType + '&search='
 	}
 
 	createTask () {
-		if (!this.taskTitle || !this.taskDueDate || !this.selectedUser) {
+		if (!this.taskTitle || !this.taskDueDate || !this.selectedUser || this.filteredAssignableUsers.length == 0) {
 			alert('Missing Data')
 			return;
 		}
@@ -39,11 +42,8 @@ export class CreateTasksComponent implements OnInit {
 			.subscribe(resp => alert('Task Created'))
 	}
 
-	filterUsers (e) {
-		if (e.length < 3) {
-			return;
-		}
-		this._tasksService.getAssignableUsers(this.nodeID, this.nodeType, e)
-			.subscribe(assignableUsers => this.filteredAssignableUsers = assignableUsers);
+	userSelected (e) {
+		this.filteredAssignableUsers = e.filteredUsers
+		this.selectedUser = e.selectedUser
 	}
 }

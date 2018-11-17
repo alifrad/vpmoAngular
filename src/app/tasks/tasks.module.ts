@@ -8,6 +8,8 @@ import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 import { MatFormFieldModule, MatIconModule, MatInputModule, MatButtonModule, MatCardModule,
   MatListModule, MatTableModule, MatDialogModule, MatSelectModule, MatTooltipModule,
   MatDatepickerModule, MatNativeDateModule, MatAutocompleteModule } from '@angular/material';
+import { UserModule } from '../user/user.module';
+
 import { AuthGuard } from '../_guards/auth.guard';
 import { TasksComponent } from './tasks.component';
 import { CreateTasksComponent } from './create-tasks.component';
@@ -42,7 +44,8 @@ const TasksRoutes: Routes = [
     MatTooltipModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    UserModule
   ],
   declarations: [
     TasksComponent,

@@ -8,6 +8,8 @@ import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 import { MatFormFieldModule, MatIconModule, MatInputModule, MatButtonModule, MatCardModule,
   MatListModule, MatTableModule, MatDialogModule, MatSelectModule, MatTooltipModule,
   MatAutocompleteModule } from '@angular/material';
+import { UserModule } from '../user/user.module';
+
 import { AuthGuard } from '../_guards/auth.guard';
 import { PermissionsComponent } from './permissions.component';
 import { AddPermissionsComponent } from './add-permissions.component';
@@ -40,7 +42,8 @@ const PermissionsRoutes: Routes = [
     MatDialogModule,
     MatSelectModule,
     MatTooltipModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    UserModule
   ],
   declarations: [
     PermissionsComponent,

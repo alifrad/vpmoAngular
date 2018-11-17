@@ -23,10 +23,10 @@ export class UserService {
     private authUser: AuthenticationService,
     ) { }
 
-  httpOptions = {
-    headers: new HttpHeaders({ 
+  private httpOptions = {
+    headers: new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': 'JWT'
+      'Authorization': 'JWT ' + this.authUser.getToken()
     })
   };
   // private extractData(res: Response) {
@@ -38,6 +38,10 @@ export class UserService {
   //   console.error('post error: ', error);
   //   return Observable.throw(error.statusText);
   // }
+
+  public searchUsers (searchUrl: string, query: string): Observable<any> {
+    return this.http.get(searchUrl + query, this.httpOptions)
+  }
 
   getAll() {
     return this.http.get<User[]>(appConfig.apiAuthUrl + '/users');

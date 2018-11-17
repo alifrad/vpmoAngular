@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 
 import { UserComponent } from './user.component';
+import { UserSearchComponent } from './user-search.component';
 // import { AdminMenuComponent } from './adminMenu/admin-menu.component';
 import { LoginModule } from './login-2/login.module';
 import { SignUpComponent } from './signUp/sign-up.component';
@@ -13,7 +14,7 @@ import { AuthenticationService } from '../_services/authentication.service';
 import { AuthGuard } from '../_guards/auth.guard';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { UserProfileComponent } from './profile/userProfile.component';
-import { MatInputModule, MatButtonModule, MatCardModule } from '@angular/material';
+import { MatInputModule, MatButtonModule, MatCardModule, MatAutocompleteModule } from '@angular/material';
 import { TeamCardComponent } from './dashboard/team-card.component';
 
 const UserRoutes: Routes = [
@@ -28,6 +29,10 @@ const UserRoutes: Routes = [
             // { path: '', component: AdminMenuComponent, canActivate: [UserService] }
         ]
     },
+    {
+        path: 'user-search',
+        component: UserSearchComponent,
+    },
 ];
 
 @NgModule({
@@ -41,12 +46,13 @@ const UserRoutes: Routes = [
         MatInputModule,
         MatButtonModule,
         MatCardModule,
-
+        MatAutocompleteModule
     ],
     exports: [
         SignUpComponent,
         DashboardComponent,
         UserProfileComponent,
+        UserSearchComponent
     ],
     declarations: [
         UserComponent,
@@ -54,11 +60,10 @@ const UserRoutes: Routes = [
         DashboardComponent,
         UserProfileComponent,
         TeamCardComponent,
-
+        UserSearchComponent
     ],
     providers: [
         UserService,
-        
         AuthGuard,
     ],
     schemas: [

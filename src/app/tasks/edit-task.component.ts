@@ -1,6 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { TasksService } from './tasks.service';
 import { MAT_DIALOG_DATA } from '@angular/material';
+import { appConfig } from '../app.config';
 
 @Component({
   selector: 'edit-task',
@@ -25,6 +26,7 @@ export class EditTaskComponent implements OnInit {
 	selectedUser: any;
 	newTitle: string;
 	newDueDate: string;
+	searchUrl: string;
 
 	ngOnInit () {
 		this.nodeID = this.data.nodeID;
@@ -33,22 +35,22 @@ export class EditTaskComponent implements OnInit {
    		this.newTitle = this.data.taskTitle;
    		this.newDueDate = this.data.taskDueDate;
    		this.selectedUser = this.data.taskAssignee;
-   		// Filtering the assignable users so that the options list can be populated
-   		this.filterUsers(this.selectedUser);
-	}
-
-	filterUsers (e) {
-		if (e.length < 3) {
-			return;
-		}
-		this._tasksService.getAssignableUsers(this.nodeID, this.nodeType, e)
-			.subscribe(assignableUsers => this.filteredAssignableUsers = assignableUsers);
+   		this.searchUrl = `${appConfig.apiUrl}` + '/assignable_task_users/' + this.nodeID +'/' + '?nodeType='+this.nodeType + '&search='
 	}
 
 	editTask () {
+		if (!this.selectedUser || !this.filteredAssignableUsers) {
+			alert('Please select a valid user')
+			return
+		}
 		this._tasksService.editTask(this.nodeID, this.nodeType, this.taskID, this.selectedUser, this.newTitle, this.newDueDate)
 			.subscribe(
 				resp => alert('Task Reassigned')
 			);
+	}
+
+	userSelected (e) {
+		this.filteredAssignableUsers = e.filteredUsers
+		this.selectedUser = e.selectedUser
 	}
 }

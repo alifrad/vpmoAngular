@@ -1,15 +1,15 @@
-@import "src/@fuse/scss/fuse";
+@import "../../../@fuse/scss/fuse";
 
 :host {
 
     #login {
         width: 100%;
-        overflow: auto;
-        background: url('/assets/images/backgrounds/dark-material-bg.jpg') no-repeat;
-        background-size: cover;
+        margin: auto;
+        // overflow: auto;
+        // background: url('../../../assets/images/backgrounds/dark-material-bg.jpg') no-repeat;
+        // background-size: cover;
 
         #login-form-wrapper {
-            flex: 1 0 auto;
             padding: 32px;
 
             @include media-breakpoint('xs') {

@@ -72,6 +72,12 @@ export class CreateNodeComponent implements OnInit {
 				parentID: this.parentNode._id,
 				severity: '',
 			};
+		} else if (nodeType === 'Deliverable') {
+			this.createNodeFormData = {
+				name: '',
+				due_date: '',
+				parentID: this.parentNode._id,
+			};
 		}
 		console.log('Create Node Form Data');
 	}

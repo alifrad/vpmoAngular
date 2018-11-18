@@ -1,55 +1,57 @@
 <h1>Documents</h1>
 
-<div *ngIf="canUploadDocuments()">
-	<input (change)="uploadDocuments($event)" id="input-file-id" multiple type="file" multiple />
-	<!--<label for="input-file-id" class="md-button md-raised md-primary">Choose Files</label>-->
-</div>
+<div *ngIf="nodeID">
+	<div *ngIf="canUploadDocuments()">
+		<input (change)="uploadDocuments($event)" id="input-file-id" multiple type="file" multiple />
+		<!--<label for="input-file-id" class="md-button md-raised md-primary">Choose Files</label>-->
+	</div>
 
-<div>
-	<table mat-table [dataSource]="uploadedDocuments">
-		<ng-container matColumnDef="document_name">
-	        <th mat-header-cell *matHeaderCellDef> Name </th>
-	        <td mat-cell *matCellDef="let doc"> {{ doc.document_name }} </td>
-	    </ng-container>
+	<div>
+		<table mat-table [dataSource]="uploadedDocuments">
+			<ng-container matColumnDef="document_name">
+		        <th mat-header-cell *matHeaderCellDef> Name </th>
+		        <td mat-cell *matCellDef="let doc"> {{ doc.document_name }} </td>
+		    </ng-container>
 
-	    <ng-container matColumnDef="document_size">
-	        <th mat-header-cell *matHeaderCellDef> Size </th>
-	        <td mat-cell *matCellDef="let doc"> {{ doc.document_size }} B </td>
-	    </ng-container>
+		    <ng-container matColumnDef="document_size">
+		        <th mat-header-cell *matHeaderCellDef> Size </th>
+		        <td mat-cell *matCellDef="let doc"> {{ doc.document_size }} B </td>
+		    </ng-container>
 
-	    <ng-container matColumnDef="uploaded_by">
-	    	<th mat-header-cell *matHeaderCellDef> Uploaded By </th>
-	        <td mat-cell *matCellDef="let doc"> {{ doc.uploaded_by }} </td>
-	    </ng-container>
-	    <ng-container matColumnDef="uploaded_at">
-	    	<th mat-header-cell *matHeaderCellDef> Uploaded At </th>
-	        <td mat-cell *matCellDef="let doc"> {{ doc.uploaded_at }} </td>
-	    </ng-container>
+		    <ng-container matColumnDef="uploaded_by">
+		    	<th mat-header-cell *matHeaderCellDef> Uploaded By </th>
+		        <td mat-cell *matCellDef="let doc"> {{ doc.uploaded_by }} </td>
+		    </ng-container>
+		    <ng-container matColumnDef="uploaded_at">
+		    	<th mat-header-cell *matHeaderCellDef> Uploaded At </th>
+		        <td mat-cell *matCellDef="let doc"> {{ doc.uploaded_at }} </td>
+		    </ng-container>
 
-	    <ng-container matColumnDef="utils">
-	    	<th mat-header-cell *matHeaderCellDef> Utils </th>
-	        <td mat-cell *matCellDef="let doc">
-	        	<button mat-icon-button class="white-icon" (click)="deleteDocument(doc)" *ngIf="canUploadDocuments()">
-			        <mat-icon> delete </mat-icon>
-			    </button>
-			    <button mat-icon-button class="white-icon" (click)="openRenameDialog(renameDialog, doc)" *ngIf="canUploadDocuments()">
-			        <mat-icon> edit </mat-icon>
-			    </button>
-	        </td>
-	    </ng-container>
+		    <ng-container matColumnDef="utils">
+		    	<th mat-header-cell *matHeaderCellDef> Utils </th>
+		        <td mat-cell *matCellDef="let doc">
+		        	<button mat-icon-button class="white-icon" (click)="deleteDocument(doc)" *ngIf="canUploadDocuments()">
+				        <mat-icon> delete </mat-icon>
+				    </button>
+				    <button mat-icon-button class="white-icon" (click)="openRenameDialog(renameDialog, doc)" *ngIf="canUploadDocuments()">
+				        <mat-icon> edit </mat-icon>
+				    </button>
+		        </td>
+		    </ng-container>
 
-	    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-	    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+		    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+		    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
 
-	</table>
-	<ng-template #renameDialog>
-        <h4>Renaming {{ renamingDocument.document_name }}</h4>
-        <mat-form-field class="full-width">
-	    	<input [(ngModel)]="renamingDocument.document_name" matInput />
-	  	</mat-form-field>
+		</table>
+		<ng-template #renameDialog>
+	        <h4>Renaming {{ renamingDocument.document_name }}</h4>
+	        <mat-form-field class="full-width">
+		    	<input [(ngModel)]="renamingDocument.document_name" matInput />
+		  	</mat-form-field>
 
-	  	<div style="text-align: center;" class="full-width">
-			<button (click)="renameDocument(renamingDocument)" mat-raised-button matTooltip="Renames the document in storage">Rename Doc</button>
-		</div>
-    </ng-template>
+		  	<div style="text-align: center;" class="full-width">
+				<button (click)="renameDocument(renamingDocument)" mat-raised-button matTooltip="Renames the document in storage">Rename Doc</button>
+			</div>
+	    </ng-template>
+	</div>
 </div>

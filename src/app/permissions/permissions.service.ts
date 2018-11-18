@@ -17,7 +17,6 @@ export class PermissionsService {
 
   private readonly apiUrl: string = `${appConfig.apiUrl}`;
   private readonly permissionsListUrl: string = `${appConfig.apiUrl}/node_permissions/`;
-  private readonly permissionsDetailUrl: string = `${appConfig.apiAuthUrl}/user_node_permissions/`;
   private readonly permissionsRemoveUrl: string = `${appConfig.apiAuthUrl}/remove_user_role/`;
   private readonly assignableUsersUrl: string = `${appConfig.apiAuthUrl}/assignable_users/`;
   private readonly assignableRolesUrl: string = `${appConfig.apiUrl}/assignable_roles/`;
@@ -40,11 +39,6 @@ export class PermissionsService {
   getPermissionsList (node: string, nodeType: string): Observable<any> {
     return this.http.get(this.permissionsListUrl+node+'/?nodeType='+nodeType, this.httpOptions)
       .catch(this.handleError);
-  }
-
-  getUserPermissions (node: string, nodeType: string): Observable<any> {
-    return this.http.get(this.permissionsDetailUrl+node+'/?nodeType='+nodeType, this.httpOptions)
-      .catch(this.handleError)
   }
 
   removeUserPermissions (node: string, nodeType: string, userID: string): Observable<any> {
@@ -75,7 +69,6 @@ export class PermissionsService {
 
   private handleError(err: HttpErrorResponse) {
     console.log(err.message);
-    this.loadingService.hide()
     return Observable.throw(err.message);
   }
 

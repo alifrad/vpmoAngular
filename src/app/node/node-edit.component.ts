@@ -22,7 +22,6 @@ export class NodeEditComponent implements OnInit {
         ) {}
 
   node: any = {};
-  nodeID: string;
   severityList: any[] = [
     {value: '1', text: 'Low'},
     {value: '2', text: 'Medium'},
@@ -30,25 +29,16 @@ export class NodeEditComponent implements OnInit {
   ];
 
   ngOnInit(): void {
-    this.route.params.subscribe(
-      params => { 
-        this.nodeID = params['id']
-        this.getNodeDetail()
-      }
-    )
-  }
-
-  getNodeDetail () {
-    this._nodeService.getNodeDetails(this.nodeID)
-      .subscribe(node => {
-        this.node = node;
-        console.log('Content', this.node)
-        // Setting the content to an empty string if it's null
+    this._nodeService.node.subscribe(value => {
+      if (value !== null) {
+        this.node = value
         if (this.node.content == null) {
           this.node.content = ''
         }
-      });
+      }
+    })
   }
+
 
   saveContent () {
     console.log('saveContent', this.node)

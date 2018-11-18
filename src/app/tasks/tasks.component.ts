@@ -6,6 +6,7 @@ import {MatDialog, MatDialogConfig} from '@angular/material';
 
 import { CreateTasksComponent } from './create-tasks.component';
 import { EditTaskComponent } from './edit-task.component';
+import { NodeService } from '../node/node.service';
 
 @Component({
   selector: 'app-tasks',
@@ -21,7 +22,8 @@ export class TasksComponent implements OnInit {
     private authUser: AuthenticationService,
     private _tasksService: TasksService,
     private dialog: MatDialog,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private nodeService: NodeService
   ) { }
 
   nodeID: string;
@@ -37,15 +39,15 @@ export class TasksComponent implements OnInit {
   ];
 
   ngOnInit () {
-    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    this.currentUser = this.authUser.getUser()
 
-   this.route.params.subscribe(
-      params => { 
-        this.nodeType = params['type'];
-        this.nodeID = params['id'];
+    this.nodeService.node.subscribe(node => {
+      if (node) {
+        this.nodeType = node.node_type
+        this.nodeID = node._id
         this.getAssignedTasks();
       }
-    );
+    })
   }
 
   getAssignedTasks () {

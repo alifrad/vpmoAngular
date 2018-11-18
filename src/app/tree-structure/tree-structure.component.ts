@@ -11,6 +11,7 @@ import { Observable } from 'rxjs';
 import { GlobalService } from '../_services/global.service';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { CreateNodeComponent } from './create-node.component';
+import { NodeService } from '../node/node.service';
 
 @Component({
   selector: 'app-tree-structure',
@@ -101,7 +102,8 @@ export class TreeStructureComponent implements OnInit {
         private router: Router,
         private route: ActivatedRoute,
         private globalService: GlobalService,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        private nodeService: NodeService
         ) { 
 
         }
@@ -164,12 +166,12 @@ export class TreeStructureComponent implements OnInit {
   
 
   public ngOnInit() {
-    this.route.params.subscribe(
-      params => { 
-        this.getTree(params['type'], params['id']);
-        this.nodeType = params['type']
-        this.nodeID = params['id']
+    this.nodeService.node.subscribe(node => {
+      if (node) {
+        this.getTree(node.node_type, node._id)
+        this.nodeType = node.node_type
+        this.nodeID = node._id
       }
-    );
+    })
   }
 }

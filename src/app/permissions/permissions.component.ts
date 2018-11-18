@@ -5,6 +5,7 @@ import { AuthenticationService } from '../_services';
 import { PermissionsService } from './permissions.service';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { LoadingService } from '../_services/loading.service';
+import { NodeService } from '../node/node.service';
 
 @Component({
   selector: 'app-permissions',
@@ -21,7 +22,8 @@ export class PermissionsComponent implements OnInit {
     private _permissionsService: PermissionsService,
     private dialog: MatDialog,
     private route: ActivatedRoute,
-    private loadingService: LoadingService
+    private loadingService: LoadingService,
+    private nodeService: NodeService
   ) { }
 
   userList: any[] = [];
@@ -37,32 +39,29 @@ export class PermissionsComponent implements OnInit {
   assignableRoles: string[] = [];
 
   ngOnInit() {
-    this.route.params.subscribe(
-      params => { 
-        this.nodeType = params['type']
-        this.nodeID = params['id']
+    this.currentUserID = this.authUser.getUser()._id
 
-        this.getUserPermissions(this.nodeID, this.nodeType);
+    this.nodeService.node.subscribe(node => {
+      if (node) {
+        this.nodeType = node.node_type
+        this.nodeID = node._id
 
         this.getPermissionsList(this.nodeID, this.nodeType);
-
         this.getAssignableRoles(this.nodeID, this.nodeType);
       }
-    );
+    })
+
+    this.nodeService.userPermissions.subscribe(permissions => {
+      if (permissions) {
+        this.currentUserPermissions = permissions.permissions
+        this.currentUserRole = permissions.role
+      }
+    })
   }
 
-  getUserPermissions (nodeID, nodeType) {
-    this._permissionsService.getUserPermissions(nodeID, nodeType)
-      .subscribe(
-        userPermissions => {
-          this.currentUserPermissions = userPermissions.permissions;
-          this.currentUserRole = userPermissions.role;
-          this.currentUserID = userPermissions._id;
-        }
-      );
-  }
 
   getPermissionsList (nodeID, nodeType) {
+    // Gets a list of users that have permissions for this node
     this._permissionsService.getPermissionsList(nodeID, nodeType)
       .subscribe(
         permissions => {
@@ -88,7 +87,7 @@ export class PermissionsComponent implements OnInit {
         response => {
           self.loadingService.hide()
           if (user._id === self.currentUserID) {
-            self.getUserPermissions(self.nodeID, self.nodeType);
+            self.nodeService.getUserPermissions(self.nodeID, self.nodeType);
           }
         }
       );

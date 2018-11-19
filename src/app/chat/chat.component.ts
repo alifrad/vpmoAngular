@@ -64,7 +64,16 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked, After
     this.route.params.subscribe(
       params => {
         this.nodeID = params['id'];
-        this.connectToChat()
+        this._chatService.chatClient.subscribe(chatClient => {
+          if (chatClient) {
+            this.chatClient = chatClient
+            var that = this
+            this.chatClient.getSubscribedChannels().then(function (resp) {
+              that.getChannel()
+            })
+          }
+        })
+        // this.connectToChat()
       }
     );
 
@@ -77,20 +86,22 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked, After
   ngAfterViewInit () {
   }
 
-  connectToChat () {
-    this._chatService.getToken()
-      .subscribe(response => {
-        this.chatToken = response.token
-        Twilio.Chat.Client.create(this.chatToken)
-          .then(client => {
-            this.chatClient = client
-            var that = this
-            this.chatClient.getSubscribedChannels().then(function (resp) {
-              that.getChannel()
+  /*
+    connectToChat () {
+      this._chatService.getToken()
+        .subscribe(response => {
+          this.chatToken = response.token
+          Twilio.Chat.Client.create(this.chatToken)
+            .then(client => {
+              this.chatClient = client
+              var that = this
+              this.chatClient.getSubscribedChannels().then(function (resp) {
+                that.getChannel()
+              })
             })
-          })
-      })
-  }
+        })
+    }
+  */
 
   getChannel () {
     var that = this
@@ -128,9 +139,15 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked, After
 
     this.channel.on('messageAdded', function (message) {
       that.messages.push(message)
+
+      // TODO: Logic needs fix - DONT UPDATE LAST CONSUMED IF MESSAGE NOT SUPPOSED TO BE VISIBLE
+      that.updateLastConsumed(message.index)
+
       that.scrollToBottom()
     })
   }
+
+
 
   getTotalMessageCount () {
     var that = this
@@ -168,11 +185,16 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked, After
             that.scrollToBottom()
           }
           // Updating the last seen message index
-          that.channel.updateLastConsumedMessageIndex(messages.items[messages.items.length-1].index).then(function (c) {
-            that.unreadMessageCount = c
-          })
+          that.updateLastConsumed(messages.items[messages.items.length-1].index)
         }
       }
+    })
+  }
+
+  updateLastConsumed(index) {
+    var that = this
+    that.channel.updateLastConsumedMessageIndex(index).then(function (c) {
+      that.unreadMessageCount = c
     })
   }
 

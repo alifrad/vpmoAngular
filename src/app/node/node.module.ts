@@ -28,6 +28,7 @@ import { DocumentsModule } from '../documents/documents.module';
 import { QuillModule } from 'ngx-quill';
 import { FormsModule } from '@angular/forms';
 import { NodeService } from './node.service';
+import { NavigationService } from './node-navigation.service';
 import { NodeEditComponent } from './node-edit.component';
 
 const NodeRoutes: Routes = [
@@ -71,11 +72,13 @@ const NodeRoutes: Routes = [
     UserModule
   ],
   providers: [
-    NodeService
+    NodeService,
+    NavigationService,
   ],
   declarations: [
     NodepageComponent,
-    NodeEditComponent
+    NodeEditComponent,
+    
   ],
   exports: [
     NodepageComponent,

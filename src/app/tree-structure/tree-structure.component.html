@@ -13,8 +13,11 @@
       </div>
     </div>
     <div class="my-container" *ngIf="!node.data.isRenaming">
-      <img *ngIf="node.data.node_type=='Team'" src="../../assets/icons/Team-T-Icon.svg" height="15" width="15"/>
-      <img *ngIf="node.data.node_type=='Project'" src="../../assets/icons/Project-P-Icon.png" height="15" width="15"/>
+      <!-- <img *ngIf="node.data.node_type=='Team'" src="../../assets/icons/Team-T-Icon.svg" height="15" width="15"/> -->
+      <!-- <img *ngIf="node.data.node_type=='Project'" src="../../assets/icons/Project-P-Icon.png" height="15" width="15"/> -->
+      <div *ngIf="node.data.node_type=='Team'" class="node-team">Team</div>
+      <div *ngIf="node.data.node_type=='Project'" class="node-project">Project</div>
+      <div *ngIf="node.data.node_type=='Topic'" class="node-topic">Topic</div>      
       
       <div class="node-name">{{ node.data.name }}</div>
       <div>

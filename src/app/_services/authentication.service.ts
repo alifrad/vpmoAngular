@@ -103,7 +103,7 @@ export class AuthenticationService {
         }
     }
 
-    getToken(): Observable<string> {
+    getToken() {
         if (localStorage.getItem('currentUser')) {
             this.tempUser = JSON.parse(localStorage.getItem('currentUser'));
             if (this.tempUser.token) {

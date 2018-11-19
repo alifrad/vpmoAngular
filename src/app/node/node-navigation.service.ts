@@ -7,42 +7,13 @@ import 'rxjs/add/operator/do';
 import { NodeService } from '../node/node.service';
 import { appConfig } from '../app.config';
 
+
 @Injectable()
 
 export class NavigationService {
     
     node: any;
-
-    constructor(
-        // private nodeService: NodeService,
-    ){
-        // nodeService.node.subscribe(
-        //     node => { 
-        //         this.node = node;
-        //         this.updateNodeNav();
-        //         if (node.type === 'Team') {
-        //             this.updateTeamNav();
-        //         } else if (node.type === 'Project') {
-        //             this.updateProjectNav();
-        //         } else if (node.type === 'Topic') {
-        //             this.updateTopicNav();
-        //         }
-                
-        //     },
-        //     err => console.log(err),
-        // );
-    }
-
-    private readonly apiUrl: string = `${appConfig.apiUrl}`;
-    // private readonly nodeUrl: string = this.apiUrl + '/node/' + this.node.type + '/' + this.node.id + '/';
-
-    // private nodeTree = this.nodeUrl + 'tree';
-    // private nodeDetails = this.nodeUrl + 'details';
-    // private nodeChat = this.nodeUrl + 'chat';
-    // private nodeDocs = this.nodeUrl + 'douments';
-    // private nodeTasks = this.nodeUrl + 'tasks';
-    // private nodePerms = this.nodeUrl + 'permissions';
-
+    nodeLink: string = '';
     nav: any = [ 
         {
         'id'      : 'general',
@@ -83,7 +54,7 @@ export class NavigationService {
                 'type' : 'item',
                 // 'icon' : 'business_center',
                 'url'  : '',
-                'hidden' : false,
+                'hidden' : true,
             },
             {
             'id'   : 'details',
@@ -91,7 +62,7 @@ export class NavigationService {
             'type' : 'item',
             'icon' : 'business_center',
             'url'  : 'app-node-edit',
-            'hidden' : false,
+            'hidden' : true,
             },
             {
                 'id'   : 'chat',
@@ -100,7 +71,7 @@ export class NavigationService {
                 'type' : 'item',
                 // 'icon' : 'business_center',
                 'url'  : 'app-chat',
-                'hidden' : false,
+                'hidden' : true,
             },
             {
                 'id'   : 'docs',
@@ -109,7 +80,7 @@ export class NavigationService {
                 'type' : 'item',
                 // 'icon' : 'business_center',
                 'url'  : 'project/all',
-                'hidden' : false,
+                'hidden' : true,
             },
             {
                 'id'   : 'tasks',
@@ -118,7 +89,7 @@ export class NavigationService {
                 'type' : 'item',
                 // 'icon' : 'business_center',
                 'url'  : 'project/all',
-                'hidden' : false,
+                'hidden' : true,
             },
             {
                 'id'   : 'perms',
@@ -127,7 +98,7 @@ export class NavigationService {
                 'type' : 'item',
                 // 'icon' : 'business_center',
                 'url'  : 'project/all',
-                'hidden' : false,
+                'hidden' : true,
             },
         ]},
         {
@@ -158,59 +129,108 @@ export class NavigationService {
     
     ];
 
-    navigation = new BehaviorSubject(this.nav);
+    navigationValue = new BehaviorSubject(this.nav);
 
-    // updateNodeNav() {
-    //     this.nav
-    //         .find(item => item.id === 'nodePages').children
-    //         .find(item => item.id === 'details').url = this.nodeDetails;
-    //     this.nav
-    //         .find(item => item.id === 'nodePages').children
-    //         .find(item => item.id === 'tree').url = this.nodeTree;
-    //     this.nav
-    //         .find(item => item.id === 'nodePages').children
-    //         .find(item => item.id === 'chat').url = this.nodeChat;
-    //     this.nav
-    //         .find(item => item.id === 'nodePages').children
-    //         .find(item => item.id === 'docs').url = this.nodeDocs;
-    //     this.nav
-    //         .find(item => item.id === 'nodePages').children
-    //         .find(item => item.id === 'tasks').url = this.nodeTasks;
-    //     this.nav
-    //         .find(item => item.id === 'nodePages').children
-    //         .find(item => item.id === 'tasks').url = this.nodePerms;
-        
-    //     this.navigation.next(this.nav);
-    // }
+    set navigation(value) {
+        this.navigationValue.next(value);
+    }
 
-    // updateTeamNav() {
-    //     this.nav
-    //         .find(item => item.id === 'nodePages').children
-    //         .find(item => item.id === 'tasks').hidden = true;
-    //     this.nav
-    //         .find(item => item.id === 'nodePages').children
-    //         .find(item => item.id === 'docs').hidden = true;
-    //     this.nav
-    //         .find(item => item.id === 'nodePages').children
-    //         .find(item => item.id === 'chat').hidden = true;
-        
-    //     this.navigation.next(this.nav);
-    // }
+    get navigation() {
+        return this.navigationValue;
+    }
 
-    // updateProjectNav() {
-    //     this.nav
-    //         .find(item => item.id === 'nodePages').children
-    //         .find(item => item.id === 'tasks').hidden = true;
-        
-    //     this.navigation.next(this.nav);
-    // }
+    constructor(
+        private nodeService: NodeService,
+    ){
+        nodeService.nodeValue.subscribe(
+            node => {
+                alert('node: ' + node);
+                if ( node !== '' ) { 
+                    
+                    this.node = JSON.parse(node);
+                    this.nodeLink = this.node.type + '/' + this.node.id;
+                    this.updateNodeNav();
+                    if (node.type === 'Team') {
+                        this.updateTeamNav();
+                    } else if (node.type === 'Project') {
+                        this.updateProjectNav();
+                    } else if (node.type === 'Topic') {
+                        this.updateTopicNav();
+                    }
+                } else { 
+                    throw new Error('node is not defined yet');
+                };
+            }
+        );
+    }
 
-    // updateTopicNav() {
-    //     this.nav
-    //         .find(item => item.id === 'nodePages').children
-    //         .find(item => item.id === 'tree').hidden = true;
+    private readonly apiUrl: string = `${appConfig.apiUrl}/node/`;
+    // private nodeUrl: string = this.apiUrl + '/node/'
+
+    private nodeTree = this.apiUrl + 'tree/' + this.nodeLink;
+    private nodeDetails = this.apiUrl + 'details/' + this.nodeLink;
+    private nodeChat = this.apiUrl + 'chat/' + this.nodeLink;
+    private nodeDocs = this.apiUrl + 'douments/' + this.nodeLink;
+    private nodeTasks = this.apiUrl + 'tasks/' + this.nodeLink;
+    private nodePerms = this.apiUrl + 'permissions/' + this.nodeLink;
+
+    
+
+
+    updateNodeNav() {
+        this.nav
+            .find(item => item.id === 'nodePages').children
+            .find(item => item.id === 'details').url = this.nodeDetails;
+        this.nav
+            .find(item => item.id === 'nodePages').children
+            .find(item => item.id === 'tree').url = this.nodeTree;
+        this.nav
+            .find(item => item.id === 'nodePages').children
+            .find(item => item.id === 'chat').url = this.nodeChat;
+        this.nav
+            .find(item => item.id === 'nodePages').children
+            .find(item => item.id === 'docs').url = this.nodeDocs;
+        this.nav
+            .find(item => item.id === 'nodePages').children
+            .find(item => item.id === 'tasks').url = this.nodeTasks;
+        this.nav
+            .find(item => item.id === 'nodePages').children
+            .find(item => item.id === 'tasks').url = this.nodePerms;
         
-    //     this.navigation.next(this.nav);
-    // }
+        this.navigationValue.next(this.nav);
+    }
+
+    updateTeamNav() {
+        this.nav
+            .find(item => item.id === 'nodePages').children
+            .find(item => item.id === 'details').hidden = true;
+        this.nav
+            .find(item => item.id === 'nodePages').children
+            .find(item => item.id === 'tasks').hidden = true;
+        this.nav
+            .find(item => item.id === 'nodePages').children
+            .find(item => item.id === 'docs').hidden = true;
+        this.nav
+            .find(item => item.id === 'nodePages').children
+            .find(item => item.id === 'chat').hidden = true;
+        
+        this.navigationValue.next(this.nav);
+    }
+
+    updateProjectNav() {
+        this.nav
+            .find(item => item.id === 'nodePages').children
+            .find(item => item.id === 'tasks').hidden = true;
+        
+        this.navigationValue.next(this.nav);
+    }
+
+    updateTopicNav() {
+        this.nav
+            .find(item => item.id === 'nodePages').children
+            .find(item => item.id === 'tree').hidden = true;
+        
+        this.navigationValue.next(this.nav);
+    }
 
 }

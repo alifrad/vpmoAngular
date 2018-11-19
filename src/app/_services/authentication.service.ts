@@ -136,8 +136,8 @@ export class AuthenticationService {
                     localStorage.setItem('team', '');
                     localStorage.setItem('project', '');
                     localStorage.setItem('topic', '');
-                    this.globalService.navigation = JSON.stringify(this.navigation);
-                    localStorage.setItem('navigation', '');
+                    // this.globalService.navigation = JSON.stringify(this.navigation);
+                    // localStorage.setItem('navigation', '');
                     
                     // this.isLoggedIn.next(true);
                     return user;

@@ -5,6 +5,7 @@ import { Team } from './team';
 import { Router } from '@angular/router';
 import { GlobalService } from '../_services/global.service';
 import {MatDialog, MatDialogConfig} from '@angular/material';
+import { NodeService } from 'app/node/node.service';
 
 @Component({
   selector: 'app-teams',
@@ -25,7 +26,8 @@ export class TeamsComponent implements OnInit {
       private teamService: TeamService,
       private router: Router,
       private globalService: GlobalService,
-      private dialog: MatDialog
+      private dialog: MatDialog,
+      private nodeService: NodeService,
   ) { 
   
   }
@@ -38,6 +40,11 @@ export class TeamsComponent implements OnInit {
     this.router.navigate(['/node/Team/' + team._id]);
   }
 
+
+  getNode(nodeId: string) {
+    this.nodeService.getNodeDetails(nodeId);
+    this.router.navigate(['node/details/Team/' + nodeId]);
+  }
 
   ngOnInit() {
     this.getTeams()

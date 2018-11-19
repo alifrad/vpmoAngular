@@ -18,7 +18,7 @@ export class NodeService {
   private readonly nodeRetrieveUpdateUrl: string = this.apiUrl + '/node/';
   private readonly permissionsDetailUrl: string = `${appConfig.apiAuthUrl}/user_node_permissions/`;
 
-  public node = new BehaviorSubject(null)
+  nodeValue = new BehaviorSubject(null);
 
   // List of permissions the user has for this node
   public userPermissions = new BehaviorSubject(null)
@@ -42,13 +42,22 @@ export class NodeService {
     this.http.get<any>(this.nodeRetrieveUpdateUrl + nodeID + '/', this.httpOptions)
       .catch(this.handleError)
       .subscribe(node => {
-        this.loadingService.hide()
-        this.node.next(node)
+        this.loadingService.hide();
+        this.node = node;
         this.userPermissions.next({
           permissions: node.user_permissions,
           role: node.user_role
-        })
+        });
       })
+  }
+
+  set node(value) {
+    this.nodeValue.next(value);
+    localStorage.setItem('node', JSON.stringify(value));
+  }
+
+  get node() {
+    return localStorage.getItem('node');
   }
 
   getUserPermissions (nodeID: string, nodeType: string) {

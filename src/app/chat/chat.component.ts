@@ -12,7 +12,7 @@ declare const Twilio: any
   styleUrls: ['./chat.component.less']
 })
 
-export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked, AfterViewInit, DoCheck {
+export class ChatComponent implements OnInit {
 
   constructor(
     private router: Router,
@@ -36,16 +36,6 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked, After
   unreadMessageCount: any;
   pageSize: any = 15;
 
-  ngOnDestroy () {
-  }
-
-  ngDoCheck () {
-    const change = this.differ.diff(this.messages);
-    if (change) {
-      // console.log('Scrolled')
-      // this.scrollToBottom()
-    }
-  }
 
   scrollToBottom(){
     if(this.chatContainer) {
@@ -77,13 +67,6 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked, After
       }
     );
 
-  }
-
-  ngAfterViewChecked () {
-    // this.scrollBottom()
-  }
-
-  ngAfterViewInit () {
   }
 
   /*

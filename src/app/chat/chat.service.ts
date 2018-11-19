@@ -92,7 +92,7 @@ export class ChatService {
     }
     that.updateChannelUnread(channel)
 
-    // 
+    // TODO: Add event listeners (onMessageAdded) here which updated unread messages on newMessage addition
   }
 
   updateChannelUnread (channel) {

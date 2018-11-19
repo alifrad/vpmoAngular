@@ -36,6 +36,11 @@
 				    <button mat-icon-button class="white-icon" (click)="openRenameDialog(renameDialog, doc)" *ngIf="canUploadDocuments()">
 				        <mat-icon> edit </mat-icon>
 				    </button>
+				    <a [href]="doc.document_url" target="_blank">
+					    <button mat-icon-button class="white-icon">
+					        <mat-icon> cloud_download </mat-icon>
+					    </button>
+					</a>
 		        </td>
 		    </ng-container>
 

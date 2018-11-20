@@ -10,7 +10,7 @@ import { navigation } from 'app/navigation/navigation';
 import { FuseNavigationService } from '@fuse/components/navigation/navigation.service';
 import { FuseSidebarComponent } from '@fuse/components/sidebar/sidebar.component';
 import { GlobalService } from '../../_services/global.service';
-import { NavigationService } from 'app/node/node-navigation.service';
+import { NodeNavigationService } from 'app/node/node-navigation.service';
 import { NodeService } from 'app/node/node.service';
 
 @Component({
@@ -51,12 +51,13 @@ export class FuseNavbarComponent implements OnInit, OnDestroy
         private navigationService: FuseNavigationService,
         private router: Router,
         private nodeService: NodeService,
+        private nodeNavigationService: NodeNavigationService,
         private globalService: GlobalService,
     )
     {
         // Navigation data
         // this.navigation = navigation;
-        nodeService.navigation.subscribe(
+        nodeNavigationService.navigation.subscribe(
             nav => {
                 // alert('nav: ' + JSON.stringify(nav));
                 this.navigation = nav;

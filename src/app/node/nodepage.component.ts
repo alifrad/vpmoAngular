@@ -23,12 +23,9 @@ export class NodepageComponent implements OnInit {
           ) { }  
 
   ngOnInit() {
-    this.loadingService.show()
-
     this._nodeService.node.subscribe(value => {
       if (value !== null) {
           this.node = value
-          this.loadingService.hide()
       }
     })
 

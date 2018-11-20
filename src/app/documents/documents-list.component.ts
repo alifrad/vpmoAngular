@@ -35,12 +35,16 @@ export class DocumentsListComponent implements OnInit {
   renamingDocument: any;
 
   ngOnInit() {
-    this.nodeService.node.subscribe(node => {
-      if (node) {
-        this.nodeType = node.node_type
-        this.nodeID = node._id
-        this.getDocuments()
-      }
+    this.route.params.subscribe(params => {
+      this.nodeService.node.subscribe(node => {
+        if (node) {
+          this.nodeType = node.node_type
+          this.nodeID = node._id
+          this.getDocuments()
+        } else {
+          this.nodeService.getNodeDetails(params['id'])
+        }
+      })
     })
 
     this.nodeService.userPermissions.subscribe(permissions => {

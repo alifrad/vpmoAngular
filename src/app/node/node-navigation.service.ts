@@ -10,7 +10,7 @@ import { appConfig } from '../app.config';
 
 @Injectable()
 
-export class NavigationService {
+export class NodeNavigationService {
     
     node: any;
     nodeLink: string = '';
@@ -40,67 +40,14 @@ export class NavigationService {
         },
         ]},
         {
-        'id'      : 'nodePages',
-        'title'   : 'Node',
-        'type'    : 'group',
-        'hidden' : false,
-        // 'icon' : 'business_center',
-        'url'  : '',
-        'children': [
-            {
-                'id'   : 'tree',
-                'title': 'Tree',
-                // 'translate': 'NAV.SAMPLE.TITLE',
-                'type' : 'item',
-                // 'icon' : 'business_center',
-                'url'  : '',
-                'hidden' : true,
-            },
-            {
-            'id'   : 'details',
-            'title': 'Details',
-            'type' : 'item',
-            'icon' : 'business_center',
-            'url'  : 'app-node-edit',
+            'id'      : 'nodePages',
+            'title'   : 'Node',
+            'type'    : 'group',
             'hidden' : true,
-            },
-            {
-                'id'   : 'chat',
-                'title': 'Chat',
-                // 'translate': 'NAV.SAMPLE.TITLE',
-                'type' : 'item',
-                // 'icon' : 'business_center',
-                'url'  : 'app-chat',
-                'hidden' : true,
-            },
-            {
-                'id'   : 'docs',
-                'title': 'Documents',
-                // 'translate': 'NAV.SAMPLE.TITLE',
-                'type' : 'item',
-                // 'icon' : 'business_center',
-                'url'  : 'project/all',
-                'hidden' : true,
-            },
-            {
-                'id'   : 'tasks',
-                'title': 'Tasks',
-                // 'translate': 'NAV.SAMPLE.TITLE',
-                'type' : 'item',
-                // 'icon' : 'business_center',
-                'url'  : 'project/all',
-                'hidden' : true,
-            },
-            {
-                'id'   : 'perms',
-                'title': 'Permissions',
-                // 'translate': 'NAV.SAMPLE.TITLE',
-                'type' : 'item',
-                // 'icon' : 'business_center',
-                'url'  : 'project/all',
-                'hidden' : true,
-            },
-        ]},
+            // 'icon' : 'business_center',
+            'url'  : '',
+            'children': []
+        },
         {
             'id'      : 'favouritsGroup',
             'title'   : 'FAVOURITES',
@@ -108,34 +55,40 @@ export class NavigationService {
             // 'icon' : 'business_center',
             'url'  : '',
             'children': [
-            {
-                'id'   : 'fav001',
-                'title': 'Issue 123',
-                // 'translate': 'NAV.SAMPLE.TITLE',
-                'type' : 'item',
-                // 'icon' : 'business_center',
-                'url'  : '',
-                'hidden' : false,
-            },
-            {
-                'id'   : 'fav002',
-                'title': 'Project XYZ',
-                'type' : 'item',
-                // 'icon' : 'business_center',
-                'url'  : '',
-                'hidden' : false,
-            },
-            ]},
-    
+                {
+                    'id'   : 'fav001',
+                    'title': 'Issue 123',
+                    // 'translate': 'NAV.SAMPLE.TITLE',
+                    'type' : 'item',
+                    // 'icon' : 'business_center',
+                    'url'  : '',
+                    'hidden' : false,
+                },
+                {
+                    'id'   : 'fav002',
+                    'title': 'Project XYZ',
+                    'type' : 'item',
+                    // 'icon' : 'business_center',
+                    'url'  : '',
+                    'hidden' : false,
+                },
+            ]
+        },
     ];
 
-    navigationValue = new BehaviorSubject<string>(JSON.stringify(this.nav));
+    navigation = new BehaviorSubject(this.nav);
 
     
 
     constructor(
         private nodeService: NodeService,
     ){
+        nodeService.node.subscribe(node => {
+            if (node) {
+                this.updateNodeNav(node)
+            }
+        })
+
         // nodeService.node.subscribe((val) => {
             
         //         // alert('node: ' + val);
@@ -168,73 +121,66 @@ export class NavigationService {
     private nodeTasks = this.apiUrl + 'tasks/' + this.nodeLink;
     private nodePerms = this.apiUrl + 'permissions/' + this.nodeLink;
 
-    
-    
 
-    updateNodeNav() {
-        // this.nav
-        //     .find(item => item.id === 'nodePages').children
-        //     .find(item => item.id === 'details').url = this.nodeDetails;
-        // this.nav
-        //     .find(item => item.id === 'nodePages').children
-        //     .find(item => item.id === 'tree').url = this.nodeTree;
-        // this.nav
-        //     .find(item => item.id === 'nodePages').children
-        //     .find(item => item.id === 'chat').url = this.nodeChat;
-        // this.nav
-        //     .find(item => item.id === 'nodePages').children
-        //     .find(item => item.id === 'docs').url = this.nodeDocs;
-        // this.nav
-        //     .find(item => item.id === 'nodePages').children
-        //     .find(item => item.id === 'tasks').url = this.nodeTasks;
-        // this.nav
-        //     .find(item => item.id === 'nodePages').children
-        //     .find(item => item.id === 'tasks').url = this.nodePerms;
-        
-        // this.navigation = this.nav;
-        this.navigation = '1212121';
+    updateNodeNav (node) {
+        var nav = this.navigation.value
+        nav.find(item => item.id == 'nodePages').hidden = false
+
+        nav.find(item => item.id == 'nodePages').children = 
+            [{
+                'id'   : 'tree',
+                'title': 'Tree',
+                // 'translate': 'NAV.SAMPLE.TITLE',
+                'type' : 'item',
+                // 'icon' : 'business_center',
+                'url'  : '/tree/'+node.node_type+'/'+node._id,
+                'hidden' : false,
+            },
+            {
+                'id'   : 'details',
+                'title': 'Details',
+                'type' : 'item',
+                // 'icon' : 'business_center',
+                'url'  : '/node/edit/'+node.node_type+'/'+node._id,
+                'hidden' : false,
+            },
+            {
+                'id'   : 'chat',
+                'title': 'Chat',
+                // 'translate': 'NAV.SAMPLE.TITLE',
+                'type' : 'item',
+                // 'icon' : 'business_center',
+                'url'  : '/chat/'+node.node_type+'/'+node._id,
+                'hidden' : false,
+            },
+            {
+                'id'   : 'docs',
+                'title': 'Documents',
+                // 'translate': 'NAV.SAMPLE.TITLE',
+                'type' : 'item',
+                // 'icon' : 'business_center',
+                'url'  : '/documents/'+node.node_type+'/'+node._id,
+                'hidden' : false,
+            },
+            {
+                'id'   : 'tasks',
+                'title': 'Tasks',
+                // 'translate': 'NAV.SAMPLE.TITLE',
+                'type' : 'item',
+                // 'icon' : 'business_center',
+                'url'  : '/tasks/'+node.node_type+'/'+node._id,
+                'hidden' : false,
+            },
+            {
+                'id'   : 'perms',
+                'title': 'Permissions',
+                // 'translate': 'NAV.SAMPLE.TITLE',
+                'type' : 'item',
+                // 'icon' : 'business_center',
+                'url'  : '/permissions/'+node.node_type+'/'+node._id,
+                'hidden' : false,
+            }]
+
+        this.navigation.next(nav)
     }
-
-    updateTeamNav() {
-        this.nav
-            .find(item => item.id === 'nodePages').children
-            .find(item => item.id === 'details').hidden = true;
-        this.nav
-            .find(item => item.id === 'nodePages').children
-            .find(item => item.id === 'tasks').hidden = true;
-        this.nav
-            .find(item => item.id === 'nodePages').children
-            .find(item => item.id === 'docs').hidden = true;
-        this.nav
-            .find(item => item.id === 'nodePages').children
-            .find(item => item.id === 'chat').hidden = true;
-        
-        this.navigation = this.nav;
-    }
-
-    updateProjectNav() {
-        this.nav
-            .find(item => item.id === 'nodePages').children
-            .find(item => item.id === 'tasks').hidden = true;
-        
-        this.navigationValue.next(this.nav);
-    }
-
-    updateTopicNav() {
-        this.nav
-            .find(item => item.id === 'nodePages').children
-            .find(item => item.id === 'tree').hidden = true;
-        
-        this.navigation = this.nav;
-    }
-
-    set navigation(value: string) {
-        this.navigationValue.next(value);
-        localStorage.setItem('navigation', JSON.stringify(value));
-    }
-
-    get navigation() {
-        return localStorage.getItem('navigation');
-    }
-
 }

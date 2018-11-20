@@ -41,14 +41,18 @@ export class PermissionsComponent implements OnInit {
   ngOnInit() {
     this.currentUserID = this.authUser.getUser()._id
 
-    this.nodeService.node.subscribe(node => {
-      if (node) {
-        this.nodeType = node.node_type
-        this.nodeID = node._id
+    this.route.params.subscribe(params => {
+      this.nodeService.node.subscribe(node => {
+        if (node) {
+          this.nodeType = node.node_type
+          this.nodeID = node._id
 
-        this.getPermissionsList(this.nodeID, this.nodeType);
-        this.getAssignableRoles(this.nodeID, this.nodeType);
-      }
+          this.getPermissionsList(this.nodeID, this.nodeType);
+          this.getAssignableRoles(this.nodeID, this.nodeType);
+        } else {
+          this.nodeService.getNodeDetails(params['id'])
+        }
+      })
     })
 
     this.nodeService.userPermissions.subscribe(permissions => {

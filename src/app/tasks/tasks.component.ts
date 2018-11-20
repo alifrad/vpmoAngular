@@ -41,13 +41,19 @@ export class TasksComponent implements OnInit {
   ngOnInit () {
     this.currentUser = this.authUser.getUser()
 
-    this.nodeService.node.subscribe(node => {
-      if (node) {
-        this.nodeType = node.node_type
-        this.nodeID = node._id
-        this.getAssignedTasks();
-      }
+
+    this.route.params.subscribe(params => {
+      this.nodeService.node.subscribe(node => {
+        if (node) {
+          this.nodeType = node.node_type
+          this.nodeID = node._id
+          this.getAssignedTasks();
+        } else {
+          this.nodeService.getNodeDetails(params['id'])
+        }
+      })
     })
+    
   }
 
   getAssignedTasks () {

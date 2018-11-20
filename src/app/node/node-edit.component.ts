@@ -29,13 +29,17 @@ export class NodeEditComponent implements OnInit {
   ];
 
   ngOnInit(): void {
-    this._nodeService.node.subscribe(value => {
-      if (value !== null) {
-        this.node = value
-        if (this.node.content == null) {
-          this.node.content = ''
+    this.route.params.subscribe(params => {
+      this._nodeService.node.subscribe(node => {
+        if (node) {
+          this.node = node
+          if (this.node.content == null) {
+            this.node.content = ''
+          }
+        } else {
+          this._nodeService.getNodeDetails(params['id'])
         }
-      }
+      })
     })
   }
 

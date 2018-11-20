@@ -166,12 +166,17 @@ export class TreeStructureComponent implements OnInit {
   
 
   public ngOnInit() {
-    this.nodeService.node.subscribe(node => {
-      if (node) {
-        this.getTree(node.node_type, node._id)
-        this.nodeType = node.node_type
-        this.nodeID = node._id
-      }
+    this.route.params.subscribe(params => {
+      this.nodeService.node.subscribe(node => {
+        if (node) {
+          this.getTree(node.node_type, node._id)
+          this.nodeType = node.node_type
+          this.nodeID = node._id
+        } else {
+          this.nodeService.getNodeDetails(params['id'])
+        }
+      })
     })
+    
   }
 }

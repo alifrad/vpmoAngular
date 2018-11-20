@@ -33,7 +33,6 @@ export class AuthenticationService {
                 private router: Router,
                 private cacheService: HttpCacheService,
                 private globalService: GlobalService,
-                
                 // public jwtHelper: JwtHelperService
                 ) 
                 { 
@@ -104,7 +103,7 @@ export class AuthenticationService {
         }
     }
 
-    getToken(): Observable<string> {
+    getToken() {
         if (localStorage.getItem('currentUser')) {
             this.tempUser = JSON.parse(localStorage.getItem('currentUser'));
             if (this.tempUser.token) {
@@ -127,8 +126,6 @@ export class AuthenticationService {
                 // login successful if there's a jwt token in the response
                 if (user && user.token) {
                     // store user details and jwt token in local storage to keep user logged in between page refreshes
-                    
-                    this.user.next(JSON.stringify(user));
                     localStorage.setItem('currentUser', JSON.stringify(user));
                     localStorage.setItem('node', '');
                     localStorage.setItem('nodeType', '');
@@ -138,6 +135,8 @@ export class AuthenticationService {
                     localStorage.setItem('topic', '');
                     // this.globalService.navigation = JSON.stringify(this.navigation);
                     // localStorage.setItem('navigation', '');
+                    
+                    this.user.next(JSON.stringify(user));
                     
                     // this.isLoggedIn.next(true);
                     return user;

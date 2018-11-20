@@ -14,7 +14,7 @@ export class CacheInterceptor implements HttpInterceptor {
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
         // pass along non-cachable requests and invalidates the cache
-        if (req.method !== 'GET' || req.url.indexOf('assignable_task_users') >= 0) {
+        if (req.method !== 'GET' || req.url.indexOf('assignable_task_users') >= 0 || req.url.indexOf('token') >= 0) {
             console.log(`Invalidating cache: ${req.method} ${req.url}`);
             this.cacheService.invalidateCache();
             return next.handle(req);

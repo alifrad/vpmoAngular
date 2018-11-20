@@ -8,6 +8,7 @@ import { AuthenticationService } from 'app/_services/authentication.service';
 import { AlertService } from 'app/_services/alert.service';
 import { LoadingService } from 'app/_services/loading.service';
 
+
 @Component({
     selector   : 'fuse-login',
     templateUrl: './login.component.html',

@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthGuard } from '../_guards/auth.guard';
 import { Routes, RouterModule } from '@angular/router';
@@ -30,6 +30,11 @@ import { FormsModule } from '@angular/forms';
 import { NodeService } from './node.service';
 import { NavigationService } from './node-navigation.service';
 import { NodeEditComponent } from './node-edit.component';
+import { DocumentsListComponent } from 'app/documents/documents-list.component';
+import { PermissionsComponent } from 'app/permissions/permissions.component';
+import { ChatComponent } from 'app/chat/chat.component';
+import { TreeStructureComponent } from 'app/tree-structure/tree-structure.component'
+import { TasksComponent } from 'app/tasks/tasks.component';
 
 const NodeRoutes: Routes = [
   {
@@ -37,7 +42,12 @@ const NodeRoutes: Routes = [
       canActivate: [ AuthGuard ],
       children: [
           { path: ':type/:id', component: NodepageComponent },
-          { path: 'edit/:type/:id', component: NodeEditComponent }
+          { path: 'details/:type/:id', component: NodeEditComponent },
+          { path: 'documents/:type/:id', component: DocumentsListComponent },
+          { path: 'permissions/:type/:id', component: PermissionsComponent},
+          { path: 'chat/:type:id', component: ChatComponent},
+          { path: 'tree/:type:id', component: TreeStructureComponent},
+          { path: 'tasks/:type:id', component: TasksComponent},
       ]
   },
 ];

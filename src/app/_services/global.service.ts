@@ -33,30 +33,30 @@ export class GlobalService {
   set team(value) {
     this.teamValue.next(value);
     localStorage.setItem('team', value);
-    this.navigationValue.subscribe(nextValue => this.nav = JSON.parse(nextValue));
-    this.nav
-      .find(item => item.id === 'teamGroup').children
-      .find(item => item.id === 'focusTeam').hidden = false;
-    this.nav
-      .find(item => item.id === 'teamGroup').children
-      .find(item => item.id === 'focusTeam').title = JSON.parse(value).name;
-    this.nav
-      .find(item => item.id === 'teamGroup').children
-      .find(item => item.id === 'focusTeam').url = '/node/Team/' + JSON.parse(value)._id;
-    this.nav.find(item => item.id === 'projectGroup').hidden = false;
-    this.nav
-      .find(item => item.id === 'projectGroup').children
-      .find(item => item.id === 'focusProject').hidden = true;
-    this.nav
-      .find(item => item.id === 'projectGroup').children
-      .find(item => item.id === 'projects').hidden = false;
-    this.nav.find(item => item.id === 'topicGroup').hidden = true;
+    // this.navigationValue.subscribe(nextValue => this.nav = JSON.parse(nextValue));
+    // this.nav
+    //   .find(item => item.id === 'teamGroup').children
+    //   .find(item => item.id === 'focusTeam').hidden = false;
+    // this.nav
+    //   .find(item => item.id === 'teamGroup').children
+    //   .find(item => item.id === 'focusTeam').title = JSON.parse(value).name;
+    // this.nav
+    //   .find(item => item.id === 'teamGroup').children
+    //   .find(item => item.id === 'focusTeam').url = '/node/Team/' + JSON.parse(value)._id;
+    // this.nav.find(item => item.id === 'projectGroup').hidden = false;
+    // this.nav
+    //   .find(item => item.id === 'projectGroup').children
+    //   .find(item => item.id === 'focusProject').hidden = true;
+    // this.nav
+    //   .find(item => item.id === 'projectGroup').children
+    //   .find(item => item.id === 'projects').hidden = false;
+    // this.nav.find(item => item.id === 'topicGroup').hidden = true;
 
     localStorage.setItem('project', '');
     localStorage.setItem('topic', '');
 
-    this.navStr = JSON.stringify(this.nav);
-    this.navigation = this.navStr;
+    // this.navStr = JSON.stringify(this.nav);
+    // this.navigation = this.navStr;
   }
 
   get team() {
@@ -67,28 +67,28 @@ export class GlobalService {
     this.projectValue.next(value);
     localStorage.setItem('project', value);
 
-    this.navigationValue.subscribe(nextValue => this.nav = JSON.parse(nextValue));
-    this.nav
-      .find(item => item.id === 'projectGroup').children
-      .find(item => item.id === 'focusProject').hidden = false;
-    this.nav
-      .find(item => item.id === 'projectGroup').children
-      .find(item => item.id === 'focusProject').title = JSON.parse(value).name;
-    this.nav
-      .find(item => item.id === 'projectGroup').children
-      .find(item => item.id === 'focusProject').url = '/node/Project/' + JSON.parse(value)._id;
-    this.nav.find(item => item.id === 'topicGroup').hidden = false;
-    this.nav
-      .find(item => item.id === 'topicGroup').children
-      .find(item => item.id === 'focusTopic').hidden = true;
-    this.nav
-      .find(item => item.id === 'topicGroup').children
-      .find(item => item.id === 'topics').hidden = false,
+    // this.navigationValue.subscribe(nextValue => this.nav = JSON.parse(nextValue));
+    // this.nav
+    //   .find(item => item.id === 'projectGroup').children
+    //   .find(item => item.id === 'focusProject').hidden = false;
+    // this.nav
+    //   .find(item => item.id === 'projectGroup').children
+    //   .find(item => item.id === 'focusProject').title = JSON.parse(value).name;
+    // this.nav
+    //   .find(item => item.id === 'projectGroup').children
+    //   .find(item => item.id === 'focusProject').url = '/node/Project/' + JSON.parse(value)._id;
+    // this.nav.find(item => item.id === 'topicGroup').hidden = false;
+    // this.nav
+    //   .find(item => item.id === 'topicGroup').children
+    //   .find(item => item.id === 'focusTopic').hidden = true;
+    // this.nav
+    //   .find(item => item.id === 'topicGroup').children
+    //   .find(item => item.id === 'topics').hidden = false,
     
     localStorage.setItem('topic', '');
     
-    this.navStr = JSON.stringify(this.nav);
-    this.navigation = this.navStr;
+    // this.navStr = JSON.stringify(this.nav);
+    // this.navigation = this.navStr;
   }
 
   get project() {
@@ -99,19 +99,19 @@ export class GlobalService {
     this.topicValue.next(value);
     localStorage.setItem('topic', value);
 
-    this.navigationValue.subscribe(nextValue => this.nav = JSON.parse(nextValue));
-    this.nav
-      .find(item => item.id === 'topicGroup').children
-      .find(item => item.id === 'focusTopic').hidden = false;
-    this.nav
-      .find(item => item.id === 'topicGroup').children
-      .find(item => item.id === 'focusTopic').title = JSON.parse(value).name;
-    this.nav
-      .find(item => item.id === 'topicGroup').children
-      .find(item => item.id === 'focusTopic').url = '/node/Topic/' + JSON.parse(value)._id;
+    // this.navigationValue.subscribe(nextValue => this.nav = JSON.parse(nextValue));
+    // this.nav
+    //   .find(item => item.id === 'topicGroup').children
+    //   .find(item => item.id === 'focusTopic').hidden = false;
+    // this.nav
+    //   .find(item => item.id === 'topicGroup').children
+    //   .find(item => item.id === 'focusTopic').title = JSON.parse(value).name;
+    // this.nav
+    //   .find(item => item.id === 'topicGroup').children
+    //   .find(item => item.id === 'focusTopic').url = '/node/Topic/' + JSON.parse(value)._id;
     
-    this.navStr = JSON.stringify(this.nav);
-    this.navigation = this.navStr;
+    // this.navStr = JSON.stringify(this.nav);
+    // this.navigation = this.navStr;
   }
 
   get topic() {

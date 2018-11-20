@@ -12,7 +12,7 @@ export const navigation = [
           // 'translate': 'NAV.SAMPLE.TITLE',
           'type' : 'item',
           'icon' : 'business_center',
-          'url'  : '/team/all',
+          'url'  : '/node/edit/Team/5bee27af00f0fa52684ac8f8',
           'hidden' : false,
       },
       {

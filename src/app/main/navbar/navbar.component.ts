@@ -10,6 +10,7 @@ import { navigation } from 'app/navigation/navigation';
 import { FuseNavigationService } from '@fuse/components/navigation/navigation.service';
 import { FuseSidebarComponent } from '@fuse/components/sidebar/sidebar.component';
 import { GlobalService } from '../../_services/global.service';
+import { NavigationService } from 'app/node/node-navigation.service';
 
 @Component({
     selector     : 'fuse-navbar',
@@ -48,23 +49,30 @@ export class FuseNavbarComponent implements OnInit, OnDestroy
         private sidebarService: FuseSidebarService,
         private navigationService: FuseNavigationService,
         private router: Router,
+        private nodeNavigation: NavigationService,
         private globalService: GlobalService,
     )
     {
         // Navigation data
         // this.navigation = navigation;
+        nodeNavigation.navigationValue.subscribe(
+            nav => {
+                alert('nav:' + JSON.stringify(nav));
+                this.navigation = nav;
+            }
+        );
 
         // Default layout
         this.layout = 'vertical';
 
-        globalService.teamValue.subscribe((nextValue) => {
-            this.team = nextValue;
-          });
+        // globalService.teamValue.subscribe((nextValue) => {
+        //     this.team = nextValue;
+        //   });
         
         
-        globalService.navigationValue.subscribe((nextValue) => {
-            this.navigation = JSON.parse(nextValue);
-        });   
+        // globalService.navigationValue.subscribe((nextValue) => {
+        //     this.navigation = JSON.parse(nextValue);
+        // });   
     }
 
     ngOnInit()

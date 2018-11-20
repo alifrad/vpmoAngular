@@ -42,6 +42,7 @@ export class AddPermissionsComponent implements OnInit {
 			alert('Please select a valid user')
 			return
 		}
+		console.log(this.selectedUser, role)
 		this.loadingService.show()
 		this._permissionsService.assignUserToNode(this.nodeID, this.nodeType, this.selectedUser, role)
 			.subscribe(

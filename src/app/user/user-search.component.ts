@@ -31,12 +31,13 @@ export class UserSearchComponent implements OnInit {
 	}
 
 	filterUsers (e) {
+		console.log(e, this.selectedUser)
 		var that = this
 
 		if (e.length < 3) {
 			this.filteredAssignableUsers = []
 			this.userSelected.emit({
-				selectedUser: this.selectedUser,
+				selectedUser: e,
 				filteredUsers: this.filteredAssignableUsers
 			})
 		}
@@ -45,7 +46,7 @@ export class UserSearchComponent implements OnInit {
 			.subscribe(assignableUsers => {
 				that.filteredAssignableUsers = assignableUsers
 				that.userSelected.emit({
-					selectedUser: that.selectedUser,
+					selectedUser: e,
 					filteredUsers: that.filteredAssignableUsers
 				})
 			});

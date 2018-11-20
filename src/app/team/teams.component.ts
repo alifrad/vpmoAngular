@@ -43,7 +43,7 @@ export class TeamsComponent implements OnInit {
 
   getNode(nodeId: string) {
     this.nodeService.getNodeDetails(nodeId);
-    this.router.navigate(['node/details/Team/' + nodeId]);
+    this.router.navigate(['node/Team/' + nodeId]);
   }
 
   ngOnInit() {

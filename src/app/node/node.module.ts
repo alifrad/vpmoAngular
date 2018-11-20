@@ -45,9 +45,9 @@ const NodeRoutes: Routes = [
           { path: 'details/:type/:id', component: NodeEditComponent },
           { path: 'documents/:type/:id', component: DocumentsListComponent },
           { path: 'permissions/:type/:id', component: PermissionsComponent},
-          { path: 'chat/:type:id', component: ChatComponent},
-          { path: 'tree/:type:id', component: TreeStructureComponent},
-          { path: 'tasks/:type:id', component: TasksComponent},
+          { path: 'chat/:type/:id', component: ChatComponent},
+          { path: 'tree/:type/:id', component: TreeStructureComponent},
+          { path: 'tasks/:type/:id', component: TasksComponent},
       ]
   },
 ];

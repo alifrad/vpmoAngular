@@ -11,6 +11,7 @@ import { FuseNavigationService } from '@fuse/components/navigation/navigation.se
 import { FuseSidebarComponent } from '@fuse/components/sidebar/sidebar.component';
 import { GlobalService } from '../../_services/global.service';
 import { NavigationService } from 'app/node/node-navigation.service';
+import { NodeService } from 'app/node/node.service';
 
 @Component({
     selector     : 'fuse-navbar',
@@ -49,15 +50,15 @@ export class FuseNavbarComponent implements OnInit, OnDestroy
         private sidebarService: FuseSidebarService,
         private navigationService: FuseNavigationService,
         private router: Router,
-        private nodeNavigation: NavigationService,
+        private nodeService: NodeService,
         private globalService: GlobalService,
     )
     {
         // Navigation data
         // this.navigation = navigation;
-        nodeNavigation.navigationValue.subscribe(
+        nodeService.navigation.subscribe(
             nav => {
-                alert('nav:' + JSON.stringify(nav));
+                // alert('nav: ' + JSON.stringify(nav));
                 this.navigation = nav;
             }
         );
@@ -88,6 +89,8 @@ export class FuseNavbarComponent implements OnInit, OnDestroy
                 }
             }
         );
+
+
     }
 
     ngOnDestroy()

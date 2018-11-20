@@ -129,39 +129,33 @@ export class NavigationService {
     
     ];
 
-    navigationValue = new BehaviorSubject(this.nav);
+    navigationValue = new BehaviorSubject<string>(JSON.stringify(this.nav));
 
-    set navigation(value) {
-        this.navigationValue.next(value);
-    }
-
-    get navigation() {
-        return this.navigationValue;
-    }
+    
 
     constructor(
         private nodeService: NodeService,
     ){
-        nodeService.nodeValue.subscribe(
-            node => {
-                alert('node: ' + node);
-                if ( node !== '' ) { 
-                    
-                    this.node = JSON.parse(node);
-                    this.nodeLink = this.node.type + '/' + this.node.id;
-                    this.updateNodeNav();
-                    if (node.type === 'Team') {
-                        this.updateTeamNav();
-                    } else if (node.type === 'Project') {
-                        this.updateProjectNav();
-                    } else if (node.type === 'Topic') {
-                        this.updateTopicNav();
-                    }
-                } else { 
-                    throw new Error('node is not defined yet');
-                };
-            }
-        );
+        // nodeService.node.subscribe((val) => {
+            
+        //         // alert('node: ' + val);
+        //         // if ( node !== '' && node !== null ) { 
+        //             // debugger;
+        //             this.node = JSON.parse(val);
+        //             this.nodeLink = this.node.type + '/' + this.node.id;
+        //             this.updateNodeNav();
+        //             // if (node.type === 'Team') {
+        //             //     this.updateTeamNav();
+        //             // } else if (node.type === 'Project') {
+        //             //     this.updateProjectNav();
+        //             // } else if (node.type === 'Topic') {
+        //             //     this.updateTopicNav();
+        //             // }
+        //         // } else { 
+        //         //     throw new Error('node is not defined yet');
+        //         // };
+        //     }
+        // );
     }
 
     private readonly apiUrl: string = `${appConfig.apiUrl}/node/`;
@@ -175,29 +169,30 @@ export class NavigationService {
     private nodePerms = this.apiUrl + 'permissions/' + this.nodeLink;
 
     
-
+    
 
     updateNodeNav() {
-        this.nav
-            .find(item => item.id === 'nodePages').children
-            .find(item => item.id === 'details').url = this.nodeDetails;
-        this.nav
-            .find(item => item.id === 'nodePages').children
-            .find(item => item.id === 'tree').url = this.nodeTree;
-        this.nav
-            .find(item => item.id === 'nodePages').children
-            .find(item => item.id === 'chat').url = this.nodeChat;
-        this.nav
-            .find(item => item.id === 'nodePages').children
-            .find(item => item.id === 'docs').url = this.nodeDocs;
-        this.nav
-            .find(item => item.id === 'nodePages').children
-            .find(item => item.id === 'tasks').url = this.nodeTasks;
-        this.nav
-            .find(item => item.id === 'nodePages').children
-            .find(item => item.id === 'tasks').url = this.nodePerms;
+        // this.nav
+        //     .find(item => item.id === 'nodePages').children
+        //     .find(item => item.id === 'details').url = this.nodeDetails;
+        // this.nav
+        //     .find(item => item.id === 'nodePages').children
+        //     .find(item => item.id === 'tree').url = this.nodeTree;
+        // this.nav
+        //     .find(item => item.id === 'nodePages').children
+        //     .find(item => item.id === 'chat').url = this.nodeChat;
+        // this.nav
+        //     .find(item => item.id === 'nodePages').children
+        //     .find(item => item.id === 'docs').url = this.nodeDocs;
+        // this.nav
+        //     .find(item => item.id === 'nodePages').children
+        //     .find(item => item.id === 'tasks').url = this.nodeTasks;
+        // this.nav
+        //     .find(item => item.id === 'nodePages').children
+        //     .find(item => item.id === 'tasks').url = this.nodePerms;
         
-        this.navigationValue.next(this.nav);
+        // this.navigation = this.nav;
+        this.navigation = '1212121';
     }
 
     updateTeamNav() {
@@ -214,7 +209,7 @@ export class NavigationService {
             .find(item => item.id === 'nodePages').children
             .find(item => item.id === 'chat').hidden = true;
         
-        this.navigationValue.next(this.nav);
+        this.navigation = this.nav;
     }
 
     updateProjectNav() {
@@ -230,7 +225,16 @@ export class NavigationService {
             .find(item => item.id === 'nodePages').children
             .find(item => item.id === 'tree').hidden = true;
         
-        this.navigationValue.next(this.nav);
+        this.navigation = this.nav;
+    }
+
+    set navigation(value: string) {
+        this.navigationValue.next(value);
+        localStorage.setItem('navigation', JSON.stringify(value));
+    }
+
+    get navigation() {
+        return localStorage.getItem('navigation');
     }
 
 }

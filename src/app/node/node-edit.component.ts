@@ -29,7 +29,7 @@ export class NodeEditComponent implements OnInit {
   ];
 
   ngOnInit(): void {
-    this._nodeService.nodeValue.subscribe(value => {
+    this._nodeService.node.subscribe(value => {
       if (value !== null) {
         this.node = value
         if (this.node.content == null) {

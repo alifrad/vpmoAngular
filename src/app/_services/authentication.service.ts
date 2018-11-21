@@ -77,7 +77,7 @@ export class AuthenticationService {
                 );
             
         } else {
-            this.logout();
+            // this.logout();
             return Observable.of(false);
 
         }
@@ -110,8 +110,9 @@ export class AuthenticationService {
                 return this.tempUser.token;
             }
         } else {
-            this.logout();
-            throw new Error('token or currentUser is not accessible!');
+            // this.logout();
+            // throw new Error('token or currentUser is not accessible!');
+            return ''
         }
               
     }  

@@ -83,8 +83,7 @@ const NodeRoutes: Routes = [
     TreeStructureModule,
     QuillModule,
     NodeBreadcrumbsModule,
-    UserModule,
-    
+    UserModule
   ],
   providers: [
     NodeService,

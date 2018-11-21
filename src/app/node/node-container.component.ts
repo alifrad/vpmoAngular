@@ -11,7 +11,7 @@ export class NodeContainerComponent implements OnInit {
   contentType: any;
 
   constructor(
-    private route: ActivatedRoute;
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {

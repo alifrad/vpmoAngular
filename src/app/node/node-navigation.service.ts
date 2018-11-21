@@ -6,6 +6,7 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/do';
 import { NodeService } from '../node/node.service';
 import { appConfig } from '../app.config';
+import { Router } from '@angular/router';
 
 
 @Injectable()
@@ -27,7 +28,7 @@ export class NodeNavigationService {
             // 'translate': 'NAV.SAMPLE.TITLE',
             'type' : 'item',
             'icon' : 'home',
-            'url'  : '/',
+            'url'  : '/user/dashboard',
             'hidden' : false,
         },
         {
@@ -82,37 +83,16 @@ export class NodeNavigationService {
 
     constructor(
         private nodeService: NodeService,
+        private router: Router,
     ){
         nodeService.node.subscribe(node => {
             if (node) {
                 this.updateNodeNav(node)
             }
         })
-
-        // nodeService.node.subscribe((val) => {
-            
-        //         // alert('node: ' + val);
-        //         // if ( node !== '' && node !== null ) { 
-        //             // debugger;
-        //             this.node = JSON.parse(val);
-        //             this.nodeLink = this.node.type + '/' + this.node.id;
-        //             this.updateNodeNav();
-        //             // if (node.type === 'Team') {
-        //             //     this.updateTeamNav();
-        //             // } else if (node.type === 'Project') {
-        //             //     this.updateProjectNav();
-        //             // } else if (node.type === 'Topic') {
-        //             //     this.updateTopicNav();
-        //             // }
-        //         // } else { 
-        //         //     throw new Error('node is not defined yet');
-        //         // };
-        //     }
-        // );
     }
 
     private readonly apiUrl: string = `${appConfig.apiUrl}/node/`;
-    // private nodeUrl: string = this.apiUrl + '/node/'
 
     private nodeTree = this.apiUrl + 'tree/' + this.nodeLink;
     private nodeDetails = this.apiUrl + 'details/' + this.nodeLink;
@@ -124,6 +104,7 @@ export class NodeNavigationService {
 
     updateNodeNav (node) {
         var nav = this.navigation.value
+        this.router.navigate([{ outlet: { breadcrumb: ['app-nodepage'] }}]);
         nav.find(item => item.id == 'nodePages').hidden = false
 
         nav.find(item => item.id == 'nodePages').children = 
@@ -141,7 +122,8 @@ export class NodeNavigationService {
                 'title': 'Details',
                 'type' : 'item',
                 // 'icon' : 'business_center',
-                'url'  : '/node/edit/'+node.node_type+'/'+node._id,
+                // 'url'  : `[/node(breadcrumb:NodepageComponent', ${node.node_type}, ${node._id}], content ['NodeEditComponent', ${node.node_type}, ${node._id}] }}]`,
+                'url' : `/node/${node._id}`,
                 'hidden' : false,
             },
             {

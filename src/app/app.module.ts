@@ -3,7 +3,7 @@ import BugsnagErrorHandler from 'bugsnag-angular';
 import bugsnag from 'bugsnag-js';
 
 import { CommonModule } from '@angular/common';
-import { NgModule, ErrorHandler } from '@angular/core';
+import { NgModule, ErrorHandler, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -180,6 +180,7 @@ export function tokenGetter() {
         { provide: HTTP_INTERCEPTORS, useClass: CacheInterceptor , multi: true },
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor , multi: true }
       ],
+    
 })
 export class AppModule
 {

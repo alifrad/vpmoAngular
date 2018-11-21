@@ -35,14 +35,26 @@ import { PermissionsComponent } from 'app/permissions/permissions.component';
 import { ChatComponent } from 'app/chat/chat.component';
 import { TreeStructureComponent } from 'app/tree-structure/tree-structure.component'
 import { TasksComponent } from 'app/tasks/tasks.component';
+import { NodeContainerComponent } from './node-container.component';
 
 const NodeRoutes: Routes = [
   {
       path: 'node',
       canActivate: [ AuthGuard ],
       children: [
-          { path: ':type/:id', component: NodepageComponent },
-          { path: 'edit/:type/:id', component: NodeEditComponent },
+          {
+            path: ':id',
+            component: NodeContainerComponent,
+            pathMatch: 'full'
+          },
+          // { path: ':type/:id', 
+          //   component: NodepageComponent,
+          //   outlet: 'breadcrumb'
+          // },
+          // { path: 'edit/:type/:id', 
+          //   component: NodeEditComponent,
+          //   outlet: 'content'
+          // },
       ]
   },
 ];
@@ -83,11 +95,13 @@ const NodeRoutes: Routes = [
   declarations: [
     NodepageComponent,
     NodeEditComponent,
+    NodeContainerComponent
     
   ],
   exports: [
     NodepageComponent,
-    NodeEditComponent
+    NodeEditComponent,
+    NodeContainerComponent
   ],
 })
 export class NodeModule { }

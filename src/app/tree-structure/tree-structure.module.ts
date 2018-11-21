@@ -10,8 +10,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule, MatDialogModule, MatFormFieldModule,
           MatInputModule, MatButtonModule, MatTooltipModule,
           MatDatepickerModule, MatNativeDateModule, MatSelectModule,
-          MatAutocompleteModule, MatProgressSpinnerModule } from '@angular/material';
+          MatAutocompleteModule, MatProgressSpinnerModule, MatDividerModule } from '@angular/material';
 import { AuthGuard } from '../_guards/auth.guard';
+import { NodepageComponent } from 'app/node/nodepage.component';
 
 const routes = [
   {
@@ -41,7 +42,8 @@ const routes = [
     MatNativeDateModule,
     MatSelectModule,
     MatAutocompleteModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatDividerModule,
   ],
   exports: [
     TreeStructureComponent,
@@ -49,7 +51,8 @@ const routes = [
   ],
   declarations: [
     TreeStructureComponent,
-    CreateNodeComponent
+    CreateNodeComponent,
+    
   ],
   providers: [
     TreeStructureService, 

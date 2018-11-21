@@ -48,7 +48,7 @@ export class NodeBreadcrumbsComponent implements OnInit {
 
   switchToNode (nodeID, nodeType) {
     localStorage.setItem('nodeID', nodeID);
-    this.router.navigate(['node/' + nodeType + '/' + nodeID]);
+    this.router.navigate(['node/' + nodeType + '/' + nodeID + '/tree']);
   }
 
   openNodeParentsPanel(panel) {

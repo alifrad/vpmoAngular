@@ -43,7 +43,7 @@ const NodeRoutes: Routes = [
       canActivate: [ AuthGuard ],
       children: [
           {
-            path: ':id',
+            path: ':type/:id/:contentType',
             component: NodeContainerComponent,
             pathMatch: 'full'
           },

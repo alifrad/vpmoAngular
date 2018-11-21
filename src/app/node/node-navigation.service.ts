@@ -104,7 +104,7 @@ export class NodeNavigationService {
 
     updateNodeNav (node) {
         var nav = this.navigation.value
-        this.router.navigate([{ outlet: { breadcrumb: ['app-nodepage'] }}]);
+        
         nav.find(item => item.id == 'nodePages').hidden = false
 
         nav.find(item => item.id == 'nodePages').children = 
@@ -114,7 +114,7 @@ export class NodeNavigationService {
                 // 'translate': 'NAV.SAMPLE.TITLE',
                 'type' : 'item',
                 // 'icon' : 'business_center',
-                'url'  : '/tree/'+node.node_type+'/'+node._id,
+                'url'  : `/node/${node.type}/${node._id}/tree`,
                 'hidden' : false,
             },
             {
@@ -122,8 +122,7 @@ export class NodeNavigationService {
                 'title': 'Details',
                 'type' : 'item',
                 // 'icon' : 'business_center',
-                // 'url'  : `[/node(breadcrumb:NodepageComponent', ${node.node_type}, ${node._id}], content ['NodeEditComponent', ${node.node_type}, ${node._id}] }}]`,
-                'url' : `/node/${node._id}`,
+                'url' : `/node/${node.type}/${node._id}/edit`,
                 'hidden' : false,
             },
             {
@@ -132,7 +131,7 @@ export class NodeNavigationService {
                 // 'translate': 'NAV.SAMPLE.TITLE',
                 'type' : 'item',
                 // 'icon' : 'business_center',
-                'url'  : '/chat/'+node.node_type+'/'+node._id,
+                'url'  : `/node/${node.type}/${node._id}/chat`,
                 'hidden' : false,
             },
             {
@@ -141,7 +140,7 @@ export class NodeNavigationService {
                 // 'translate': 'NAV.SAMPLE.TITLE',
                 'type' : 'item',
                 // 'icon' : 'business_center',
-                'url'  : '/documents/'+node.node_type+'/'+node._id,
+                'url'  : `/node/${node.type}/${node._id}/documents`,
                 'hidden' : false,
             },
             {
@@ -150,7 +149,7 @@ export class NodeNavigationService {
                 // 'translate': 'NAV.SAMPLE.TITLE',
                 'type' : 'item',
                 // 'icon' : 'business_center',
-                'url'  : '/tasks/'+node.node_type+'/'+node._id,
+                'url'  : `/node/${node.type}/${node._id}/tasks`,
                 'hidden' : false,
             },
             {
@@ -159,7 +158,7 @@ export class NodeNavigationService {
                 // 'translate': 'NAV.SAMPLE.TITLE',
                 'type' : 'item',
                 // 'icon' : 'business_center',
-                'url'  : '/permissions/'+node.node_type+'/'+node._id,
+                'url'  : `/node/${node.type}/${node._id}/permissions`,
                 'hidden' : false,
             }]
 

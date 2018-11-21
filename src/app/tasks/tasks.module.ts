@@ -15,7 +15,6 @@ import { TasksComponent } from './tasks.component';
 import { CreateTasksComponent } from './create-tasks.component';
 import { EditTaskComponent } from './edit-task.component';
 import { TasksService } from './tasks.service';
-import { NodeModule } from 'app/node/node.module';
 
 const TasksRoutes: Routes = [
   {

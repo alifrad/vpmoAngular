@@ -1,11 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/index';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/do';
 import { NodeService } from '../node/node.service';
-import { appConfig } from '../app.config';
 import { Router } from '@angular/router';
 
 
@@ -79,8 +77,6 @@ export class NodeNavigationService {
 
     navigation = new BehaviorSubject(this.nav);
 
-    
-
     constructor(
         private nodeService: NodeService,
         private router: Router,
@@ -92,21 +88,10 @@ export class NodeNavigationService {
         })
     }
 
-    private readonly apiUrl: string = `${appConfig.apiUrl}/node/`;
-
-    private nodeTree = this.apiUrl + 'tree/' + this.nodeLink;
-    private nodeDetails = this.apiUrl + 'details/' + this.nodeLink;
-    private nodeChat = this.apiUrl + 'chat/' + this.nodeLink;
-    private nodeDocs = this.apiUrl + 'douments/' + this.nodeLink;
-    private nodeTasks = this.apiUrl + 'tasks/' + this.nodeLink;
-    private nodePerms = this.apiUrl + 'permissions/' + this.nodeLink;
-
-
     updateNodeNav (node) {
         var nav = this.navigation.value
-        
+        let urlBase = `/node/${node.node_type}/${node._id}/`;
         nav.find(item => item.id == 'nodePages').hidden = false
-
         nav.find(item => item.id == 'nodePages').children = 
             [{
                 'id'   : 'tree',
@@ -114,7 +99,7 @@ export class NodeNavigationService {
                 // 'translate': 'NAV.SAMPLE.TITLE',
                 'type' : 'item',
                 // 'icon' : 'business_center',
-                'url'  : `/node/${node.type}/${node._id}/tree`,
+                'url'  : urlBase + 'tree',
                 'hidden' : false,
             },
             {
@@ -122,7 +107,7 @@ export class NodeNavigationService {
                 'title': 'Details',
                 'type' : 'item',
                 // 'icon' : 'business_center',
-                'url' : `/node/${node.type}/${node._id}/edit`,
+                'url' : urlBase + 'edit',
                 'hidden' : false,
             },
             {
@@ -131,7 +116,7 @@ export class NodeNavigationService {
                 // 'translate': 'NAV.SAMPLE.TITLE',
                 'type' : 'item',
                 // 'icon' : 'business_center',
-                'url'  : `/node/${node.type}/${node._id}/chat`,
+                'url'  : urlBase + 'chat',
                 'hidden' : false,
             },
             {
@@ -140,7 +125,7 @@ export class NodeNavigationService {
                 // 'translate': 'NAV.SAMPLE.TITLE',
                 'type' : 'item',
                 // 'icon' : 'business_center',
-                'url'  : `/node/${node.type}/${node._id}/documents`,
+                'url'  : urlBase + 'documents',
                 'hidden' : false,
             },
             {
@@ -149,7 +134,7 @@ export class NodeNavigationService {
                 // 'translate': 'NAV.SAMPLE.TITLE',
                 'type' : 'item',
                 // 'icon' : 'business_center',
-                'url'  : `/node/${node.type}/${node._id}/tasks`,
+                'url'  : urlBase + 'tasks',
                 'hidden' : false,
             },
             {
@@ -158,7 +143,7 @@ export class NodeNavigationService {
                 // 'translate': 'NAV.SAMPLE.TITLE',
                 'type' : 'item',
                 // 'icon' : 'business_center',
-                'url'  : `/node/${node.type}/${node._id}/permissions`,
+                'url'  : urlBase + 'permissions',
                 'hidden' : false,
             }]
 

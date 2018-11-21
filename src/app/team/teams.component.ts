@@ -35,15 +35,15 @@ export class TeamsComponent implements OnInit {
   teamTree(team: Team) {
     // debugger;
     localStorage.setItem('nodeType', 'Team');
-    this.globalService.team = JSON.stringify(team);
-    this.globalService.node = JSON.stringify(team);
-    this.router.navigate(['/node/Team/' + team._id]);
+    // this.globalService.team = JSON.stringify(team);
+    // this.globalService.node = JSON.stringify(team);
+    this.router.navigate(['/node/Team/' + team._id + '/tree']);
   }
 
 
   getNode(nodeId: string) {
-    this.nodeService.getNodeDetails(nodeId);
-    this.router.navigate(['node/' + nodeId]);
+    // this.nodeService.getNodeDetails(nodeId);
+    this.router.navigate(['/node/Team/' + nodeId + '/tree']);
   }
 
   ngOnInit() {

@@ -15,7 +15,8 @@ import {
   MatListModule,
   MatTabsModule,
   MatExpansionModule,
-  MatSelectModule 
+  MatSelectModule, 
+  MatDividerModule
 } from '@angular/material';
 import { UserModule } from '../user/user.module';
 import { ProjectModule } from '../project/project.module';
@@ -30,11 +31,6 @@ import { FormsModule } from '@angular/forms';
 import { NodeService } from './node.service';
 import { NodeNavigationService } from './node-navigation.service';
 import { NodeEditComponent } from './node-edit.component';
-import { DocumentsListComponent } from 'app/documents/documents-list.component';
-import { PermissionsComponent } from 'app/permissions/permissions.component';
-import { ChatComponent } from 'app/chat/chat.component';
-import { TreeStructureComponent } from 'app/tree-structure/tree-structure.component'
-import { TasksComponent } from 'app/tasks/tasks.component';
 import { NodeContainerComponent } from './node-container.component';
 
 const NodeRoutes: Routes = [
@@ -78,6 +74,7 @@ const NodeRoutes: Routes = [
     MatTabsModule,
     MatExpansionModule,
     MatSelectModule,
+    MatDividerModule,
     ProjectModule,
     ChatModule,
     PermissionsModule,
@@ -86,7 +83,8 @@ const NodeRoutes: Routes = [
     TreeStructureModule,
     QuillModule,
     NodeBreadcrumbsModule,
-    UserModule
+    UserModule,
+    
   ],
   providers: [
     NodeService,

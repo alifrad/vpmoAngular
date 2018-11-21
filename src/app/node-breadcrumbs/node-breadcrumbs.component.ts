@@ -37,8 +37,8 @@ export class NodeBreadcrumbsComponent implements OnInit {
     this.currentUser = this.authUser.getUser()
 
     this.nodeService.node.subscribe(node => {
-      this.nodeType = node.node_type
-      this.nodeID = node._id
+      this.nodeType = node.node_type;
+      this.nodeID = node._id;
       this._breadcrumbsService.getNodeParents(this.nodeID)
           .subscribe(nodeParents => {
             this.nodeParents = nodeParents;

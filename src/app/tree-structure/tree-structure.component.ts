@@ -146,7 +146,7 @@ export class TreeStructureComponent implements OnInit {
 
     // this.router.navigate(['node/details']);
     console.log('node/' + nodeType + '/' + nodeId);
-    this.router.navigate(['node/' + nodeType + '/' + nodeId]);
+    this.router.navigate(['node/' + nodeType + '/' + nodeId + '/tree']);
   }
 
   getTree(nodeType, nodeId) {

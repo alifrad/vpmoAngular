@@ -102,15 +102,16 @@ export class FuseToolbarComponent implements OnInit {
 
         this.navigation = navigation;
 
-        this.globalService.currentUserValue.subscribe(
-            (user) => {
-                this.user = user;
-                this.user = JSON.parse(this.user);
-                this.fullname = this.user.token;            
-            },
-            (err: any) => console.log(err),
-        );
-
+        this.authService.user.subscribe(user => {
+            if (user) {
+                this.user = user
+                this.fullname = this.user.fullname
+                this.isLoggedIn = true
+            } else {
+                this.fullname = ''
+                this.isLoggedIn = false
+            }
+        })
 
     }
 
@@ -118,15 +119,6 @@ export class FuseToolbarComponent implements OnInit {
         // debugger;
 
         this.fullname = this.authService.getUserName()
-
-        this.authService.isAuthenticated()
-            .subscribe(
-                (data: boolean) => { this.isLoggedIn = data, console.log(`isLoggedIn: ${this.isLoggedIn}`); },
-                (err: any) => console.log(`error in reading isAuthenticated from Auth component ${err}`),
-                () => console.log('isAuthenticated function read properly')
-            );
-        console.log('ngOnInit complete');
-
     }
 
     toggleSidebarOpened(key)
@@ -152,16 +144,6 @@ export class FuseToolbarComponent implements OnInit {
     logout() {
         // console.log(this.user$ + ' is loggin out...');
         this.authService.logout();
-        
-    }
-
-    loggedIn() {
-        if (this.authService.isAuthenticated()){
-            console.log('user is authenticated'); 
-        } else {
-            console.log('user is not authenticated'); 
-        }
-        
         
     }
 }

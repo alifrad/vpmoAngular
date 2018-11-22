@@ -22,19 +22,26 @@ export class PermissionsService {
   private readonly assignableRolesUrl: string = `${appConfig.apiUrl}/assignable_roles/`;
   private readonly assignUserToNodeUrl: string = `${appConfig.apiAuthUrl}/assign_role/`;
 
-  private httpOptions = {
-    // for auntification
-    headers: new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': 'JWT ' + this.authUser.getToken()
-    })
-  };
+  private httpOptions: Object;
 
   constructor(
     private http: HttpClient,
-    private authUser: AuthenticationService,
+    private authService: AuthenticationService,
     private loadingService: LoadingService
-  ) { }
+  ) {
+    authService.user.subscribe(user => {
+      this.setHttpOptions(user)
+    })
+  }
+
+  setHttpOptions (user) {
+    this.httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'JWT ' + user.token || ''
+      })
+    }
+  }
 
   getPermissionsList (node: string, nodeType: string): Observable<any> {
     return this.http.get(this.permissionsListUrl+node+'/?nodeType='+nodeType, this.httpOptions)

@@ -17,7 +17,7 @@ export class ChatComponent implements OnInit {
   constructor(
     private router: Router,
     private _chatService: ChatService,
-    private authUser: AuthenticationService,
+    private authService: AuthenticationService,
     private route: ActivatedRoute,
     differs: IterableDiffers
   ) {
@@ -49,7 +49,13 @@ export class ChatComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.currentUser = this.authUser.getUser().username
+    this.authService.user.subscribe(user => {
+      if (user) {
+        this.currentUser = user.username
+      } else {
+        this.currentUser = ''
+      }
+    })
     
     this.route.params.subscribe(
       params => {

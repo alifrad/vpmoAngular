@@ -19,14 +19,23 @@ export class TasksService {
 	private readonly createDeleteUpdateTaskUrl: string = this.apiUrl + '/delete_update_create_task/';
 
 	private httpOptions = {
-	    // for auntification
-	    headers: new HttpHeaders({
-	      'Content-Type': 'application/json',
-	      'Authorization': 'JWT ' + this.authUser.getToken()
-	    })
+		headers: {}
 	};
 
-	constructor(private http: HttpClient, private authUser: AuthenticationService) { }
+	constructor(private http: HttpClient, private authService: AuthenticationService) {
+		authService.user.subscribe(user => {
+	        this.setHttpOptions(user)
+	    })
+	}
+
+	setHttpOptions (user) {
+	    this.httpOptions = {
+	        headers: new HttpHeaders({
+	            'Content-Type': 'application/json',
+	            'Authorization': 'JWT ' + user.token || ''
+	        })
+	    }
+	}
 
 	getAssignedTasks (nodeID: string): Observable<any> {
 		// Returns the list of tasks assigned to the user

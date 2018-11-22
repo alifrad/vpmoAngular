@@ -16,15 +16,22 @@ export class ProjectService {
   // url for crud operation of teamTree
   private readonly projectsUrl: string = `${appConfig.apiUrl}/projects/`;
   private readonly nodeRetrieveUpdateUrl: string = `${appConfig.apiUrl}/node/`;
-  private httpOptions = {
-    // for auntification
-    headers: new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': 'JWT ' + this.authUser.getToken
-    })
-  };
+  private httpOptions: Object;
 
-  constructor(private http: HttpClient, private authUser: AuthenticationService) { }
+  constructor(private http: HttpClient, private authService: AuthenticationService) {
+    authService.user.subscribe(user => {
+      this.setHttpOptions(user)
+    })
+  }
+
+  setHttpOptions (user) {
+    this.httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'JWT ' + user.token || ''
+      })
+    }
+  }
 
   getProjects(): Observable<IProject[]> {
     return this.http.get<IProject[]>(this.projectsUrl , this.httpOptions)

@@ -19,37 +19,13 @@ export class AuthGuard implements CanActivate {
     canActivate(
         route: ActivatedRouteSnapshot, 
         state: RouterStateSnapshot): Observable<boolean> {
-            return this.authService.isAuthenticated()
-                .map(
-                    data => {
-                        if (data === false) {
-                            this.authService.redirectUrl = state.url;
-                            this.router.navigate(['/user/login']);
-                            return data;
-                        }
-                        if (data === true) {
-                            return data;
-                        }
-                    },
-                    error => {
-                        this.authService.redirectUrl = state.url;
-                        this.router.navigate(['/user/login']);
-                        return error;
-                    }
-
-                );
-    }
-
-    checklogedIn(url: string): boolean {
-        if (this.authService.isAuthenticated()
-            .subscribe(
-                (data) => {this.loggedIn = data; },
-            )
-        ) {
-            return true;
-        }
-        this.authService.redirectUrl = url;
-        this.router.navigate(['/user/login']);
-        return false;
+            var user = this.authService.user.value
+            if (user) {
+                return Observable.of(true)
+            } else {
+                this.authService.redirectUrl = state.url;
+                this.router.navigate(['/user/login']);
+                return Observable.of(false);
+            }
     }
 }

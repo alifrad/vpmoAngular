@@ -18,7 +18,7 @@ export class PermissionsComponent implements OnInit {
   title = 'Permissions';
 
   constructor(
-    private authUser: AuthenticationService,
+    private authService: AuthenticationService,
     private _permissionsService: PermissionsService,
     private dialog: MatDialog,
     private route: ActivatedRoute,
@@ -39,7 +39,13 @@ export class PermissionsComponent implements OnInit {
   assignableRoles: string[] = [];
 
   ngOnInit() {
-    this.currentUserID = this.authUser.getUser()._id
+    this.authService.user.subscribe(user => {
+      if (user) {
+        this.currentUserID = user._id
+      } else {
+        this.currentUserID = null
+      }
+    })
 
     this.route.params.subscribe(params => {
       this.nodeService.node.subscribe(node => {

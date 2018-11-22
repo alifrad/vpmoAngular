@@ -18,7 +18,7 @@ export class NodeBreadcrumbsComponent implements OnInit {
   title = 'NodeBreadcrumbs';
 
   constructor(
-    private authUser: AuthenticationService,
+    private authService: AuthenticationService,
     private _breadcrumbsService: NodeBreadcrumbsService,
     private _permissionsService: PermissionsService,
     private route: ActivatedRoute,
@@ -34,7 +34,9 @@ export class NodeBreadcrumbsComponent implements OnInit {
   nodeParents: any = [];
 
   ngOnInit () {
-    this.currentUser = this.authUser.getUser()
+    this.authService.user.subscribe(user => {
+      this.currentUser = user
+    })
 
     this.nodeService.node.subscribe(node => {
       this.nodeType = node.node_type;

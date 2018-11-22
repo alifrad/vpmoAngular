@@ -21,13 +21,7 @@ export class ChatService {
   // url for crud operation of teamTree
   private readonly apiUrl: string = `${appConfig.chatUrl}`;
   private readonly tokenUrl: string = this.apiUrl + '/token/';
-  private httpOptions = {
-    // for auntification
-    headers: new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': 'JWT ' + this.authUser.getToken()
-    })
-  };
+  private httpOptions: Object;
 
   constructor(
     private http: HttpClient,
@@ -35,12 +29,13 @@ export class ChatService {
     private loadingService: LoadingService
   ) {
     authUser.user.subscribe(user => {
+      this.setHttpOptions(user)
       if (user) {
         this.unreadMessageTracker.next({})
         this.userChannels.next([])
         this.unreadMessageTracker.next({})
 
-        this.getChatClient(JSON.parse(user))
+        this.getChatClient(user)
       }
     })
   }
@@ -48,6 +43,16 @@ export class ChatService {
   public chatClient = new BehaviorSubject(null);
   public userChannels = new BehaviorSubject([]);
   public unreadMessageTracker = new BehaviorSubject({});
+
+
+  setHttpOptions (user) {
+    this.httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'JWT ' + user.token || ''
+      })
+    }
+  }
 
   // This is called whenever there is a new login
   getChatClient (user) {
@@ -108,12 +113,7 @@ export class ChatService {
 
 
   getToken (user): Observable<any> {
-    return this.http.get(this.tokenUrl, {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Authorization': 'JWT ' + user.token
-      })
-    })
+    return this.http.get(this.tokenUrl, this.httpOptions)
       .catch(this.handleError)
   }
 

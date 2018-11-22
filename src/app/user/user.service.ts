@@ -20,24 +20,24 @@ export class UserService {
   constructor(
     private http: HttpClient,
     private messageService: MessageService,
-    private authUser: AuthenticationService,
-    ) { }
+    private authService: AuthenticationService,
+    ) {
+      authService.user.subscribe(user => {
+        this.setHttpOptions(user)
+      })
+    }
 
-  private httpOptions = {
-    headers: new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': 'JWT ' + this.authUser.getToken()
-    })
-  };
-  // private extractData(res: Response) {
-  //   let body = res.json();
-  //   return body.fields || { };
-  // }
+  private httpOptions: any;
 
-  // private handleError(error: any) {
-  //   console.error('post error: ', error);
-  //   return Observable.throw(error.statusText);
-  // }
+  setHttpOptions (user) {
+    this.httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'JWT ' + user.token || ''
+      })
+    }
+  }
+
 
   public searchUsers (searchUrl: string, query: string): Observable<any> {
     return this.http.get(searchUrl + query, this.httpOptions)

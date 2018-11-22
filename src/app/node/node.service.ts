@@ -27,17 +27,24 @@ export class NodeService {
   
   constructor(
     private http: HttpClient, 
-    private authUser: AuthenticationService,
+    private authService: AuthenticationService,
     private loadingService: LoadingService
-  ) { }
-
-  private httpOptions = {
-    // for authentication
-    headers: new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': 'JWT ' + this.authUser.getToken()
+  ) {
+    authService.user.subscribe(user => {
+      this.setHttpOptions(user)
     })
-  };
+  }
+
+  private httpOptions: Object;
+
+  setHttpOptions (user) {
+    this.httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'JWT ' + user.token || ''
+      })
+    }
+  }
 
   getNodeDetails (nodeID: string) {
     this.loadingService.show()

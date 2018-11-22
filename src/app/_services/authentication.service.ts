@@ -23,101 +23,36 @@ export class AuthenticationService {
     token: string;
     navigation: any;
 
-    user = new BehaviorSubject<any>('');
+    user = new BehaviorSubject<any>(null);
    
-    // currentUser = this.user.asObservable();
     loggedIn = new BehaviorSubject<boolean>(false);
     
-    // userLoggedIn = this.loggedIn.asObservable();
-
     constructor(private http: HttpClient, 
                 private router: Router,
                 private cacheService: HttpCacheService,
                 private globalService: GlobalService,
                 private alertService: AlertService
-                // public jwtHelper: JwtHelperService
                 ) 
                 { 
                     this.navigation = navigation;
                 }
 
 
-    // isLoggedIn(): Observable<boolean> {
-    //     const token = this.getToken();
-    //     return this.http.post<any>(appConfig.apiAuthUrl + '/token-verify/', { token: token })
-    //         .pipe(map(res => {
-    //             if (res.token) {
-    //                 console.log('user token is verified');
-    //                 return true;
-    //             } else {
-    //                 console.log('user token is not valid');
-    //                 return false;
-    //             }
-    //         }));
-    // }
-
-
-    isAuthenticated(): Observable<boolean> {
-        // get the token
-        // debugger;
-        if (this.getToken()) {
-            
-            const token = this.getToken();
-            return this.http.post<any>(appConfig.apiAuthUrl + '/token-verify/', { token: token })
-                .pipe(
-                    map(res => {
-                    if (res.token) {
-                        console.log('isAuthenticated: user is authenticated');
-                        return true;
-                    } else {
-                        console.log('isAuthenticated: user is NOT authenticated');
-                        this.logout();
-                        return false;
-                    }
-                    }),
-                    catchError(err => of(false))
-                );
-            
-        } else {
-            // this.logout();
-            return Observable.of(false);
-
-        }
-    }
-
-
     getUserName(): Observable<string> {   
-        if (!localStorage.getItem('currentUser')) {
-            console.log('user has not logged in!');
+        if (this.user.value !== null) {
+            return this.user.value.username
         } else {
-            this.tempUser = JSON.parse(localStorage.getItem('currentUser'));
-            return this.tempUser.fullname
+            return null
         }
     }
 
     getUser() {
-        if (!localStorage.getItem('currentUser')) {
-            console.log('user has not logged in!');
-            throw new Error('user has not logged in!');
+        if (this.user.value !== null) {
+            return this.user.value
         } else {
-            this.tempUser = JSON.parse(localStorage.getItem('currentUser'));
-            return this.tempUser
+            return null
         }
     }
-
-    getToken() {
-        if (localStorage.getItem('currentUser')) {
-            this.tempUser = JSON.parse(localStorage.getItem('currentUser'));
-            if (this.tempUser.token) {
-                return this.tempUser.token;
-            }
-        } else {
-            // this.logout();
-            // throw new Error('token or currentUser is not accessible!');
-            return ''
-        }
-              
-    }  
 
 
     login(email: string, password: string) {
@@ -129,7 +64,7 @@ export class AuthenticationService {
                 // login successful if there's a jwt token in the response
                 if (user && user.token) {
                     // store user details and jwt token in local storage to keep user logged in between page refreshes
-                    localStorage.setItem('currentUser', JSON.stringify(user));
+                    localStorage.setItem("user", JSON.stringify(user));
                     localStorage.setItem('node', '');
                     localStorage.setItem('nodeType', '');
                     localStorage.setItem('nodePermission', '');
@@ -139,14 +74,14 @@ export class AuthenticationService {
                     // this.globalService.navigation = JSON.stringify(this.navigation);
                     // localStorage.setItem('navigation', '');
                     
-                    this.user.next(JSON.stringify(user));
+                    this.user.next(user);
                     
                     // this.isLoggedIn.next(true);
                     return user;
                 } else {
                     console.log('could not log in, either email or password is wrong!');
-                    // this.globalService.currentUser = '';
-                    localStorage.removeItem('currentUser');
+                    localStorage.removeItem('user');
+                    this.user.next(null)
                     throw new Error('Email and/or Password is wrong!');
                 }
             }));
@@ -154,22 +89,21 @@ export class AuthenticationService {
 
     logout() {
         // remove user from local storage to log user out
-        // localStorage.removeItem('currentUser');
         this.cacheService.invalidateCache();
         localStorage.clear();
+        this.user.next(null)
   
         console.log('Cleared Cache and localStorage');
-        // this.loggedIn.next(false);
         this.router.navigate(['/user/login']);
     }
 
     updateLocalStorage (fullname, username, email) {
-        this.tempUser = JSON.parse(localStorage.getItem('currentUser'));
+        this.tempUser = JSON.parse(localStorage.getItem('user'));
         this.tempUser.fullname = fullname;
         this.tempUser.username = username;
         this.tempUser.email = email;
-        localStorage.setItem('currentUser', JSON.stringify(this.tempUser));
-        this.user.next(JSON.parse(localStorage.getItem('currentUser')));
+        localStorage.setItem('user', JSON.stringify(this.tempUser));
+        this.user.next(JSON.parse(localStorage.getItem('user')));
         return this.user;
     }
 

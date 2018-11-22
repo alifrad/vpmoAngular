@@ -7,6 +7,7 @@ import { catchError, map, tap } from 'rxjs/operators';
 import 'rxjs/add/operator/map';
 
 import { Team } from './team';
+import { CustomHttpClient } from '../_services/custom-http.service';
 import { MessageService } from '../shared/message.service';
 import { appConfig } from '../app.config';
 import { AuthenticationService } from '../_services';
@@ -19,20 +20,12 @@ import { HttpErrorResponse } from '@angular/common/http/src/response';
 export class TeamService {
 
   token: string;
-  private httpOptions = {
-    // for auntification
-    headers: new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': 'JWT ' + this.authUser.getToken()
-    })
-  };
+  private httpOptions: Object;
 
   constructor(
-    private http: HttpClient,
-    private authUser: AuthenticationService,
-  ) {
-
-  }
+    private http: CustomHttpClient,
+    private authService: AuthenticationService,
+  ) { }
   
   getCurrentTeam(): Observable<any> {
     if (!localStorage.getItem('currentUser')) {
@@ -42,8 +35,8 @@ export class TeamService {
     }
   }
  
-  getTeams(): Observable<Team[]> {
-    return this.http.get<Team[]>(appConfig.apiUrl + `/nodes/` + '?nodeType=Team');
+  getTeams(): Observable<any> {
+    return this.http.get(appConfig.apiUrl + `/nodes/` + '?nodeType=Team');
   }
 
   getUserTeamPerm(_id, team: number) {
@@ -51,14 +44,14 @@ export class TeamService {
   }
 
   createUserTeamPerm(_id, team: number) {
-    return this.http.post<any>(appConfig.apiUrl + '/users_perm', { user: _id, team: team, permission: 'contribute_obj'});
+    return this.http.post(appConfig.apiUrl + '/users_perm', { user: _id, team: team, permission: 'contribute_obj'});
   }
 
   createTeam (teamName: string): Observable<any> {
     var data = {
       name: teamName
     }
-    return this.http.post(appConfig.apiUrl+'/teams/add/', data, this.httpOptions)
+    return this.http.post(appConfig.apiUrl+'/teams/add/', data)
       .catch(this.handleError)
   }
 

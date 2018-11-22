@@ -85,6 +85,7 @@ import {
   } from '@angular/material';
 import { GlobalService } from './_services/global.service';
 import { NavigationComponent } from './navigation/navigation.component';
+import { CustomHttpClient } from './_services/custom-http.service';
 
 const appRoutes: Routes = [
     {
@@ -102,14 +103,6 @@ const bugsnagClient = bugsnag('API_KEY');
 // create a factory which will return the bugsnag error handler
 export function errorHandlerFactory() {
   return new BugsnagErrorHandler(bugsnagClient);
-}
-
-
-
-export function tokenGetter() {
-    this.tempUser = JSON.parse(localStorage.getItem('currentUser'));
-    console.log(this.tempUser.token);
-    return this.tempUser.token;
 }
 
 
@@ -177,6 +170,7 @@ export function tokenGetter() {
         AlertService,
         LoadingService,
         HttpCacheService,
+        CustomHttpClient,
         { provide: ErrorHandler, useFactory: errorHandlerFactory },
         { provide: HTTP_INTERCEPTORS, useClass: CacheInterceptor , multi: true },
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor , multi: true }

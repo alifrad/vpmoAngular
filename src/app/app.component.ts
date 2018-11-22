@@ -30,7 +30,7 @@ export class AppComponent implements OnInit {
         private fuseNavigationService: FuseNavigationService,
         private fuseSplashScreen: FuseSplashScreenService,
         private fuseTranslationLoader: FuseTranslationLoaderService,
-        // private authService: AuthenticationService,
+        private authService: AuthenticationService,
         // private http: HttpClient,
     )
     {
@@ -47,15 +47,10 @@ export class AppComponent implements OnInit {
         this.translate.use('en');
     }
 
-    // ping() {
-    //     this.http
-    //       .get('http://example.com/api/things')
-    //       .subscribe(data => console.log(data), err => console.log(err));
-    //   }
 
     ngOnInit() {
-        // this.authService.currentUser.subscribe(user => this.fullname = user.fullname);
-        // this.authService.userLoggedIn.subscribe(data => this.isLoggedIn = data);
-        
-          }
+        if (localStorage.getItem("user")) {
+            this.authService.user.next(JSON.parse(localStorage.getItem("user")))
+        }
+    }
 }

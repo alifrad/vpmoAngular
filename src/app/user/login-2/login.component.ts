@@ -75,8 +75,7 @@ export class LoginComponent implements OnInit
         this.authenticationService.login(this.loginForm.value.email, this.loginForm.value.password)
             .subscribe(
                 data => {
-                  console.log(this.model.email);
-                  console.log(localStorage.getItem('currentUser'));
+                  console.log(localStorage.getItem('user'));
                   // this.userLoggedIn.emit(this.model.fullname);
                   if (this.authenticationService.redirectUrl) {
                     this.router.navigateByUrl(this.authenticationService.redirectUrl);

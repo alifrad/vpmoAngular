@@ -18,15 +18,23 @@ export class TreeStructureHttpService {
   private readonly nodeCreateUrl: string = `${appConfig.apiUrl}/create_node/`;
   private readonly nodeUpdateUrl: string = `${appConfig.apiUrl}/node/`;
 
-  constructor(private http: HttpClient, private authUser: AuthenticationService) { }
-
-  private httpOptions = {
-    // for auntification
-    headers: new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': 'JWT ' + this.authUser.getToken
+  constructor(private http: HttpClient, private authService: AuthenticationService) {
+    authService.user.subscribe(user => {
+      this.setHttpOptions(user)
     })
-  };
+  }
+
+  private httpOptions: Object;
+
+  setHttpOptions (user) {
+    this.httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'JWT ' + user.token || ''
+      })
+    }
+  }
+
 
   /*
   public deleteNode(nodeId: string): any {

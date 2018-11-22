@@ -139,7 +139,8 @@ export function tokenGetter() {
         NodeBreadcrumbsModule,
         TreeStructureModule,
         NodeModule,
-        MatProgressSpinnerModule
+        MatProgressSpinnerModule,
+        MatSnackBarModule
     ],
     // The components, directives, and pipes that belong to this NgModule
     declarations: [

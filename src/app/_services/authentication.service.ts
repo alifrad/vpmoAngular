@@ -13,6 +13,7 @@ import { HttpCacheService } from './http-cache.service';
 import { GlobalService } from './global.service';
 import { navigation } from '../navigation/navigation';
 // import { GlobalService } from './global2.service';
+import { AlertService } from './alert.service';
 
 @Injectable()
 
@@ -33,6 +34,7 @@ export class AuthenticationService {
                 private router: Router,
                 private cacheService: HttpCacheService,
                 private globalService: GlobalService,
+                private alertService: AlertService
                 // public jwtHelper: JwtHelperService
                 ) 
                 { 
@@ -119,7 +121,7 @@ export class AuthenticationService {
 
 
     login(email: string, password: string) {
-        console.log('Logging In...');
+        this.alertService.info('Logging in')
         this.cacheService.invalidateCache();
         localStorage.clear();
         return this.http.post<any>(appConfig.apiAuthUrl + '/users/login/', { email: email, password: password })

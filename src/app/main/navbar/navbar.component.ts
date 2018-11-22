@@ -66,15 +66,6 @@ export class FuseNavbarComponent implements OnInit, OnDestroy
 
         // Default layout
         this.layout = 'vertical';
-
-        // globalService.teamValue.subscribe((nextValue) => {
-        //     this.team = nextValue;
-        //   });
-        
-        
-        // globalService.navigationValue.subscribe((nextValue) => {
-        //     this.navigation = JSON.parse(nextValue);
-        // });   
     }
 
     ngOnInit()

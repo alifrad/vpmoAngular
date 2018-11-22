@@ -19,8 +19,10 @@ export class NodeService {
   private readonly apiUrl: string = `${appConfig.apiUrl}`;
   private readonly nodeRetrieveUpdateUrl: string = this.apiUrl + '/node/';
   private readonly permissionsDetailUrl: string = `${appConfig.apiAuthUrl}/user_node_permissions/`;
+  private readonly nodeFavoriteUrl: string = `${appConfig.apiAuthUrl}/favorite_nodes/`;
 
   node = new BehaviorSubject(null);
+
   nodeLink: string = '';
   // currenNode = this.node.asObservable();
   // List of permissions the user has for this node
@@ -61,6 +63,14 @@ export class NodeService {
 
   partialUpdateNode (nodeID: string, nodeData: any): Observable<any> {
     return this.http.patch(this.nodeRetrieveUpdateUrl + nodeID + '/', nodeData)
+  }
+
+  favoriteNode (nodeID: string) {
+    return this.http.put(this.nodeFavoriteUrl, {node: nodeID})
+  }
+
+  unfavoriteNode (nodeID: string) {
+    return this.http.request('delete', this.nodeFavoriteUrl, {node: nodeID})
   }
 
 }

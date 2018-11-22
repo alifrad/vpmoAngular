@@ -24,18 +24,25 @@ export class AuthenticationService {
     navigation: any;
 
     user = new BehaviorSubject<any>(null);
+    favoriteNodes = new BehaviorSubject<any>([]);
    
     loggedIn = new BehaviorSubject<boolean>(false);
     
     constructor(private http: HttpClient, 
-                private router: Router,
-                private cacheService: HttpCacheService,
-                private globalService: GlobalService,
-                private alertService: AlertService
-                ) 
-                { 
-                    this.navigation = navigation;
-                }
+        private router: Router,
+        private cacheService: HttpCacheService,
+        private globalService: GlobalService,
+        private alertService: AlertService
+    ) { 
+        this.navigation = navigation;
+        this.user.subscribe(user => {
+            if (user) {
+                this.getFavoriteNodes(user)
+            } else {
+                this.favoriteNodes.next([])
+            }
+        })
+    }
 
 
     getUserName(): Observable<string> {   
@@ -52,6 +59,18 @@ export class AuthenticationService {
         } else {
             return null
         }
+    }
+
+    getFavoriteNodes (user) {
+        this.http.get(appConfig.apiAuthUrl + '/favorite_nodes/', {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+                'Authorization': 'JWT ' + user.token
+            })
+        })
+            .subscribe(favoriteNodes => {
+                this.favoriteNodes.next(favoriteNodes)
+            })
     }
 
 

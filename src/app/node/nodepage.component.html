@@ -3,6 +3,13 @@
 
   <div>
     <h2>{{node._id}}</h2>
+
+    <button mat-icon-button *ngIf="isFavorite" (click)="toggleFavorite()">
+        <mat-icon> star </mat-icon>
+    </button>
+    <button mat-icon-button *ngIf="!isFavorite" (click)="toggleFavorite()">
+        <mat-icon> star_border </mat-icon>
+    </button>
   </div>
 
   

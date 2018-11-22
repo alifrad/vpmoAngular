@@ -10,6 +10,7 @@ import { BehaviorSubject } from 'rxjs/index';
 import { appConfig } from '../app.config';
 import { AuthenticationService } from '../_services';
 import { LoadingService } from '../_services/loading.service';
+import { CustomHttpClient } from '../_services/custom-http.service';
 
 import { HttpErrorResponse } from '@angular/common/http/src/response';
 
@@ -21,15 +22,13 @@ export class ChatService {
   // url for crud operation of teamTree
   private readonly apiUrl: string = `${appConfig.chatUrl}`;
   private readonly tokenUrl: string = this.apiUrl + '/token/';
-  private httpOptions: Object;
 
   constructor(
-    private http: HttpClient,
+    private http: CustomHttpClient,
     private authUser: AuthenticationService,
     private loadingService: LoadingService
   ) {
     authUser.user.subscribe(user => {
-      this.setHttpOptions(user)
       if (user) {
         this.unreadMessageTracker.next({})
         this.userChannels.next([])
@@ -43,16 +42,6 @@ export class ChatService {
   public chatClient = new BehaviorSubject(null);
   public userChannels = new BehaviorSubject([]);
   public unreadMessageTracker = new BehaviorSubject({});
-
-
-  setHttpOptions (user) {
-    this.httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Authorization': 'JWT ' + user.token || ''
-      })
-    }
-  }
 
   // This is called whenever there is a new login
   getChatClient (user) {
@@ -113,13 +102,6 @@ export class ChatService {
 
 
   getToken (user): Observable<any> {
-    return this.http.get(this.tokenUrl, this.httpOptions)
-      .catch(this.handleError)
+    return this.http.get(this.tokenUrl)
   }
-
-  private handleError(err: HttpErrorResponse) {
-    console.log(err.message);
-    return Observable.throw(err.message);
-  }
-
 }

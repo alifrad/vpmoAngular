@@ -27,7 +27,6 @@ export class AlertComponent implements OnDestroy {
     }
 
     openSnackBar(alert: any) {
-        console.log(alert.type)
         this.snackBar.open(alert.text, alert.type.toUpperCase(), {
             duration: 2000,
             panelClass: alert.type

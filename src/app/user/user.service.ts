@@ -11,40 +11,24 @@ import { User } from './user';
 import { MessageService } from '../shared/message.service';
 import { appConfig } from '../app.config';
 import { AuthenticationService } from '../_services';
-
+import { CustomHttpClient } from '../_services/custom-http.service';
 
 
 @Injectable()
 export class UserService {
 
   constructor(
-    private http: HttpClient,
+    private http: CustomHttpClient,
     private messageService: MessageService,
     private authService: AuthenticationService,
-    ) {
-      authService.user.subscribe(user => {
-        this.setHttpOptions(user)
-      })
-    }
-
-  private httpOptions: any;
-
-  setHttpOptions (user) {
-    this.httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Authorization': 'JWT ' + user.token || ''
-      })
-    }
-  }
-
+    ) { }
 
   public searchUsers (searchUrl: string, query: string): Observable<any> {
-    return this.http.get(searchUrl + query, this.httpOptions)
+    return this.http.get(searchUrl + query)
   }
 
   getAll() {
-    return this.http.get<User[]>(appConfig.apiAuthUrl + '/users');
+    return this.http.get(appConfig.apiAuthUrl + '/users');
   }
 
   getById(_id: string) {
@@ -65,7 +49,7 @@ export class UserService {
 
   update(_id: number, user: User) {
       const url = appConfig.apiAuthUrl + '/users/update/' + _id + '/';
-      return this.http.patch(url, user, this.httpOptions);
+      return this.http.patch(url, user);
   }
 
   /**

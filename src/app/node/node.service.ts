@@ -9,6 +9,7 @@ import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/do';
 import { LoadingService } from '../_services/loading.service';
+import { CustomHttpClient } from '../_services/custom-http.service';
 
 @Injectable({
   providedIn: 'root'
@@ -26,30 +27,15 @@ export class NodeService {
   public userPermissions = new BehaviorSubject(null)
   
   constructor(
-    private http: HttpClient, 
+    private http: CustomHttpClient, 
     private authService: AuthenticationService,
     private loadingService: LoadingService
-  ) {
-    authService.user.subscribe(user => {
-      this.setHttpOptions(user)
-    })
-  }
+  ) { }
 
-  private httpOptions: Object;
-
-  setHttpOptions (user) {
-    this.httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Authorization': 'JWT ' + user.token || ''
-      })
-    }
-  }
 
   getNodeDetails (nodeID: string) {
     this.loadingService.show()
-    this.http.get<any>(this.nodeRetrieveUpdateUrl + nodeID + '/', this.httpOptions)
-      .catch(this.handleError)
+    this.http.get(this.nodeRetrieveUpdateUrl + nodeID + '/')
       .subscribe(val => {
         this.loadingService.hide();
 
@@ -64,8 +50,7 @@ export class NodeService {
   }
 
   getUserPermissions (nodeID: string, nodeType: string) {
-    this.http.get<any>(this.permissionsDetailUrl+nodeID+'/?nodeType='+nodeType, this.httpOptions)
-      .catch(this.handleError)
+    this.http.get(this.permissionsDetailUrl+nodeID+'/?nodeType='+nodeType)
       .subscribe(response => {
         this.userPermissions.next({
           permissions: response.permissions,
@@ -75,12 +60,7 @@ export class NodeService {
   }
 
   partialUpdateNode (nodeID: string, nodeData: any): Observable<any> {
-    return this.http.patch(this.nodeRetrieveUpdateUrl + nodeID + '/', nodeData, this.httpOptions)
-      .catch(this.handleError);
+    return this.http.patch(this.nodeRetrieveUpdateUrl + nodeID + '/', nodeData)
   }
 
-  private handleError(err: HttpErrorResponse) {
-    console.log(err.message);
-    return Observable.throw(err.message);
-  }
 }

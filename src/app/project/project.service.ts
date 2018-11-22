@@ -9,6 +9,7 @@ import { appConfig } from '../app.config';
 import { IProject } from './project';
 import { HttpErrorResponse } from '@angular/common/http/src/response';
 import { AuthenticationService } from '../_services';
+import { CustomHttpClient } from '../_services/custom-http.service';
 
 @Injectable()
 export class ProjectService {
@@ -16,44 +17,21 @@ export class ProjectService {
   // url for crud operation of teamTree
   private readonly projectsUrl: string = `${appConfig.apiUrl}/projects/`;
   private readonly nodeRetrieveUpdateUrl: string = `${appConfig.apiUrl}/node/`;
-  private httpOptions: Object;
 
-  constructor(private http: HttpClient, private authService: AuthenticationService) {
-    authService.user.subscribe(user => {
-      this.setHttpOptions(user)
-    })
+  constructor(private http: CustomHttpClient, private authService: AuthenticationService) { }
+
+
+  getProjects(): Observable<any> {
+    return this.http.get(this.projectsUrl)
   }
 
-  setHttpOptions (user) {
-    this.httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Authorization': 'JWT ' + user.token || ''
-      })
-    }
+  partialUpdateProject (projectId: string, projectContent: string): Observable<any> {
+    return this.http.patch(this.nodeRetrieveUpdateUrl + projectId + '/', {content: projectContent})
   }
 
-  getProjects(): Observable<IProject[]> {
-    return this.http.get<IProject[]>(this.projectsUrl , this.httpOptions)
-        // .do(data => console.log('All Projects: ' + JSON.stringify(data)))
-        .catch(this.handleError);
-  }
-
-  partialUpdateProject (projectId: string, projectContent: string): Observable<IProject[]> {
-
-    return this.http.patch<IProject[]>(this.nodeRetrieveUpdateUrl + projectId + '/', {content: projectContent}, this.httpOptions)
-      .catch(this.handleError);
-  }
-
-  getProject (projectId: string): Observable<IProject> {
-    return this.http.get<IProject>(this.nodeRetrieveUpdateUrl + projectId + '/', this.httpOptions)
-     .catch(this.handleError);
+  getProject (projectId: string): Observable<any> {
+    return this.http.get(this.nodeRetrieveUpdateUrl + projectId + '/')
  }
-
-  private handleError(err: HttpErrorResponse) {
-    console.log(err.message);
-    return Observable.throw(err.message);
-  }
 
   create(project: IProject) {
     return this.http.post(this.projectsUrl + '/add', project);

@@ -9,7 +9,7 @@ import 'rxjs/add/operator/do';
 
 import { appConfig } from '../app.config';
 import { AuthenticationService } from '../_services';
-
+import { CustomHttpClient } from '../_services/custom-http.service';
 import { HttpErrorResponse } from '@angular/common/http/src/response';
 
 @Injectable()
@@ -22,45 +22,28 @@ export class PermissionsService {
   private readonly assignableRolesUrl: string = `${appConfig.apiUrl}/assignable_roles/`;
   private readonly assignUserToNodeUrl: string = `${appConfig.apiAuthUrl}/assign_role/`;
 
-  private httpOptions: Object;
 
   constructor(
-    private http: HttpClient,
+    private http: CustomHttpClient,
     private authService: AuthenticationService,
     private loadingService: LoadingService
-  ) {
-    authService.user.subscribe(user => {
-      this.setHttpOptions(user)
-    })
-  }
+  ) { }
 
-  setHttpOptions (user) {
-    this.httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Authorization': 'JWT ' + user.token || ''
-      })
-    }
-  }
 
   getPermissionsList (node: string, nodeType: string): Observable<any> {
-    return this.http.get(this.permissionsListUrl+node+'/?nodeType='+nodeType, this.httpOptions)
-      .catch(this.handleError);
+    return this.http.get(this.permissionsListUrl+node+'/?nodeType='+nodeType)
   }
 
   removeUserPermissions (node: string, nodeType: string, userID: string): Observable<any> {
-    return this.http.delete(this.permissionsRemoveUrl+node+'/?nodeType='+nodeType+'&user='+userID, this.httpOptions)
-      .catch(this.handleError);
+    return this.http.delete(this.permissionsRemoveUrl+node+'/?nodeType='+nodeType+'&user='+userID)
   }
 
   getAssignableUsers (node: string, nodeType: string, usernameQuery: string): Observable<any> {
-    return this.http.get(this.assignableUsersUrl+node+"/?nodeType="+nodeType+"&search="+usernameQuery, this.httpOptions)
-      .catch(this.handleError)
+    return this.http.get(this.assignableUsersUrl+node+"/?nodeType="+nodeType+"&search="+usernameQuery)
   }
 
   getAssignableRoles (node: string, nodeType: string): Observable<any> {
-    return this.http.get(this.assignableRolesUrl+node+"/?nodeType="+nodeType, this.httpOptions)
-      .catch(this.handleError)
+    return this.http.get(this.assignableRolesUrl+node+"/?nodeType="+nodeType)
   }
 
   assignUserToNode (node: string, nodeType: string, username: string, role: string): Observable<any> {
@@ -70,13 +53,6 @@ export class PermissionsService {
       'user': username,
       'role': role
     }
-    return this.http.put(this.assignUserToNodeUrl, data, this.httpOptions)
-      .catch(this.handleError)
+    return this.http.put(this.assignUserToNodeUrl, data)
   }
-
-  private handleError(err: HttpErrorResponse) {
-    console.log(err.message);
-    return Observable.throw(err.message);
-  }
-
 }

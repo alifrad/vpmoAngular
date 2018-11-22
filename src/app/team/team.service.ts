@@ -52,7 +52,6 @@ export class TeamService {
       name: teamName
     }
     return this.http.post(appConfig.apiUrl+'/teams/add/', data)
-      .catch(this.handleError)
   }
 
   private handleError(err: HttpErrorResponse) {

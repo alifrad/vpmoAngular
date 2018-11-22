@@ -159,7 +159,6 @@ export class TreeStructureComponent implements OnInit {
             this.tree.treeModel.expandAll();
           }, 111);
         },
-        (err: any) => console.log('getTree ', err),
         () => console.log('All done getting nodes.')
       );
   }

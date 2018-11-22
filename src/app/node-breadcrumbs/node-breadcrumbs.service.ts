@@ -8,7 +8,7 @@ import 'rxjs/add/operator/do';
 
 import { appConfig } from '../app.config';
 import { AuthenticationService } from '../_services';
-
+import { CustomHttpClient } from '../_services/custom-http.service';
 import { HttpErrorResponse } from '@angular/common/http/src/response';
 
 @Injectable()
@@ -17,31 +17,10 @@ export class NodeBreadcrumbsService {
   private readonly apiUrl: string = `${appConfig.apiUrl}`;
   private readonly getNodeParentsUrl: string = this.apiUrl + '/node_parents/';
 
-  private httpOptions: Object;
+  constructor(private http: CustomHttpClient, private authService: AuthenticationService) { }
 
-  constructor(private http: HttpClient, private authService: AuthenticationService) {
-    authService.user.subscribe(user => {
-      this.setHttpOptions(user)
-    })
-  }
-
-  setHttpOptions (user) {
-    this.httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Authorization': 'JWT ' + user.token || ''
-      })
-    }
-  }
 
   getNodeParents (nodeID: string): Observable<any> {
-    return this.http.get(this.getNodeParentsUrl + nodeID + '/', this.httpOptions)
-      .catch(this.handleError)
+    return this.http.get(this.getNodeParentsUrl + nodeID + '/')
   }
-
-  private handleError(err: HttpErrorResponse) {
-    console.log(err.message);
-    return Observable.throw(err.message);
-  }
-
 }

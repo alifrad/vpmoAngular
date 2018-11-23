@@ -36,7 +36,7 @@ export class AuthenticationService {
     ) { 
         this.navigation = navigation;
         this.user.subscribe(user => {
-            if (user) {
+            if (user != null) {
                 this.getFavoriteNodes(user)
             } else {
                 this.favoriteNodes.next([])

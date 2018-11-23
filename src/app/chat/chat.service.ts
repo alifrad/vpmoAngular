@@ -29,7 +29,7 @@ export class ChatService {
     private loadingService: LoadingService
   ) {
     authUser.user.subscribe(user => {
-      if (user) {
+      if (user !== null) {
         this.unreadMessageTracker.next({})
         this.userChannels.next([])
         this.unreadMessageTracker.next({})
@@ -93,9 +93,9 @@ export class ChatService {
     var that = this
 
     var unreadMessages = that.unreadMessageTracker.value
-    channel.getMessagesCount().then(function (messageCount) {
-      var lastConsumed = channel.lastConsumedMessageIndex || -1
-      unreadMessages[channel.friendlyName] = messageCount - (lastConsumed + 1)
+
+    channel.getUnconsumedMessagesCount().then(function (c) {
+      unreadMessages[channel.friendlyName] = c
       that.unreadMessageTracker.next(unreadMessages)
     })
   }

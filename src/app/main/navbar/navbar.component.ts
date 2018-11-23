@@ -132,7 +132,7 @@ export class FuseNavbarComponent implements OnInit, OnDestroy
                 // 'translate': 'NAV.SAMPLE.TITLE',
                 'type' : 'item',
                 // 'icon' : 'business_center',
-                'url'  : '/node/'+favoriteNodes[i].node_type+'/'+favoriteNodes[i]._id+'/edit/',
+                'url'  : '/node/'+favoriteNodes[i].node_type+'/'+favoriteNodes[i]._id+'/tree/',
                 'hidden' : false,
             }
             this.navigation.find(item => item.id == 'favoritesGroup').children.push(child)

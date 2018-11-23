@@ -127,12 +127,13 @@ export class ChatComponent implements OnInit {
     
 
     this.channel.on('messageAdded', function (message) {
-      that.messages.push(message)
+      if (message.index == that.messages[that.messages.length-1].index+1) {
+        that.messages.push(message)
 
-      // TODO: Logic needs fix - DONT UPDATE LAST CONSUMED IF MESSAGE NOT SUPPOSED TO BE VISIBLE
-      that.updateLastConsumed(message.index)
+        that.updateLastConsumed(message.index)
 
-      that.scrollToBottom()
+        that.scrollToBottom()
+      }
     })
   }
 
@@ -173,17 +174,17 @@ export class ChatComponent implements OnInit {
             that.messages.push(messages.items[i])
             that.scrollToBottom()
           }
-          // Updating the last seen message index
-          that.updateLastConsumed(messages.items[messages.items.length-1].index)
         }
+        that.updateLastConsumed(that.messages[that.messages.length-1].index)
       }
     })
   }
 
   updateLastConsumed(index) {
     var that = this
-    that.channel.updateLastConsumedMessageIndex(index).then(function (c) {
+    that.channel.advanceLastConsumedMessageIndex(index).then(function (c) {
       that.unreadMessageCount = c
+      that._chatService.updateChannelUnread(that.channel)
     })
   }
 

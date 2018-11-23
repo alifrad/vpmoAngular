@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs/Subscription';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AddPermissionsComponent } from './add-permissions.component';
 import { AuthenticationService } from '../_services';
@@ -13,7 +14,7 @@ import { NodeService } from '../node/node.service';
   styleUrls: ['./permissions.component.css']
 })
 
-export class PermissionsComponent implements OnInit {
+export class PermissionsComponent implements OnInit, OnDestroy {
   
   title = 'Permissions';
 
@@ -33,40 +34,35 @@ export class PermissionsComponent implements OnInit {
   currentUserPermissions: string[] = [];
   // Role of the current user for the node
   currentUserRole: string;
-  currentUserID: string;
   displayedColumns: string[] = ['username', 'role', 'controlsColumn'];
   // The roles assignable by the user
   assignableRoles: string[] = [];
 
+  private nodeSubscription: Subscription;
+  private userPermSubscription: Subscription;
+
   ngOnInit() {
-    this.authService.user.subscribe(user => {
-      if (user) {
-        this.currentUserID = user._id
-      } else {
-        this.currentUserID = null
+    this.nodeSubscription = this.nodeService.node.subscribe(node => {
+      if (node) {
+        this.nodeType = node.node_type
+        this.nodeID = node._id
+
+        this.getPermissionsList(this.nodeID, this.nodeType);
+        this.getAssignableRoles(this.nodeID, this.nodeType);
       }
     })
 
-    this.route.params.subscribe(params => {
-      this.nodeService.node.subscribe(node => {
-        if (node) {
-          this.nodeType = node.node_type
-          this.nodeID = node._id
-
-          this.getPermissionsList(this.nodeID, this.nodeType);
-          this.getAssignableRoles(this.nodeID, this.nodeType);
-        } else {
-          this.nodeService.getNodeDetails(params['id'])
-        }
-      })
-    })
-
-    this.nodeService.userPermissions.subscribe(permissions => {
+    this.userPermSubscription = this.nodeService.userPermissions.subscribe(permissions => {
       if (permissions) {
         this.currentUserPermissions = permissions.permissions
         this.currentUserRole = permissions.role
       }
     })
+  }
+
+  ngOnDestroy () {
+    this.nodeSubscription.unsubscribe()
+    this.userPermSubscription.unsubscribe()
   }
 
 
@@ -96,7 +92,7 @@ export class PermissionsComponent implements OnInit {
       .subscribe(
         response => {
           self.loadingService.hide()
-          if (user._id === self.currentUserID) {
+          if (user._id === self.authService.getUser()._id) {
             self.nodeService.getUserPermissions(self.nodeID, self.nodeType);
           }
         }

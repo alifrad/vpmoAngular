@@ -3,7 +3,7 @@
         <mat-icon> add </mat-icon>
     </button>
 
-	<table mat-table [dataSource]="assignedTasks" *ngIf="currentUser">
+	<table mat-table [dataSource]="assignedTasks" *ngIf="getUser()">
 		<ng-container matColumnDef="title">
 	        <th mat-header-cell *matHeaderCellDef> Title </th>
 	        <td mat-cell *matCellDef="let task"> {{ task.title }} </td>
@@ -22,7 +22,7 @@
 	        <th mat-header-cell *matHeaderCellDef> Status </th>
 	        <td mat-cell *matCellDef="let task">
 
-	        	<mat-form-field *ngIf="currentUser._id == task.assignee._id">
+	        	<mat-form-field *ngIf="getUser()._id == task.assignee._id">
 					<mat-select [(value)]="task.status" (selectionChange)="changeTaskStatus($event.value, task)">
 					<mat-option *ngFor="let status of taskStatusList" [value]="status.value">
 						{{ status.text }}
@@ -30,7 +30,7 @@
 					</mat-select>
 				</mat-form-field>
 
-						<span *ngIf="currentUser._id != task.assignee._id">
+						<span *ngIf="getUser()._id != task.assignee._id">
 	        		{{ task.status }}
 	        	</span>
 	        </td>

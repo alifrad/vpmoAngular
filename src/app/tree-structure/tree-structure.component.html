@@ -35,7 +35,7 @@
         <button mat-icon-button  class="white-icon" class="white-icon" (click)="startRenaming(node)">
           <mat-icon> edit </mat-icon>
         </button>
-        <button mat-icon-button class="unread-badge" (click)="startRenaming(node)">
+        <button *ngIf="unreadMessages[node.data.name] !== undefined" mat-icon-button class="unread-badge" (click)="startRenaming(node)">
           {{ unreadMessages[node.data.name] }}
         </button>
         <button mat-icon-button class="white-icon" (click)="viewDetail(node)">

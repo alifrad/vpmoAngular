@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs/Subscription';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthenticationService } from '../_services';
 import { TasksService } from './tasks.service';
@@ -14,7 +15,7 @@ import { NodeService } from '../node/node.service';
   styleUrls: ['./tasks.component.css']
 })
 
-export class TasksComponent implements OnInit {
+export class TasksComponent implements OnInit, OnDestroy {
   
   title = 'Tasks';
 
@@ -28,7 +29,6 @@ export class TasksComponent implements OnInit {
 
   nodeID: string;
   nodeType: string;
-  currentUser: any;
 
   assignedTasks: any[] = [];
   displayedColumns: string[] = ['title', 'assignee_name', 'due_date', 'status', 'utils'];
@@ -38,22 +38,24 @@ export class TasksComponent implements OnInit {
     {value: 'COMPLETE', text: 'Complete'}
   ];
 
+  private nodeSubscription: Subscription;
+
   ngOnInit () {
-    this.currentUser = this.authUser.getUser()
-
-
-    this.route.params.subscribe(params => {
-      this.nodeService.node.subscribe(node => {
-        if (node) {
-          this.nodeType = node.node_type
-          this.nodeID = node._id
-          this.getAssignedTasks();
-        } else {
-          this.nodeService.getNodeDetails(params['id'])
-        }
-      })
+    this.nodeSubscription = this.nodeService.node.subscribe(node => {
+      if (node) {
+        this.nodeType = node.node_type
+        this.nodeID = node._id
+        this.getAssignedTasks();
+      }
     })
-    
+  }
+
+  ngOnDestroy () {
+    this.nodeSubscription.unsubscribe()
+  }
+
+  getUser () {
+    return this.authUser.getUser()
   }
 
   getAssignedTasks () {

@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs/Subscription';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthenticationService } from '../_services';
 import { DocumentsService } from './documents.service';
@@ -13,7 +14,7 @@ import { NodeService } from '../node/node.service';
   styleUrls: ['./documents-list.component.css']
 })
 
-export class DocumentsListComponent implements OnInit {
+export class DocumentsListComponent implements OnInit, OnDestroy {
   
   title = 'Documents';
 
@@ -34,24 +35,28 @@ export class DocumentsListComponent implements OnInit {
   displayedColumns: string[] = ['document_name', 'document_size', 'uploaded_by', "uploaded_at", "utils"];
   renamingDocument: any;
 
+  private nodeSubscription: Subscription;
+  private userPermSubscription: Subscription;
+
   ngOnInit() {
-    this.route.params.subscribe(params => {
-      this.nodeService.node.subscribe(node => {
-        if (node) {
-          this.nodeType = node.node_type
-          this.nodeID = node._id
-          this.getDocuments()
-        } else {
-          this.nodeService.getNodeDetails(params['id'])
-        }
-      })
+    this.nodeSubscription = this.nodeService.node.subscribe(node => {
+      if (node) {
+        this.nodeType = node.node_type
+        this.nodeID = node._id
+        this.getDocuments()
+      }
     })
 
-    this.nodeService.userPermissions.subscribe(permissions => {
+    this.userPermSubscription = this.nodeService.userPermissions.subscribe(permissions => {
       if (permissions) {
         this.currentUserPermissions = permissions.permissions
       }
     })
+  }
+
+  ngOnDestroy () {
+    this.nodeSubscription.unsubscribe()
+    this.userPermSubscription.unsubscribe()
   }
 
   getDocuments () {

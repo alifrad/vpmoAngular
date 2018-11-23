@@ -185,21 +185,18 @@ export class TreeStructureComponent implements OnInit {
   
 
   public ngOnInit() {
-    this.route.params.subscribe(params => {
-      this.nodeService.node.subscribe(node => {
-        if (node !== null) {
-          this.getTree(node.node_type, node._id)
-          this.nodeType = node.node_type
-          this.nodeID = node._id
+    console.log('TreeStructure Init')
 
-          this.authService.favoriteNodes.subscribe(favoriteNodes => {
-            this.favoriteNodeIds = favoriteNodes.map(i => i._id)
-            console.log(this.favoriteNodeIds)
-          })
-        } else {
-          this.nodeService.getNodeDetails(params['id'])
-        }
-      })
+    this.nodeService.node.subscribe(node => {
+      if (node !== null) {
+        this.getTree(node.node_type, node._id)
+        this.nodeType = node.node_type
+        this.nodeID = node._id
+      }
+    })
+
+    this.authService.favoriteNodes.subscribe(favoriteNodes => {
+      this.favoriteNodeIds = favoriteNodes.map(i => i._id)
     })
 
     this.chatService.unreadMessageTracker.subscribe(unreadMessages => {

@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { NodeService } from './node.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { GlobalService } from '../../app/_services/global.service';
-
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-node-edit',
@@ -11,7 +11,7 @@ import { GlobalService } from '../../app/_services/global.service';
   styleUrls: ['./node-edit.component.css']
 })
 
-export class NodeEditComponent implements OnInit {
+export class NodeEditComponent implements OnInit, OnDestroy {
   errorMessage: string;
 
   constructor(
@@ -28,19 +28,21 @@ export class NodeEditComponent implements OnInit {
     {value: '3', text: 'High'}
   ];
 
+  private nodeSubscription: Subscription;
+
   ngOnInit(): void {
-    this.route.params.subscribe(params => {
-      this._nodeService.node.subscribe(node => {
-        if (node) {
-          this.node = node
-          if (this.node.content == null) {
-            this.node.content = ''
-          }
-        } else {
-          this._nodeService.getNodeDetails(params['id'])
+    this.nodeSubscription = this._nodeService.node.subscribe(node => {
+      if (node) {
+        this.node = node
+        if (this.node.content == null) {
+          this.node.content = ''
         }
-      })
+      }
     })
+  }
+
+  ngOnDestroy () {
+    this.nodeSubscription.unsubscribe();
   }
 
 

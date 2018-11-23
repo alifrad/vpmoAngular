@@ -20,8 +20,10 @@ export class NodeService {
   private readonly nodeRetrieveUpdateUrl: string = this.apiUrl + '/node/';
   private readonly permissionsDetailUrl: string = `${appConfig.apiAuthUrl}/user_node_permissions/`;
   private readonly nodeFavoriteUrl: string = `${appConfig.apiAuthUrl}/favorite_nodes/`;
+  private readonly getNodeParentsUrl: string = this.apiUrl + '/node_parents/';
 
   node = new BehaviorSubject(null);
+  nodeParents = new BehaviorSubject([]);
 
   nodeLink: string = '';
   // currenNode = this.node.asObservable();
@@ -34,22 +36,31 @@ export class NodeService {
     private loadingService: LoadingService
   ) { }
 
-
   getNodeDetails (nodeID: string) {
     this.loadingService.show()
     this.http.get(this.nodeRetrieveUpdateUrl + nodeID + '/')
       .subscribe(val => {
-        this.loadingService.hide();
-
-        this.node.next(val);
-        localStorage.setItem('node', JSON.stringify(val));
-        this.userPermissions.next({
-          permissions: val.user_permissions,
-          role: val.user_role
-        });
-
+        this.getNodeParents(val)
       })
   }
+
+  getNodeParents (node) {
+    this.http.get(this.getNodeParentsUrl + node._id + '/').subscribe(nodeParents => {
+      this.setSubjects(node, nodeParents)
+    })
+  }
+
+  setSubjects (node, nodeParents) {
+    this.node.next(node)
+    localStorage.setItem('node', JSON.stringify(node));
+    this.userPermissions.next({
+      permissions: node.user_permissions,
+      role: node.user_role
+    });
+    this.nodeParents.next(nodeParents)
+    this.loadingService.hide();
+  }
+
 
   getUserPermissions (nodeID: string, nodeType: string) {
     this.http.get(this.permissionsDetailUrl+nodeID+'/?nodeType='+nodeType)
@@ -72,5 +83,4 @@ export class NodeService {
   unfavoriteNode (nodeID: string) {
     return this.http.request('delete', this.nodeFavoriteUrl, {node: nodeID})
   }
-
 }

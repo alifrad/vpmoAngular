@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthenticationService } from '../_services';
 import { NodeBreadcrumbsService } from './node-breadcrumbs.service';
 import { PermissionsService } from '../permissions/permissions.service'
 import {MatBottomSheet, MatBottomSheetRef} from '@angular/material';
 import { NodeService } from '../node/node.service';
+import { Subscription } from 'rxjs/Subscription';
 
 
 @Component({
@@ -13,7 +14,7 @@ import { NodeService } from '../node/node.service';
   styleUrls: ['./node-breadcrumbs.component.css']
 })
 
-export class NodeBreadcrumbsComponent implements OnInit {
+export class NodeBreadcrumbsComponent implements OnInit, OnDestroy {
   
   title = 'NodeBreadcrumbs';
 
@@ -29,23 +30,26 @@ export class NodeBreadcrumbsComponent implements OnInit {
 
   nodeID: string;
   nodeType: string;
-  currentUser: any;
 
   nodeParents: any = [];
 
-  ngOnInit () {
-    this.authService.user.subscribe(user => {
-      this.currentUser = user
-    })
+  private nodeSubscription: Subscription;
+  private nodeParentsSubscription: Subscription;
 
-    this.nodeService.node.subscribe(node => {
+  ngOnInit () {
+    this.nodeSubscription = this.nodeService.node.subscribe(node => {
       this.nodeType = node.node_type;
       this.nodeID = node._id;
-      this._breadcrumbsService.getNodeParents(this.nodeID)
-          .subscribe(nodeParents => {
-            this.nodeParents = nodeParents;
-          });
     })
+
+    this.nodeParentsSubscription = this.nodeService.nodeParents.subscribe(nodeParents => {
+      this.nodeParents = nodeParents
+    })
+  }
+
+  ngOnDestroy () {
+    this.nodeSubscription.unsubscribe()
+    this.nodeParentsSubscription.unsubscribe()
   }
 
   switchToNode (nodeID, nodeType) {

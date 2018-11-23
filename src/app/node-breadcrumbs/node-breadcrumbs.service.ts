@@ -15,12 +15,6 @@ import { HttpErrorResponse } from '@angular/common/http/src/response';
 export class NodeBreadcrumbsService {
 
   private readonly apiUrl: string = `${appConfig.apiUrl}`;
-  private readonly getNodeParentsUrl: string = this.apiUrl + '/node_parents/';
 
   constructor(private http: CustomHttpClient, private authService: AuthenticationService) { }
-
-
-  getNodeParents (nodeID: string): Observable<any> {
-    return this.http.get(this.getNodeParentsUrl + nodeID + '/')
-  }
 }

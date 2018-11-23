@@ -13,6 +13,7 @@ import { GlobalService } from '../../_services/global.service';
 import { NodeNavigationService } from 'app/node/node-navigation.service';
 import { NodeService } from 'app/node/node.service';
 import { AuthenticationService } from 'app/_services/authentication.service';
+import { ChatService } from 'app/chat/chat.service';
 
 @Component({
     selector     : 'fuse-navbar',
@@ -90,6 +91,11 @@ export class FuseNavbarComponent implements OnInit, OnDestroy
     navigationServiceWatcher: Subscription;
     fusePerfectScrollbarUpdateTimeout;
     team: any;
+    unreadMessages: any = {};
+
+    nodeNavigationSubscription: Subscription;
+    favoriteNodesSubscription: Subscription;
+    unreadMessagesSubscription: Subscription;
 
     constructor(
         private sidebarService: FuseSidebarService,
@@ -98,19 +104,24 @@ export class FuseNavbarComponent implements OnInit, OnDestroy
         private nodeService: NodeService,
         private nodeNavigationService: NodeNavigationService,
         private globalService: GlobalService,
-        private authService: AuthenticationService
+        private authService: AuthenticationService,
+        private chatService: ChatService
     )
     {
         // Navigation data
         // this.navigation = navigation;
-        nodeNavigationService.navigation.subscribe(
+        this.nodeNavigationSubscription = nodeNavigationService.navigation.subscribe(
             nav => {
                 this.updateNodeNav(nav)
             }
         );
 
-        authService.favoriteNodes.subscribe(favoriteNodes => {
-            this.updateFavoriteNodesNav(favoriteNodes)
+        this.unreadMessagesSubscription = chatService.unreadMessageTracker.subscribe(unreadMessages => {
+            this.updateFavoriteNodesNav(authService.favoriteNodes.value, unreadMessages)
+        })
+
+        this.favoriteNodesSubscription = authService.favoriteNodes.subscribe(favoriteNodes => {
+            this.updateFavoriteNodesNav(favoriteNodes, chatService.unreadMessageTracker.value)
         })
 
         // Default layout
@@ -122,12 +133,12 @@ export class FuseNavbarComponent implements OnInit, OnDestroy
         this.navigation.find(item => item.id == 'nodePages').children = nodeNav
     }
 
-    updateFavoriteNodesNav (favoriteNodes) {
+    updateFavoriteNodesNav (favoriteNodes, unreadMessages) {
         this.navigation.find(item => item.id == 'favoritesGroup').hidden = false
         this.navigation.find(item => item.id == 'favoritesGroup').children = []
         for (var i = 0; i < favoriteNodes.length; i++) {
             var child = {
-                'id'   : favoriteNodes[i]._id,
+                'id'   : favoriteNodes[i].name,
                 'title': favoriteNodes[i].name,
                 // 'translate': 'NAV.SAMPLE.TITLE',
                 'type' : 'item',
@@ -135,9 +146,19 @@ export class FuseNavbarComponent implements OnInit, OnDestroy
                 'url'  : '/node/'+favoriteNodes[i].node_type+'/'+favoriteNodes[i]._id+'/tree/',
                 'hidden' : false,
             }
+            if (unreadMessages[child.title] !== undefined) {
+                child['badge'] = {
+                    title: unreadMessages[child.title]
+                }
+            } else {
+                child['badge'] = {
+                    title: 0
+                }
+            }
             this.navigation.find(item => item.id == 'favoritesGroup').children.push(child)
         }
     }
+
 
     ngOnInit()
     {
@@ -166,6 +187,18 @@ export class FuseNavbarComponent implements OnInit, OnDestroy
         if ( this.navigationServiceWatcher )
         {
             this.navigationServiceWatcher.unsubscribe();
+        }
+
+        if (this.nodeNavigationSubscription) {
+            this.nodeNavigationSubscription.unsubscribe()
+        }
+
+        if (this.favoriteNodesSubscription) {
+            this.favoriteNodesSubscription.unsubscribe()
+        }
+
+        if (this.unreadMessagesSubscription) {
+            this.unreadMessagesSubscription.unsubscribe()
         }
     }
 

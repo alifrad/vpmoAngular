@@ -13,7 +13,6 @@ import { AuthenticationService } from '../_services/authentication.service';
 export class NodepageComponent implements OnInit {
   errorMessage: string;
   node: any;
-  isFavorite: boolean = false;
   selectedIndex: any;
 
   constructor(
@@ -29,13 +28,6 @@ export class NodepageComponent implements OnInit {
     this._nodeService.node.subscribe(value => {
       if (value !== null) {
           this.node = value
-          this.authService.favoriteNodes.subscribe(favoriteNodes => {
-            if (favoriteNodes.filter(i => i._id == this.node._id).length  == 0) {
-              this.isFavorite = false
-            } else {
-              this.isFavorite = true
-            }
-          })
       }
     })
 
@@ -44,20 +36,6 @@ export class NodepageComponent implements OnInit {
         this._nodeService.getNodeDetails(params['id'])
       }
     );
-  }
-
-  toggleFavorite () {
-    if (this.isFavorite) {
-      this._nodeService.unfavoriteNode(this.node._id)
-        .subscribe(val => {
-          this.authService.favoriteNodes.next(val)
-        })
-    } else {
-      this._nodeService.favoriteNode(this.node._id)
-        .subscribe(val => {
-          this.authService.favoriteNodes.next(val)
-        })
-    }
   }
 
   onTabChanged (e) {

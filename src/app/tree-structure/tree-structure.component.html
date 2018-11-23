@@ -20,12 +20,23 @@
       <div *ngIf="node.data.node_type=='Topic'" class="node-topic">Topic</div>      
       
       <div class="node-name">{{ node.data.name }}</div>
+
       <div>
+        <button mat-icon-button class="yellow-icon" *ngIf="favoriteNodeIds.indexOf(node.data._id) >= 0" (click)="toggleFavorite(node.data._id)">
+          <mat-icon> star </mat-icon>
+        </button>
+        <button mat-icon-button class="yellow-icon" *ngIf="favoriteNodeIds.indexOf(node.data._id) <= -1" (click)="toggleFavorite(node.data._id)">
+          <mat-icon> star_border </mat-icon>
+        </button>
+        
         <button *ngIf="node.data.node_type!='Topic'" mat-icon-button (click)="startAdd(node)">
           <mat-icon> add </mat-icon>
         </button>
-        <button mat-icon-button class="white-icon" (click)="startRenaming(node)">
+        <button mat-icon-button  class="white-icon" class="white-icon" (click)="startRenaming(node)">
           <mat-icon> edit </mat-icon>
+        </button>
+        <button mat-icon-button class="unread-badge" (click)="startRenaming(node)">
+          {{ unreadMessages[node.data.name] }}
         </button>
         <button mat-icon-button class="white-icon" (click)="viewDetail(node)">
           <mat-icon> navigate_next </mat-icon>

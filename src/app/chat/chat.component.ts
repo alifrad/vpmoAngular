@@ -69,28 +69,10 @@ export class ChatComponent implements OnInit {
             })
           }
         })
-        // this.connectToChat()
       }
     );
 
   }
-
-  /*
-    connectToChat () {
-      this._chatService.getToken()
-        .subscribe(response => {
-          this.chatToken = response.token
-          Twilio.Chat.Client.create(this.chatToken)
-            .then(client => {
-              this.chatClient = client
-              var that = this
-              this.chatClient.getSubscribedChannels().then(function (resp) {
-                that.getChannel()
-              })
-            })
-        })
-    }
-  */
 
   getChannel () {
     var that = this

@@ -12,6 +12,8 @@ import { GlobalService } from '../_services/global.service';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { CreateNodeComponent } from './create-node.component';
 import { NodeService } from '../node/node.service';
+import { AuthenticationService } from '../_services/authentication.service';
+import { ChatService } from '../chat/chat.service';
 
 @Component({
   selector: 'app-tree-structure',
@@ -32,6 +34,10 @@ export class TreeStructureComponent implements OnInit {
   private renamingNode: any = null;
   // array of tree nodes
   public nodes = [];
+  // array of nodes that are favorited by the user
+  private favoriteNodeIds: any[] = [];
+  // mapping of {node.name: unreadMessageCount}
+  private unreadMessages: any = {};
 
   // set options for tree
   public options: ITreeOptions = {
@@ -97,16 +103,16 @@ export class TreeStructureComponent implements OnInit {
   }
 
   constructor(
-        private treeStructureService: TreeStructureService, 
-        private treeStructureHttpService: TreeStructureHttpService,
-        private router: Router,
-        private route: ActivatedRoute,
-        private globalService: GlobalService,
-        private dialog: MatDialog,
-        private nodeService: NodeService
-        ) { 
-
-        }
+    private treeStructureService: TreeStructureService, 
+    private treeStructureHttpService: TreeStructureHttpService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private globalService: GlobalService,
+    private dialog: MatDialog,
+    private nodeService: NodeService,
+    private authService: AuthenticationService,
+    private chatService: ChatService
+  ) { }
 
   // IMPORTANT update is needed
   public onMoveNode($event) {
@@ -162,19 +168,42 @@ export class TreeStructureComponent implements OnInit {
         () => console.log('All done getting nodes.')
       );
   }
+
+  toggleFavorite (nodeID) {
+    if (this.favoriteNodeIds.indexOf(nodeID) >= 0) {
+      this.nodeService.unfavoriteNode(nodeID)
+        .subscribe(val => {
+          this.authService.favoriteNodes.next(val)
+        })
+    } else {
+      this.nodeService.favoriteNode(nodeID)
+        .subscribe(val => {
+          this.authService.favoriteNodes.next(val)
+        })
+    }
+  }
   
 
   public ngOnInit() {
     this.route.params.subscribe(params => {
       this.nodeService.node.subscribe(node => {
-        if (node) {
+        if (node !== null) {
           this.getTree(node.node_type, node._id)
           this.nodeType = node.node_type
           this.nodeID = node._id
+
+          this.authService.favoriteNodes.subscribe(favoriteNodes => {
+            this.favoriteNodeIds = favoriteNodes.map(i => i._id)
+            console.log(this.favoriteNodeIds)
+          })
         } else {
           this.nodeService.getNodeDetails(params['id'])
         }
       })
+    })
+
+    this.chatService.unreadMessageTracker.subscribe(unreadMessages => {
+      this.unreadMessages = unreadMessages
     })
     
   }

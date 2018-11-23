@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders, HttpRequest, HttpErrorResponse } from '@angula
 import { AuthenticationService } from './authentication.service';
 import { AlertService } from './alert.service';
 import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
 
 
 @Injectable()
@@ -12,6 +13,7 @@ export class CustomHttpClient {
 
   constructor(
     private http: HttpClient,
+    private router: Router,
     private authService: AuthenticationService,
     private alertService: AlertService
   ) {
@@ -95,6 +97,9 @@ export class CustomHttpClient {
 
   handleError(err: HttpErrorResponse) {
     this.alertService.error(err.message)
+    if (err.status == 401) {
+      this.router.navigate(['/user/login'])
+    }
     return Observable.throw(err.message);
   }
 }

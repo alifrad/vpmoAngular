@@ -12,6 +12,7 @@ import { FuseSidebarComponent } from '@fuse/components/sidebar/sidebar.component
 import { GlobalService } from '../../_services/global.service';
 import { NodeNavigationService } from 'app/node/node-navigation.service';
 import { NodeService } from 'app/node/node.service';
+import { AuthenticationService } from 'app/_services/authentication.service';
 
 @Component({
     selector     : 'fuse-navbar',
@@ -41,7 +42,51 @@ export class FuseNavbarComponent implements OnInit, OnDestroy
     }
 
     @Input() layout;
-    navigation: any;
+    navigation: any = [ 
+        {
+        'id'      : 'general',
+        'title'   : 'General',
+        'type'    : 'group',
+        'url'  : '',
+        'children': [
+        {
+            'id'   : 'home',
+            'title': 'Home',
+            // 'translate': 'NAV.SAMPLE.TITLE',
+            'type' : 'item',
+            'icon' : 'home',
+            'url'  : '/user/dashboard',
+            'hidden' : false,
+        },
+        {
+            'id'   : 'teams',
+            'title': 'My Teams',
+            'type' : 'item',
+            'icon' : 'business_center',
+            'url'  : '/team/all',
+            'hidden' : false,
+        },
+        ]},
+        {
+            'id'      : 'nodePages',
+            'title'   : 'Node',
+            'type'    : 'group',
+            'hidden' : true,
+            // 'icon' : 'business_center',
+            'url'  : '',
+            'children': []
+        },
+        {
+            'id'      : 'favoritesGroup',
+            'title'   : 'FAVOURITES',
+            'type'    : 'group',
+            // 'icon' : 'business_center',
+            'url'  : '',
+            hidden: true,
+            'children': [
+            ]
+        },
+    ];;
     navigationServiceWatcher: Subscription;
     fusePerfectScrollbarUpdateTimeout;
     team: any;
@@ -53,19 +98,45 @@ export class FuseNavbarComponent implements OnInit, OnDestroy
         private nodeService: NodeService,
         private nodeNavigationService: NodeNavigationService,
         private globalService: GlobalService,
+        private authService: AuthenticationService
     )
     {
         // Navigation data
         // this.navigation = navigation;
         nodeNavigationService.navigation.subscribe(
             nav => {
-                // alert('nav: ' + JSON.stringify(nav));
-                this.navigation = nav;
+                this.updateNodeNav(nav)
             }
         );
 
+        authService.favoriteNodes.subscribe(favoriteNodes => {
+            this.updateFavoriteNodesNav(favoriteNodes)
+        })
+
         // Default layout
         this.layout = 'vertical';
+    }
+
+    updateNodeNav (nodeNav) {
+        this.navigation.find(item => item.id == 'nodePages').hidden = false
+        this.navigation.find(item => item.id == 'nodePages').children = nodeNav
+    }
+
+    updateFavoriteNodesNav (favoriteNodes) {
+        this.navigation.find(item => item.id == 'favoritesGroup').hidden = false
+        this.navigation.find(item => item.id == 'favoritesGroup').children = []
+        for (var i = 0; i < favoriteNodes.length; i++) {
+            var child = {
+                'id'   : favoriteNodes[i]._id,
+                'title': favoriteNodes[i].name,
+                // 'translate': 'NAV.SAMPLE.TITLE',
+                'type' : 'item',
+                // 'icon' : 'business_center',
+                'url'  : '/node/'+favoriteNodes[i].node_type+'/'+favoriteNodes[i]._id+'/edit/',
+                'hidden' : false,
+            }
+            this.navigation.find(item => item.id == 'favoritesGroup').children.push(child)
+        }
     }
 
     ngOnInit()

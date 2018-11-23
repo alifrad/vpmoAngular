@@ -13,69 +13,8 @@ export class NodeNavigationService {
     
     node: any;
     nodeLink: string = '';
-    nav: any = [ 
-        {
-        'id'      : 'general',
-        'title'   : 'General',
-        'type'    : 'group',
-        'url'  : '',
-        'children': [
-        {
-            'id'   : 'home',
-            'title': 'Home',
-            // 'translate': 'NAV.SAMPLE.TITLE',
-            'type' : 'item',
-            'icon' : 'home',
-            'url'  : '/user/dashboard',
-            'hidden' : false,
-        },
-        {
-            'id'   : 'teams',
-            'title': 'My Teams',
-            'type' : 'item',
-            'icon' : 'business_center',
-            'url'  : '/team/all',
-            'hidden' : false,
-        },
-        ]},
-        {
-            'id'      : 'nodePages',
-            'title'   : 'Node',
-            'type'    : 'group',
-            'hidden' : true,
-            // 'icon' : 'business_center',
-            'url'  : '',
-            'children': []
-        },
-        {
-            'id'      : 'favouritsGroup',
-            'title'   : 'FAVOURITES',
-            'type'    : 'group',
-            // 'icon' : 'business_center',
-            'url'  : '',
-            'children': [
-                {
-                    'id'   : 'fav001',
-                    'title': 'Issue 123',
-                    // 'translate': 'NAV.SAMPLE.TITLE',
-                    'type' : 'item',
-                    // 'icon' : 'business_center',
-                    'url'  : '',
-                    'hidden' : false,
-                },
-                {
-                    'id'   : 'fav002',
-                    'title': 'Project XYZ',
-                    'type' : 'item',
-                    // 'icon' : 'business_center',
-                    'url'  : '',
-                    'hidden' : false,
-                },
-            ]
-        },
-    ];
 
-    navigation = new BehaviorSubject(this.nav);
+    navigation = new BehaviorSubject([]);
 
     constructor(
         private nodeService: NodeService,
@@ -89,10 +28,8 @@ export class NodeNavigationService {
     }
 
     updateNodeNav (node) {
-        var nav = this.navigation.value
         let urlBase = `/node/${node.node_type}/${node._id}/`;
-        nav.find(item => item.id == 'nodePages').hidden = false
-        nav.find(item => item.id == 'nodePages').children = 
+        var nav = 
             [{
                 'id'   : 'tree',
                 'title': 'Tree',
@@ -146,7 +83,6 @@ export class NodeNavigationService {
                 'url'  : urlBase + 'permissions',
                 'hidden' : false,
             }]
-
         this.navigation.next(nav)
     }
 }

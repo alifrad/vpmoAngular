@@ -6,11 +6,12 @@ import { TranslateModule } from '@ngx-translate/core';
 import { FuseSharedModule } from '@fuse/shared.module';
 
 import { FuseSampleComponent } from './sample.component';
+import { HomeComponent } from 'app/home/home.component';
 
 const routes = [
     {
         path     : 'sample',
-        component: FuseSampleComponent
+        component: HomeComponent
     }
 ];
 

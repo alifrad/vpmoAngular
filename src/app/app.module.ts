@@ -18,7 +18,7 @@ import { fuseConfig } from './fuse-config';
 
 import { AppComponent } from './app.component';
 import { FuseMainModule } from './main/main.module';
-import { FuseSampleModule } from './main/content/sample/sample.module';
+import { HomeModule } from './home/home.module';
 
 import { UserModule } from './user/user.module';
 import { ProjectModule } from './project/project.module';
@@ -90,7 +90,7 @@ import { CustomHttpClient } from './_services/custom-http.service';
 const appRoutes: Routes = [
     {
         path      : '**',
-        redirectTo: 'sample'
+        redirectTo: 'home'
     }
 ];
 
@@ -121,7 +121,7 @@ export function errorHandlerFactory() {
         FuseModule.forRoot(fuseConfig),
         FuseSharedModule,
         FuseMainModule,
-        FuseSampleModule,
+        HomeModule,
         TeamModule,
         UserModule,
         ProjectModule,

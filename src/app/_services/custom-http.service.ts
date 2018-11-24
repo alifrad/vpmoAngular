@@ -98,7 +98,7 @@ export class CustomHttpClient {
   handleError(err: HttpErrorResponse) {
     this.alertService.error(err.message)
     if (err.status == 401) {
-      this.router.navigate(['/user/login'])
+      this.router.navigate(['/user/logout'])
     }
     return Observable.throw(err.message);
   }

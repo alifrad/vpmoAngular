@@ -38,13 +38,14 @@ export class PermissionsComponent implements OnInit, OnDestroy {
   // The roles assignable by the user
   assignableRoles: string[] = [];
   currentUser: any;
+  nodeOwner: string;
 
   private nodeSubscription: Subscription;
   private userPermSubscription: Subscription;
   private currentUserSubscription: Subscription;
 
   ngOnInit() {
-    this.authService.user.subscribe(user => {
+    this.currentUserSubscription = this.authService.user.subscribe(user => {
       this.currentUser = user
     })
 
@@ -52,6 +53,12 @@ export class PermissionsComponent implements OnInit, OnDestroy {
       if (node) {
         this.nodeType = node.node_type
         this.nodeID = node._id
+
+        if (node.user_linked != false && node.user_linked != undefined) {
+          this.nodeOwner = node.user_team
+        } else {
+          this.nodeOwner = ''
+        }
 
         this.getPermissionsList(this.nodeID, this.nodeType);
         this.getAssignableRoles(this.nodeID, this.nodeType);

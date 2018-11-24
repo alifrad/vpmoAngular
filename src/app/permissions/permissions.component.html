@@ -38,7 +38,7 @@
 				    </button>
 		    	</th>
 		    	<td mat-cell *matCellDef="let user">
-				    <button mat-icon-button class="white-icon" (click)="removeUserPermissions(user)" *ngIf="canRemoveUsers()">
+				    <button mat-icon-button class="white-icon" (click)="removeUserPermissions(user)" *ngIf="canRemoveUsers() && !(currentUserRole == 'team_admin' && user._id == currentUser._id)">
 				        <mat-icon> delete </mat-icon>
 				    </button>
 		    	</td>

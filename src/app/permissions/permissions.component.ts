@@ -37,11 +37,17 @@ export class PermissionsComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = ['username', 'role', 'controlsColumn'];
   // The roles assignable by the user
   assignableRoles: string[] = [];
+  currentUser: any;
 
   private nodeSubscription: Subscription;
   private userPermSubscription: Subscription;
+  private currentUserSubscription: Subscription;
 
   ngOnInit() {
+    this.authService.user.subscribe(user => {
+      this.currentUser = user
+    })
+
     this.nodeSubscription = this.nodeService.node.subscribe(node => {
       if (node) {
         this.nodeType = node.node_type
@@ -63,6 +69,7 @@ export class PermissionsComponent implements OnInit, OnDestroy {
   ngOnDestroy () {
     this.nodeSubscription.unsubscribe()
     this.userPermSubscription.unsubscribe()
+    this.currentUserSubscription.unsubscribe()
   }
 
 

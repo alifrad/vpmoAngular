@@ -15,6 +15,7 @@ import { LoadingService } from 'app/_services/loading.service';
     styleUrls  : ['./login.component.scss'],
     animations : fuseAnimations
 })
+
 export class LoginComponent implements OnInit
 {
     loginForm: FormGroup;
@@ -61,7 +62,7 @@ export class LoginComponent implements OnInit
 
         this.loginForm = this.formBuilder.group({
             email   : ['', [Validators.required, Validators.email]],
-            password: ['', Validators.required]
+            password: ['', Validators.required],
         });
 
         this.loginForm.valueChanges.subscribe(() => {

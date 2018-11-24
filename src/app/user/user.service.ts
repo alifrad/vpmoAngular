@@ -27,6 +27,10 @@ export class UserService {
     return this.http.get(searchUrl + query)
   }
 
+  public userExists (queryField: string, query: string): Observable<any> {
+    return this.http.get(appConfig.apiAuthUrl + '/user_exists/?query_field='+queryField+'&query='+query)
+  }
+
   getAll() {
     return this.http.get(appConfig.apiAuthUrl + '/users');
   }

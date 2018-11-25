@@ -14,6 +14,8 @@ import { NodeNavigationService } from 'app/node/node-navigation.service';
 import { NodeService } from 'app/node/node.service';
 import { AuthenticationService } from 'app/_services/authentication.service';
 import { ChatService } from 'app/chat/chat.service';
+import { MatIconRegistry } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
     selector     : 'fuse-navbar',
@@ -63,7 +65,7 @@ export class FuseNavbarComponent implements OnInit, OnDestroy
             'id'   : 'teams',
             'title': 'My Teams',
             'type' : 'item',
-            'icon' : 'business_center',
+            'icon' : 'people',
             'url'  : '/team/all',
             'hidden' : false,
         },
@@ -105,7 +107,9 @@ export class FuseNavbarComponent implements OnInit, OnDestroy
         private nodeNavigationService: NodeNavigationService,
         private globalService: GlobalService,
         private authService: AuthenticationService,
-        private chatService: ChatService
+        private chatService: ChatService,
+        private matIconRegistry: MatIconRegistry,
+        private domSanitizer: DomSanitizer
     )
     {
         // Navigation data
@@ -126,6 +130,12 @@ export class FuseNavbarComponent implements OnInit, OnDestroy
 
         // Default layout
         this.layout = 'vertical';
+        
+        // adding customised icons
+        this.matIconRegistry.addSvgIcon(
+            'teams',
+            this.domSanitizer.bypassSecurityTrustResourceUrl('../../assets/icon/teams.svg')
+        );
     }
 
     updateNodeNav (nodeNav) {
@@ -142,7 +152,7 @@ export class FuseNavbarComponent implements OnInit, OnDestroy
                 'title': favoriteNodes[i].name,
                 // 'translate': 'NAV.SAMPLE.TITLE',
                 'type' : 'item',
-                // 'icon' : 'business_center',
+                'icon' : 'star',
                 'url'  : '/node/'+favoriteNodes[i].node_type+'/'+favoriteNodes[i]._id+'/tree/',
                 'hidden' : false,
             }

@@ -53,6 +53,7 @@ export class LoginComponent implements OnInit
 
     ngOnInit()
     {
+        
         // reset login status
         this.authenticationService.logout();
 
@@ -68,6 +69,8 @@ export class LoginComponent implements OnInit
         this.loginForm.valueChanges.subscribe(() => {
             this.onLoginFormValuesChanged();
         });
+
+        this.loadingService.hide();
     }
 
 

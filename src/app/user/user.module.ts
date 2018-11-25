@@ -16,16 +16,31 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { UserProfileComponent } from './profile/userProfile.component';
 import { MatInputModule, MatButtonModule, MatCardModule, MatAutocompleteModule } from '@angular/material';
 import { TeamCardComponent } from './dashboard/team-card.component';
+import { LoginComponent } from './login-2/login.component';
 
 const UserRoutes: Routes = [
     {
         path: 'user',
         component: UserComponent,
         children: [
-            // { path: 'login', component: LoginComponent },
-            { path: 'signup', component: SignUpComponent },
-            { path: 'dashboard', component: DashboardComponent },
-            { path: 'profile', component: UserProfileComponent }
+            { 
+                path: 'login', 
+                component: LoginComponent,         
+            },
+            { 
+                path: 'signup', 
+                component: SignUpComponent 
+            },
+            { 
+                path: 'dashboard', 
+                component: DashboardComponent,
+                canActivate: [ AuthGuard ]
+            },
+            { 
+                path: 'profile', 
+                component: UserProfileComponent,
+                canActivate: [ AuthGuard ], 
+            }
             // { path: '', component: AdminMenuComponent, canActivate: [UserService] }
         ]
     },

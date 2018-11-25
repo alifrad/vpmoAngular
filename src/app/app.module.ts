@@ -171,9 +171,10 @@ export function errorHandlerFactory() {
         LoadingService,
         HttpCacheService,
         CustomHttpClient,
-        { provide: ErrorHandler, useFactory: errorHandlerFactory },
+        { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor , multi: true },
+        // { provide: ErrorHandler, useFactory: errorHandlerFactory },
         { provide: HTTP_INTERCEPTORS, useClass: CacheInterceptor , multi: true },
-        { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor , multi: true }
+        
       ],
     
 })

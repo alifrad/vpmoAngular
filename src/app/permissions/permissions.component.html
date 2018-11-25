@@ -18,7 +18,7 @@
 		        		On select change, assign the new selected role to the user
 		       	-->
 		        <td mat-cell *matCellDef="let user">
-		        	<mat-form-field *ngIf="canEditUserRoles()">
+		        	<mat-form-field *ngIf="canEditUserRoles() && !(currentUserRole == 'team_admin' && user._id == currentUser._id) && !(nodeOwner == 'team@'+user.username)">
 					  <mat-select [(value)]="user.role" (selectionChange)="assignRole($event.value, user)">
 					    <mat-option *ngFor="let role of assignableRoles" [value]="role">
 					      {{ role }}

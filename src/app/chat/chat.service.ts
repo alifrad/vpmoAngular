@@ -42,6 +42,8 @@ export class ChatService {
   public chatClient = new BehaviorSubject(null);
   public userChannels = new BehaviorSubject([]);
   public unreadMessageTracker = new BehaviorSubject({});
+  // Chat component listens to this and adds to display if message is added on active channel
+  public messages = new BehaviorSubject(null);
 
   // This is called whenever there is a new login
   getChatClient (user) {
@@ -51,10 +53,18 @@ export class ChatService {
     this.getToken(user).subscribe(response => {
       var token = response.token
       Twilio.Chat.Client.create(token).then(client => {
-        console.log('Connected as ', client)
         that.getUserChannels(client)
         that.chatClient.next(client)
         that.loadingService.hide()
+
+        client.on('messageAdded', function(message) {
+          var unreadMessages = that.unreadMessageTracker.value
+          if (unreadMessages[message.channel.friendlyName] !== undefined) {
+            unreadMessages[message.channel.friendlyName] = unreadMessages[message.channel.friendlyName] + 1
+          }
+          that.unreadMessageTracker.next(unreadMessages)
+          that.messages.next(message)
+        })
 
         client.on('channelAdded', function (channel) {
           that.channelAdded(channel)
@@ -86,7 +96,6 @@ export class ChatService {
     }
     that.updateChannelUnread(channel)
 
-    // TODO: Add event listeners (onMessageAdded) here which updated unread messages on newMessage addition
   }
 
   updateChannelUnread (channel) {
@@ -95,7 +104,11 @@ export class ChatService {
     var unreadMessages = that.unreadMessageTracker.value
 
     channel.getUnconsumedMessagesCount().then(function (c) {
-      unreadMessages[channel.friendlyName] = c
+      if (c == null) {
+        unreadMessages[channel.friendlyName] = channel.lastMessage.index+1
+      } else {
+        unreadMessages[channel.friendlyName] = c
+      }
       that.unreadMessageTracker.next(unreadMessages)
     })
   }

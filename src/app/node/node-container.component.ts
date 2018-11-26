@@ -9,6 +9,7 @@ import { ActivatedRoute } from '@angular/router';
 export class NodeContainerComponent implements OnInit {
 
   contentType: any;
+  nodeID: any;
 
   constructor(
     private route: ActivatedRoute
@@ -17,8 +18,7 @@ export class NodeContainerComponent implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       this.contentType = params['contentType'];
-        
-      
+      this.nodeID = params['id']
     })
   }
 

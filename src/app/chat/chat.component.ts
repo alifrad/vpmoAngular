@@ -1,8 +1,11 @@
-import { Component, OnInit, OnDestroy, ViewChild, AfterViewChecked, AfterViewInit, IterableDiffers, DoCheck } from '@angular/core';
+import { Component, OnInit, OnDestroy,
+          ViewChild, AfterViewChecked, AfterViewInit,
+          IterableDiffers, DoCheck, Input } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ChatService } from './chat.service';
 import { AuthenticationService } from '../_services';
 import { appConfig } from '../app.config';
+import { Subscription } from 'rxjs/Subscription';
 
 declare const Twilio: any
 
@@ -12,7 +15,9 @@ declare const Twilio: any
   styleUrls: ['./chat.component.less']
 })
 
-export class ChatComponent implements OnInit {
+export class ChatComponent implements OnInit, OnDestroy {
+
+  @Input() nodeID: string;
 
   constructor(
     private router: Router,
@@ -28,14 +33,16 @@ export class ChatComponent implements OnInit {
 
   differ: any;
   messages: any[] = [];
-  nodeID: string;
   chatToken: string;
   chatClient: any;
-  channel: any;
+  channel: any = null;
   currentUser: any;
   unreadMessageCount: any;
   pageSize: any = 15;
 
+  userSubscription: Subscription;
+  clientSubscription: Subscription;
+  messageSubscription: Subscription;
 
   scrollToBottom(){
     if(this.chatContainer) {
@@ -49,7 +56,7 @@ export class ChatComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.authService.user.subscribe(user => {
+    this.userSubscription = this.authService.user.subscribe(user => {
       if (user) {
         this.currentUser = user.username
       } else {
@@ -57,21 +64,39 @@ export class ChatComponent implements OnInit {
       }
     })
     
-    this.route.params.subscribe(
-      params => {
-        this.nodeID = params['id'];
-        this._chatService.chatClient.subscribe(chatClient => {
-          if (chatClient) {
-            this.chatClient = chatClient
-            var that = this
-            this.chatClient.getSubscribedChannels().then(function (resp) {
-              that.getChannel()
-            })
-          }
+    this.clientSubscription = this._chatService.chatClient.subscribe(chatClient => {
+      if (chatClient) {
+        this.chatClient = chatClient
+        var that = this
+        this.chatClient.getSubscribedChannels().then(function (resp) {
+          that.getChannel()
         })
       }
-    );
+    })
 
+    this.messageSubscription = this._chatService.messages.subscribe(message => {
+      if (message) {
+        this.messageAdded(message)
+      }
+    })
+  }
+
+  ngOnDestroy () {
+    this.userSubscription.unsubscribe();
+    this.clientSubscription.unsubscribe();
+    this.messageSubscription.unsubscribe();
+  }
+
+  messageAdded (message) {
+    if (this.channel != null && message.channel.sid == this.channel.sid) {
+      if (this.messages.length == 0 || message.index == this.messages[this.messages.length-1].index+1) {
+        this.messages.push(message)
+
+        this.updateLastConsumed(message.index)
+
+        this.scrollToBottom()
+      }
+    }
   }
 
   getChannel () {
@@ -94,7 +119,6 @@ export class ChatComponent implements OnInit {
     }
 
     // Getting messages forwards from the last seen message
-    console.log('Last Message', lastSeenIndex, this.channel.lastMessage)
     if (this.channel.lastMessage && lastSeenIndex > this.channel.lastMessage.index-14) {
       // If last seen index was in the last page, just get the last page
       if (this.channel.lastMessage.index <= 15) {
@@ -107,9 +131,9 @@ export class ChatComponent implements OnInit {
       this.getMessages(lastSeenIndex, 'forwards')
     }
     
-
+    /*
     this.channel.on('messageAdded', function (message) {
-      if (message.index == that.messages[that.messages.length-1].index+1) {
+      if (that.messages.length == 0 || message.index == that.messages[that.messages.length-1].index+1) {
         that.messages.push(message)
 
         that.updateLastConsumed(message.index)
@@ -117,6 +141,7 @@ export class ChatComponent implements OnInit {
         that.scrollToBottom()
       }
     })
+    */
   }
 
 

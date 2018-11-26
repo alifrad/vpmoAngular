@@ -6,9 +6,9 @@
                   <span class="card-title">
                       register as a new user {{ registerForm.hasError('emailNotSame')}}
                   </span>
-                  <form class="col s12 white" [formGroup]="registerForm" (ngSubmit)="OnSubmit(registerForm)">
+                  <form class="col s12 white" #form="ngForm" [formGroup]="registerForm" (ngSubmit)="OnSubmit(registerForm)">
                     <mat-form-field>
-                      <input matInput placeholder="Email" formControlName="email">
+                      <input matInput placeholder="Email" formControlName="email" required>
                       <mat-error *ngIf="registerForm.get('email').errors && registerForm.get('email').errors.required">
                         Email is required
                       </mat-error>
@@ -21,14 +21,14 @@
                     </mat-form-field>
 
                     <mat-form-field>
-                      <input matInput placeholder="Confirm Email" formControlName="email2">
+                      <input matInput placeholder="Confirm Email" formControlName="email2" required>
                       <mat-error *ngIf="registerForm.get('email2').errors && registerForm.get('email2').errors.emailNotSame">
                         Emails do not match
                       </mat-error>
                     </mat-form-field>
 
                     <mat-form-field>
-                      <input matInput placeholder="Username" formControlName="username">
+                      <input matInput placeholder="Username" formControlName="username" required>
                       <mat-error *ngIf="registerForm.get('username').errors && registerForm.get('username').errors.required">
                         Username is required
                       </mat-error>
@@ -45,13 +45,15 @@
                     </mat-form-field>
 
                     <mat-form-field>
-                      <input matInput type="password" placeholder="Password" formControlName="password">
+                      <input matInput type="password" placeholder="Password" formControlName="password" required>
                         <mat-error *ngIf="registerForm.get('password').errors && registerForm.get('password').errors.required">
                           Password is required
                       </mat-error>
                     </mat-form-field>
                       
-                    <button type="submit" mat-raised-button color="primary">Sign Up</button>
+                    <button type="submit" mat-raised-button color="primary" [disabled]="form.invalid">
+                      Sign Up
+                    </button>
                   </form>
           </div>
         </div>

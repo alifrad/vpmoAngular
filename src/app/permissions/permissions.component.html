@@ -25,6 +25,9 @@
 					    </mat-option>
 					  </mat-select>
 					</mat-form-field>
+					<span *ngIf="canEditUserRoles() && (currentUserRole == 'team_admin' && user._id == currentUser._id)">
+		        		{{ user.role }}
+		        	</span>
 					<span *ngIf="!canEditUserRoles()">
 		        		{{ user.role }}
 		        	</span>

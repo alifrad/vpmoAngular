@@ -18,7 +18,6 @@ export class LoadingComponent {
     ngOnInit() {
 	    this._loadingService.showOverlay.subscribe(value => {
 	    	this.showOverlay = value
-	    	console.log('Loading', value)
 	    })
 	  }
 }

@@ -228,7 +228,6 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   private sendMessage (msg) {
-    console.log('Sending', msg)
     this.channel.sendMessage(msg)
   }
 

@@ -19,7 +19,7 @@ export class DashboardComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.fullname = this.authService.getUserName()
+    this.fullname = this.authService.getUser().fullname;
     console.log(this.fullname);
     this.chatService.unreadMessageTracker.subscribe(unreadMessages => {
     	this.unreadMessages = unreadMessages

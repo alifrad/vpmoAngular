@@ -118,7 +118,7 @@ export class FuseToolbarComponent implements OnInit {
     ngOnInit() {
         // debugger;
 
-        this.fullname = this.authService.getUserName()
+        // this.fullname = this.authService.getUserName()
     }
 
     toggleSidebarOpened(key)

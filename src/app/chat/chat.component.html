@@ -1,39 +1,50 @@
-<div class="chat-container">
-	<!--
-	<mat-list>		
-		<mat-list-item *ngFor="let message of messages; let i = index; let last = last">
-			
-				<img matListAvatar src="http://lorempixel.com/40/40/people/{{i}}" />
+<div class="chat" fxFlex fxLayout="column">
+	<!-- <div class="chat-container"> -->
+		<!--
+		<mat-list>		
+			<mat-list-item *ngFor="let message of messages; let i = index; let last = last">
 				
-				
-					<h3 matLine class="cursor-pointer"> {{ message.author }} </h3>
-					<p matLine>
-						<span>{{ message.content }}</span>
-					</p>
-				
-					<h5>{{ message.sent_on | date:'dd-MMM-yyyy @ h:mma' }}</h5>
+					<img matListAvatar src="http://lorempixel.com/40/40/people/{{i}}" />
+					
+					
+						<h3 matLine class="cursor-pointer"> {{ message.author }} </h3>
+						<p matLine>
+							<span>{{ message.content }}</span>
+						</p>
+					
+						<h5>{{ message.sent_on | date:'dd-MMM-yyyy @ h:mma' }}</h5>
 
-				<mat-divider *ngIf="!last"></mat-divider>
-			
-		</mat-list-item>
-	</mat-list>
--->
+					<mat-divider *ngIf="!last"></mat-divider>
+				
+			</mat-list-item>
+		</mat-list>
+	-->
 	<h5 style="margin: 0;">Unread Messages: {{ unreadMessageCount }}</h5>
-	<div id="device">
-	  	<div #chatContainer class="chat" (scroll)="onScroll($event)">
-		    <div class="message" [ngClass]="{'me': message.author == currentUser}" *ngFor="let message of messages;">
-		        <img src="../../assets/icons/Team-T-Icon.svg" height="72" width="72"/>
-		        <!-- message.author available here as well -->
-		        <div><p>{{ message.body }}</p></div>
-		    </div>
-		    <!-- add class me if user is currentuser
-		    <div class="message">
-		        <img src="../../assets/icons/Team-T-Icon.svg" height="72" width="72"/>
-		        <div><p>Aliquam gravida semper pharetra.</p></div>
-		    </div>
-		    -->
+
+	<div id="chat-content" fxFlex="1 1 auto" (scroll)="onScroll($event)">
+		<div class="chat-messages">
+			<div class="message-row" *ngFor="let message of messages;" 
+				[ngClass]="{
+					'me': message.author === currentUser,
+					'contact': message.author !== currentUser
+				}">
+				<img src="../../assets/icons/Team-T-Icon.svg" class="avatar"/>
+				<!-- message.author available here as well -->
+				<div class="bubble">
+					<div class="message">{{ message.body }}</div>
+					<div class="time secondary-text">time</div>
+				</div>
+				
+			</div>
+			<!-- add class me if user is currentuser
+			<div class="message">
+				<img src="../../assets/icons/Team-T-Icon.svg" height="72" width="72"/>
+				<div><p>Aliquam gravida semper pharetra.</p></div>
+			</div>
+			-->
 		</div>
 	</div>
+	<!-- </div> -->
 </div>
 
 <mat-form-field class="chat-inp full-width">

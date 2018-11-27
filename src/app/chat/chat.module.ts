@@ -14,12 +14,15 @@ import {
   MatButtonModule, 
   MatCardModule, 
   MatListModule, 
-  MatDividerModule 
+  MatDividerModule,
+  MatMenuModule,
+  MatRadioModule
 } from '@angular/material';
 
 import { AuthGuard } from '../_guards/auth.guard';
 import { ChatComponent } from './chat.component';
 import { ChatService } from './chat.service';
+import { FuseSharedModule } from '../../@fuse/shared.module';
 
 const ChatRoutes: Routes = [
   {
@@ -46,6 +49,9 @@ const ChatRoutes: Routes = [
     MatListModule,
     MatIconModule,
     MatDividerModule,
+    MatMenuModule,
+    MatRadioModule,
+    FuseSharedModule
   ],
   declarations: [
     ChatComponent,

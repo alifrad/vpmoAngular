@@ -1,7 +1,7 @@
 <app-nodepage></app-nodepage>
 <mat-divider></mat-divider>
 <app-node-edit *ngIf="contentType=='edit'"></app-node-edit>
-<app-chat [nodeID]="nodeID" *ngIf="contentType=='chat'"></app-chat>
+<app-chat [nodeID]="nodeID" [nodeType]="nodeType" *ngIf="contentType=='chat'"></app-chat>
 <app-tree-structure *ngIf="contentType=='tree'"></app-tree-structure>
 <app-permissions *ngIf="contentType=='permissions'"></app-permissions>
 <app-documents-list *ngIf="contentType=='documents'"></app-documents-list>

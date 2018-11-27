@@ -10,6 +10,7 @@ export class NodeContainerComponent implements OnInit {
 
   contentType: any;
   nodeID: any;
+  nodeType: any;
 
   constructor(
     private route: ActivatedRoute
@@ -19,6 +20,7 @@ export class NodeContainerComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.contentType = params['contentType'];
       this.nodeID = params['id']
+      this.nodeType = params['type']
     })
   }
 

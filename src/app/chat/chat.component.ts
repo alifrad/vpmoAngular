@@ -6,24 +6,27 @@ import { ChatService } from './chat.service';
 import { AuthenticationService } from '../_services';
 import { appConfig } from '../app.config';
 import { Subscription } from 'rxjs/Subscription';
+import { NodeService } from '../node/node.service';
 
 declare const Twilio: any
 
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
-  styleUrls: ['./chat.component.less']
+  styleUrls: ['./chat.component.scss']
 })
 
 export class ChatComponent implements OnInit, OnDestroy {
 
   @Input() nodeID: string;
+  @Input() nodeType: string;
 
   constructor(
     private router: Router,
     private _chatService: ChatService,
     private authService: AuthenticationService,
     private route: ActivatedRoute,
+    private nodeService: NodeService,
     differs: IterableDiffers
   ) {
     this.differ = differs.find([]).create(null);
@@ -39,10 +42,12 @@ export class ChatComponent implements OnInit, OnDestroy {
   currentUser: any;
   unreadMessageCount: any;
   pageSize: any = 15;
+  currentUserPermissions: string[] = [];
 
   userSubscription: Subscription;
   clientSubscription: Subscription;
   messageSubscription: Subscription;
+  permissionsSubscription: Subscription;
 
   scrollToBottom(){
     if(this.chatContainer) {
@@ -79,12 +84,30 @@ export class ChatComponent implements OnInit, OnDestroy {
         this.messageAdded(message)
       }
     })
+
+    this.permissionsSubscription = this.nodeService.userPermissions.subscribe(permissions => {
+      if (permissions) {
+        this.currentUserPermissions = permissions.permissions
+        if (!this.canChat() && permissions.permissions.indexOf('update_'+this.nodeType.toLowerCase()) >= 0){
+          this.getChannel()
+        }
+      }
+    })
   }
 
   ngOnDestroy () {
     this.userSubscription.unsubscribe();
     this.clientSubscription.unsubscribe();
     this.messageSubscription.unsubscribe();
+    this.permissionsSubscription.unsubscribe();
+  }
+
+  canChat () {
+    if (this.currentUserPermissions.indexOf('update_'+this.nodeType.toLowerCase()) >= 0) {
+      return true
+    } else {
+      return false
+    }
   }
 
   messageAdded (message) {
@@ -205,6 +228,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   private sendMessage (msg) {
+    console.log('Sending', msg)
     this.channel.sendMessage(msg)
   }
 

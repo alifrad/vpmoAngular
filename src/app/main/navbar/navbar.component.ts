@@ -165,7 +165,6 @@ export class FuseNavbarComponent implements OnInit, OnDestroy
                     title: 0
                 }
             }
-            console.log('Unread Messages Updated', unreadMessages)
             this.navigation.find(item => item.id == 'favoritesGroup').children.push(child)
         }
     }

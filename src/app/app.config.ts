@@ -1,6 +1,6 @@
 export const appConfig = {
-    apiUrl: 'http://127.0.0.1:8000/vpmoapp/api',
-    docApiUrl: 'http://127.0.0.1:8000/vpmodoc/api',
-    apiAuthUrl: 'http://127.0.0.1:8000/vpmoauth/api',
-    chatUrl: 'http://127.0.0.1:8000/chat'
+    apiUrl: 'http://gingercomms.radconsultants.com.au/vpmoapp/api',
+    docApiUrl: 'http://gingercomms.radconsultants.com.au/vpmodoc/api',
+    apiAuthUrl: 'http://gingercomms.radconsultants.com.au/vpmoauth/api',
+    chatUrl: 'http://gingercomms.radconsultants.com.au/chat'
 };

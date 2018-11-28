@@ -2,16 +2,18 @@
 
 	<div id="chat-content" fusePerfectScrollbar fxFlex="1 1 auto" (scroll)="onScroll($event)" #chatContainer>
 		<div class="chat-messages">
-			<div class="message-row" *ngFor="let message of messages;" 
+			<div class="message-row" *ngFor="let message of messages; let i = index" 
 				[ngClass]="{
-					'me': message.author === currentUser,
-					'contact': message.author !== currentUser
+					'me': message.author === currentUser.username,
+					'contact': message.author !== currentUser.username,
+                    'last-of-group': isLastMessageOfGroup(message, i)
 				}">
-				<img *ngIf="message.author !== currentUser" src="../../assets/icons/Team-T-Icon.svg" class="avatar"/>
+				<img *ngIf="message.author !== currentUser.username && message.attributes.authorAvatar == null" src="../../assets/icons/Team-T-Icon.svg" class="avatar"/>
+				<img *ngIf="message.author !== currentUser.username && message.attributes.authorAvatar != null" [src]="message.attributes.authorAvatar" class="avatar"/>
 				<!-- message.author available here as well -->
 				<div class="bubble">
 					<div class="message">{{ message.body }}</div>
-					<div class="time secondary-text">time</div>
+					<div class="time secondary-text">{{message.attributes.authorName}}</div>
 				</div>
 				
 			</div>

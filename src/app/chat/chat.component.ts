@@ -63,7 +63,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.userSubscription = this.authService.user.subscribe(user => {
       if (user) {
-        this.currentUser = user.username
+        this.currentUser = user
       } else {
         this.currentUser = ''
       }
@@ -228,7 +228,14 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   private sendMessage (msg) {
-    this.channel.sendMessage(msg)
+    this.channel.sendMessage(msg, {
+      authorName: this.currentUser.fullname,
+      authorAvatar: this.currentUser.avatar
+    })
+  }
+
+  isLastMessageOfGroup(message, index) {
+    return (index == this.messages.length-1 || this.messages[index+1] && this.messages[index+1].author != message.author)
   }
 
 }

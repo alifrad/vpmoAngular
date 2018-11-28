@@ -1,7 +1,9 @@
 <mat-form-field class="full-width">
-	<input (ngModelChange)="filterUsers($event)" type="text" placeholder="Task Assignee" matInput [matAutocomplete]="auto" [(ngModel)]="selectedUser">
+	<input (ngModelChange)="filterUsers($event)" type="text" placeholder="User" matInput [matAutocomplete]="auto" [(ngModel)]="selectedUser">
 	<mat-autocomplete #auto="matAutocomplete">
 		<mat-option *ngFor="let option of filteredAssignableUsers" [value]="option.username">
+			<img *ngIf="option.avatar == null" class="avatar" src="assets/images/avatars/profile.jpg">
+			<img *ngIf="option.avatar != null" class="avatar" [src]="option.avatar">
 			<span>{{option.fullname}}</span> |
 			<small>email: {{option.email}} |
 				username: {{option.username}}

@@ -4,6 +4,7 @@ import { UserService } from './user.service';
 @Component({
   selector: 'user-search',
   templateUrl: './user-search.component.html',
+  styleUrls: ['user-search.component.scss']
 })
 
 

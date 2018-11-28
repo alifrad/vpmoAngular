@@ -17,6 +17,7 @@ import { UserProfileComponent } from './profile/userProfile.component';
 import { MatInputModule, MatButtonModule, MatCardModule, MatAutocompleteModule } from '@angular/material';
 import { TeamCardComponent } from './dashboard/team-card.component';
 import { LoginComponent } from './login-2/login.component';
+import { ImageCropperModule } from 'ngx-image-cropper';
 
 const UserRoutes: Routes = [
     {
@@ -61,7 +62,8 @@ const UserRoutes: Routes = [
         MatInputModule,
         MatButtonModule,
         MatCardModule,
-        MatAutocompleteModule
+        MatAutocompleteModule,
+        ImageCropperModule
     ],
     exports: [
         SignUpComponent,

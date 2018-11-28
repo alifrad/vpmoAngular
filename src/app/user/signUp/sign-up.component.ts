@@ -33,6 +33,8 @@ export class SignUpComponent implements OnInit {
   emailPattern = '^[a-z0-9.%+-]+@[a-z0-9.%-]+\.[a-z]{2,4}$';
   message: string;
   registerForm: FormGroup;
+  avatar: any = null;
+  avatarSelectedEvent: any = '';
 
 
   constructor(
@@ -87,8 +89,31 @@ export class SignUpComponent implements OnInit {
   }
 
 
+  avatarSelected (e) {
+    if (e.target.files.length > 0) {
+      this.avatarSelectedEvent = e
+    } else {
+      this.avatar = null
+    }
+  }
+
+  avatarCropped (e) {
+    let fReader = new FileReader()
+    var that = this
+    fReader.onload = function (e) {
+      that.avatar = fReader.result.split(',')[1]
+    }
+    fReader.readAsDataURL(e.file)
+  }
+
+
   OnSubmit(registerForm) {
-    this.userService.create(registerForm.getRawValue())
+    var registerData = registerForm.value
+    if (this.avatar != null) {
+      registerData.avatar = this.avatar
+    }
+
+    this.userService.create(registerData)
       .subscribe(
         data => {console.log('success: ', data);
                 this.router.navigate(['/user/login']);

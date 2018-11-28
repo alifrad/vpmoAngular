@@ -39,8 +39,7 @@
             flex: 1 1 auto;
             box-sizing: border-box;
             -webkit-overflow-scrolling: touch;
-            max-height: 20em;
-            min-height: 20em;
+            height: 20em;
 
             .chat-messages {
                 position: relative;

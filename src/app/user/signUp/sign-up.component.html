@@ -7,6 +7,17 @@
                       register as a new user {{ registerForm.hasError('emailNotSame')}}
                   </span>
                   <form class="col s12 white" #form="ngForm" [formGroup]="registerForm" (ngSubmit)="OnSubmit(registerForm)">
+
+                    <input (change)="avatarSelected($event)" id="input-file-id" multiple type="file" multiple />
+                    <image-cropper
+                      [imageChangedEvent]="avatarSelectedEvent"
+                      [maintainAspectRatio]="true"
+                      [aspectRatio]="4 / 3"
+                      [resizeToWidth]="128"
+                      format="png"
+                      (imageCropped)="avatarCropped($event)"
+                    ></image-cropper>
+
                     <mat-form-field>
                       <input matInput placeholder="Email" formControlName="email" required>
                       <mat-error *ngIf="registerForm.get('email').errors && registerForm.get('email').errors.required">

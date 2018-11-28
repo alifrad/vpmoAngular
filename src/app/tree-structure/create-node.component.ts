@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, Inject, EventEmitter } from '@angular/cor
 import { TreeStructureHttpService } from './tree-structure-http.service';
 import { MAT_DIALOG_DATA } from '@angular/material';
 import { TasksService } from 'app/tasks/tasks.service';
+import { LoadingService } from '../_services/loading.service';
 
 @Component({
 	selector: 'app-create-node',
@@ -22,6 +23,7 @@ export class CreateNodeComponent implements OnInit {
 	constructor(
 		private treeStructureHttpService: TreeStructureHttpService,
 		private _tasksService: TasksService,
+		private loadingService: LoadingService,
 		@Inject(MAT_DIALOG_DATA) public data: any
 	) { }
 
@@ -84,8 +86,10 @@ export class CreateNodeComponent implements OnInit {
 
 	createNode() {
 		const self = this;
+		this.loadingService.show()
 		this.treeStructureHttpService.createNode(this.createNodeFormData, this.selectedNodeType)
 			.subscribe(response => {
+				self.loadingService.hide()
 				self.onCreate.emit(response);
 			});
 	}

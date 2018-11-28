@@ -9,6 +9,7 @@ import { navigation } from 'app/navigation/navigation';
 import { AuthenticationService } from 'app/_services/authentication.service';
 import { GlobalService } from '../../_services/global2.service';
 import { Observable } from 'rxjs';
+import { Subscription } from 'rxjs/Subscription';
 
 
 @Component({
@@ -27,9 +28,8 @@ export class FuseToolbarComponent implements OnInit {
     navigation: any;
     title = 'app';
     isLoggedIn: boolean;
-    user: any;
+    user: any = null;
     fullname: any;
-
 
     constructor(
         private router: Router,
@@ -37,7 +37,7 @@ export class FuseToolbarComponent implements OnInit {
         private sidebarService: FuseSidebarService,
         private translate: TranslateService,
         private authService: AuthenticationService,
-        private globalService: GlobalService,
+        private globalService: GlobalService
     )
     {
         this.userStatusOptions = [
@@ -108,6 +108,7 @@ export class FuseToolbarComponent implements OnInit {
                 this.fullname = this.user.fullname
                 this.isLoggedIn = true
             } else {
+                this.user = null
                 this.fullname = ''
                 this.isLoggedIn = false
             }

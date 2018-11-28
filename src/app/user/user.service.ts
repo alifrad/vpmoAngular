@@ -19,6 +19,7 @@ export class UserService {
 
   constructor(
     private http: CustomHttpClient,
+    private genericHttp: HttpClient,
     private messageService: MessageService,
     private authService: AuthenticationService,
     private alertService: AlertService
@@ -41,7 +42,14 @@ export class UserService {
   }
 
   create(user: User) {
-      return this.http.post(appConfig.apiAuthUrl + '/users/register/', user);
+    var formData = new FormData()
+    for (var key in user) {
+      if (user.hasOwnProperty(key)) {
+        formData.append(key, user[key])
+      }
+    }
+    console.log(formData)
+    return this.genericHttp.post(appConfig.apiAuthUrl + '/users/register/', formData);
   }
 
   // update(user: User) {

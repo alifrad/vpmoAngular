@@ -59,8 +59,8 @@ export class ChatService {
 
         client.on('messageAdded', function(message) {
           var unreadMessages = that.unreadMessageTracker.value
-          if (unreadMessages[message.channel.friendlyName] !== undefined) {
-            unreadMessages[message.channel.friendlyName] = unreadMessages[message.channel.friendlyName] + 1
+          if (unreadMessages[message.channel.uniqueName] !== undefined) {
+            unreadMessages[message.channel.uniqueName] = unreadMessages[message.channel.uniqueName] + 1
           }
           that.unreadMessageTracker.next(unreadMessages)
           that.messages.next(message)
@@ -69,6 +69,13 @@ export class ChatService {
         client.on('channelAdded', function (channel) {
           that.channelAdded(channel)
         })
+
+        client.on('channelJoined', function(channel) {
+          that.channelAdded(channel)
+        })
+
+        // Add listener for client.on('tokenAboutToExpire', xx) 
+        //  To update chat token when it's about to expire
       })
     })
   }
@@ -90,9 +97,13 @@ export class ChatService {
 
   channelAdded (channel) {
     var that = this
+    var userChannels = that.userChannels.value
 
-    if (that.userChannels.value.indexOf(channel) <= -1) {
-      that.userChannels.next(that.userChannels.value.concat([channel]))
+    if (userChannels.filter(i => i.uniqueName == channel.uniqueName).length == 0) {
+      that.userChannels.next(userChannels.concat([channel]))
+    } else {
+      userChannels[userChannels.indexOf(userChannels.filter(i => i.uniqueName == channel.uniqueName))] = channel
+      that.userChannels.next(userChannels)
     }
     that.updateChannelUnread(channel)
 
@@ -106,12 +117,12 @@ export class ChatService {
     channel.getUnconsumedMessagesCount().then(function (c) {
       if (c == null) {
         if (channel.lastMessage == undefined) {
-          unreadMessages[channel.friendlyName] = 0
+          unreadMessages[channel.uniqueName] = 0
         } else {
-          unreadMessages[channel.friendlyName] = channel.lastMessage.index+1
+          unreadMessages[channel.uniqueName] = channel.lastMessage.index+1
         }
       } else {
-        unreadMessages[channel.friendlyName] = c
+        unreadMessages[channel.uniqueName] = c
       }
       that.unreadMessageTracker.next(unreadMessages)
     })

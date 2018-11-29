@@ -148,7 +148,7 @@ export class FuseNavbarComponent implements OnInit, OnDestroy
         this.navigation.find(item => item.id == 'favoritesGroup').children = []
         for (var i = 0; i < favoriteNodes.length; i++) {
             var child = {
-                'id'   : favoriteNodes[i].name,
+                'id'   : favoriteNodes[i]._id,
                 'title': favoriteNodes[i].name,
                 // 'translate': 'NAV.SAMPLE.TITLE',
                 'type' : 'item',
@@ -156,9 +156,9 @@ export class FuseNavbarComponent implements OnInit, OnDestroy
                 'url'  : '/node/'+favoriteNodes[i].node_type+'/'+favoriteNodes[i]._id+'/tree/',
                 'hidden' : false,
             }
-            if (unreadMessages[child.title] !== undefined) {
+            if (unreadMessages[child.id] !== undefined) {
                 child['badge'] = {
-                    title: unreadMessages[child.title]
+                    title: unreadMessages[child.id]
                 }
             } else {
                 child['badge'] = {

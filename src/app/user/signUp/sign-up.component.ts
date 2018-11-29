@@ -119,7 +119,7 @@ export class SignUpComponent implements OnInit {
                 this.router.navigate(['/user/login']);
         },
         error => {console.log('error: ', error);
-                this.alertService.error(error);
+                this.alertService.error(error.message);
         }
       );
   }

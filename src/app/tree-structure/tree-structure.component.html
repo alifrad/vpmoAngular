@@ -36,7 +36,7 @@
           <mat-icon> edit </mat-icon>
         </button>
         <button *ngIf="unreadMessages[node.data.name] !== undefined" mat-icon-button class="unread-badge" (click)="startRenaming(node)">
-          {{ unreadMessages[node.data.name] }}
+          {{ unreadMessages[node.data._id] }}
         </button>
         <button mat-icon-button class="white-icon" (click)="viewDetail(node)">
           <mat-icon> navigate_next </mat-icon>

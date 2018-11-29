@@ -8,7 +8,7 @@
 					'contact': message.author !== currentUser.username,
                     'last-of-group': isLastMessageOfGroup(message, i)
 				}">
-				<img *ngIf="message.author !== currentUser.username && message.attributes.authorAvatar == null" src="../../assets/icons/Team-T-Icon.svg" class="avatar"/>
+				<img *ngIf="message.author !== currentUser.username && message.attributes.authorAvatar == null" src="../../assets/images/avatars/profile.jpg" class="avatar"/>
 				<img *ngIf="message.author !== currentUser.username && message.attributes.authorAvatar != null" [src]="message.attributes.authorAvatar" class="avatar"/>
 				<!-- message.author available here as well -->
 				<div class="bubble">

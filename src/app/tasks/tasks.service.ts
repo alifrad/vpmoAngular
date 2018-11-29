@@ -13,7 +13,7 @@ import { HttpErrorResponse } from '@angular/common/http/src/response';
 
 @Injectable()
 export class TasksService {
-	private readonly apiUrl: string = `${appConfig.apiUrl}`;
+	private readonly apiUrl: string = `${appConfig.taskApiUrl}`;
 	private readonly getAssignedTasksUrl: string = this.apiUrl + '/list_assigned_tasks/';
 	private readonly getAssignableUsersUrl: string = this.apiUrl + '/assignable_task_users/';
 	private readonly createDeleteUpdateTaskUrl: string = this.apiUrl + '/delete_update_create_task/';

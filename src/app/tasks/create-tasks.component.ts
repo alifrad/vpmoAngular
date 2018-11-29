@@ -30,7 +30,7 @@ export class CreateTasksComponent implements OnInit {
 	ngOnInit () {
 		this.nodeID = this.data.nodeID;
    		this.nodeType = this.data.nodeType;
-   		this.searchUrl = `${appConfig.apiUrl}` + '/assignable_task_users/' + this.nodeID +'/' + '?nodeType='+this.nodeType + '&search='
+   		this.searchUrl = `${appConfig.taskApiUrl}` + '/assignable_task_users/' + this.nodeID +'/' + '?nodeType='+this.nodeType + '&search='
 	}
 
 	createTask () {

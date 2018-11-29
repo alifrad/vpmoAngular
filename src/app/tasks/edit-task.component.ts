@@ -35,7 +35,7 @@ export class EditTaskComponent implements OnInit {
    		this.newTitle = this.data.taskTitle;
    		this.newDueDate = this.data.taskDueDate;
    		this.selectedUser = this.data.taskAssignee;
-   		this.searchUrl = `${appConfig.apiUrl}` + '/assignable_task_users/' + this.nodeID +'/' + '?nodeType='+this.nodeType + '&search='
+   		this.searchUrl = `${appConfig.taskApiUrl}` + '/assignable_task_users/' + this.nodeID +'/' + '?nodeType='+this.nodeType + '&search='
 	}
 
 	editTask () {

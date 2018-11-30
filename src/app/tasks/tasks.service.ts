@@ -35,7 +35,7 @@ export class TasksService {
 		// Sends a post request with given data to create the task
 		var data = {
 			due_date: dueDate,
-			state: 'NEW',
+			status: 'NEW',
 			title: taskTitle,
 			'assignee': assignee,
 			node: nodeID

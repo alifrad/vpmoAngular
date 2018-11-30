@@ -25,14 +25,14 @@
     <div class="list-content" fxLayout="column">
 
         <div class="list-cards ngx-dnd-container"
-             [model]="list.idCards" ngxDroppable="card" (out)="onDrop($event)"
+             [model]="list.tasks" ngxDroppable="card" (drop)="onDrop($event)"
              fusePerfectScrollbar #listScroll>
             <scrumboard-card ngxDraggable
                                    (click)="openCardDialog(cardId)"
                                    class="scrumboard-card ngx-dnd-item"
-                                   *ngFor="let cardId of list.idCards"
-                                   [model]="cardId"
-                                   [cardId]="cardId">
+                                   *ngFor="let task of list.tasks"
+                                   [model]="task"
+                                   [card]="task">
             </scrumboard-card>
         </div>
     </div>
@@ -40,7 +40,13 @@
 
     <!-- NEW CARD BUTTON-->
     <div class="list-footer">
-        <scrumboard-add-card (cardAdded)="onCardAdd($event)"></scrumboard-add-card>
+        <div class="add-card-button"
+            (click)="openCardCreateDialog()"
+            fxLayout="row" fxLayoutAlign="start center">
+            <mat-icon class="s-20">add</mat-icon>
+            <div>Add a card</div>
+        </div>
+        <!--<scrumboard-add-card (cardAdded)="onCardAdd($event)" [nodeID]="nodeID" [nodeType]="nodeType"></scrumboard-add-card>-->
     </div>
     <!-- / NEW CARD BUTTON-->
 

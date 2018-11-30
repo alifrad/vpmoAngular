@@ -1,5 +1,7 @@
-import { Component, EventEmitter, Output, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, Output, Input, ViewChild, ViewEncapsulation, OnInit, Inject } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { appConfig } from 'app/app.config';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
 @Component({
     selector     : 'scrumboard-add-card',
@@ -7,13 +9,19 @@ import { FormBuilder, FormGroup } from '@angular/forms';
     styleUrls    : ['./add-card.component.scss'],
     encapsulation: ViewEncapsulation.None
 })
-export class ScrumboardAddCardComponent
+export class ScrumboardAddCardComponent implements OnInit
 {
-    formActive: boolean;
     form: FormGroup;
+    nodeID: string;
+    nodeType: string;
 
     @Output()
     cardAdded: EventEmitter<any>;
+    
+
+    filteredAssignableUsers: any = [];
+    selectedUser: any;
+    searchUrl: string;
 
     @ViewChild('nameInput')
     nameInputField;
@@ -24,28 +32,37 @@ export class ScrumboardAddCardComponent
      * @param {FormBuilder} _formBuilder
      */
     constructor(
-        private _formBuilder: FormBuilder
+        private _formBuilder: FormBuilder,
+        private dialogRef: MatDialogRef<ScrumboardAddCardComponent>,
+        @Inject(MAT_DIALOG_DATA) public data: any
     )
     {
         // Set the defaults
-        this.formActive = false;
-        this.cardAdded = new EventEmitter();
+        this.cardAdded = new EventEmitter();        
+    }
+
+    ngOnInit () {
+        this.nodeID = this.data.nodeID
+        this.nodeType = this.data.nodeType
+        this.searchUrl = `${appConfig.taskApiUrl}` + '/assignable_task_users/' + this.nodeID +'/' + '?nodeType='+this.nodeType + '&search='
+        
+        this.form = this._formBuilder.group({
+            title: '',
+            content: '',
+            assignee: '',
+            due_date: ''
+        });
+        // TODO: Assignee needs to be created
+        this.focusNameField();
     }
 
     // -----------------------------------------------------------------------------------------------------
     // @ Public methods
     // -----------------------------------------------------------------------------------------------------
 
-    /**
-     * Open the form
-     */
-    openForm(): void
-    {
-        this.form = this._formBuilder.group({
-            name: ''
-        });
-        this.formActive = true;
-        this.focusNameField();
+    userSelected (e) {
+        this.filteredAssignableUsers = e.filteredUsers
+        this.selectedUser = e.selectedUser
     }
 
     /**
@@ -53,7 +70,7 @@ export class ScrumboardAddCardComponent
      */
     closeForm(): void
     {
-        this.formActive = false;
+        this.dialogRef.close()
     }
 
     /**
@@ -73,9 +90,10 @@ export class ScrumboardAddCardComponent
     {
         if ( this.form.valid )
         {
-            const cardName = this.form.getRawValue().name;
-            this.cardAdded.next(cardName);
-            this.formActive = false;
+            var formData = this.form.getRawValue()
+            formData.assignee = this.selectedUser
+            this.cardAdded.next(formData);
+            this.closeForm()
         }
     }
 }

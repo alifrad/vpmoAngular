@@ -17,6 +17,8 @@ export class ScrumboardService
     private apiUrl: string = `${appConfig.taskApiUrl}`;
     private projectListsUrl: string = this.apiUrl + '/project_scrumboard_task_list';
     private addEditDeleteListUrl: string = this.apiUrl + '/scrumboard_task_list/';
+    private createDeleteUpdateTaskUrl: string = this.apiUrl + '/delete_update_create_task/';
+    private taskReorderUrl: string = this.apiUrl + '/reorder_tasks/';
 
     onListsChanged: BehaviorSubject<any>;
 
@@ -62,9 +64,21 @@ export class ScrumboardService
      * @param newCard
      * @returns {Promise<any>}
      */
-    addCard(listId, newCard): void //Promise<any>
+    addCard(newCard, listId): Promise<any>
     {
-
+        newCard.node = this.node._id
+        return new Promise((resolve, reject) => {
+            console.log(this.node)
+            this.http.post(this.createDeleteUpdateTaskUrl+'?nodeType='+this.node.node_type+'&nodeID='+this.node._id, newCard)
+                .subscribe(response => {
+                    var lists = this.onListsChanged.value;
+                    var list = lists.indexOf(lists.filter(list => list._id == listId)[0])
+                    lists[list].tasks.push(response)
+                    console.log(lists, list)
+                    this.lists = lists
+                    this.onListsChanged.next(lists)
+                })
+        })
     }
 
     /**
@@ -98,8 +112,19 @@ export class ScrumboardService
         return new Promise((resolve, reject) => {
             this.http.put(this.projectListsUrl + '/' + this.node._id + '/', lists)
                 .subscribe(response => {
+                    /*
                     this.lists = response
                     this.onListsChanged.next(response)
+                    */
+                    resolve(this.lists)
+                }, reject)
+        })
+    }
+
+    updateTaskIndexes(list): Promise<any> {
+        return new Promise((resolve, reject) => {
+            this.http.put(this.taskReorderUrl+'/'+list._id+'/', list.tasks)
+                .subscribe(response => {
                     resolve(this.lists)
                 }, reject)
         })

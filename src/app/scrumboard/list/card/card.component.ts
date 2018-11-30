@@ -11,10 +11,7 @@ import * as moment from 'moment';
 export class ScrumboardCardComponent implements OnInit
 {
     @Input()
-    cardId;
-
-    card: any;
-    board: any;
+    card;
 
     /**
      * Constructor
@@ -35,12 +32,7 @@ export class ScrumboardCardComponent implements OnInit
      * On init
      */
     ngOnInit(): void
-    {
-        this.board = this._activatedRoute.snapshot.data.board;
-        this.card = this.board.cards.filter((card) => {
-            return this.cardId === card.id;
-        })[0];
-    }
+    { }
 
     // -----------------------------------------------------------------------------------------------------
     // @ Public methods

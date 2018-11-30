@@ -29,6 +29,8 @@
                     *ngFor="let list of lists"
                     [model]="list"
                     [list]="list"
+                    [nodeID]="nodeID"
+                    [nodeType]="nodeType"
                     [@animate]="{value:'*',params:{duration:'350ms',x:'100%'}}">
                 </scrumboard-list>
                 <!-- / LIST -->

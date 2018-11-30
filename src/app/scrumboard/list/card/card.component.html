@@ -1,9 +1,3 @@
-<!-- CARD COVER -->
-<div *ngIf="board.settings.cardCoverImages && card.idAttachmentCover"
-     class="list-card-cover">
-    <img [src]="card.attachments | getById:card.idAttachmentCover:'src'">
-</div>
-<!-- / CARD COVER -->
 
 <!-- CARD DETAILS -->
 <div class="list-card-details">
@@ -14,26 +8,14 @@
     </div>
     <!-- /CARD SORT HANDLE -->
 
-    <!-- CARD LABELS -->
-    <div *ngIf="card.idLabels.length > 0" class="list-card-labels" fxLayout="row wrap">
-
-        <span class="list-card-label"
-              [ngClass]="board.labels | getById:labelId:'color'"
-              *ngFor="let labelId of card.idLabels"
-              [matTooltip]="board.labels | getById:labelId:'name'">
-        </span>
-
-    </div>
-    <!-- / CARD LABELS -->
-
     <!-- CARD NAME -->
-    <div class="list-card-name">{{card.name}}</div>
+    <div class="list-card-name">{{card.title}}</div>
     <!-- / CARD NAME -->
 
+    <!--
     <div *ngIf="card.due || card.checkItems"
          class="list-card-badges" fxLayout="row" fxLayoutAlign="start center">
 
-        <!-- CARD DUE -->
         <span class="badge due-date"
               [ngClass]="{'overdue': isOverdue(card.due)}"
               *ngIf="card.due" fxLayout="row" fxLayoutAlign="start center">
@@ -41,9 +23,7 @@
             <span>{{card.due | date:'mediumDate'}}</span>
 
         </span>
-        <!-- / CARD DUE -->
 
-        <!-- CARD CHECK ITEMS STATUS -->
         <span *ngIf="card.checkItems"
               class="badge check-items"
               [ngClass]="{'completed': card.checkItemsChecked === card.checkItems}"
@@ -53,25 +33,8 @@
             <span>/</span>
             <span>{{card.checkItems}}</span>
         </span>
-        <!-- / CARD CHECK ITEMS STATUS -->
-
     </div>
-
-    <!-- CARD MEMBERS -->
-    <div *ngIf="card.idMembers.length > 0"
-         class="list-card-members"
-         fxLayout="row">
-
-        <div class="list-card-member"
-             *ngFor="let memberId of card.idMembers">
-
-            <img class="list-card-member-avatar"
-                 [src]="board.members | getById:memberId:'avatar'"
-                 [matTooltip]="board.members | getById:memberId:'name'">
-        </div>
-
-    </div>
-    <!-- / CARD MEMBERS -->
+  -->
 
 </div>
 <!-- / CARD DETAILS -->
@@ -81,15 +44,8 @@
 
     <div fxLayout="row" fxLayoutAlign="start center">
 
-        <!-- CARD SUBSCRIBE -->
-        <span *ngIf="card.subscribed" class="list-card-footer-item"
-              fxLayout="row" fxLayoutAlign="start center">
-            <mat-icon class="s-18">remove_red_eye</mat-icon>
-        </span>
-        <!-- / CARD SUBSCRIBE -->
-
         <!-- CARD DETAILS -->
-        <span *ngIf="card.description !== ''"
+        <span *ngIf="card.content !== ''"
               class="list-card-footer-item" fxLayout="row" fxLayoutAlign="start center">
             <mat-icon class="s-18">description</mat-icon>
         </span>
@@ -98,24 +54,6 @@
     </div>
 
     <div fxLayout="row" fxLayoutAlign="end center">
-
-        <!-- CARD ATTACHMENT -->
-        <span *ngIf="card.attachments"
-              class="list-card-footer-item"
-              fxLayout="row" fxLayoutAlign="start center">
-            <mat-icon class="s-18">attachment</mat-icon>
-            <span class="value">{{card.attachments.length}}</span>
-        </span>
-        <!-- / CARD ATTACHMENT -->
-
-        <!-- CARD COMMENTS -->
-        <span *ngIf="card.comments"
-              class="list-card-footer-item"
-              fxLayout="row" fxLayoutAlign="start center">
-            <mat-icon class="s-18">comment</mat-icon>
-            <span class="value">{{card.comments.length}}</span>
-        </span>
-        <!-- / CARD COMMENTS -->
 
     </div>
 </div>

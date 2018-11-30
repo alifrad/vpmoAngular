@@ -19,7 +19,8 @@ import { NodeService } from '../node/node.service';
 export class ScrumboardComponent implements OnInit, OnDestroy
 {
     lists: any[] = [];
-    node: any;
+    nodeID: string;
+    nodeType: string;
 
     // Private
     private _unsubscribeAll: Subject<any>;
@@ -49,6 +50,11 @@ export class ScrumboardComponent implements OnInit, OnDestroy
             .subscribe(lists => {
                 this.lists = lists
             })
+
+        this._activatedRoute.params.subscribe(params => {
+            this.nodeID = params['id']
+            this.nodeType = params['type']
+        })
     }
 
     /**

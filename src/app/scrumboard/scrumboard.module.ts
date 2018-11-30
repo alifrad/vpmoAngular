@@ -6,6 +6,8 @@ import {
 } from '@angular/material';
 import { NgxDnDModule } from '@swimlane/ngx-dnd';
 
+import { UserModule } from '../user/user.module';
+
 import { FuseSharedModule } from '@fuse/shared.module';
 import { FuseConfirmDialogModule, FuseMaterialColorPickerModule } from '@fuse/components';
 
@@ -60,6 +62,7 @@ const routes: Routes = [
         MatTooltipModule,
 
         NgxDnDModule,
+        UserModule,
 
         FuseSharedModule,
         FuseConfirmDialogModule,
@@ -69,7 +72,7 @@ const routes: Routes = [
         ScrumboardService,
         BoardResolve
     ],
-    entryComponents: [],
+    entryComponents: [ScrumboardAddCardComponent],
     exports: [
         ScrumboardComponent
     ]

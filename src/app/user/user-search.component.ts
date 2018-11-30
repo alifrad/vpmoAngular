@@ -24,7 +24,6 @@ export class UserSearchComponent implements OnInit {
 	selectedUser: any;
 
 	ngOnInit () {
-		console.log('SearchUser', this.preselectedUser)
 		if (this.preselectedUser) {
 			this.selectedUser = this.preselectedUser
 			this.filterUsers(this.selectedUser)
@@ -32,7 +31,6 @@ export class UserSearchComponent implements OnInit {
 	}
 
 	filterUsers (e) {
-		console.log(e, this.selectedUser)
 		var that = this
 
 		if (e.length < 3) {
@@ -41,6 +39,7 @@ export class UserSearchComponent implements OnInit {
 				selectedUser: e,
 				filteredUsers: this.filteredAssignableUsers
 			})
+			return
 		}
 		
 		this._userService.searchUsers(this.searchUrl, e)

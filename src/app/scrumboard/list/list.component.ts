@@ -9,6 +9,7 @@ import { FusePerfectScrollbarDirective } from '@fuse/directives/fuse-perfect-scr
 
 import { ScrumboardService } from '../scrumboard.service';
 import { ScrumboardCardDialogComponent } from '../dialogs/card/card.component';
+import { ScrumboardAddCardComponent } from './add-card/add-card.component';
 
 @Component({
     selector     : 'scrumboard-list',
@@ -23,6 +24,12 @@ export class ScrumboardListComponent implements OnInit, OnDestroy
 
     @Input()
     list;
+
+    @Input()
+    nodeID;
+
+    @Input()
+    nodeType;
 
     @ViewChild(FusePerfectScrollbarDirective)
     listScroll: FusePerfectScrollbarDirective;
@@ -99,14 +106,23 @@ export class ScrumboardListComponent implements OnInit, OnDestroy
      *
      * @param newCardName
      */
-    onCardAdd(newCardName): void
+    onCardAdd(newCardData): void
     {
-        if ( newCardName === '' )
+        if ( newCardData.title === '' )
         {
             return;
         }
+        var data = {
+            task_list_id: this.list._id,
+            title: newCardData.title,
+            content: newCardData.content,
+            assignee: newCardData.assignee,
+            due_date: newCardData.due_date,
+            status: 'NEW',
+            task_list_index: this.list.tasks.length
+        }
 
-        this._scrumboardService.addCard(this.list.id, {name: newCardName});
+        this._scrumboardService.addCard(data, this.list._id);
 
         setTimeout(() => {
             this.listScroll.scrollToBottom(0, 400);
@@ -132,6 +148,21 @@ export class ScrumboardListComponent implements OnInit, OnDestroy
                 this._scrumboardService.removeList(listId);
             }
         });
+    }
+
+    /**
+        Opens the dialog for task creation
+    **/
+    openCardCreateDialog() {
+        const dialogRef = this._matDialog.open(ScrumboardAddCardComponent, {
+            width: '350',
+            height: '500',
+            data: {nodeID: this.nodeID, nodeType: this.nodeType}
+        })
+
+        dialogRef.componentInstance.cardAdded.subscribe(newCardData => {
+            this.onCardAdd(newCardData)
+        })
     }
 
     /**
@@ -161,6 +192,7 @@ export class ScrumboardListComponent implements OnInit, OnDestroy
      */
     onDrop(ev): void
     {
+        this._scrumboardService.updateTaskIndexes(this.list)
         // this._scrumboardService.updateBoard();
     }
 }

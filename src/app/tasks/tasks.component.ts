@@ -83,12 +83,6 @@ export class TasksComponent implements OnInit, OnDestroy {
   }
 
   openEditDialog (task) {
-    const dialogConfig = new MatDialogConfig();
-
-    dialogConfig.autoFocus = true;
-    dialogConfig.width = '350';
-    dialogConfig.height = '500';
-
     const dialogRef = this.dialog.open(EditTaskComponent, {
       width: '350',
       height: '500',

@@ -1,0 +1,48 @@
+<mat-sidenav-container>
+
+    <div id="board">
+
+        <!-- HEADER -->
+        <!--
+        <div class="header p-16 p-md-24" [ngClass]="board.settings.color" fxLayout="column">
+
+            <div class="header-content" fxLayout="row wrap" fxLayoutAlign="space-between" fxFlex="1 0 auto">
+
+
+            </div>
+
+        </div>
+        -->
+        <!-- / HEADER -->
+
+        <div fxFlex class="board-content-wrapper p-16 p-md-24">
+
+            <!-- BOARD -->
+            <div class="board-content ngx-dnd-container p-16 p-md-24" fxLayout="row"
+                 ngxDroppable="list" [model]="lists" (drop)="onDrop($event)"
+                 [@animateStagger]="{value:'50'}">
+
+                <!-- LIST -->
+                <scrumboard-list
+                    class="scrumboard-list list-wrapper ngx-dnd-item"
+                    ngxDraggable
+                    *ngFor="let list of lists"
+                    [model]="list"
+                    [list]="list"
+                    [@animate]="{value:'*',params:{duration:'350ms',x:'100%'}}">
+                </scrumboard-list>
+                <!-- / LIST -->
+
+                <!-- NEW LIST BUTTON-->
+                <scrumboard-add-list class="new-list-wrapper" (listAdded)="onListAdd($event)"
+                                           ngxDraggable [moves]="false"
+                                           [@animate]="{value:'*',params:{duration:'350ms',x:'100%'}}">
+                </scrumboard-add-list>
+                <!-- / NEW LIST BUTTON-->
+
+            </div>
+            <!-- / BOARD -->
+        </div>
+        <!-- primary content -->
+    </div>
+</mat-sidenav-container>

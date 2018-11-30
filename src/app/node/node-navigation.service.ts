@@ -83,6 +83,17 @@ export class NodeNavigationService {
                 'url'  : urlBase + 'permissions',
                 'hidden' : false,
             }]
+        if (node.node_type == 'Project') {
+            nav.push({
+                'id'   : 'scrumboard',
+                'title': 'Scrumboard',
+                // 'translate': 'NAV.SAMPLE.TITLE',
+                'type' : 'item',
+                'icon' : 'check_box',
+                'url'  : urlBase + 'board',
+                'hidden' : false,
+            })
+        }
         this.navigation.next(nav)
     }
 }

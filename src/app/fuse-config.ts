@@ -6,6 +6,7 @@
  * about changing these options per component basis.
  */
 export const fuseConfig = {
+    colorTheme      : 'theme-default',
     layout          : {
         navigation      : 'left', // 'right', 'left', 'top', 'none'
         navigationFolded: false, // true, false

@@ -26,6 +26,7 @@ import { PermissionsModule } from '../permissions/permissions.module';
 import { TasksModule } from '../tasks/tasks.module';
 import { NodeBreadcrumbsModule } from '../node-breadcrumbs/node-breadcrumbs.module';
 import { DocumentsModule } from '../documents/documents.module';
+import { ScrumboardModule } from '../scrumboard/scrumboard.module';
 import { QuillModule } from 'ngx-quill';
 import { FormsModule } from '@angular/forms';
 import { NodeService } from './node.service';
@@ -83,7 +84,8 @@ const NodeRoutes: Routes = [
     TreeStructureModule,
     QuillModule,
     NodeBreadcrumbsModule,
-    UserModule
+    UserModule,
+    ScrumboardModule
   ],
   providers: [
     NodeService,

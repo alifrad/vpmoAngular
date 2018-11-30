@@ -24,6 +24,7 @@ import { UserModule } from './user/user.module';
 import { ProjectModule } from './project/project.module';
 import { ChatModule } from './chat/chat.module';
 import { PermissionsModule } from './permissions/permissions.module';
+import { ScrumboardModule } from './scrumboard/scrumboard.module';
 import { TasksModule } from './tasks/tasks.module';
 import { DocumentsModule } from './documents/documents.module';
 import { NodeBreadcrumbsModule } from './node-breadcrumbs/node-breadcrumbs.module';
@@ -127,6 +128,7 @@ export function errorHandlerFactory() {
         ProjectModule,
         ChatModule,
         PermissionsModule,
+        ScrumboardModule,
         TasksModule,
         DocumentsModule,
         NodeBreadcrumbsModule,

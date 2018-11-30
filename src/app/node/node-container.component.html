@@ -6,4 +6,6 @@
 <app-permissions *ngIf="contentType=='permissions'"></app-permissions>
 <app-documents-list *ngIf="contentType=='documents'"></app-documents-list>
 <app-tasks *ngIf="contentType=='tasks'"></app-tasks>
+<app-scrumboard *ngIf="contentType=='board' && nodeType == 'Project'"></app-scrumboard>
+
 

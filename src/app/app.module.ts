@@ -13,7 +13,7 @@ import 'hammerjs';
 
 import { FuseModule } from '@fuse/fuse.module';
 import { FuseSharedModule } from '@fuse/shared.module';
-
+import { FuseSidebarModule, FuseThemeOptionsModule } from '@fuse/components'
 import { fuseConfig } from './fuse-config';
 
 import { AppComponent } from './app.component';
@@ -122,6 +122,9 @@ export function errorHandlerFactory() {
         FuseModule.forRoot(fuseConfig),
         FuseSharedModule,
         FuseMainModule,
+        FuseSidebarModule,
+        FuseThemeOptionsModule,
+        
         HomeModule,
         TeamModule,
         UserModule,
@@ -136,7 +139,8 @@ export function errorHandlerFactory() {
         NodeModule,
         MatProgressSpinnerModule,
         MatSnackBarModule,
-        MatInputModule
+        MatInputModule,
+        MatIconModule
     ],
     // The components, directives, and pipes that belong to this NgModule
     declarations: [

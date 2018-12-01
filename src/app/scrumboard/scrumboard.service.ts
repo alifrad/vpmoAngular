@@ -162,9 +162,22 @@ export class ScrumboardService
      * @param cardId
      * @param listId
      */
-    removeCard(cardId, listId?): void
+    removeCard(cardId, listId): void
     {
+        var data = {
+            _id: cardId
+        }
+        this.http.request('delete', this.createDeleteUpdateTaskUrl+'?nodeType=Project'+'&nodeID='+this.node._id, data)
+            .subscribe(response => {
+                var lists = this.onListsChanged.value
+                var list = lists.find(list => list._id == listId)
+                var index = lists.indexOf(list)
+                list.tasks.splice(list.tasks.indexOf(list.tasks.find(task => task._id == cardId)), 1)
+                lists[index] = list
 
+                this.onListsChanged.next(lists)
+                this.lists = lists
+            })
     }
 
     /**
@@ -172,9 +185,30 @@ export class ScrumboardService
      *
      * @param newCard
      */
-    updateCard(newCard): void
+    updateCard(newCard, listId): Promise<any>
     {
+        var data = {
+            _id: newCard._id,
+            assignee: newCard.assignee,
+            title: newCard.title,
+            status: newCard.status,
+            content: newCard.content,
+            due_date: newCard.due_date
+        }
+        return new Promise((resolve, reject) => {
+            this.http.put(this.createDeleteUpdateTaskUrl+'?nodeType=Project'+'&nodeID='+this.node._id, data)
+            .subscribe(response => {
+                var lists = this.onListsChanged.value
+                var list = lists.find(list => list._id == listId)
+                var index = lists.indexOf(list)
+                list.tasks[list.tasks.indexOf(list.tasks.find(task => task._id == newCard._id))] = newCard
+                lists[index] = list
 
+                this.onListsChanged.next(lists)
+                this.lists = lists
+                resolve(this.lists)
+            }, reject)
+        })
     }
 }
 

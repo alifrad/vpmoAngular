@@ -13,6 +13,7 @@ export class ScrumboardCardComponent implements OnInit
     @Input()
     card;
 
+
     /**
      * Constructor
      *

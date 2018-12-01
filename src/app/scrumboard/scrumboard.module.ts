@@ -72,7 +72,7 @@ const routes: Routes = [
         ScrumboardService,
         BoardResolve
     ],
-    entryComponents: [ScrumboardAddCardComponent],
+    entryComponents: [ScrumboardAddCardComponent, ScrumboardCardDialogComponent],
     exports: [
         ScrumboardComponent
     ]

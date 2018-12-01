@@ -28,7 +28,7 @@
              [model]="list.tasks" ngxDroppable="card" (drop)="onDrop($event)"
              fusePerfectScrollbar #listScroll>
             <scrumboard-card ngxDraggable
-                                   (click)="openCardDialog(cardId)"
+                                   (click)="openCardDialog(task)"
                                    class="scrumboard-card ngx-dnd-item"
                                    *ngFor="let task of list.tasks"
                                    [model]="task"

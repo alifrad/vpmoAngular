@@ -136,6 +136,10 @@ export class ScrumboardListComponent implements OnInit, OnDestroy
      */
     removeList(listId): void
     {
+        if (this.list.tasks.length > 0) {
+            alert('Can not delete a list with tasks.')
+            return
+        }
         this.confirmDialogRef = this._matDialog.open(FuseConfirmDialogComponent, {
             disableClose: false
         });
@@ -170,18 +174,20 @@ export class ScrumboardListComponent implements OnInit, OnDestroy
      *
      * @param cardId
      */
-    openCardDialog(cardId): void
+    openCardDialog(task): void
     {
         this.dialogRef = this._matDialog.open(ScrumboardCardDialogComponent, {
             panelClass: 'scrumboard-card-dialog',
             data      : {
-                cardId: cardId,
-                listId: this.list.id
+                task: task,
+                list: this.list,
+                nodeID: this.nodeID,
+                nodeType: this.nodeType
             }
         });
         this.dialogRef.afterClosed()
             .subscribe(response => {
-
+                console.log('Card Detail Dialog closed.')
             });
     }
 

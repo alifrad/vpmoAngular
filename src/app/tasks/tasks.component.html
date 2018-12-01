@@ -18,6 +18,10 @@
 	        <th mat-header-cell *matHeaderCellDef> Due Date </th>
 	        <td mat-cell *matCellDef="let task"> {{ task.due_date }} </td>
 	    </ng-container>
+	    <ng-container matColumnDef="task_list">
+	        <th mat-header-cell *matHeaderCellDef> Task List </th>
+	        <td mat-cell *matCellDef="let task"> {{ task.task_list.title }} </td>
+	    </ng-container>
 	    <ng-container matColumnDef="status">
 	        <th mat-header-cell *matHeaderCellDef> Status </th>
 	        <td mat-cell *matCellDef="let task">
@@ -31,7 +35,7 @@
 				</mat-form-field>
 
 						<span *ngIf="getUser()._id != task.assignee._id">
-	        		{{ task.status }}
+	        		{{ taskStatusMap[task.status] }}
 	        	</span>
 	        </td>
 	    </ng-container>

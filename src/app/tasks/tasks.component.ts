@@ -31,12 +31,18 @@ export class TasksComponent implements OnInit, OnDestroy {
   nodeType: string;
 
   assignedTasks: any[] = [];
-  displayedColumns: string[] = ['title', 'assignee_name', 'due_date', 'status', 'utils'];
+  displayedColumns: string[] = ['title', 'assignee_name', 'due_date', 'status', 'utils', 'task_list'];
   taskStatusList: any[] = [
     {value: 'NEW', text: 'New'},
     {value: 'IN_PROGRESS', text: 'In Progress'},
     {value: 'COMPLETE', text: 'Complete'}
   ];
+
+  taskStatusMap = {
+    'NEW': 'New',
+    'IN_PROGRESS': 'In Progress',
+    'COMPLETE': 'Complete'
+  };
 
   private nodeSubscription: Subscription;
 
@@ -109,5 +115,4 @@ export class TasksComponent implements OnInit, OnDestroy {
         }
       )
   }
-
 }

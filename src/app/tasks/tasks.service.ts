@@ -17,6 +17,7 @@ export class TasksService {
 	private readonly getAssignedTasksUrl: string = this.apiUrl + '/list_assigned_tasks/';
 	private readonly getAssignableUsersUrl: string = this.apiUrl + '/assignable_task_users/';
 	private readonly createDeleteUpdateTaskUrl: string = this.apiUrl + '/delete_update_create_task/';
+	private readonly taskListsGetUrl: string = this.apiUrl + '/assignable_scrumboard_task_lists/';
 
 
 	constructor(private http: CustomHttpClient, private authService: AuthenticationService) { }
@@ -26,19 +27,24 @@ export class TasksService {
 		return this.http.get(this.getAssignedTasksUrl+nodeID+'/')
 	}
 
+	getTaskLists (nodeID: string): Observable<any> {
+		return this.http.get(this.taskListsGetUrl+nodeID+'/')
+	}
+
 	getAssignableUsers(nodeID: string, nodeType: string, searchQuery: string): Observable<any> {
 		// Returns a filtered (searched) observable of a list of users that can be assigned a task for a node
 		return this.http.get(this.getAssignableUsersUrl+nodeID+'/?nodeType='+nodeType+'&search='+searchQuery)
 	}
 
-	createTask (nodeID: string, nodeType: string, dueDate: any, assignee: string, taskTitle: string): Observable<any> {
+	createTask (nodeID: string, nodeType: string, dueDate: any, assignee: string, taskTitle: string, taskList: string): Observable<any> {
 		// Sends a post request with given data to create the task
 		var data = {
 			due_date: dueDate,
 			status: 'NEW',
 			title: taskTitle,
 			'assignee': assignee,
-			node: nodeID
+			node: nodeID,
+			task_list_id: taskList
 		}
 		return this.http.post(this.createDeleteUpdateTaskUrl+'?nodeType='+nodeType+'&nodeID='+nodeID, data)
 	}

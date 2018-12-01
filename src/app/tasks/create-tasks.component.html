@@ -7,6 +7,16 @@
 		</mat-form-field>
 	</div>
 
+	<div *ngIf="taskLists && taskLists.length > 0">
+		<mat-form-field>
+		    <mat-select [(ngModel)]="selectedTaskList">
+		        <mat-option *ngFor="let taskList of taskLists" [value]="taskList._id">
+		            {{ taskList.title }}
+		        </mat-option>
+		    </mat-select>
+		</mat-form-field>
+	</div>
+
 	<user-search [searchUrl]="searchUrl" (userSelected)="userSelected($event)"></user-search>
 
 	<div>

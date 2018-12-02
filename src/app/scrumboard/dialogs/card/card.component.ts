@@ -8,6 +8,7 @@ import { FuseUtils } from '@fuse/utils';
 
 import { ScrumboardService } from '../../scrumboard.service';
 import { takeUntil } from 'rxjs/operators';
+import { mergeMap } from 'rxjs/operators';
 
 import { appConfig } from 'app/app.config';
 
@@ -100,39 +101,36 @@ export class ScrumboardCardDialogComponent implements OnInit, OnDestroy
     // -----------------------------------------------------------------------------------------------------
 
     /**
-     * Toggle cover image - TODO
-     *
-     * @param attachmentId
+     * Add Attachment
      */
-    toggleCoverImage(attachmentId): void
-    {
-        if ( this.card.idAttachmentCover === attachmentId )
-        {
-            this.card.idAttachmentCover = '';
-        }
-        else
-        {
-            this.card.idAttachmentCover = attachmentId;
-        }
+    addAttachment(event) {
+        var file = event.target.files[0]
 
-        this.updateCard();
+        this._scrumboardService.getPresignedS3Url(this.card._id, file.name)
+            .pipe(mergeMap(putDetails =>
+                return this._scrumboardService.uploadS3Document(putDetails.url, file, file.type)
+            ))
+            .pipe(mergeMap(awsResponse => 
+                return this._scrumboardService.createTaskDocument(this.card._id, file.name)
+            ))
+            .subscribe(createDocResponse => {
+                this.card.documents.push(createDocResponse)
+            })
+        console.log(event)
     }
+
 
     /**
      * Remove attachment - TODO
      *
      * @param attachment
      */
-    removeAttachment(attachment): void
+    removeAttachment(document): void
     {
-        if ( attachment.id === this.card.idAttachmentCover )
-        {
-            this.card.idAttachmentCover = '';
-        }
-
-        this.card.attachments.splice(this.card.attachments.indexOf(attachment), 1);
-
-        this.updateCard();
+        this._scrumboardService.deleteTaskDocument(this.card._id, document._id)
+            .subscribe(response => {
+                this.card.documents.splice(this.card.documents.indexOf(document), 1)
+            })
     }
 
 

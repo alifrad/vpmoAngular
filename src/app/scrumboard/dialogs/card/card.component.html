@@ -105,6 +105,90 @@
         <!-- SECTIONS -->
         <div class="sections">
 
+            <!-- ATTACHMENTS SECTION -->
+            <div class="section">
+
+                <div class="attachments">
+
+                    <div class="section-header" fxLayout="row" fxLayoutAlign="start">
+                        <mat-icon class="mr-8">attachment</mat-icon>
+                        <span class="section-title">Attachments</span>
+                    </div>
+
+                    <div class="section-content">
+
+                        <div fxLayout="column" fxLayoutAlign="start" fxLayoutWrap fxLayout.gt-sm="row">
+
+                            <div class="attachment" fxFlex="33" *ngFor="let item of card.documents">
+
+
+                                <div fxLayout="column" fxLayoutAlign="start">
+
+                                    <!--
+                                    <div class="attachment-preview mat-elevation-z1">
+                                        <img [src]="item.src">
+                                    </div>-->
+
+                                    <div class="attachment-content mt-8" fxLayout="row"
+                                         fxLayoutAlign="start center">
+
+                                        <div fxFlex>
+
+                                            <div fxLayout="row" fxLayoutAlign="start start">
+                                                <span class="attachment-name">{{item.document_name}}</span>
+                                            </div>
+
+                                            <span class="attachment-time">{{item.uploaded_at | date:"short"}}</span>
+
+                                        </div>
+
+                                        <button mat-icon-button class="attachment-actions-button"
+                                                [matMenuTriggerFor]="attachmentActionsMenu">
+                                            <mat-icon>more_vert</mat-icon>
+                                        </button>
+
+                                        <mat-menu #attachmentActionsMenu="matMenu">
+                                            <button mat-menu-item (click)="removeAttachment(item)">
+                                                Remove Attachment
+                                            </button>
+                                            <a [href]="item.document_url" target="_blank">
+                                                <button mat-menu-item>
+                                                    Download File
+                                                </button>
+                                            </a>
+                                        </mat-menu>
+
+                                    </div>
+
+                                </div>
+                                <!--
+                                <div *ngSwitchCase="'link'" fxLayout="row">
+                                    <div class="attachment-preview mat-elevation-z2" fxLayout="column"
+                                         fxLayoutAlign="center center">
+                                        <span>LINK</span>
+                                    </div>
+                                    <div class="attachment-content" fxLayout="column">
+                                        <span class="attachment-url">{{item.url}}</span>
+                                        <span class="attachment-time">{{item.time}}</span>
+                                    </div>
+                                </div>
+                                -->
+                            </div>
+
+                        </div>
+
+                        <input #file type="file" (change)="addAttachment($event)" style="display: none;">
+                        <button (click)="file.click()" mat-stroked-button class="add-attachment-button" aria-label="add attachment">
+                            Add an attachment
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+            <!-- / ATTACHMENTS SECTION -->
+
 
             <!-- COMMENTS SECTION -->
             <!-- To be turned into a twilio chat section

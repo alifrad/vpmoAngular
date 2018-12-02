@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { CustomHttpClient } from '../_services/custom-http.service';
@@ -19,6 +19,9 @@ export class ScrumboardService
     private addEditDeleteListUrl: string = this.apiUrl + '/scrumboard_task_list/';
     private createDeleteUpdateTaskUrl: string = this.apiUrl + '/delete_update_create_task/';
     private taskReorderUrl: string = this.apiUrl + '/reorder_tasks/';
+    private presignedUrlGetUrl: string = `${appConfig.docApiUrl}` + '/task_documents_management/';
+    private createTaskDocumentUrl: string = `${appConfig.docApiUrl}` + '/create_task_document/';
+    private taskDocumentDeleteUrl: string = `${appConfig.docApiUrl}` + '/delete_task_document/';
 
     onListsChanged: BehaviorSubject<any>;
 
@@ -209,6 +212,27 @@ export class ScrumboardService
                 resolve(this.lists)
             }, reject)
         })
+    }
+
+    getPresignedS3Url (taskId, fileName): Observable<any> {
+        var data = { fileName: fileName }
+        return this.http.post(this.presignedUrlGetUrl + taskId + '/', data)
+    }
+
+    uploadS3Document (presignedUrl, file, contentType): Observable<any> {
+        const s3Headers = new HttpHeaders({
+            'Content-Type': contentType,
+        })
+        return this.http.customPut(presignedUrl, file, {headers: s3Headers, reportProgress: true})
+    }
+
+    createTaskDocument (taskId, fileName): Observable<any> {
+        var data = { fileName: fileName }
+        return this.http.post(this.createTaskDocumentUrl + taskId + '/', data)
+    }
+
+    deleteTaskDocument (taskId, docId): Observable<any> {
+        return this.http.delete(this.taskDocumentDeleteUrl+taskId+'/'+docId+'/')
     }
 }
 

@@ -115,13 +115,28 @@ div.node-project {
     border-radius: 10px;
     font-size:small;
 }
-div.node-topic {
+
+.node-topic {
     width: auto;
     float: left;
     padding: 5px;
-    background-color: rgb(23, 245, 97);
     color: rgb(43, 43, 43);
     margin: 0;
     border-radius: 10px;
-    font-size:small;
+    font-size:x-small;
 }
+
+.deliverable {
+    background-color: rgb(0, 200, 200);
+}
+.issue {
+    background-color: rgb(255, 100, 0);
+}
+.risk {
+    background-color: rgb(230, 180, 0);
+}
+.meeting {
+    background-color: rgb(20, 20, 150);
+    color: rgb(224, 224, 224);
+}
+

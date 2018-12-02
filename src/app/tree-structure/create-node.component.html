@@ -45,17 +45,7 @@
 			<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
 			<mat-datepicker #picker></mat-datepicker>
 		</mat-form-field>
-		<!-- <mat-form-field class="full-width">
-			<input (input)="filterUsers($event.target.value)" type="text" placeholder="Task Assignee" matInput [matAutocomplete]="auto" [(ngModel)]="selectedUser">
-			<mat-autocomplete #auto="matAutocomplete">
-				<mat-option *ngFor="let option of filteredAssignableUsers" [value]="option.username">
-					<span>{{option.fullname}}</span> |
-					<small>email: {{option.email}} |
-						username: {{option.username}}
-					</small>
-				</mat-option>
-			</mat-autocomplete>
-		</mat-form-field> -->
+
 		<mat-form-field class="full-width">
 			<mat-select matInput placeholder="issue severity" [(ngModel)]="createNodeFormData.severity">
 				<mat-option *ngFor="let severity of severityList" [value]="severity.value">
@@ -63,6 +53,47 @@
 				</mat-option>
 			</mat-select>
 		</mat-form-field>
+	</div>
+
+	<div *ngIf="selectedNodeType == 'Risk'">
+		<mat-form-field class="full-width">
+			<input [(ngModel)]="createNodeFormData.name" matInput maxlength="150" placeholder="Name" />
+		</mat-form-field>
+		<mat-form-field class="full-width">
+			<input matInput [matDatepicker]="picker" placeholder="Start Date" [(ngModel)]="createNodeFormData.due_date">
+			<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+			<mat-datepicker #picker></mat-datepicker>
+		</mat-form-field>
+
+		<mat-form-field class="full-width">
+			<mat-select matInput placeholder="risk impact" [(ngModel)]="createNodeFormData.impact">
+				<mat-option *ngFor="let impact of impactList" [value]="impact.value">
+					{{ impact.text }}
+				</mat-option>
+			</mat-select>
+		</mat-form-field>
+		<mat-form-field class="full-width">
+			<mat-select matInput placeholder="risk probability" [(ngModel)]="createNodeFormData.probability">
+				<mat-option *ngFor="let probability of probabilityList" [value]="probability.value">
+					{{ probability.text }}
+				</mat-option>
+			</mat-select>
+		</mat-form-field>
+	</div>
+
+	<div *ngIf="selectedNodeType == 'Meeting'">
+		<mat-form-field class="full-width">
+			<input [(ngModel)]="createNodeFormData.name" matInput maxlength="150" placeholder="Name" />
+		</mat-form-field>
+		<mat-form-field class="full-width">
+			<input matInput [matDatepicker]="picker" placeholder="Meeting Date" [(ngModel)]="createNodeFormData.date_time">
+			<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+			<mat-datepicker #picker></mat-datepicker>
+		</mat-form-field>
+		<mat-form-field class="full-width">
+			<input [(ngModel)]="createNodeFormData.venue" matInput maxlength="150" placeholder="Venue" />
+		</mat-form-field>
+		
 	</div>
 
 	<div>

@@ -128,6 +128,50 @@
 		</div>
 	</div>
 
+	<!-- Risk edit block -->
+	<div *ngIf="node.topic_type == 'Risk'">
+		<div>
+			<mat-form-field>
+				<input matInput placeholder="Node Name" [(ngModel)]="node.name">
+			</mat-form-field>
+		</div>
+
+		<div class="quill-container">
+			<label>Content</label>
+			<quill-editor [(ngModel)]="node.content"></quill-editor>
+		</div>
+
+		<!-- TODO - create a assignee field (user select with a dropdown list search) -->
+
+		<div>
+			<mat-form-field class="full-width">
+				<mat-select matInput placeholder="Risk Impact" [(ngModel)]="node.impact">
+					<mat-option *ngFor="let impact of impactList" [value]="impact.value">
+						{{ impact.text }}
+					</mat-option>
+				</mat-select>
+			</mat-form-field>
+		</div>
+
+		<div>
+			<mat-form-field class="full-width">
+				<mat-select matInput placeholder="Risk Probability" [(ngModel)]="node.probability">
+					<mat-option *ngFor="let probability of probabilityList" [value]="probability.value">
+						{{ probability.text }}
+					</mat-option>
+				</mat-select>
+			</mat-form-field>
+		</div>
+
+		<div>
+			<mat-form-field>
+				<input matInput [matDatepicker]="picker" placeholder="Due Date" [(ngModel)]="node.due_date">
+				<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+				<mat-datepicker #picker></mat-datepicker>
+			</mat-form-field>
+		</div>
+	</div>
+
 </div>
 
 

@@ -27,13 +27,15 @@ scrumboard-list {
     .list {
         max-height: 100%;
         border-radius: 2px;
+        background-color: rgb(230, 230, 230);
         transition: box-shadow 150ms ease;
 
         .list-header {
             height: 64px;
             min-height: 64px;
             padding: 0 8px 0 16px;
-            border-bottom: 1px solid;
+            color: rgb(110,110,110);
+            border-bottom: 1px solid rgb(110,110,110) ;
 
             @include media-breakpoint('lt-md') {
                 height: 48px;

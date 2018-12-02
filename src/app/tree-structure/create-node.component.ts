@@ -19,6 +19,16 @@ export class CreateNodeComponent implements OnInit {
 		{value: '2', text: 'Medium'},
 		{value: '3', text: 'High'}
 	  ];
+	impactList: any[] = [
+		{value: '1', text: 'Minor'},
+		{value: '2', text: 'Moderate'},
+		{value: '3', text: 'High'}
+	  ];
+	probabilityList: any[] = [
+		{value: '1', text: 'Low probability'},
+		{value: '2', text: 'Medium probability'},
+		{value: '3', text: 'High'}
+	  ];
 	
 	constructor(
 		private treeStructureHttpService: TreeStructureHttpService,
@@ -46,7 +56,7 @@ export class CreateNodeComponent implements OnInit {
 		if (this.parentNode.node_type === 'Team') {
 			this.selectableNodeTypes = ['Project'];
 		} else if (this.parentNode.node_type === 'Project') {
-			this.selectableNodeTypes = ['Project', 'Deliverable', 'Issue'];
+			this.selectableNodeTypes = ['Project', 'Deliverable', 'Issue', 'Risk','Meeting'];
 		}
 	}
 
@@ -61,12 +71,6 @@ export class CreateNodeComponent implements OnInit {
 				start: '',
 				parentID: this.parentNode._id
 			};
-		} else if (nodeType === 'Project') {
-			this.createNodeFormData = {
-				name: '',
-				due_date: '',
-				parentID: this.parentNode._id
-			};
 		} else if (nodeType === 'Issue') {
 			this.createNodeFormData = {
 				name: '',
@@ -78,6 +82,21 @@ export class CreateNodeComponent implements OnInit {
 			this.createNodeFormData = {
 				name: '',
 				due_date: '',
+				parentID: this.parentNode._id,
+			};
+		} else if (nodeType === 'Risk') {
+			this.createNodeFormData = {
+				name: '',
+				due_date: '',
+				parentID: this.parentNode._id,
+				impact:'',
+				probability:''
+			};
+		} else if (nodeType === 'Meeting') {
+			this.createNodeFormData = {
+				name: '',
+				date_time: '',
+				venue: '',
 				parentID: this.parentNode._id,
 			};
 		}

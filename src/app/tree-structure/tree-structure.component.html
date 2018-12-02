@@ -17,7 +17,10 @@
       <!-- <img *ngIf="node.data.node_type=='Project'" src="../../assets/icons/Project-P-Icon.png" height="15" width="15"/> -->
       <div *ngIf="node.data.node_type=='Team'" class="node-team">Team</div>
       <div *ngIf="node.data.node_type=='Project'" class="node-project">Project</div>
-      <div *ngIf="node.data.node_type=='Topic'" class="node-topic">Topic</div>      
+      <div *ngIf="node.data.model_name=='Deliverable'" class="node-topic deliverable">Deliverable</div>
+      <div *ngIf="node.data.model_name=='Issue'" class="node-topic issue">Issue</div>
+      <div *ngIf="node.data.model_name=='Risk'" class="node-topic risk">Risk</div>
+      <div *ngIf="node.data.model_name=='Meeting'" class="node-topic meeting">Meeting</div>
       
       <div class="node-name">{{ node.data.name }}</div>
 

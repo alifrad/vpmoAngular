@@ -27,6 +27,16 @@ export class NodeEditComponent implements OnInit, OnDestroy {
     {value: '2', text: 'Medium'},
     {value: '3', text: 'High'}
   ];
+  impactList: any[] = [
+    {value: '1', text: 'Minor'},
+    {value: '2', text: 'Moderate'},
+    {value: '3', text: 'High'}
+  ];
+  probabilityList: any[] = [
+    {value: '1', text: 'Low probability'},
+    {value: '2', text: 'Medium probability'},
+    {value: '3', text: 'High probability'}
+  ];
 
   private nodeSubscription: Subscription;
 

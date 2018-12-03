@@ -74,7 +74,8 @@ const routes: Routes = [
     ],
     entryComponents: [ScrumboardAddCardComponent, ScrumboardCardDialogComponent],
     exports: [
-        ScrumboardComponent
+        ScrumboardComponent,
+        ScrumboardCardDialogComponent
     ]
 })
 export class ScrumboardModule

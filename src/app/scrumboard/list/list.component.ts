@@ -180,7 +180,7 @@ export class ScrumboardListComponent implements OnInit, OnDestroy
             panelClass: 'scrumboard-card-dialog',
             data      : {
                 task: task,
-                list: this.list,
+                list: { _id: null },
                 nodeID: this.nodeID,
                 nodeType: this.nodeType
             }

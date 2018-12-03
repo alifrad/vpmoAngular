@@ -172,6 +172,28 @@
 		</div>
 	</div>
 
+	<!-- Meeting edit block -->
+	<div *ngIf="node.topic_type == 'Meeting'">
+		<div>
+			<mat-form-field>
+				<input matInput placeholder="Node Name" [(ngModel)]="node.name">
+			</mat-form-field>
+		</div>
+
+		<div class="quill-container">
+			<label>Content</label>
+			<quill-editor [(ngModel)]="node.content"></quill-editor>
+		</div>
+
+		<!-- TODO - create a assignee field (user select with a dropdown list search) -->
+		
+		
+
+		<div>
+			<!-- mat datetime picker for meeting time and date -->
+		</div>
+	</div>
+
 </div>
 
 

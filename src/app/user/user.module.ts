@@ -18,6 +18,7 @@ import { MatInputModule, MatButtonModule, MatCardModule, MatAutocompleteModule }
 import { TeamCardComponent } from './dashboard/team-card.component';
 import { LoginComponent } from './login-2/login.component';
 import { ImageCropperModule } from 'ngx-image-cropper';
+import { TeamModule } from 'app/team/team.module'
 
 const UserRoutes: Routes = [
     {
@@ -63,7 +64,8 @@ const UserRoutes: Routes = [
         MatButtonModule,
         MatCardModule,
         MatAutocompleteModule,
-        ImageCropperModule
+        ImageCropperModule,
+        TeamModule
     ],
     exports: [
         SignUpComponent,

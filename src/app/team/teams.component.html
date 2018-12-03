@@ -1,9 +1,14 @@
 
 <div>
-    <H1>my teams</H1>
+  <h1>My Teams
+      <button mat-icon-button class="primary-300" (click)="openTeamCreateDialog(createTeamDialog)">
+        <mat-icon> add </mat-icon>
+      </button>
+   </h1>
 </div>
 
   
+<!--
 <mat-card class="example-card">
   <mat-card-header>
     <mat-card-title>
@@ -20,28 +25,38 @@
     <button mat-button (click)="openTeamCreateDialog(createTeamDialog)">Create Team</button>
   </mat-card-actions>
 </mat-card>
-  
-  
+-->
+
 <mat-card class="example-card" *ngFor='let team of teams'>
+
   <mat-card-header>
     <mat-card-title>
       <img src="../../assets/icons/Team-T-Icon.svg" height="15" width="15">
       <span class="pl-4"><b>{{team.name}}</b></span>
+      <button *ngIf="team.unreadMessages != undefined" mat-icon-button class="unread-badge">
+        {{ team.unreadMessages }}
+      </button>
     </mat-card-title>
-    <mat-card-subtitle># members</mat-card-subtitle>
   </mat-card-header>
-  <!-- <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu"> -->
+
   <mat-card-content>
-      <div>
-          number of projects = [X]
-      </div>
+    <div>{{ team.members_count }} Members</div>
+    <div>{{ team.projects_count }} Projects</div>
+
+    <div class="node-counts">
+      <div class="issues">{{ team.topic_counts.Issue || 0 }} Issues</div>
+      <div class="risks">{{ team.topic_counts.Risk || 0 }} Risks</div>
+      <div class="deliverables">{{ team.topic_counts.Deliverable || 0 }} Deliverables</div>
+      <div class="tasks">{{ team.Task || 0 }} Tasks</div>
+    </div>
   </mat-card-content>
+
   <mat-card-actions>
     <button mat-button (click)="getNode(team._id)">View Details</button>
-    <!-- <button mat-button>SHARE</button> -->
   </mat-card-actions>
+
 </mat-card>
-  
+
 <ng-template #createTeamDialog>
   <h4>Create Team</h4>
   <mat-form-field class="full-width">

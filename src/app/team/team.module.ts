@@ -1,6 +1,7 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { AppModule } from '../app.module';
 import { TeamsComponent } from './teams.component';
+import { TeamDashboardComponent } from './team-dashboard.component'
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from '../_guards/auth.guard';
@@ -12,7 +13,8 @@ import {
     MatIconModule,
     MatDialogModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    MatGridListModule
   } from '@angular/material';
 
 const TeamRoutes: Routes = [
@@ -39,18 +41,18 @@ const TeamRoutes: Routes = [
         FormsModule,
         ReactiveFormsModule,
         MatFormFieldModule,
-        MatInputModule
+        MatInputModule,
+        MatGridListModule
     ],
     exports: [
         TeamsComponent,
-        
+        TeamDashboardComponent
     ],
     declarations: [
         TeamsComponent,
-        
+        TeamDashboardComponent
     ],
     providers: [
-        
 
     ],
     schemas: [

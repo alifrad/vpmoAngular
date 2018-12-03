@@ -140,7 +140,8 @@ export function errorHandlerFactory() {
         MatProgressSpinnerModule,
         MatSnackBarModule,
         MatInputModule,
-        MatIconModule
+        MatIconModule,
+        MatGridListModule,
     ],
     // The components, directives, and pipes that belong to this NgModule
     declarations: [

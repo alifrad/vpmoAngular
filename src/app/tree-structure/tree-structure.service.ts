@@ -56,14 +56,17 @@ export class TreeStructureService {
   }
 
   private getPath(node): string {
+    console.log(node)
     if (node == null) {
       return '';
     }
-    if (node.parent == null || node.parent.data.virtual) {
+    if (node.data.path == null) {
       return ',' + node.data._id + ',';
+    } else {
+      return node.data.path + node.data._id + ',';
     }
-    const res = this.getPath(node.parent) + node.data._id + ',';
-    return res;
+    // const res = this.getPath(node.parent) + node.data._id + ',';
+    // return res;
   }
 
   public updateDataFields(node: ITreeNode): void {
@@ -103,7 +106,6 @@ export class TreeStructureService {
       let x = treeModel.getNodeById(nodeId);
       changedNode.push(x.data);
     }
-    console.log(changedNode);
     return changedNode;
   }
 

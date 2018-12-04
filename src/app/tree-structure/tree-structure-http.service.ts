@@ -28,7 +28,6 @@ export class TreeStructureHttpService {
 
   // update bunch of nodes
   public updateNodeList(nodeList: INodeDto[], teamId: string): any {
-    console.log('updateNodeList ', nodeList);
     return this.http.put(this.nodesTreeUrl + teamId + '/', nodeList).subscribe();
   }
 

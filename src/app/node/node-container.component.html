@@ -3,6 +3,7 @@
 
 <!-- Dashboard Components -->
 <team-dashboard *ngIf="contentType=='dashboard' && nodeType == 'Team'" [nodeID]="nodeID"></team-dashboard>
+<project-dashboard *ngIf="contentType=='dashboard' && nodeType == 'Project'"></project-dashboard>
 
 <app-node-edit *ngIf="contentType=='edit'"></app-node-edit>
 <app-chat [nodeID]="nodeID" [nodeType]="nodeType" *ngIf="contentType=='chat'"></app-chat>

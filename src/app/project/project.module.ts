@@ -8,6 +8,7 @@ import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 import { ProjectAddComponent } from './project-add.component';
 import { ProjectService } from './project.service';
 import { ProjectComponent } from './project.component';
+import { ProjectDashboardComponent } from './project-dashboard.component'
 import { 
   MatDatepickerModule, 
   MatNativeDateModule, 
@@ -53,18 +54,19 @@ const ProjectRoutes: Routes = [
     MatCardModule,
     MatListModule,
     MatIconModule,
-    QuillModule,
-    
+    QuillModule
   ],
   declarations: [
     ProjectComponent,
     ProjectAddComponent,
-    ProjectListComponent
+    ProjectListComponent,
+    ProjectDashboardComponent
   ],
   providers: [
     ProjectService,
   ],
   exports: [
+    ProjectDashboardComponent
   ],
 })
 export class ProjectModule { }

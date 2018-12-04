@@ -9,11 +9,11 @@ import { ChatService } from 'app/chat/chat.service';
 import { Subscription } from 'rxjs/Subscription';
 
 @Component({
-  selector: 'app-teams',
-  templateUrl: './teams.component.html',
-  styleUrls: ['./teams.component.scss']
+  selector: 'teams-list',
+  templateUrl: './teams-list.component.html',
+  styleUrls: ['./teams-list.component.scss']
 })
-export class TeamsComponent implements OnInit, OnDestroy {
+export class TeamsListComponent implements OnInit, OnDestroy {
 
   teams: any[] = [];
   errorMessage: string;

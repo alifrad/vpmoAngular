@@ -43,7 +43,7 @@ export class TopicsListComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnChanges (changes) {
   	if (changes['topicType'] != undefined) {
-  		this.setDisplayedColumns(changes['topicType'])
+  		this.setDisplayedColumns(changes['topicType'].currentValue)
   	}
   }
 

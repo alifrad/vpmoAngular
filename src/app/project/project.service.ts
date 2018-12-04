@@ -37,4 +37,8 @@ export class ProjectService {
     return this.http.post(this.projectsUrl + '/add', project);
   }
 
+  getTopicsUnderProject(parentNodeID, topicType) {
+    return this.http.get(appConfig.apiUrl + '/nodes/?nodeType='+topicType+'&parentNodeID='+parentNodeID)
+  }
+
 }

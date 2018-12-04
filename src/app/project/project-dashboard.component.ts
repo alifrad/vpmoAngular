@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
 import { NodeService } from '../node/node.service';
 import { Subscription } from 'rxjs/Subscription';
 import { Subject, combineLatest } from 'rxjs';
@@ -23,7 +24,8 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
 
   constructor(
   	private nodeService: NodeService,
-    private authService: AuthenticationService
+    private authService: AuthenticationService,
+    private router: Router
   ) {
   	this._unsubscribeAll = new Subject();
   }
@@ -37,7 +39,7 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
     combined
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe(([node, user]) => {
-        if (node && user) {
+        if (node !== null && user) {
           this.node = node
           this.currentUsername = user.username
           this.setTaskCount()
@@ -72,6 +74,14 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
         this.overdueCount += 1
       }
     }
+  }
+
+  goToScrumboard () {
+    this.router.navigate(['node/'+this.node.node_type+'/'+this.node._id+'/board'])
+  }
+
+  goToTopic (topicType) {
+    this.router.navigate(['node/'+this.node.node_type+'/'+this.node._id+'/'+topicType])
   }
 
 }

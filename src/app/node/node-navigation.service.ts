@@ -31,6 +31,15 @@ export class NodeNavigationService {
         let urlBase = `/node/${node.node_type}/${node._id}/`;
         var nav = 
             [{
+                'id'   : 'dashboard',
+                'title': 'Node Dashboard',
+                // 'translate': 'NAV.SAMPLE.TITLE',
+                'type' : 'item',
+                'icon' : 'navigation',
+                'url'  : urlBase + 'dashboard',
+                'hidden' : false,
+            },
+            {
                 'id'   : 'tree',
                 'title': 'Tree',
                 // 'translate': 'NAV.SAMPLE.TITLE',

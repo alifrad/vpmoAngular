@@ -9,6 +9,7 @@ import { MatFormFieldModule, MatIconModule, MatInputModule, MatButtonModule, Mat
   MatListModule, MatTableModule, MatDialogModule, MatSelectModule, MatTooltipModule,
   MatDatepickerModule, MatNativeDateModule, MatAutocompleteModule } from '@angular/material';
 import { UserModule } from '../user/user.module';
+import { ScrumboardModule } from '../scrumboard/scrumboard.module';
 
 import { AuthGuard } from '../_guards/auth.guard';
 import { TasksComponent } from './tasks.component';
@@ -46,6 +47,7 @@ const TasksRoutes: Routes = [
     MatNativeDateModule,
     MatAutocompleteModule,
     UserModule,
+    ScrumboardModule
   ],
   declarations: [
     TasksComponent,

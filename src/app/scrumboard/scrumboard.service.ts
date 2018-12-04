@@ -209,7 +209,7 @@ export class ScrumboardService
 
                 this.onListsChanged.next(lists)
                 this.lists = lists
-                resolve(this.lists)
+                resolve(this.lists)                
             }, reject)
         })
     }

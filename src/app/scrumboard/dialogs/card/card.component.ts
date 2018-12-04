@@ -69,21 +69,6 @@ export class ScrumboardCardDialogComponent implements OnInit, OnDestroy
         this.card = this._data.task
 
         this.searchUrl = `${appConfig.taskApiUrl}` + '/assignable_task_users/' + this._data.nodeID +'/' + '?nodeType='+this._data.nodeType + '&search='
-        /*
-        this._scrumboardService.onBoardChanged
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe(board => {
-                this.board = board;
-
-                this.card = this.board.cards.find((_card) => {
-                    return this._data.cardId === _card.id;
-                });
-
-                this.list = this.board.lists.find((_list) => {
-                    return this._data.listId === _list.id;
-                });
-            });
-        */
     }
 
     /**
@@ -107,12 +92,12 @@ export class ScrumboardCardDialogComponent implements OnInit, OnDestroy
         var file = event.target.files[0]
 
         this._scrumboardService.getPresignedS3Url(this.card._id, file.name)
-            .pipe(mergeMap(putDetails =>
+            .pipe(mergeMap(putDetails => {
                 return this._scrumboardService.uploadS3Document(putDetails.url, file, file.type)
-            ))
-            .pipe(mergeMap(awsResponse => 
+            }))
+            .pipe(mergeMap(awsResponse => {
                 return this._scrumboardService.createTaskDocument(this.card._id, file.name)
-            ))
+            }))
             .subscribe(createDocResponse => {
                 this.card.documents.push(createDocResponse)
             })

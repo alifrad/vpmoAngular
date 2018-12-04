@@ -1,25 +1,29 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { AuthenticationService } from 'app/_services/authentication.service';
 import { TeamService } from './team.service';
 import { Team } from './team';
 import { Router } from '@angular/router';
 import { GlobalService } from '../_services/global.service';
 import {MatDialog, MatDialogConfig} from '@angular/material';
-import { NodeService } from 'app/node/node.service';
+import { ChatService } from 'app/chat/chat.service';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-teams',
   templateUrl: './teams.component.html',
   styleUrls: ['./teams.component.scss']
 })
-export class TeamsComponent implements OnInit {
+export class TeamsComponent implements OnInit, OnDestroy {
 
-  teams: Team[] = [];
+  teams: any[] = [];
   errorMessage: string;
   node: any;
   team: any;
   newTeamName: string;
   dialogRef: any;
+  unreadMessages: any;
+
+  unreadMessageSubscription: Subscription;
 
   constructor(
       private authenticationService: AuthenticationService,
@@ -27,10 +31,8 @@ export class TeamsComponent implements OnInit {
       private router: Router,
       private globalService: GlobalService,
       private dialog: MatDialog,
-      private nodeService: NodeService,
-  ) { 
-  
-  }
+      private chatService: ChatService
+  ) { }
 
   teamTree(team: Team) {
     // debugger;
@@ -42,12 +44,20 @@ export class TeamsComponent implements OnInit {
 
 
   getNode(nodeId: string) {
-    // this.nodeService.getNodeDetails(nodeId);
-    this.router.navigate(['/node/Team/' + nodeId + '/tree']);
+    this.router.navigate(['/node/Team/' + nodeId + '/dashboard']);
   }
 
   ngOnInit() {
     this.getTeams()
+
+    this.unreadMessageSubscription = this.chatService.unreadMessageTracker.subscribe(unreadMessages => {
+      this.unreadMessages = unreadMessages
+      this.setUnreadMessages()
+    })
+  }
+
+  ngOnDestroy () {
+    this.unreadMessageSubscription.unsubscribe();
   }
 
   getTeams () {
@@ -55,10 +65,33 @@ export class TeamsComponent implements OnInit {
       teams =>  
       {
         this.teams = teams;
+        this.setUnreadMessages()
       },
       error => this.errorMessage = <any>error
     );
   }
+
+
+  /*
+   * Goes over all teams and sets unread messages on each
+   */
+  setUnreadMessages() {
+    for (var team = 0; team < this.teams.length; team++) {
+      this.teams[team].unreadMessages = 0
+
+      if (this.unreadMessages[this.teams[team]._id] != undefined) {
+        this.teams[team].unreadMessages += this.unreadMessages[this.teams[team]._id]
+      }
+
+      for (var child = 0; child < this.teams[team].child_nodes.length; child++) {
+        if (this.unreadMessages[this.teams[team].child_nodes[child]] != undefined) {
+          this.teams[team].unreadMessages += this.unreadMessages[this.teams[team].child_nodes[child]]
+        }
+      }
+    }
+  }
+
+
 
   openTeamCreateDialog (templateRef) {
     let dialogRef = this.dialog.open(templateRef, {

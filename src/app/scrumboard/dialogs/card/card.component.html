@@ -58,7 +58,7 @@
     <div *ngIf="card" mat-dialog-content class="py-24 px-0 m-0" fusePerfectScrollbar>
 
         <!-- BREADCRUMB -->
-        <div class="card-breadcrumb mt-8 mb-32 px-24" fxLayout="row" fxLayoutAlign="start center">
+        <div *ngIf="list" class="card-breadcrumb mt-8 mb-32 px-24" fxLayout="row" fxLayoutAlign="start center">
             <span>{{list.title}}</span>
             <mat-icon class="s-20">chevron_right</mat-icon>
         </div>

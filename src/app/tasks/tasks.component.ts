@@ -8,6 +8,7 @@ import {MatDialog, MatDialogConfig} from '@angular/material';
 import { CreateTasksComponent } from './create-tasks.component';
 import { EditTaskComponent } from './edit-task.component';
 import { NodeService } from '../node/node.service';
+import { ScrumboardCardDialogComponent } from '../scrumboard/dialogs/card/card.component'
 
 @Component({
   selector: 'app-tasks',
@@ -89,12 +90,16 @@ export class TasksComponent implements OnInit, OnDestroy {
   }
 
   openEditDialog (task) {
-    const dialogRef = this.dialog.open(EditTaskComponent, {
-      width: '350',
-      height: '500',
-      data: {nodeID: this.nodeID, nodeType: this.nodeType, taskID: task._id, taskTitle: task.title,
-            taskDueDate: task.due_date, taskAssignee: task.assignee.username}
-    });
+    const dialogRef = this.dialog.open(ScrumboardCardDialogComponent, {
+            panelClass: 'scrumboard-card-dialog',
+            data      : {
+                task: task,
+                list: task.task_list,
+                nodeID: this.nodeID,
+                nodeType: this.nodeType
+            }
+        });
+        
     dialogRef.afterClosed().subscribe(result => {
       this.getAssignedTasks();
     });

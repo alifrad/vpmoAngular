@@ -1,5 +1,5 @@
-<app-nodepage></app-nodepage>
-<mat-divider></mat-divider>
+<app-nodepage *ngIf="contentType != 'chat'"></app-nodepage>
+<mat-divider *ngIf="contentType != 'chat'"></mat-divider>
 
 <!-- Team Dashboard -->
 <team-dashboard *ngIf="contentType=='dashboard' && nodeType == 'Team'" [nodeID]="nodeID"></team-dashboard>

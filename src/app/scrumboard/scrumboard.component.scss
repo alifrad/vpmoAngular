@@ -1,7 +1,8 @@
 @import "src/@fuse/scss/fuse";
 
 :host {
-
+    padding: 24px;
+    
     mat-sidenav-container {
         width: 100%;
         height: 100%;

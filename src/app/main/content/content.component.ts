@@ -1,4 +1,4 @@
-import { Component, HostBinding, OnDestroy } from '@angular/core';
+import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 
 import { Subscription } from 'rxjs';
@@ -13,10 +13,11 @@ import { FuseConfigService } from '@fuse/services/config.service';
     styleUrls  : ['./content.component.scss'],
     animations : fuseAnimations
 })
-export class FuseContentComponent implements OnDestroy
+export class FuseContentComponent implements OnDestroy, OnInit
 {
     onConfigChanged: Subscription;
     fuseSettings: any;
+    mobile: boolean;
 
     @HostBinding('@routerTransitionUp') routeAnimationUp = false;
     @HostBinding('@routerTransitionDown') routeAnimationDown = false;
@@ -61,6 +62,13 @@ export class FuseContentComponent implements OnDestroy
                         this.fuseSettings = newSettings;
                     }
                 );
+    }
+
+    ngOnInit () {
+        console.log('Width', window.screen.width)
+        if (window.screen.width <= 360) { // 768px portrait
+            this.mobile = true;
+        }
     }
 
     ngOnDestroy()

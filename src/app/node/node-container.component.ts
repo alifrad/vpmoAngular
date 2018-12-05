@@ -4,7 +4,10 @@ import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-node-container',
   templateUrl: './node-container.component.html',
-  styleUrls: ['./node-container.component.less']
+  styleUrls: ['./node-container.component.less'],
+  host: {
+    '[class.p-24]': "contentType != 'chat'"
+  }
 })
 export class NodeContainerComponent implements OnInit {
 

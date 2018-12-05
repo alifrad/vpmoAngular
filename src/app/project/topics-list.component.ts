@@ -25,6 +25,29 @@ export class TopicsListComponent implements OnInit, OnChanges, OnDestroy {
   unreadMessages: any;
   unreadMessagesSubscription: Subscription;
 
+  STATUS_MAP: any = {
+    1: 'Open',
+    0: 'Closed'
+  }
+
+  SEVERITY_MAP: any = {
+    1: 'Low',
+    2: 'Medium',
+    3: 'High'
+  }
+
+  IMPACT_MAP: any = {
+    1: 'Minor',
+    2: "Moderate",
+    3: 'High'
+  }
+
+  PROBABILITY_MAP: any = {
+    1: 'Low Probability',
+    2: 'Medium Probability',
+    3: 'High Probability'
+  }
+
   constructor(
   	private projectService: ProjectService,
   	private router: Router,

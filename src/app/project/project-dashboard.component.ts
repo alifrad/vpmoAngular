@@ -39,7 +39,7 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
     combined
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe(([node, user]) => {
-        if (node !== null && user) {
+        if (node !== null && node.tasks_due != undefined && user) {
           this.node = node
           this.currentUsername = user.username
           this.setTaskCount()

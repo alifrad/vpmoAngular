@@ -7,6 +7,7 @@ import { GlobalService } from '../_services/global.service';
 import {MatDialog, MatDialogConfig} from '@angular/material';
 import { ChatService } from 'app/chat/chat.service';
 import { Subscription } from 'rxjs/Subscription';
+import { LoadingService } from '../_services/loading.service';
 
 @Component({
   selector: 'teams-list',
@@ -31,7 +32,8 @@ export class TeamsListComponent implements OnInit, OnDestroy {
       private router: Router,
       private globalService: GlobalService,
       private dialog: MatDialog,
-      private chatService: ChatService
+      private chatService: ChatService,
+      private loadingService: LoadingService
   ) { }
 
   teamTree(team: Team) {
@@ -76,16 +78,18 @@ export class TeamsListComponent implements OnInit, OnDestroy {
    * Goes over all teams and sets unread messages on each
    */
   setUnreadMessages() {
-    for (var team = 0; team < this.teams.length; team++) {
-      this.teams[team].unreadMessages = 0
+    if (this.unreadMessages) {
+      for (var team = 0; team < this.teams.length; team++) {
+        this.teams[team].unreadMessages = 0
 
-      if (this.unreadMessages[this.teams[team]._id] != undefined) {
-        this.teams[team].unreadMessages += this.unreadMessages[this.teams[team]._id]
-      }
+        if (this.unreadMessages[this.teams[team]._id] != undefined) {
+          this.teams[team].unreadMessages += this.unreadMessages[this.teams[team]._id]
+        }
 
-      for (var child = 0; child < this.teams[team].child_nodes.length; child++) {
-        if (this.unreadMessages[this.teams[team].child_nodes[child]] != undefined) {
-          this.teams[team].unreadMessages += this.unreadMessages[this.teams[team].child_nodes[child]]
+        for (var child = 0; child < this.teams[team].child_nodes.length; child++) {
+          if (this.unreadMessages[this.teams[team].child_nodes[child]] != undefined) {
+            this.teams[team].unreadMessages += this.unreadMessages[this.teams[team].child_nodes[child]]
+          }
         }
       }
     }
@@ -114,9 +118,10 @@ export class TeamsListComponent implements OnInit, OnDestroy {
     }
 
     var self = this
+    this.loadingService.show()
     this.teamService.createTeam(this.newTeamName)
       .subscribe(createdTeam => {
-        alert('Team Created')
+        this.loadingService.hide()
         self.dialogRef.close()
       })
   }

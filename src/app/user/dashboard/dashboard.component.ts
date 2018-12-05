@@ -11,23 +11,12 @@ import { ChatService } from 'app/chat/chat.service';
 export class DashboardComponent implements OnInit {
 
   fullname: any;
-  unreadMessages: any;
 
   constructor(
   	private authService: AuthenticationService,
   	private chatService: ChatService
   ) { }
 
-  ngOnInit() {
-    this.fullname = this.authService.getUser().fullname;
-    console.log(this.fullname);
-    this.chatService.unreadMessageTracker.subscribe(unreadMessages => {
-    	this.unreadMessages = unreadMessages
-    })
-  }
-
-  channels () {
-  	return Object.keys(this.unreadMessages)
-  }
+  ngOnInit() { }
 
 }

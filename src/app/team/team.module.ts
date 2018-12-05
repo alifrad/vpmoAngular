@@ -1,6 +1,6 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { AppModule } from '../app.module';
-import { TeamsComponent } from './teams.component';
+import { TeamsListComponent } from './teams-list.component';
 import { TeamDashboardComponent } from './team-dashboard.component'
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
@@ -23,7 +23,7 @@ const TeamRoutes: Routes = [
         // component: UserComponent,
         children: [
             // { path: 'tree', component: SignUpComponent },
-            { path: 'all', component: TeamsComponent },
+            { path: 'all', component: TeamsListComponent },
         ],
         canActivate: [ AuthGuard ],
     },
@@ -45,11 +45,11 @@ const TeamRoutes: Routes = [
         MatGridListModule
     ],
     exports: [
-        TeamsComponent,
+        TeamsListComponent,
         TeamDashboardComponent
     ],
     declarations: [
-        TeamsComponent,
+        TeamsListComponent,
         TeamDashboardComponent
     ],
     providers: [

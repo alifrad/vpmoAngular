@@ -2,14 +2,8 @@
   <div class="section no-pad-bot">
     <div class="container">
       <br><br>
-      <ul>
-      	<li *ngFor="let channel of channels()">
-      		{{ channel }} {{ unreadMessages[channel] }}
-      	</li>
-      </ul>
-
       <!--<app-team-card></app-team-card>-->
-      <app-teams style="width: 100%;"></app-teams>
+      <teams-list style="width: 100%;"></teams-list>
     </div>
   </div>
 </div>

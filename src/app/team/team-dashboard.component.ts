@@ -12,7 +12,7 @@ import { Subscription } from 'rxjs/Subscription';
 @Component({
   selector: 'team-dashboard',
   templateUrl: './team-dashboard.component.html',
-  styleUrls: ['./team-dashboard.component.scss', './teams.component.scss']
+  styleUrls: ['./team-dashboard.component.scss', './teams-list.component.scss']
 })
 export class TeamDashboardComponent implements OnInit, OnChanges, OnDestroy {
 

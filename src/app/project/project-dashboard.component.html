@@ -1,0 +1,71 @@
+<div>
+	<h1>Project Dashboard</h1>
+
+  <!-- TASKS CARD -->
+	<mat-card *ngIf="node && currentUsername">
+    <mat-card-header>
+      <mat-card-title>
+        Tasks
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <p>Mine Overdue: {{ overdueCountMine }}</p>
+      <p>Mine Due: {{ dueCountMine }}</p>
+      <p>All Overdue: {{ overdueCount }}</p>
+      <p>All Due: {{ dueCount }}</p> 
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-button (click)="goToScrumboard()">Go to Scrumboard</button>
+    </mat-card-actions>
+  </mat-card>
+  <!-- /TASKS CARD -->
+
+  <!-- ISSUES CARD -->
+  <mat-card *ngIf="node">
+    <mat-card-header>
+      <mat-card-title>
+        ISSUES
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <p>Total Count: {{ node.topic_counts.Issue || 0 }}</p>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-button (click)="goToTopic('Issue')">Go to Issues List</button>
+    </mat-card-actions>
+  </mat-card>
+  <!-- /ISSUES CARD -->
+
+  <!-- DELIVERABLES CARD -->
+  <mat-card *ngIf="node">
+    <mat-card-header>
+      <mat-card-title>
+        Deliverables
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <p>Total Count: {{ node.topic_counts.Deliverable || 0 }}</p>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-button (click)="goToTopic('Deliverable')">Go to Deliverables List</button>
+    </mat-card-actions>
+  </mat-card>
+  <!-- /DELIVERABLES CARD -->
+
+  <!-- RISKS CARD -->
+  <mat-card *ngIf="node">
+    <mat-card-header>
+      <mat-card-title>
+        Risks
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <p>Total Count: {{ node.topic_counts.Risk || 0 }}</p>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-button (click)="goToTopic('Risk')">Go to Risks List</button>
+    </mat-card-actions>
+  </mat-card>
+  <!-- /RISKS CARD -->
+
+</div>

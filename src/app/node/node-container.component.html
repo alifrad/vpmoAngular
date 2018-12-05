@@ -1,8 +1,12 @@
 <app-nodepage></app-nodepage>
 <mat-divider></mat-divider>
 
-<!-- Dashboard Components -->
+<!-- Team Dashboard -->
 <team-dashboard *ngIf="contentType=='dashboard' && nodeType == 'Team'" [nodeID]="nodeID"></team-dashboard>
+
+<!-- Project Dashboard + Corresponding topic list -->
+<project-dashboard *ngIf="contentType=='dashboard' && nodeType == 'Project'"></project-dashboard>
+<topics-list [parentNodeID]="nodeID" [parentNodeType]="nodeType" [topicType]="contentType" *ngIf="(contentType=='Deliverable' || contentType=='Risk' || contentType=='Issue') && nodeType == 'Project'"></topics-list>
 
 <app-node-edit *ngIf="contentType=='edit'"></app-node-edit>
 <app-chat [nodeID]="nodeID" [nodeType]="nodeType" *ngIf="contentType=='chat'"></app-chat>

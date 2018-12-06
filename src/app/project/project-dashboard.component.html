@@ -2,7 +2,7 @@
 	<h1>Project Dashboard</h1>
 
   <!-- TASKS CARD -->
-	<mat-card *ngIf="node && currentUsername">
+	<mat-card class="dashboard-card" *ngIf="node && currentUsername">
     <mat-card-header>
       <mat-card-title>
         Tasks
@@ -21,7 +21,7 @@
   <!-- /TASKS CARD -->
 
   <!-- ISSUES CARD -->
-  <mat-card *ngIf="node">
+  <mat-card class="dashboard-card" *ngIf="node">
     <mat-card-header>
       <mat-card-title>
         ISSUES
@@ -37,7 +37,7 @@
   <!-- /ISSUES CARD -->
 
   <!-- DELIVERABLES CARD -->
-  <mat-card *ngIf="node">
+  <mat-card class="dashboard-card" *ngIf="node">
     <mat-card-header>
       <mat-card-title>
         Deliverables
@@ -53,7 +53,7 @@
   <!-- /DELIVERABLES CARD -->
 
   <!-- RISKS CARD -->
-  <mat-card *ngIf="node">
+  <mat-card class="dashboard-card" *ngIf="node">
     <mat-card-header>
       <mat-card-title>
         Risks

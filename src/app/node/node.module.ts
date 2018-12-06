@@ -16,7 +16,8 @@ import {
   MatTabsModule,
   MatExpansionModule,
   MatSelectModule, 
-  MatDividerModule
+  MatDividerModule,
+  MatBadgeModule
 } from '@angular/material';
 import { UserModule } from '../user/user.module';
 import { ProjectModule } from '../project/project.module';
@@ -34,6 +35,7 @@ import { NodeService } from './node.service';
 import { NodeNavigationService } from './node-navigation.service';
 import { NodeEditComponent } from './node-edit.component';
 import { NodeContainerComponent } from './node-container.component';
+import { NodeShortcutsComponent } from './node-shortcuts.component';
 
 const NodeRoutes: Routes = [
   {
@@ -77,6 +79,7 @@ const NodeRoutes: Routes = [
     MatExpansionModule,
     MatSelectModule,
     MatDividerModule,
+    MatBadgeModule,
     ProjectModule,
     ChatModule,
     PermissionsModule,
@@ -96,7 +99,8 @@ const NodeRoutes: Routes = [
   declarations: [
     NodepageComponent,
     NodeEditComponent,
-    NodeContainerComponent
+    NodeContainerComponent,
+    NodeShortcutsComponent
     
   ],
   exports: [

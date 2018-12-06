@@ -2,32 +2,9 @@
   <app-node-breadcrumbs></app-node-breadcrumbs>
 
   <div>
-    <h2>{{node._id}}</h2>
+    <small>{{node._id}}</small>
   </div>
 
-  
-  <!--
-    <mat-tab-group (selectedTabChange)="onTabChanged($event)" [selectedIndex]="0" dynamicHeight>
-      <mat-tab *ngIf="nodeType !== 'Topic'" label="Tree"> 
-        <app-tree-structure></app-tree-structure> 
-      </mat-tab>
-      <mat-tab label="Content">  
-        <app-node-edit *ngIf="showContent()"></app-node-edit> 
-      </mat-tab>
-      <mat-tab label="Conversation"> 
-        <app-chat *ngIf="selectedIndex==2"></app-chat>
-      </mat-tab>
-      <mat-tab label="Tasks"> 
-        <app-tasks *ngIf="selectedIndex==3"></app-tasks>
-      </mat-tab>
-      <mat-tab label="Documents">
-        <app-documents-list *ngIf="selectedIndex==4"></app-documents-list>
-      </mat-tab>
-      <mat-tab label="Permissions">
-      	<app-permissions *ngIf="selectedIndex==5"></app-permissions>
-      </mat-tab>
-    </mat-tab-group>
-  -->
 </div>
 
 

@@ -14,7 +14,8 @@ import {
     MatDialogModule,
     MatFormFieldModule,
     MatInputModule,
-    MatGridListModule
+    MatGridListModule,
+    MatBadgeModule
   } from '@angular/material';
 
 const TeamRoutes: Routes = [
@@ -42,7 +43,8 @@ const TeamRoutes: Routes = [
         ReactiveFormsModule,
         MatFormFieldModule,
         MatInputModule,
-        MatGridListModule
+        MatGridListModule,
+        MatBadgeModule
     ],
     exports: [
         TeamsListComponent,

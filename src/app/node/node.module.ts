@@ -17,7 +17,7 @@ import {
   MatExpansionModule,
   MatSelectModule, 
   MatDividerModule,
-  MatBadgeModule
+  MatBadgeModule,
 } from '@angular/material';
 import { UserModule } from '../user/user.module';
 import { ProjectModule } from '../project/project.module';

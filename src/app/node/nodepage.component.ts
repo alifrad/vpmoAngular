@@ -14,6 +14,7 @@ export class NodepageComponent implements OnInit {
   errorMessage: string;
   node: any;
   selectedIndex: any;
+  step = 0;
 
   constructor(
     private router: Router,
@@ -48,6 +49,18 @@ export class NodepageComponent implements OnInit {
     } else {
       return this.selectedIndex == 1
     }
+  }
+
+  setStep(index: number) {
+    this.step = index;
+  }
+
+  nextStep() {
+    this.step++;
+  }
+
+  prevStep() {
+    this.step--;
   }
 
 }

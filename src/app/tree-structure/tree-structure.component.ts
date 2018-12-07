@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { TreeStructureService } from './tree-structure.service';
 import { TreeStructureHttpService } from './tree-structure-http.service';
 import { TreeComponent, ITreeOptions } from '../../../node_modules/angular-tree-component';
@@ -14,13 +14,14 @@ import { CreateNodeComponent } from './create-node.component';
 import { NodeService } from '../node/node.service';
 import { AuthenticationService } from '../_services/authentication.service';
 import { ChatService } from '../chat/chat.service';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-tree-structure',
   templateUrl: './tree-structure.component.html',
   styleUrls: ['./tree-structure.component.scss']
 })
-export class TreeStructureComponent implements OnInit {
+export class TreeStructureComponent implements OnInit, OnDestroy {
   treeRoot: any;
   nodeType: any;
   nodeID: any;
@@ -38,6 +39,10 @@ export class TreeStructureComponent implements OnInit {
   private favoriteNodeIds: any[] = [];
   // mapping of {node.name: unreadMessageCount}
   private unreadMessages: any = {};
+
+  nodeSubscription: Subscription;
+  favoriteNodesSubscription: Subscription;
+  unreadMessagesSubscription: Subscription;
 
   // set options for tree
   public options: ITreeOptions = {
@@ -173,26 +178,30 @@ export class TreeStructureComponent implements OnInit {
         })
     }
   }
-  
 
-  public ngOnInit() {
+  ngOnInit () {
     console.log('TreeStructure Init')
 
-    this.nodeService.node.subscribe(node => {
-      if (node !== null) {
+    this.nodeSubscription = this.nodeService.node.subscribe(node => {
+      if (node !== null && node !== undefined) {
         this.getTree(node.node_type, node._id)
         this.nodeType = node.node_type
         this.nodeID = node._id
       }
     })
 
-    this.authService.favoriteNodes.subscribe(favoriteNodes => {
+    this.favoriteNodesSubscription = this.authService.favoriteNodes.subscribe(favoriteNodes => {
       this.favoriteNodeIds = favoriteNodes.map(i => i._id)
     })
 
-    this.chatService.unreadMessageTracker.subscribe(unreadMessages => {
+    this.unreadMessagesSubscription = this.chatService.unreadMessageTracker.subscribe(unreadMessages => {
       this.unreadMessages = unreadMessages
     })
-    
+  }
+
+  ngOnDestroy () {
+    this.nodeSubscription.unsubscribe();
+    this.favoriteNodesSubscription.unsubscribe();
+    this.unreadMessagesSubscription.unsubscribe();
   }
 }

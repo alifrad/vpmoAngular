@@ -27,7 +27,7 @@ export class NodepageComponent implements OnInit {
 
   ngOnInit() {
     this._nodeService.node.subscribe(value => {
-      if (value !== null) {
+      if (value != null && value != undefined) {
           this.node = value
       }
     })

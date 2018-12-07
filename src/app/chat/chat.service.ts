@@ -48,14 +48,13 @@ export class ChatService {
   // This is called whenever there is a new login
   getChatClient (user) {
     var that = this
-    this.loadingService.show()
+    var taskID = this.loadingService.startTask()
 
     this.getToken(user).subscribe(response => {
       var token = response.token
       Twilio.Chat.Client.create(token).then(client => {
         that.getUserChannels(client)
         that.chatClient.next(client)
-        that.loadingService.hide()
 
         client.on('messageAdded', function(message) {
           var unreadMessages = that.unreadMessageTracker.value
@@ -73,9 +72,11 @@ export class ChatService {
         client.on('channelJoined', function(channel) {
           that.channelAdded(channel)
         })
+        console.log('Stopping channel client task')
+        that.loadingService.taskFinished(taskID)
 
-        // Add listener for client.on('tokenAboutToExpire', xx) 
-        //  To update chat token when it's about to expire
+        //  TODO Add listener for client.on('tokenAboutToExpire', xx) 
+        //    To update chat token when it's about to expire
       })
     })
   }
@@ -98,6 +99,7 @@ export class ChatService {
   channelAdded (channel) {
     var that = this
     var userChannels = that.userChannels.value
+    var taskID = this.loadingService.startTask()
 
     if (userChannels.filter(i => i.uniqueName == channel.uniqueName).length == 0) {
       that.userChannels.next(userChannels.concat([channel]))
@@ -105,13 +107,13 @@ export class ChatService {
       userChannels[userChannels.indexOf(userChannels.filter(i => i.uniqueName == channel.uniqueName))] = channel
       that.userChannels.next(userChannels)
     }
+    that.loadingService.taskFinished(taskID)
     that.updateChannelUnread(channel)
 
   }
 
   updateChannelUnread (channel) {
     var that = this
-
     var unreadMessages = that.unreadMessageTracker.value
 
     channel.getUnconsumedMessagesCount().then(function (c) {

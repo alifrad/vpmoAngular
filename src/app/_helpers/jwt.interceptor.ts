@@ -3,17 +3,22 @@ import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HTTP_INTERCEPTORS
 import { Observable } from 'rxjs/Observable';
 import { appConfig } from '../app.config';
 import { Router } from '@angular/router';
+import { LoadingService } from '../_services/loading.service';
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
 
-    constructor(private router: Router) { }
+    constructor(
+        private router: Router,
+        private loadingService: LoadingService
+    ) { }
 
     private handleAuthError(err: HttpErrorResponse): Observable<any> {
         //handle your auth error or rethrow
         if (err.status === 401 || err.status === 403) {
             //navigate /delete cookies or whatever
             this.router.navigateByUrl(`/user/login`);
+            this.loadingService.clearTasks()
             // if you've caught / handled the error, you don't want to rethrow it unless you also want downstream consumers to have to handle it as well.
             return Observable.of(err.message);
         }

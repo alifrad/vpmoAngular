@@ -43,11 +43,11 @@ export class AddPermissionsComponent implements OnInit {
 			return
 		}
 		console.log(this.selectedUser, role)
-		this.loadingService.show()
+		var taskID = this.loadingService.startTask()
 		this._permissionsService.assignUserToNode(this.nodeID, this.nodeType, this.selectedUser, role)
 			.subscribe(
 				response => {
-					this.loadingService.hide()
+					this.loadingService.taskFinished(taskID)
 				 	this.usersList = this.usersList.filter(item => item._id !== this.selectedUser);
 				 	this.dialogRef.close()
 				 }

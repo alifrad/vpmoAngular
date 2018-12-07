@@ -70,7 +70,7 @@ export class LoginComponent implements OnInit
             this.onLoginFormValuesChanged();
         });
 
-        this.loadingService.hide();
+        this.loadingService.clearTasks();
     }
 
 

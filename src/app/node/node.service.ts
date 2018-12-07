@@ -38,7 +38,7 @@ export class NodeService {
   ) { }
 
   getNodeDetails (nodeID: string) {
-    this.loadingService.show()
+    var taskID = this.loadingService.startTask()
     if (nodeID) {
       this.http.get(this.nodeRetrieveUpdateUrl + nodeID + '/')
         .pipe(mergeMap(node => {
@@ -52,11 +52,12 @@ export class NodeService {
         }))
         .subscribe(nodeParents => {
           this.nodeParents.next(nodeParents)
-          this.loadingService.hide()
+          this.loadingService.taskFinished(taskID)
         })
     }
   }
 
+  /* UNUSED */
   getNodeParents (node) {
     if (node._id !== undefined) {
       this.http.get(this.getNodeParentsUrl + node._id + '/').subscribe(nodeParents => {
@@ -65,6 +66,7 @@ export class NodeService {
     }
   }
 
+  /* UNUSED */
   setSubjects (node, nodeParents) {
     this.node.next(node)
     localStorage.setItem('node', JSON.stringify(node));
@@ -73,7 +75,6 @@ export class NodeService {
       role: node.user_role
     });
     this.nodeParents.next(nodeParents)
-    this.loadingService.hide();
   }
 
 

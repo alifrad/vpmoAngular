@@ -118,10 +118,10 @@ export class TeamsListComponent implements OnInit, OnDestroy {
     }
 
     var self = this
-    this.loadingService.show()
+    var taskID = this.loadingService.startTask()
     this.teamService.createTeam(this.newTeamName)
       .subscribe(createdTeam => {
-        this.loadingService.hide()
+        this.loadingService.taskFinished(taskID)
         self.dialogRef.close()
       })
   }

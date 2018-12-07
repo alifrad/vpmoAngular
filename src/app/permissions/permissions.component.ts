@@ -101,11 +101,11 @@ export class PermissionsComponent implements OnInit, OnDestroy {
 
   assignRole (newRole, user) {
     const self = this;
-    this.loadingService.show()
+    var taskID = this.loadingService.startTask()
     this._permissionsService.assignUserToNode(this.nodeID, this.nodeType, user.username, newRole)
       .subscribe(
         response => {
-          self.loadingService.hide()
+          this.loadingService.taskFinished(taskID)
           if (user._id === self.authService.getUser()._id) {
             self.nodeService.getUserPermissions(self.nodeID, self.nodeType);
           }
@@ -167,11 +167,12 @@ export class PermissionsComponent implements OnInit, OnDestroy {
   // Use it in add permissions to set the base role when adding a user
 
   removeUserPermissions (user) {
-    this.loadingService.show()
+    var taskID = this.loadingService.startTask()
+
     this._permissionsService.removeUserPermissions(this.nodeID, this.nodeType, user._id)
        .subscribe(
         response => {
-          this.loadingService.hide()
+          this.loadingService.taskFinished(taskID)
           this.userList = this.userList.filter(item => item._id !== user._id);
           // this.userList.splice(this.userList.indexOf(user), 1)
         }

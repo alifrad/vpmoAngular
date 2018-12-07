@@ -10,14 +10,24 @@ import { LoadingService } from '../_services/loading.service';
 
 export class LoadingComponent {
     message: string = 'Loading!';
-    @Input() showOverlay: boolean;
+    loadingObjects: string[] = [];
 
     constructor(private _loadingService: LoadingService) {
     }
 
     ngOnInit() {
-	    this._loadingService.showOverlay.subscribe(value => {
-	    	this.showOverlay = value
+	    this._loadingService.onLoadStarted.subscribe(loadingObject => {
+            console.log('LOADING', this.loadingObjects)
+            if (loadingObject !== null && loadingObject !== 'CLEAR') {
+                var index = this.loadingObjects.indexOf(loadingObject)
+                if (index < 0) {
+                    this.loadingObjects.push(loadingObject)
+                } else {
+                    this.loadingObjects.splice(index, 1)
+                }
+            } else if (loadingObject == 'CLEAR') {
+                this.loadingObjects = []
+            }
 	    })
 	  }
 }

@@ -4,7 +4,7 @@ import { AuthenticationService } from './authentication.service';
 import { AlertService } from './alert.service';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
-
+import { LoadingService } from './loading.service';
 
 @Injectable()
 export class CustomHttpClient {
@@ -15,7 +15,8 @@ export class CustomHttpClient {
     private http: HttpClient,
     private router: Router,
     private authService: AuthenticationService,
-    private alertService: AlertService
+    private alertService: AlertService,
+    private loadingService: LoadingService
   ) {
     authService.user.subscribe(user => {
       if (user) {
@@ -100,6 +101,8 @@ export class CustomHttpClient {
     if (err.status == 401) {
       this.router.navigate(['/user/logout'])
     }
+    // Clearing all tasks to hide the loading component in case of an error
+    this.loadingService.clearTasks()
     return Observable.throw(err.message);
   }
 }

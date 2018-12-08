@@ -22,6 +22,13 @@ export class LoadingService {
     });
 	}
 
+  public taskTimedout(taskID) {
+    this.onLoadStarted.next({
+      taskID: taskID,
+      reason: 'TIMEOUT'
+    })
+  }
+
   public startTask() {
   	var taskID = this.generateUUID()
     this.onLoadStarted.next(taskID)

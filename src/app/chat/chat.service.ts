@@ -72,7 +72,6 @@ export class ChatService {
         client.on('channelJoined', function(channel) {
           that.channelAdded(channel)
         })
-        console.log('Stopping channel client task')
         that.loadingService.taskFinished(taskID)
 
         //  TODO Add listener for client.on('tokenAboutToExpire', xx) 
@@ -83,15 +82,15 @@ export class ChatService {
 
   getUserChannels (client) {
     var that = this
-
+    var taskID = this.loadingService.startTask()
     client.getUserChannelDescriptors().then(function (channelDescriptors) {
       
       for (var i = 0; i < channelDescriptors.items.length; i++) {
-
         channelDescriptors.items[i].getChannel().then(function (channel) {
           that.channelAdded(channel)
         })
       }
+      that.loadingService.taskFinished(taskID)
 
     })
   }
@@ -115,7 +114,10 @@ export class ChatService {
   updateChannelUnread (channel) {
     var that = this
     var unreadMessages = that.unreadMessageTracker.value
-
+    var taskID = null
+    if (Object.keys(unreadMessages).length == 0) {
+      taskID = this.loadingService.startTask()
+    }
     channel.getUnconsumedMessagesCount().then(function (c) {
       if (c == null) {
         if (channel.lastMessage == undefined) {
@@ -127,6 +129,9 @@ export class ChatService {
         unreadMessages[channel.uniqueName] = c
       }
       that.unreadMessageTracker.next(unreadMessages)
+      if (taskID !== null) {
+        that.loadingService.taskFinished(taskID)
+      }
     })
   }
 

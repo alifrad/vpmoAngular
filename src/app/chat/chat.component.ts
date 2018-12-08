@@ -7,6 +7,7 @@ import { AuthenticationService } from '../_services';
 import { appConfig } from '../app.config';
 import { Subscription } from 'rxjs/Subscription';
 import { NodeService } from '../node/node.service';
+import { LoadingService } from '../_services/loading.service';
 
 declare const Twilio: any
 
@@ -27,7 +28,8 @@ export class ChatComponent implements OnInit, OnDestroy {
     private authService: AuthenticationService,
     private route: ActivatedRoute,
     private nodeService: NodeService,
-    differs: IterableDiffers
+    differs: IterableDiffers,
+    private loadingService: LoadingService
   ) {
     this.differ = differs.find([]).create(null);
   }
@@ -123,17 +125,20 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   getChannel () {
+    var taskID = this.loadingService.startTask()
     var that = this
     this.chatClient.getChannelByUniqueName(this.nodeID)
       .then(function (channel) {
         that.channel = channel
         that.setupChannel()
+        that.loadingService.taskFinished(taskID)
       })
   }
 
   setupChannel () {
     var that = this
     var lastSeenIndex = this.channel.lastConsumedMessageIndex || 0
+    var taskID = this.loadingService.startTask()
 
     if (lastSeenIndex == 0) {
       this.getTotalMessageCount()
@@ -153,18 +158,7 @@ export class ChatComponent implements OnInit, OnDestroy {
       // Otherwise, get from the last seen page
       this.getMessages(lastSeenIndex, 'forwards')
     }
-    
-    /*
-    this.channel.on('messageAdded', function (message) {
-      if (that.messages.length == 0 || message.index == that.messages[that.messages.length-1].index+1) {
-        that.messages.push(message)
-
-        that.updateLastConsumed(message.index)
-
-        that.scrollToBottom()
-      }
-    })
-    */
+    this.loadingService.taskFinished(taskID)
   }
 
 
@@ -190,7 +184,7 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   getMessages (fromIndex, direction) {
     var that = this
-
+    var taskID = this.loadingService.startTask()
     that.channel.getMessages(that.pageSize, fromIndex, direction).then(function (messages) {
       if (messages.items.length > 0) {
         // Adding to the back of the array if we're scrolling up (lastPage)
@@ -207,6 +201,7 @@ export class ChatComponent implements OnInit, OnDestroy {
         }
         that.updateLastConsumed(that.messages[that.messages.length-1].index)
       }
+      that.loadingService.taskFinished(taskID)
     })
   }
 

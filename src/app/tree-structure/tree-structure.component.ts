@@ -121,7 +121,7 @@ export class TreeStructureComponent implements OnInit, OnDestroy {
 
   // IMPORTANT update is needed
   public onMoveNode($event) {
-    console.log('On Move', $event.node)
+    console.log('On Move', $event)
     const movedNode: ITreeNode = this.tree.treeModel.getNodeById($event.node._id);
     const updatedList: IVisualNodeData[] = this.treeStructureService.updateModel(movedNode, this.tree.treeModel);
     const updatedListDto = this.treeStructureService.converVisualNodeToDtoList(updatedList, false);

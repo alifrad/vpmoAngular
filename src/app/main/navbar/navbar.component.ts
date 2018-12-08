@@ -47,6 +47,39 @@ export class FuseNavbarComponent implements OnInit, OnDestroy
     @Input() layout;
     navigation: any = [ 
         {
+        'id'      : 'user',
+        'title'   : 'User',
+        'type'    : 'group',
+        'hidden'  : false,
+        'url'  : '',
+        'children': [
+        {
+            'id'   : 'profile',
+            'title': 'My Profile',
+            // 'translate': 'NAV.SAMPLE.TITLE',
+            'type' : 'item',
+            'icon' : 'account_circle',
+            'url'  : '/user/profile',
+            'hidden' : false,
+        },
+        {
+            'id'   : 'logout',
+            'title': 'Logout',
+            'type' : 'item',
+            'icon' : 'exit_to_app',
+            'url'  : '/user/logout',
+            'hidden' : false,
+        },
+        {
+            'id'   : 'login',
+            'title': 'Log in',
+            'type' : 'item',
+            'icon' : '',
+            'url'  : '/user/login',
+            'hidden' : true,
+        }
+        ]},
+        {
         'id'      : 'general',
         'title'   : 'General',
         'type'    : 'group',
@@ -70,15 +103,15 @@ export class FuseNavbarComponent implements OnInit, OnDestroy
             'hidden' : false,
         },
         ]},
-        {
-            'id'      : 'nodePages',
-            'title'   : 'Node',
-            'type'    : 'group',
-            'hidden' : true,
-            // 'icon' : 'business_center',
-            'url'  : '',
-            'children': []
-        },
+        // {
+        //     'id'      : 'nodePages',
+        //     'title'   : 'Node',
+        //     'type'    : 'group',
+        //     'hidden' : true,
+        //     // 'icon' : 'business_center',
+        //     'url'  : '',
+        //     'children': []
+        // },
         {
             'id'      : 'favoritesGroup',
             'title'   : 'FAVOURITES',
@@ -94,10 +127,12 @@ export class FuseNavbarComponent implements OnInit, OnDestroy
     fusePerfectScrollbarUpdateTimeout;
     team: any;
     unreadMessages: any = {};
-
+    isLoggedIn: boolean;
     nodeNavigationSubscription: Subscription;
     favoriteNodesSubscription: Subscription;
     unreadMessagesSubscription: Subscription;
+    user: any = null;
+    fullname: any;
 
     constructor(
         private sidebarService: FuseSidebarService,
@@ -113,12 +148,12 @@ export class FuseNavbarComponent implements OnInit, OnDestroy
     )
     {
         // Navigation data
-        // this.navigation = navigation;
-        this.nodeNavigationSubscription = nodeNavigationService.navigation.subscribe(
-            nav => {
-                this.updateNodeNav(nav)
-            }
-        );
+        
+        // this.nodeNavigationSubscription = nodeNavigationService.navigation.subscribe(
+        //     nav => {
+        //         this.updateNodeNav(nav)
+        //     }
+        // );
 
         this.unreadMessagesSubscription = chatService.unreadMessageTracker.subscribe(unreadMessages => {
             this.updateFavoriteNodesNav(authService.favoriteNodes.value, unreadMessages)
@@ -136,11 +171,37 @@ export class FuseNavbarComponent implements OnInit, OnDestroy
             'teams',
             this.domSanitizer.bypassSecurityTrustResourceUrl('../../assets/icon/teams.svg')
         );
+
+        this.authService.user.subscribe(user => {
+            if (user) {
+                this.user = user
+                this.fullname = this.user.fullname;
+                this.isLoggedIn = true;
+                this.updateUserNav(this.isLoggedIn);
+            } else {
+                this.user = null
+                this.fullname = ''
+                this.isLoggedIn = false;
+                this.updateUserNav(this.isLoggedIn);
+            }
+        });
     }
 
     updateNodeNav (nodeNav) {
-        this.navigation.find(item => item.id == 'nodePages').hidden = false
+        // this.navigation.find(item => item.id == 'user').hidden = false
         this.navigation.find(item => item.id == 'nodePages').children = nodeNav
+    }
+
+    updateUserNav (userLoggedIn: Boolean) {
+        if (userLoggedIn) {
+            this.navigation.find(item => item.id == 'profile').hidden = false;
+            this.navigation.find(item => item.id == 'logout').hidden = false;
+            this.navigation.find(item => item.id == 'login').hidden = true;  
+        } else {
+            this.navigation.find(item => item.id == 'profile').hidden = true;
+            this.navigation.find(item => item.id == 'logout').hidden = true;
+            this.navigation.find(item => item.id == 'login').hidden = false;  
+        };        
     }
 
     updateFavoriteNodesNav (favoriteNodes, unreadMessages) {
@@ -220,5 +281,9 @@ export class FuseNavbarComponent implements OnInit, OnDestroy
     toggleSidebarFolded()
     {
         this.sidebarService.getSidebar('navbar').toggleFold();
+    }
+
+    logout() {
+        this.authService.logout();
     }
 }

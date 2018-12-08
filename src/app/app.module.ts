@@ -91,7 +91,7 @@ import { CustomHttpClient } from './_services/custom-http.service';
 const appRoutes: Routes = [
     {
         path      : '**',
-        redirectTo: 'home'
+        redirectTo: 'user/login'
     }
 ];
 

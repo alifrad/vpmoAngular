@@ -20,15 +20,18 @@
                 </div>
             </div>
 
-            <div class="px-8 px-mat-16">
+            <app-node-breadcrumbs></app-node-breadcrumbs>
+            
+            
+            <!-- <div class="px-8 px-mat-16">
                 <fuse-shortcuts [navigation]="navigation"></fuse-shortcuts>
-            </div>
+            </div> -->
 
         </div>
 
         <div class="" fxFlex="0 1 auto" fxLayout="row" fxLayoutAlign="start center">
-
-            <div *ngIf="isLoggedIn">
+            
+            <!-- <div *ngIf="isLoggedIn">
                 <button mat-button [matMenuTriggerFor]="userMenu"
                         class="user-button">
                     <div fxLayout="row" fxLayoutAlign="center center">
@@ -67,7 +70,7 @@
             <div *ngIf="!isLoggedIn">
                 <button mat-menu-item [routerLink]="['/user/login']">Log In</button>
                 
-            </div>
+            </div> -->
 
             <div class="toolbar-separator"></div>
 
@@ -84,7 +87,7 @@
                 </div>
             </button> -->
 
-            <mat-menu #languageMenu="matMenu" [overlapTrigger]="false">
+            <!-- <mat-menu #languageMenu="matMenu" [overlapTrigger]="false">
 
                 <button mat-menu-item *ngFor="let lang of languages" (click)="setLanguage(lang)">
                     <div fxLayout="row" fxLayoutAlign="start center">
@@ -102,7 +105,7 @@
                     fuseMatSidenavToggler="quick-panel"
                     aria-label="Toggle quick panel">
                 <mat-icon class="icon">format_list_bulleted</mat-icon>
-            </button>
+            </button> -->
 
         </div>
     </div>

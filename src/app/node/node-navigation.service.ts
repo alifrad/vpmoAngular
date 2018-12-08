@@ -20,11 +20,11 @@ export class NodeNavigationService {
         private nodeService: NodeService,
         private router: Router,
     ){
-        nodeService.node.subscribe(node => {
-            if (node) {
-                this.updateNodeNav(node)
-            }
-        })
+        // nodeService.node.subscribe(node => {
+        //     if (node) {
+        //         this.updateNodeNav(node)
+        //     }
+        // })
     }
 
     updateNodeNav (node) {

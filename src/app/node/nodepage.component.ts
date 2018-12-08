@@ -49,4 +49,6 @@ export class NodepageComponent implements OnInit {
       return this.selectedIndex == 1
     }
   }
+
+
 }

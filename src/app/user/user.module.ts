@@ -18,7 +18,8 @@ import { MatInputModule, MatButtonModule, MatCardModule, MatAutocompleteModule }
 import { TeamCardComponent } from './dashboard/team-card.component';
 import { LoginComponent } from './login-2/login.component';
 import { ImageCropperModule } from 'ngx-image-cropper';
-import { TeamModule } from 'app/team/team.module'
+import { TeamModule } from 'app/team/team.module';
+import { LogoutComponent } from './logout.component'
 
 const UserRoutes: Routes = [
     {
@@ -41,6 +42,11 @@ const UserRoutes: Routes = [
             { 
                 path: 'profile', 
                 component: UserProfileComponent,
+                canActivate: [ AuthGuard ], 
+            },
+            { 
+                path: 'logout', 
+                component: LogoutComponent,
                 canActivate: [ AuthGuard ], 
             }
             // { path: '', component: AdminMenuComponent, canActivate: [UserService] }
@@ -79,7 +85,8 @@ const UserRoutes: Routes = [
         DashboardComponent,
         UserProfileComponent,
         TeamCardComponent,
-        UserSearchComponent
+        UserSearchComponent,
+        LogoutComponent
     ],
     providers: [
         UserService,

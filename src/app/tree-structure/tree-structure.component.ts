@@ -52,7 +52,13 @@ export class TreeStructureComponent implements OnInit, OnDestroy {
     //
     allowDrag: true,
     allowDrop: (element, to: { parent: ITreeNode, index }): boolean => {
-      return !to.parent.data.virtual;
+      // Disabling dropping into topic nodes
+      if (to.parent.data.node_type == 'Topic') {
+        return false
+      } else {
+        return true
+      }
+      // return !to.parent.data.virtual;
     },
   };
 
@@ -121,12 +127,15 @@ export class TreeStructureComponent implements OnInit, OnDestroy {
 
   // IMPORTANT update is needed
   public onMoveNode($event) {
-    console.log('On Move', $event)
-    const movedNode: ITreeNode = this.tree.treeModel.getNodeById($event.node._id);
-    const updatedList: IVisualNodeData[] = this.treeStructureService.updateModel(movedNode, this.tree.treeModel);
-    const updatedListDto = this.treeStructureService.converVisualNodeToDtoList(updatedList, false);
-    // this line should change to accomodate the changes to structure when the top node is a project
-    this.treeStructureHttpService.updateNodeList(updatedListDto, this.getTopNode());
+    // Cancel the event if the node is being moved into a topic
+    if ($event.to.parent.node_type != 'Topic') {
+      console.log('On Move', $event)
+      const movedNode: ITreeNode = this.tree.treeModel.getNodeById($event.node._id);
+      const updatedList: IVisualNodeData[] = this.treeStructureService.updateModel(movedNode, this.tree.treeModel);
+      const updatedListDto = this.treeStructureService.converVisualNodeToDtoList(updatedList, false);
+      // this line should change to accomodate the changes to structure when the top node is a project
+      this.treeStructureHttpService.updateNodeList(updatedListDto, this.getTopNode());
+    }
   }
 
   getTopNode(): string {

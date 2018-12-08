@@ -17,7 +17,7 @@ export class LoadingComponent {
 
     ngOnInit() {
 	    this._loadingService.onLoadStarted.subscribe(loadingObject => {
-            console.log('LOADING', this.loadingObjects)
+            // DEBUG -> console.log('LOADING', this.loadingObjects)
             if (loadingObject !== null && loadingObject !== 'CLEAR') {
                 var index = this.loadingObjects.indexOf(loadingObject)
                 if (index < 0) {

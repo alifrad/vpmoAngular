@@ -23,6 +23,9 @@ export class ChatService {
   private readonly apiUrl: string = `${appConfig.chatUrl}`;
   private readonly tokenUrl: string = this.apiUrl + '/token/';
 
+  private client: any;
+  private newMessageEventHandler: any;
+
   constructor(
     private http: CustomHttpClient,
     private authUser: AuthenticationService,
@@ -53,10 +56,11 @@ export class ChatService {
     this.getToken(user).subscribe(response => {
       var token = response.token
       Twilio.Chat.Client.create(token).then(client => {
-        that.getUserChannels(client)
-        that.chatClient.next(client)
+        this.client = client
+        that.getUserChannels(this.client)
+        that.chatClient.next(this.client)
 
-        client.on('messageAdded', function(message) {
+        this.newMessageEventHandler = this.client.on('messageAdded', function(message) {
           var unreadMessages = that.unreadMessageTracker.value
           if (unreadMessages[message.channel.uniqueName] !== undefined) {
             unreadMessages[message.channel.uniqueName] = unreadMessages[message.channel.uniqueName] + 1
@@ -65,16 +69,16 @@ export class ChatService {
           that.messages.next(message)
         })
 
-        client.on('channelAdded', function (channel) {
+        this.client.on('channelAdded', function (channel) {
           that.channelAdded(channel)
         })
 
-        client.on('channelJoined', function(channel) {
+        this.client.on('channelJoined', function(channel) {
           that.channelAdded(channel)
         })
         that.loadingService.taskFinished(taskID)
 
-        //  TODO Add listener for client.on('tokenAboutToExpire', xx) 
+        //  TODO Add listener for this.client.on('tokenAboutToExpire', xx) 
         //    To update chat token when it's about to expire
       })
     })

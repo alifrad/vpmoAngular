@@ -96,7 +96,7 @@ fuse-navbar {
     & > .left-navbar {
         display: none !important;
 
-        @include media-breakpoint-down(md) {
+        @include media-breakpoint(md) {
             display: flex !important;
         }
     }

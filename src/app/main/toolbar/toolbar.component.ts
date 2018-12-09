@@ -94,7 +94,7 @@ export class FuseToolbarComponent implements OnInit {
                 }
             });
 
-        this.fuseConfig.onConfigChanged.subscribe((settings) => {
+        this.fuseConfig.config.subscribe((settings) => {
             this.horizontalNav = settings.layout.navigation === 'top';
             this.noNav = settings.layout.navigation === 'non e';
         });

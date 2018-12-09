@@ -56,7 +56,7 @@ export class FuseContentComponent implements OnDestroy, OnInit
         });
 
         this.onConfigChanged =
-            this.fuseConfig.onConfigChanged
+            this.fuseConfig.config
                 .subscribe(
                     (newSettings) => {
                         this.fuseSettings = newSettings;

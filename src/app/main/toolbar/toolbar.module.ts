@@ -8,7 +8,7 @@ import { FuseSharedModule } from '@fuse/shared.module';
 
 import { FuseToolbarComponent } from 'app/main/toolbar/toolbar.component';
 import { FuseSearchBarModule, FuseShortcutsModule } from '@fuse/components';
-import { NodeBreadcrumbsModule } from '../../node-breadcrumbs/node-breadcrumbs.module';
+import { NodeBreadcrumbsModule } from 'app/node-breadcrumbs/node-breadcrumbs.module';
 
 
 @NgModule({

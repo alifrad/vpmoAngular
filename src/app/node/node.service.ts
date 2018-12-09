@@ -3,11 +3,11 @@ import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { AuthenticationService } from 'app/_services';
 import { appConfig } from '../app.config';
 import { HttpHeaders, HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { BehaviorSubject } from 'rxjs/index';
-import 'rxjs/add/observable/throw';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/do';
+
+
+
 import { LoadingService } from '../_services/loading.service';
 import { CustomHttpClient } from '../_services/custom-http.service';
 import { mergeMap } from 'rxjs/operators';

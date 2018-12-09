@@ -1,6 +1,10 @@
+
+import {throwError as observableThrowError } from 'rxjs';
+import { Observable, of } from 'rxjs';
+
+import {catchError} from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HTTP_INTERCEPTORS, HttpErrorResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
 import { appConfig } from '../app.config';
 import { Router } from '@angular/router';
 import { LoadingService } from '../_services/loading.service';
@@ -20,9 +24,9 @@ export class JwtInterceptor implements HttpInterceptor {
             this.router.navigateByUrl(`/user/login`);
             this.loadingService.clearTasks()
             // if you've caught / handled the error, you don't want to rethrow it unless you also want downstream consumers to have to handle it as well.
-            return Observable.of(err.message);
+            return of(err.message);
         }
-        return Observable.throw(err);
+        return observableThrowError(err);
     }
     
     intercept(
@@ -39,9 +43,9 @@ export class JwtInterceptor implements HttpInterceptor {
                         }
                     });
                 }
-                return next.handle(request).catch(x=> this.handleAuthError(x)); //here use an arrow function, otherwise you may get "Cannot read property 'navigate' of undefined" on angular 4.4.2/net core 2/webpack 2.70;    
+                return next.handle(request).pipe(catchError(x=> this.handleAuthError(x))); //here use an arrow function, otherwise you may get "Cannot read property 'navigate' of undefined" on angular 4.4.2/net core 2/webpack 2.70;    
             } else {
-                return next.handle(request).catch(x=> this.handleAuthError(x)); //here use an arrow function, otherwise you may get "Cannot read property 'navigate' of undefined" on angular 4.4.2/net core 2/webpack 2.70; 
+                return next.handle(request).pipe(catchError(x=> this.handleAuthError(x))); //here use an arrow function, otherwise you may get "Cannot read property 'navigate' of undefined" on angular 4.4.2/net core 2/webpack 2.70; 
         }
     }
 }

@@ -1,11 +1,11 @@
+
+import {throwError as observableThrowError,  Observable ,  of } from 'rxjs';
 import { Injectable } from '@angular/core';
 // import { Headers, Http } from '@angular/http';
 import { HttpClient, HttpHeaders, HttpRequest } from '@angular/common/http';
 import { Response, RequestOptions } from '@angular/http';
-import { Observable } from 'rxjs';
-import { of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
-import 'rxjs/add/operator/map';
+
 
 import { User } from './user';
 import { MessageService } from '../shared/message.service';
@@ -62,13 +62,13 @@ export class UserService {
 
   update(_id: number, user: User) {
       const url = appConfig.apiAuthUrl + '/users/update/' + _id + '/';
-      return this.http.patch(url, user)
-        .catch(err => this.handleError(err));
+      return this.http.patch(url, user).pipe(
+        catchError(err => this.handleError(err)));
   }
 
   private handleError(error: any) { 
     let errMsg = (error.message) ? error.message : error.status ? `${error.status} - ${error.statusText}` : 'Server error';
-    return Observable.throw(error);
+    return observableThrowError(error);
   }
 
   /**

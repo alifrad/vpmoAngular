@@ -5,7 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ChatService } from './chat.service';
 import { AuthenticationService } from '../_services';
 import { appConfig } from '../app.config';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 import { NodeService } from '../node/node.service';
 import { LoadingService } from '../_services/loading.service';
 

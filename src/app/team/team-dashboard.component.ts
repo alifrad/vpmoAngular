@@ -5,9 +5,8 @@ import { Router } from '@angular/router';
 import { GlobalService } from '../_services/global.service';
 import {MatDialog, MatDialogConfig} from '@angular/material';
 import { takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+import { Subject ,  Subscription } from 'rxjs';
 import { ChatService } from 'app/chat/chat.service';
-import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'team-dashboard',

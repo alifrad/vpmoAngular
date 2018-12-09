@@ -1,12 +1,12 @@
+
+import {throwError as observableThrowError,  Observable, Subject ,  of } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-import { Observable, Subject } from 'rxjs';
 import { catchError, map, filter, scan } from 'rxjs/operators';
 import { User } from '../user/user';
 import { appConfig } from '../app.config';
 import { BehaviorSubject } from 'rxjs/index';
-import { of } from 'rxjs';
-import 'rxjs/add/observable/of';
+
 import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { HttpCacheService } from './http-cache.service';
@@ -128,7 +128,7 @@ export class AuthenticationService {
 
     private handleError(err: HttpErrorResponse) {
         console.log(err.message);
-        return Observable.throw(err.message);
+        return observableThrowError(err.message);
       }
 
 }

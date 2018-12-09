@@ -1,3 +1,5 @@
+
+import {map} from 'rxjs/operators';
 import { Component, OnInit, Injectable } from '@angular/core';
 import { User } from '../../user/user';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -5,8 +7,8 @@ import { UserService } from '../../user/user.service';
 import { Router } from '@angular/router';
 import { AlertService } from '../../_services';
 import { AbstractControl, AsyncValidatorFn, ValidationErrors } from '@angular/forms';
-import { Observable } from 'rxjs';
-
+import { Observable } from 'rxjs/Observable';
+import { LoadingService } from 'app/_services/loading.service';
 
 class ExistingUserValidator {
     constructor (private userService: UserService) { }
@@ -41,7 +43,8 @@ export class SignUpComponent implements OnInit {
     private userService: UserService,
     private router: Router,
     private alertService: AlertService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private loadingService: LoadingService
   ) { }
 
 
@@ -69,23 +72,23 @@ export class SignUpComponent implements OnInit {
   }
 
   validateEmailNotTaken(control: AbstractControl) {
-    return this.userService.userExists('email', control.value).map(res => {
+    return this.userService.userExists('email', control.value).pipe(map(res => {
       if (res.exists) {
         return {exists: true}
       } else {
         return null
       }
-    });
+    }));
   }
 
   validateUsernameNotTaken(control: AbstractControl) {
-    return this.userService.userExists('username', control.value).map(res => {
+    return this.userService.userExists('username', control.value).pipe(map(res => {
       if (res.exists) {
         return {exists: true}
       } else {
         return null
       }
-    });
+    }));
   }
 
 
@@ -100,7 +103,9 @@ export class SignUpComponent implements OnInit {
   avatarCropped (e) {
     let fReader = new FileReader()
     var that = this
+    var enc = new TextDecoder("utf-8");
     fReader.onload = function (e) {
+    // @ts-ignore
       that.avatar = fReader.result.split(',')[1]
     }
     fReader.readAsDataURL(e.file)
@@ -113,13 +118,18 @@ export class SignUpComponent implements OnInit {
       registerData.avatar = this.avatar
     }
 
+    var taskID = this.loadingService.startTask()
     this.userService.create(registerData)
       .subscribe(
-        data => {console.log('success: ', data);
-                this.router.navigate(['/user/login']);
+        data => {
+          console.log('success: ', data);
+          this.loadingService.taskFinished(taskID)
+          this.router.navigate(['/user/login']);
         },
-        error => {console.log('error: ', error);
-                this.alertService.error(error.message);
+        error => {
+          console.log('error: ', error);
+          this.loadingService.taskFinished(taskID)
+          this.alertService.error(error.message);
         }
       );
   }

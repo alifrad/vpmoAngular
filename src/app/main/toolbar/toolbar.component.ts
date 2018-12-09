@@ -8,8 +8,7 @@ import { FuseSidebarService } from '@fuse/components/sidebar/sidebar.service';
 import { navigation } from 'app/navigation/navigation';
 import { AuthenticationService } from 'app/_services/authentication.service';
 import { GlobalService } from '../../_services/global2.service';
-import { Observable } from 'rxjs';
-import { Subscription } from 'rxjs/Subscription';
+import { Observable ,  Subscription } from 'rxjs';
 
 
 @Component({

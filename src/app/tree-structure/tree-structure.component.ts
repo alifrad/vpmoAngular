@@ -7,14 +7,13 @@ import * as _ from 'lodash';
 import { IVisualNodeData } from './tree-structure-model';
 import { timeout } from '../../../node_modules/rxjs/operators';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable ,  Subscription } from 'rxjs';
 import { GlobalService } from '../_services/global.service';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { CreateNodeComponent } from './create-node.component';
 import { NodeService } from '../node/node.service';
 import { AuthenticationService } from '../_services/authentication.service';
 import { ChatService } from '../chat/chat.service';
-import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-tree-structure',

@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 import { GlobalService } from '../_services/global.service';
 import {MatDialog, MatDialogConfig} from '@angular/material';
 import { ChatService } from 'app/chat/chat.service';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 import { LoadingService } from '../_services/loading.service';
 
 @Component({

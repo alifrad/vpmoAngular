@@ -1,8 +1,7 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { NodeService } from '../node/node.service';
-import { Subscription } from 'rxjs/Subscription';
-import { Subject, combineLatest } from 'rxjs';
+import { Subscription ,  Subject, combineLatest } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AuthenticationService } from '../_services/authentication.service';
 

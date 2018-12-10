@@ -2,7 +2,7 @@ import { Component, OnInit, Input, OnChanges, OnDestroy } from '@angular/core';
 import { ProjectService } from './project.service';
 import { Router } from '@angular/router';
 import { ChatService } from '../chat/chat.service';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'topics-list',

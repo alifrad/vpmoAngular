@@ -1,10 +1,11 @@
+
+import {throwError as observableThrowError } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpRequest } from '@angular/common/http';
 import { Response, RequestOptions } from '@angular/http';
-import { Observable } from 'rxjs';
-import { of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
-import 'rxjs/add/operator/map';
+
 
 import { Team } from './team';
 import { CustomHttpClient } from '../_services/custom-http.service';
@@ -31,7 +32,7 @@ export class TeamService {
     if (!localStorage.getItem('currentUser')) {
         console.log('user has not logged in!');
     } else {
-        return Observable.of(localStorage.getItem('team'));
+        return of(localStorage.getItem('team'));
     }
   }
  
@@ -60,7 +61,7 @@ export class TeamService {
 
   private handleError(err: HttpErrorResponse) {
     console.log(err.message);
-    return Observable.throw(err.message);
+    return observableThrowError(err.message);
   }
 }
 

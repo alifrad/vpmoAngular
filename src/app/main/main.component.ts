@@ -30,9 +30,10 @@ export class FuseMainComponent implements OnDestroy
     )
     {
         this.onConfigChanged =
-            this.fuseConfig.onConfigChanged
+            this.fuseConfig.config
                 .subscribe(
                     (newSettings) => {
+                        console.log('Main settings', newSettings)
                         this.fuseSettings = newSettings;
                         this.layoutMode = this.fuseSettings.layout.mode;
                     }

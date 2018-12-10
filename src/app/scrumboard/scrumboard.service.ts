@@ -39,7 +39,7 @@ export class ScrumboardService
         this.onListsChanged = new BehaviorSubject([])
 
         this.nodeService.node.subscribe(node => {
-            if (node !== null && node.node_type == 'Project') {
+            if (node && node.node_type == 'Project') {
                 this.node = node
                 this.getLists(node._id)
             }

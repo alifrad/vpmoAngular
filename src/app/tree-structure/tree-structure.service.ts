@@ -56,7 +56,6 @@ export class TreeStructureService {
   }
 
   private getPath(node): string {
-    console.log(node)
     if (node == null) {
       return '';
     }

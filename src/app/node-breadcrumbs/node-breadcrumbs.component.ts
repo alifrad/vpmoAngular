@@ -5,7 +5,7 @@ import { NodeBreadcrumbsService } from './node-breadcrumbs.service';
 import { PermissionsService } from '../permissions/permissions.service'
 import {MatBottomSheet, MatBottomSheetRef} from '@angular/material';
 import { NodeService } from '../node/node.service';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 
 @Component({

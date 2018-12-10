@@ -3,13 +3,39 @@ import { BehaviorSubject } from 'rxjs/index';
 
 @Injectable()
 export class LoadingService {
-  public showOverlay = new BehaviorSubject(false);
+  public onLoadStarted = new BehaviorSubject(null);
 
-  public hide() {
-    this.showOverlay.next(false)
+  public taskFinished(taskID) {
+    this.onLoadStarted.next(taskID)
   }
 
-  public show() {
-    this.showOverlay.next(true)
+  private generateUUID () { // Public Domain/MIT
+    // SOURCE: https://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
+    var d = new Date().getTime();
+    if (typeof performance !== 'undefined' && typeof performance.now === 'function'){
+      d += performance.now(); //use high-precision timer if available
+    }
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+      var r = (d + Math.random() * 16) % 16 | 0;
+      d = Math.floor(d / 16);
+      return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+    });
+	}
+
+  public taskTimedout(taskID) {
+    this.onLoadStarted.next({
+      taskID: taskID,
+      reason: 'TIMEOUT'
+    })
+  }
+
+  public startTask() {
+  	var taskID = this.generateUUID()
+    this.onLoadStarted.next(taskID)
+    return taskID
+  }
+
+  public clearTasks () {
+  	this.onLoadStarted.next('CLEAR')
   }
 }

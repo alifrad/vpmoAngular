@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { IVisualNodeData, INodeDto } from './tree-structure-model';
 import { appConfig } from '../app.config';
 
-import { Observable } from '../../../node_modules/rxjs/Observable';
+import { Observable } from 'rxjs/Observable';
 import 'rxjs';
 import { HttpClient, HttpHeaders } from '../../../node_modules/@angular/common/http';
 import { AuthenticationService } from 'app/_services';

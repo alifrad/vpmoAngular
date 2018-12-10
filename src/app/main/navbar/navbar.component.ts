@@ -84,6 +84,7 @@ export class FuseNavbarComponent implements OnInit, OnDestroy
         'title'   : 'General',
         'type'    : 'group',
         'url'  : '',
+        'translate': 'NAV.COMPONENTS',
         'children': [
         {
             'id'   : 'home',
@@ -188,8 +189,10 @@ export class FuseNavbarComponent implements OnInit, OnDestroy
     }
 
     updateNodeNav (nodeNav) {
-        // this.navigation.find(item => item.id == 'user').hidden = false
-        this.navigation.find(item => item.id == 'nodePages').children = nodeNav
+        this.navigationService.updateNavigationItem('nodePages', {
+            hidden: false,
+            children: nodeNav
+        })
     }
 
     updateUserNav (userLoggedIn: Boolean) {
@@ -205,8 +208,7 @@ export class FuseNavbarComponent implements OnInit, OnDestroy
     }
 
     updateFavoriteNodesNav (favoriteNodes, unreadMessages) {
-        this.navigation.find(item => item.id == 'favoritesGroup').hidden = false
-        this.navigation.find(item => item.id == 'favoritesGroup').children = []
+        var children = []
         for (var i = 0; i < favoriteNodes.length; i++) {
             var child = {
                 'id'   : favoriteNodes[i]._id,
@@ -226,8 +228,12 @@ export class FuseNavbarComponent implements OnInit, OnDestroy
                     title: 0
                 }
             }
-            this.navigation.find(item => item.id == 'favoritesGroup').children.push(child)
+            children.push(child)
         }
+        this.navigationService.updateNavigationItem('favoritesGroup', {
+            hidden: false,
+            children: children
+        })
     }
 
 
@@ -283,7 +289,12 @@ export class FuseNavbarComponent implements OnInit, OnDestroy
         this.sidebarService.getSidebar('navbar').toggleFold();
     }
 
-    logout() {
-        this.authService.logout();
+    toJSON(data) {
+        return JSON.stringify(data)
+    }
+
+    setInitialNavigation (initialNav) {
+        this.navigationService.register('main', initialNav)
+        this.navigationService.setCurrentNavigation('main');
     }
 }

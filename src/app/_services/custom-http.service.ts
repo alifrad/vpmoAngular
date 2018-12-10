@@ -1,10 +1,13 @@
+
+import {throwError as observableThrowError,  Observable } from 'rxjs';
+
+import {catchError} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 import { HttpClient, HttpHeaders, HttpRequest, HttpErrorResponse } from '@angular/common/http';
 import { AuthenticationService } from './authentication.service';
 import { AlertService } from './alert.service';
-import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
-
+import { LoadingService } from './loading.service';
 
 @Injectable()
 export class CustomHttpClient {
@@ -15,7 +18,8 @@ export class CustomHttpClient {
     private http: HttpClient,
     private router: Router,
     private authService: AuthenticationService,
-    private alertService: AlertService
+    private alertService: AlertService,
+    private loadingService: LoadingService
   ) {
     authService.user.subscribe(user => {
       if (user) {
@@ -39,8 +43,8 @@ export class CustomHttpClient {
     headers = this.createAuthorizationHeader(headers);
     return this.http.get<any>(url, {
         headers: headers
-      })
-      .catch(err => this.handleError(err))
+      }).pipe(
+      catchError(err => this.handleError(err)))
   }
 
   post (url, data) {
@@ -48,13 +52,13 @@ export class CustomHttpClient {
     headers = this.createAuthorizationHeader(headers);
     return this.http.post<any>(url, data, {
         headers: headers
-      })
-      .catch(err => this.handleError(err))
+      }).pipe(
+      catchError(err => this.handleError(err)))
   }
 
   customPut (url, data, headers) {
-    return this.http.put<any>(url, data, headers)
-      .catch(err => this.handleError(err))
+    return this.http.put<any>(url, data, headers).pipe(
+      catchError(err => this.handleError(err)))
   }
 
   put (url, data) {
@@ -62,8 +66,8 @@ export class CustomHttpClient {
     headers = this.createAuthorizationHeader(headers);
     return this.http.put<any>(url, data, {
         headers: headers
-      })
-      .catch(err => this.handleError(err))
+      }).pipe(
+      catchError(err => this.handleError(err)))
   }
 
   delete (url) {
@@ -71,8 +75,8 @@ export class CustomHttpClient {
     headers = this.createAuthorizationHeader(headers);
     return this.http.delete<any>(url, {
         headers: headers
-      })
-      .catch(err => this.handleError(err))
+      }).pipe(
+      catchError(err => this.handleError(err)))
   }
 
   patch (url, data) {
@@ -80,8 +84,8 @@ export class CustomHttpClient {
     headers = this.createAuthorizationHeader(headers);
     return this.http.patch<any>(url, data, {
         headers: headers
-      })
-      .catch(err => this.handleError(err))
+      }).pipe(
+      catchError(err => this.handleError(err)))
   }
 
   request (requestMethod: string, url: string, body) {
@@ -91,8 +95,8 @@ export class CustomHttpClient {
       body: body,
       headers: headers
     }
-    return this.http.request(requestMethod, url, options)
-      .catch(err => this.handleError(err))
+    return this.http.request(requestMethod, url, options).pipe(
+      catchError(err => this.handleError(err)))
   }
 
   handleError(err: HttpErrorResponse) {
@@ -100,6 +104,8 @@ export class CustomHttpClient {
     if (err.status == 401) {
       this.router.navigate(['/user/logout'])
     }
-    return Observable.throw(err.message);
+    // Clearing all tasks to hide the loading component in case of an error
+    this.loadingService.clearTasks()
+    return observableThrowError(err.message);
   }
 }

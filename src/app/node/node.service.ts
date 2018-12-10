@@ -3,13 +3,14 @@ import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { AuthenticationService } from 'app/_services';
 import { appConfig } from '../app.config';
 import { HttpHeaders, HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { BehaviorSubject } from 'rxjs/index';
-import 'rxjs/add/observable/throw';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/do';
+
+
+
 import { LoadingService } from '../_services/loading.service';
 import { CustomHttpClient } from '../_services/custom-http.service';
+import { mergeMap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -37,19 +38,35 @@ export class NodeService {
   ) { }
 
   getNodeDetails (nodeID: string) {
-    this.loadingService.show()
-    this.http.get(this.nodeRetrieveUpdateUrl + nodeID + '/')
-      .subscribe(val => {
-        this.getNodeParents(val)
-      })
+    var taskID = this.loadingService.startTask()
+    if (nodeID) {
+      this.http.get(this.nodeRetrieveUpdateUrl + nodeID + '/')
+        .pipe(mergeMap(node => {
+          this.node.next(node)
+          localStorage.setItem('node', JSON.stringify(node));
+          this.userPermissions.next({
+            permissions: node.user_permissions,
+            role: node.user_role
+          });
+          return this.http.get(this.getNodeParentsUrl + node._id + '/')
+        }))
+        .subscribe(nodeParents => {
+          this.nodeParents.next(nodeParents)
+          this.loadingService.taskFinished(taskID)
+        })
+    }
   }
 
+  /* UNUSED */
   getNodeParents (node) {
-    this.http.get(this.getNodeParentsUrl + node._id + '/').subscribe(nodeParents => {
-      this.setSubjects(node, nodeParents)
-    })
+    if (node._id !== undefined) {
+      this.http.get(this.getNodeParentsUrl + node._id + '/').subscribe(nodeParents => {
+        this.setSubjects(node, nodeParents)
+      })
+    }
   }
 
+  /* UNUSED */
   setSubjects (node, nodeParents) {
     this.node.next(node)
     localStorage.setItem('node', JSON.stringify(node));
@@ -58,7 +75,6 @@ export class NodeService {
       role: node.user_role
     });
     this.nodeParents.next(nodeParents)
-    this.loadingService.hide();
   }
 
 

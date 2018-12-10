@@ -7,8 +7,7 @@ import { FuseConfirmDialogComponent } from '@fuse/components/confirm-dialog/conf
 import { FuseUtils } from '@fuse/utils';
 
 import { ScrumboardService } from '../../scrumboard.service';
-import { takeUntil } from 'rxjs/operators';
-import { mergeMap } from 'rxjs/operators';
+import { takeUntil ,  mergeMap } from 'rxjs/operators';
 
 import { appConfig } from 'app/app.config';
 

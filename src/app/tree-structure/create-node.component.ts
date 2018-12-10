@@ -105,10 +105,10 @@ export class CreateNodeComponent implements OnInit {
 
 	createNode() {
 		const self = this;
-		this.loadingService.show()
+		var taskID = this.loadingService.startTask()
 		this.treeStructureHttpService.createNode(this.createNodeFormData, this.selectedNodeType)
 			.subscribe(response => {
-				self.loadingService.hide()
+				self.loadingService.taskFinished(taskID)
 				self.onCreate.emit(response);
 			});
 	}

@@ -68,32 +68,35 @@ export class AppComponent implements OnInit, OnDestroy {
         }
 
         // Subscribe to config changes
-        console.log('App Init', this._fuseConfigService.config)
-        var config = this._fuseConfigService.config
-        this.fuseConfig = config;
+        this._fuseConfigService.config
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe((config) => {
+                this.fuseConfig = config;
+                // Boxed
+                if ( this.fuseConfig.layout.width === 'boxed' )
+                {
+                    this.document.body.classList.add('boxed');
+                }
+                else
+                {
+                    this.document.body.classList.remove('boxed');
+                }
 
-        // Boxed
-        if ( this.fuseConfig.layout.width === 'boxed' )
-        {
-            this.document.body.classList.add('boxed');
-        }
-        else
-        {
-            this.document.body.classList.remove('boxed');
-        }
+                // Color theme - Use normal for loop for IE11 compatibility
+                for ( let i = 0; i < this.document.body.classList.length; i++ )
+                {
+                    const className = this.document.body.classList[i];
 
-        // Color theme - Use normal for loop for IE11 compatibility
-        for ( let i = 0; i < this.document.body.classList.length; i++ )
-        {
-            const className = this.document.body.classList[i];
+                    if ( className.startsWith('theme-') )
+                    {
+                        this.document.body.classList.remove(className);
+                    }
+                }
 
-            if ( className.startsWith('theme-') )
-            {
-                this.document.body.classList.remove(className);
-            }
-        }
+                this.document.body.classList.add(this.fuseConfig.colorTheme);
+            });
 
-        this.document.body.classList.add(this.fuseConfig.colorTheme);
+        
     }
 
     /**

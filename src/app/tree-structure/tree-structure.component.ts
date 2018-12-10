@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { TreeStructureService } from './tree-structure.service';
 import { TreeStructureHttpService } from './tree-structure-http.service';
 import { TreeComponent, ITreeOptions } from '../../../node_modules/angular-tree-component';
@@ -7,7 +7,7 @@ import * as _ from 'lodash';
 import { IVisualNodeData } from './tree-structure-model';
 import { timeout } from '../../../node_modules/rxjs/operators';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable ,  Subscription } from 'rxjs';
 import { GlobalService } from '../_services/global.service';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { CreateNodeComponent } from './create-node.component';
@@ -20,7 +20,7 @@ import { ChatService } from '../chat/chat.service';
   templateUrl: './tree-structure.component.html',
   styleUrls: ['./tree-structure.component.scss']
 })
-export class TreeStructureComponent implements OnInit {
+export class TreeStructureComponent implements OnInit, OnDestroy {
   treeRoot: any;
   nodeType: any;
   nodeID: any;
@@ -39,6 +39,10 @@ export class TreeStructureComponent implements OnInit {
   // mapping of {node.name: unreadMessageCount}
   private unreadMessages: any = {};
 
+  nodeSubscription: Subscription;
+  favoriteNodesSubscription: Subscription;
+  unreadMessagesSubscription: Subscription;
+
   // set options for tree
   public options: ITreeOptions = {
     idField: '_id',
@@ -47,7 +51,13 @@ export class TreeStructureComponent implements OnInit {
     //
     allowDrag: true,
     allowDrop: (element, to: { parent: ITreeNode, index }): boolean => {
-      return !to.parent.data.virtual;
+      // Disabling dropping into topic nodes
+      if (to.parent.data.node_type == 'Topic') {
+        return false
+      } else {
+        return true
+      }
+      // return !to.parent.data.virtual;
     },
   };
 
@@ -116,12 +126,15 @@ export class TreeStructureComponent implements OnInit {
 
   // IMPORTANT update is needed
   public onMoveNode($event) {
-    console.log('On Move', $event.node)
-    const movedNode: ITreeNode = this.tree.treeModel.getNodeById($event.node._id);
-    const updatedList: IVisualNodeData[] = this.treeStructureService.updateModel(movedNode, this.tree.treeModel);
-    const updatedListDto = this.treeStructureService.converVisualNodeToDtoList(updatedList, false);
-    // this line should change to accomodate the changes to structure when the top node is a project
-    this.treeStructureHttpService.updateNodeList(updatedListDto, this.getTopNode());
+    // Cancel the event if the node is being moved into a topic
+    if ($event.to.parent.node_type != 'Topic') {
+      console.log('On Move', $event)
+      const movedNode: ITreeNode = this.tree.treeModel.getNodeById($event.node._id);
+      const updatedList: IVisualNodeData[] = this.treeStructureService.updateModel(movedNode, this.tree.treeModel);
+      const updatedListDto = this.treeStructureService.converVisualNodeToDtoList(updatedList, false);
+      // this line should change to accomodate the changes to structure when the top node is a project
+      this.treeStructureHttpService.updateNodeList(updatedListDto, this.getTopNode());
+    }
   }
 
   getTopNode(): string {
@@ -173,26 +186,30 @@ export class TreeStructureComponent implements OnInit {
         })
     }
   }
-  
 
-  public ngOnInit() {
+  ngOnInit () {
     console.log('TreeStructure Init')
 
-    this.nodeService.node.subscribe(node => {
-      if (node !== null) {
+    this.nodeSubscription = this.nodeService.node.subscribe(node => {
+      if (node !== null && node !== undefined) {
         this.getTree(node.node_type, node._id)
         this.nodeType = node.node_type
         this.nodeID = node._id
       }
     })
 
-    this.authService.favoriteNodes.subscribe(favoriteNodes => {
+    this.favoriteNodesSubscription = this.authService.favoriteNodes.subscribe(favoriteNodes => {
       this.favoriteNodeIds = favoriteNodes.map(i => i._id)
     })
 
-    this.chatService.unreadMessageTracker.subscribe(unreadMessages => {
+    this.unreadMessagesSubscription = this.chatService.unreadMessageTracker.subscribe(unreadMessages => {
       this.unreadMessages = unreadMessages
     })
-    
+  }
+
+  ngOnDestroy () {
+    this.nodeSubscription.unsubscribe();
+    this.favoriteNodesSubscription.unsubscribe();
+    this.unreadMessagesSubscription.unsubscribe();
   }
 }

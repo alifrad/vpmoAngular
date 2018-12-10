@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { AuthenticationService } from '../_services';
 import { NodeBreadcrumbsService } from './node-breadcrumbs.service';
 import { PermissionsService } from '../permissions/permissions.service'
@@ -22,7 +22,6 @@ export class NodeBreadcrumbsComponent implements OnInit, OnDestroy {
     private authService: AuthenticationService,
     private _breadcrumbsService: NodeBreadcrumbsService,
     private _permissionsService: PermissionsService,
-    private route: ActivatedRoute,
     private router: Router,
     private bottomSheet: MatBottomSheet,
     private nodeService: NodeService
@@ -38,11 +37,19 @@ export class NodeBreadcrumbsComponent implements OnInit, OnDestroy {
 
   ngOnInit () {
     this.nodeSubscription = this.nodeService.node.subscribe(node => {
-      this.nodeType = node.node_type;
-      this.nodeID = node._id;
+      console.log('Node updated', node)
+      if (node != null) {
+        this.nodeType = node.node_type;
+        this.nodeID = node._id;
+      } else {
+        this.nodeType = ''
+        this.nodeID = ''
+        this.nodeParents = []
+      }
     })
 
     this.nodeParentsSubscription = this.nodeService.nodeParents.subscribe(nodeParents => {
+      console.log('NodeParents updated', nodeParents)
       this.nodeParents = nodeParents
     })
   }

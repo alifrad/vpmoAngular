@@ -149,7 +149,7 @@ export class FuseNavbarComponent implements OnInit, OnDestroy
     )
     {
         // Navigation data
-        
+        this.setInitialNavigation(this.navigation)
         // this.nodeNavigationSubscription = nodeNavigationService.navigation.subscribe(
         //     nav => {
         //         this.updateNodeNav(nav)

@@ -1,16 +1,17 @@
 :host {
 	width: 100%;
-    padding: 24px;
 }
 
 ul {
 	list-style: none;
 	padding: 0;
+    margin: 0;
 }
 
 ul li {
 	display: inline;
 	color: grey;
+    font-size: 15px;
 }
 
 ul :last-child {

@@ -13,7 +13,7 @@ import { NodeBreadcrumbsService } from './node-breadcrumbs.service';
 
 const NodeBreadcrumbsRoutes: Routes = [
   {
-    path: 'node-breadcrumbs/:type/:id',
+    path: 'node-breadcrumbs',
     component: NodeBreadcrumbsComponent,
     canActivate: [ AuthGuard ]
   }

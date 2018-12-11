@@ -9,22 +9,22 @@
         <!-- / TOOLBAR: Above -->
 
         <!-- NAVBAR: Top -->
-        <fuse-navbar layout="horizontal"
+        <navbar layout="horizontal"
                      class="top-navbar" fxHide fxShow.gt-md
                      [ngClass]="fuseSettings.colorClasses.navbar"
                      *ngIf="fuseSettings.layout.navigation === 'top'">
-        </fuse-navbar>
+        </navbar>
         <!-- / NAVBAR: Top -->
 
         <div id="wrapper">
 
             <!-- NAVBAR: Left -->
             <fuse-sidebar [name]="'navbar'"
-                          [folded]="fuseSettings.layout.navigationFolded"
+                          [folded]="fuseSettings.layout.navbar.folded"
                           [lockedOpen]="'gt-md'"
-                          class="left-navbar" [ngClass]="fuseSettings.colorClasses.navbar"
+                          class="navbar-fuse-sidebar" [ngClass]="fuseSettings.colorClasses.navbar"
                           *ngIf="fuseSettings.layout.navigation === 'left' || fuseSettings.layout.navigation === 'top'">
-                <fuse-navbar layout="vertical"></fuse-navbar>
+                <navbar layout="vertical"></navbar>
             </fuse-sidebar>
             <!-- / NAVBAR: Left -->
 
@@ -52,7 +52,7 @@
                           [lockedOpen]="'gt-md'"
                           class="right-navbar" [ngClass]="fuseSettings.colorClasses.navbar"
                           *ngIf="fuseSettings.layout.navigation === 'right'">
-                <fuse-navbar layout="vertical"></fuse-navbar>
+                <navbar layout="vertical"></navbar>
             </fuse-sidebar>
             <!-- / NAVBAR: Right -->
 

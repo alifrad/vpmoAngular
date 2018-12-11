@@ -47,10 +47,29 @@ export const fuseConfig = {
     colorTheme      : 'theme-default',
     layout          : {
         navigation      : 'left', // 'right', 'left', 'top', 'none'
-        navigationFolded: false, // true, false
+        // navigationFolded: false, // true, false
         toolbar         : 'below', // 'above', 'below', 'none'
-        footer          : 'below', // 'above', 'below', 'none'
-        mode            : 'fullwidth' // 'boxed', 'fullwidth'
+        mode            : 'fullwidth', // 'boxed', 'fullwidth'
+        style    : 'vertical-layout-1',
+        width    : 'fullwidth',
+        navbar   : {
+            primaryBackground  : 'fuse-navy-700',
+            secondaryBackground: 'fuse-navy-900',
+            folded             : false,
+            hidden             : false,
+            position           : 'left',
+            variant            : 'vertical-style-1'
+        },
+        footer   : {
+            customBackgroundColor: true,
+            background           : 'fuse-navy-900',
+            hidden               : false,
+            position             : 'below-fixed'
+        },
+        sidepanel: {
+            hidden  : true,
+            position: 'right'
+        }
     },
     colorClasses    : {
         toolbar: 'primary-50-bg',

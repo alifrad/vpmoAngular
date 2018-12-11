@@ -10,7 +10,7 @@ import { BehaviorSubject } from 'rxjs/index';
 
 import { LoadingService } from '../_services/loading.service';
 import { CustomHttpClient } from '../_services/custom-http.service';
-import { mergeMap } from 'rxjs/operators';
+import { mergeMap, exhaustMap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -41,7 +41,7 @@ export class NodeService {
     var taskID = this.loadingService.startTask()
     if (nodeID) {
       this.http.get(this.nodeRetrieveUpdateUrl + nodeID + '/')
-        .pipe(mergeMap(node => {
+        .pipe(exhaustMap(node => {
           this.node.next(node)
           localStorage.setItem('node', JSON.stringify(node));
           this.userPermissions.next({

@@ -1,4 +1,4 @@
-<div *ngIf="nodeID">
+<div *ngIf="nodeParents.length > 0">
 	<ul *ngIf="nodeParents.length < 4">
 		<li *ngFor="let breadcrumb of nodeParents" (click)="switchToNode(breadcrumb._id, breadcrumb.node_type)">
 			{{ breadcrumb.name }}

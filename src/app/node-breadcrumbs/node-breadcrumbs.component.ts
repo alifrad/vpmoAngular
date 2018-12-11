@@ -27,27 +27,11 @@ export class NodeBreadcrumbsComponent implements OnInit, OnDestroy {
     private nodeService: NodeService
   ) { }
 
-  nodeID: string;
-  nodeType: string;
-
   nodeParents: any = [];
 
-  private nodeSubscription: Subscription;
   private nodeParentsSubscription: Subscription;
 
   ngOnInit () {
-    this.nodeSubscription = this.nodeService.node.subscribe(node => {
-      console.log('Node updated', node)
-      if (node != null) {
-        this.nodeType = node.node_type;
-        this.nodeID = node._id;
-      } else {
-        this.nodeType = ''
-        this.nodeID = ''
-        this.nodeParents = []
-      }
-    })
-
     this.nodeParentsSubscription = this.nodeService.nodeParents.subscribe(nodeParents => {
       console.log('NodeParents updated', nodeParents)
       this.nodeParents = nodeParents
@@ -55,7 +39,6 @@ export class NodeBreadcrumbsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy () {
-    this.nodeSubscription.unsubscribe()
     this.nodeParentsSubscription.unsubscribe()
   }
 

@@ -32,7 +32,7 @@ import { NodeBreadcrumbsComponent } from 'app/node-breadcrumbs/node-breadcrumbs.
         NodeBreadcrumbsModule
         
     ],
-    bootstrap: [FuseToolbarComponent, NodeBreadcrumbsComponent],
+    bootstrap: [FuseToolbarComponent],
     exports     : [
         FuseToolbarComponent
     ]

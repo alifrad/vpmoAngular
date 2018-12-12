@@ -32,14 +32,17 @@ export class NodeBreadcrumbsComponent implements OnInit, OnDestroy {
   private nodeParentsSubscription: Subscription;
 
   ngOnInit () {
-    this.nodeParentsSubscription = this.nodeService.nodeParents.subscribe(nodeParents => {
-      console.log('NodeParents updated', nodeParents)
-      this.nodeParents = nodeParents
+    this.nodeParentsSubscription = this.nodeService.node.subscribe(node => {
+      if (node) {
+        this.nodeParents = node.parents
+      }
     })
   }
 
   ngOnDestroy () {
-    this.nodeParentsSubscription.unsubscribe()
+    if (this.nodeParentsSubscription !== undefined) {
+      this.nodeParentsSubscription.unsubscribe()
+    }
   }
 
   switchToNode (nodeID, nodeType) {

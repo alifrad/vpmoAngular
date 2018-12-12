@@ -7,6 +7,8 @@ import { PermissionsService } from './permissions.service';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { LoadingService } from '../_services/loading.service';
 import { NodeService } from '../node/node.service';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-permissions',
@@ -25,7 +27,9 @@ export class PermissionsComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private loadingService: LoadingService,
     private nodeService: NodeService
-  ) { }
+  ) {
+    this._unsubscribeAll = new Subject();
+  }
 
   userList: any[] = [];
   nodeID: string;
@@ -40,43 +44,40 @@ export class PermissionsComponent implements OnInit, OnDestroy {
   currentUser: any;
   nodeOwner: string;
 
-  private nodeSubscription: Subscription;
-  private userPermSubscription: Subscription;
-  private currentUserSubscription: Subscription;
+  private _unsubscribeAll: Subject<any>;
 
   ngOnInit() {
-    this.currentUserSubscription = this.authService.user.subscribe(user => {
-      this.currentUser = user
-    })
+    this.authService.user
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe(user => {
+        this.currentUser = user
+      })
 
-    this.nodeSubscription = this.nodeService.node.subscribe(node => {
-      if (node) {
-        this.nodeType = node.node_type
-        this.nodeID = node._id
+    this.nodeService.node
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe(node => {
+        if (node) {
+          this.nodeType = node.node_type
+          this.nodeID = node._id
 
-        if (node.user_linked != false && node.user_linked != undefined) {
-          this.nodeOwner = node.user_team
-        } else {
-          this.nodeOwner = ''
+          if (node.user_linked != false && node.user_linked != undefined) {
+            this.nodeOwner = node.user_team
+          } else {
+            this.nodeOwner = ''
+          }
+
+          this.userList = node.users
+          this.currentUserPermissions = node.user_permissions
+          this.currentUserRole = node.user_role
+          // TODO: Move into the nodeService
+          this.getAssignableRoles(this.nodeID, this.nodeType);
         }
-
-        this.getPermissionsList(this.nodeID, this.nodeType);
-        this.getAssignableRoles(this.nodeID, this.nodeType);
-      }
-    })
-
-    this.userPermSubscription = this.nodeService.userPermissions.subscribe(permissions => {
-      if (permissions) {
-        this.currentUserPermissions = permissions.permissions
-        this.currentUserRole = permissions.role
-      }
-    })
+      })
   }
 
   ngOnDestroy () {
-    this.nodeSubscription.unsubscribe()
-    this.userPermSubscription.unsubscribe()
-    this.currentUserSubscription.unsubscribe()
+    this._unsubscribeAll.next();
+    this._unsubscribeAll.complete();
   }
 
 

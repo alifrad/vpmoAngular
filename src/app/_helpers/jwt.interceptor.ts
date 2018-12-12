@@ -19,7 +19,7 @@ export class JwtInterceptor implements HttpInterceptor {
 
     private handleAuthError(err: HttpErrorResponse): Observable<any> {
         //handle your auth error or rethrow
-        if (err.status === 401 || err.status === 403) {
+        if (err.status === 401) {
             //navigate /delete cookies or whatever
             this.router.navigateByUrl(`/user/login`);
             this.loadingService.clearTasks()

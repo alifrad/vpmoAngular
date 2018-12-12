@@ -36,29 +36,24 @@ export class DocumentsListComponent implements OnInit, OnDestroy {
   renamingDocument: any;
 
   private nodeSubscription: Subscription;
-  private userPermSubscription: Subscription;
 
   ngOnInit() {
     this.nodeSubscription = this.nodeService.node.subscribe(node => {
       if (node) {
         this.nodeType = node.node_type
         this.nodeID = node._id
-        this.getDocuments()
+        this.currentUserPermissions = node.user_permissions
+        this.uploadedDocuments = node.documents
       }
     })
 
-    this.userPermSubscription = this.nodeService.userPermissions.subscribe(permissions => {
-      if (permissions) {
-        this.currentUserPermissions = permissions.permissions
-      }
-    })
   }
 
   ngOnDestroy () {
     this.nodeSubscription.unsubscribe()
-    this.userPermSubscription.unsubscribe()
   }
 
+  /* Unused */
   getDocuments () {
     this._documentsService.getUploadedDocuments(this.nodeID, this.nodeType)
       .subscribe(documents => {

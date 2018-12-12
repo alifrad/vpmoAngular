@@ -5,7 +5,7 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import { CustomHttpClient } from '../_services/custom-http.service';
 import { appConfig } from '../app.config';
 import { NodeService } from '../node/node.service';
-
+import { delay } from 'rxjs/operators';
 
 @Injectable()
 export class ScrumboardService
@@ -51,6 +51,7 @@ export class ScrumboardService
     getLists (projectId: string): Promise<any> {
         return new Promise((resolve, reject) => {
             this.http.get(this.projectListsUrl + '/' + projectId + '/')
+                .pipe(delay(500)) // Added delay to avoid overloading the server
                 .subscribe(response => {
                     this.lists = response
                     this.onListsChanged.next(response)

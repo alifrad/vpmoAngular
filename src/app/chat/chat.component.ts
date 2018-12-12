@@ -8,6 +8,8 @@ import { appConfig } from '../app.config';
 import { Subscription } from 'rxjs';
 import { NodeService } from '../node/node.service';
 import { LoadingService } from '../_services/loading.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 declare const Twilio: any
 
@@ -32,6 +34,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     private loadingService: LoadingService
   ) {
     this.differ = differs.find([]).create(null);
+    this._unsubscribeAll = new Subject();
   }
 
   @ViewChild('chatContainer') chatContainer;
@@ -46,10 +49,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   pageSize: any = 15;
   currentUserPermissions: string[] = [];
 
-  userSubscription: Subscription;
-  clientSubscription: Subscription;
-  messageSubscription: Subscription;
-  permissionsSubscription: Subscription;
+  _unsubscribeAll: Subject<any>;
 
   scrollToBottom(){
     if(this.chatContainer) {
@@ -63,45 +63,51 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.userSubscription = this.authService.user.subscribe(user => {
-      if (user) {
-        this.currentUser = user
-      } else {
-        this.currentUser = ''
-      }
-    })
-    
-    this.clientSubscription = this._chatService.chatClient.subscribe(chatClient => {
-      if (chatClient) {
-        this.chatClient = chatClient
-        var that = this
-        this.chatClient.getSubscribedChannels().then(function (resp) {
-          that.getChannel()
-        })
-      }
-    })
-
-    this.messageSubscription = this._chatService.messages.subscribe(message => {
-      if (message) {
-        this.messageAdded(message)
-      }
-    })
-
-    this.permissionsSubscription = this.nodeService.userPermissions.subscribe(permissions => {
-      if (permissions) {
-        this.currentUserPermissions = permissions.permissions
-        if (!this.canChat() && permissions.permissions.indexOf('update_'+this.nodeType.toLowerCase()) >= 0){
-          this.getChannel()
+    this.authService.user
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe(user => {
+        if (user) {
+          this.currentUser = user
+        } else {
+          this.currentUser = ''
         }
-      }
-    })
+      })
+    
+    this._chatService.chatClient
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe(chatClient => {
+        if (chatClient) {
+          this.chatClient = chatClient
+          var that = this
+          this.chatClient.getSubscribedChannels().then(function (resp) {
+            that.getChannel()
+          })
+        }
+      })
+
+    this._chatService.messages
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe(message => {
+        if (message) {
+          this.messageAdded(message)
+        }
+      })
+
+    this.nodeService.node
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe(node => {
+        if (node) {
+          this.currentUserPermissions = node.user_permissions
+          if (!this.canChat() && this.currentUserPermissions.indexOf('update_'+this.nodeType.toLowerCase()) >= 0){
+            this.getChannel()
+          }
+        }
+      })
   }
 
   ngOnDestroy () {
-    this.userSubscription.unsubscribe();
-    this.clientSubscription.unsubscribe();
-    this.messageSubscription.unsubscribe();
-    this.permissionsSubscription.unsubscribe();
+    this._unsubscribeAll.next();
+    this._unsubscribeAll.complete();
   }
 
   canChat () {

@@ -33,7 +33,9 @@ export class NodepageComponent implements OnInit {
 
     this.route.params.subscribe(
       params => {
-        this._nodeService.getNodeDetails(params['id'])
+        if (params['id'] && params['type']) {
+          this._nodeService.getNodeDetails(params['id'], params['type'])
+        }
       }
     );
   }

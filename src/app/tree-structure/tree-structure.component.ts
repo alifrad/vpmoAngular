@@ -7,13 +7,14 @@ import * as _ from 'lodash';
 import { IVisualNodeData } from './tree-structure-model';
 import { timeout } from '../../../node_modules/rxjs/operators';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Observable ,  Subscription } from 'rxjs';
+import { Observable, Subscription, Subject } from 'rxjs';
 import { GlobalService } from '../_services/global.service';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { CreateNodeComponent } from './create-node.component';
 import { NodeService } from '../node/node.service';
 import { AuthenticationService } from '../_services/authentication.service';
 import { ChatService } from '../chat/chat.service';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-tree-structure',
@@ -39,9 +40,7 @@ export class TreeStructureComponent implements OnInit, OnDestroy {
   // mapping of {node.name: unreadMessageCount}
   private unreadMessages: any = {};
 
-  nodeSubscription: Subscription;
-  favoriteNodesSubscription: Subscription;
-  unreadMessagesSubscription: Subscription;
+  _unsubscribeAll: Subject<any>;
 
   // set options for tree
   public options: ITreeOptions = {
@@ -122,7 +121,9 @@ export class TreeStructureComponent implements OnInit, OnDestroy {
     private nodeService: NodeService,
     private authService: AuthenticationService,
     private chatService: ChatService
-  ) { }
+  ) {
+    this._unsubscribeAll = new Subject();
+  }
 
   // IMPORTANT update is needed
   public onMoveNode($event) {
@@ -159,20 +160,6 @@ export class TreeStructureComponent implements OnInit, OnDestroy {
     }
   }
 
-  getTree(nodeType, nodeId) {
-    this.treeStructureHttpService.getTree(nodeType, nodeId)
-      .subscribe(
-        (data) => {
-          this.nodes = this.treeStructureService.preUploadData(data);
-          // need time in order create dom for tree
-          setTimeout(() => {
-            this.tree.treeModel.expandAll();
-          }, 111);
-        },
-        () => console.log('All done getting nodes.')
-      );
-  }
-
   toggleFavorite (nodeID) {
     if (this.favoriteNodeIds.indexOf(nodeID) >= 0) {
       this.nodeService.unfavoriteNode(nodeID)
@@ -190,26 +177,35 @@ export class TreeStructureComponent implements OnInit, OnDestroy {
   ngOnInit () {
     console.log('TreeStructure Init')
 
-    this.nodeSubscription = this.nodeService.node.subscribe(node => {
-      if (node !== null && node !== undefined) {
-        this.getTree(node.node_type, node._id)
-        this.nodeType = node.node_type
-        this.nodeID = node._id
-      }
-    })
+    this.nodeService.node
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe(node => {
+        if (node !== null) {
+          this.nodes = this.treeStructureService.preUploadData(node.tree);
+          // need time in order create dom for tree
+          setTimeout(() => {
+            this.tree.treeModel.expandAll();
+          }, 111);
+          this.nodeID = node._id
+        }
+      })
 
-    this.favoriteNodesSubscription = this.authService.favoriteNodes.subscribe(favoriteNodes => {
-      this.favoriteNodeIds = favoriteNodes.map(i => i._id)
-    })
 
-    this.unreadMessagesSubscription = this.chatService.unreadMessageTracker.subscribe(unreadMessages => {
-      this.unreadMessages = unreadMessages
-    })
+    this.authService.favoriteNodes
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe(favoriteNodes => {
+        this.favoriteNodeIds = favoriteNodes.map(i => i._id)
+      })
+
+    this.chatService.unreadMessageTracker
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe(unreadMessages => {
+        this.unreadMessages = unreadMessages
+      })
   }
 
   ngOnDestroy () {
-    this.nodeSubscription.unsubscribe();
-    this.favoriteNodesSubscription.unsubscribe();
-    this.unreadMessagesSubscription.unsubscribe();
+    this._unsubscribeAll.next();
+    this._unsubscribeAll.complete();
   }
 }

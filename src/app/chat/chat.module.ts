@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
+import { QuillModule } from 'ngx-quill';
 
 import { 
   MatDatepickerModule, 
@@ -51,7 +52,8 @@ const ChatRoutes: Routes = [
     MatDividerModule,
     MatMenuModule,
     MatRadioModule,
-    FuseSharedModule
+    FuseSharedModule,
+    QuillModule
   ],
   declarations: [
     ChatComponent,

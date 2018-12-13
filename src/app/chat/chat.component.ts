@@ -229,6 +229,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   private sendMessage (msg) {
+    console.log(msg)
     this.channel.sendMessage(msg, {
       authorName: this.currentUser.fullname,
       authorAvatar: this.currentUser.avatar

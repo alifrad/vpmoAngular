@@ -8,9 +8,10 @@ import { BehaviorSubject } from 'rxjs/index';
 
 import { LoadingService } from '../_services/loading.service';
 import { CustomHttpClient } from '../_services/custom-http.service';
-import { mergeMap, exhaustMap, concatMap, concat, merge } from 'rxjs/operators';
+import { mergeMap, exhaustMap, merge, delay, combineAll, concatMap, toArray } from 'rxjs/operators';
 import { forkJoin } from "rxjs/observable/forkJoin";
-
+// import { concat } from 'rxjs/observable/concat';
+import {concat} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -44,9 +45,11 @@ export class NodeService {
     let nodeParents = this.http.get(this.getNodeParentsUrl + nodeID + '/');
     let nodeTree = this.http.get(this.nodesTreeUrl + nodeID + '/');
     let nodeUsers = this.http.get(this.permissionsUserListUrl + nodeID + '/?nodeType=' + nodeType);
-    let nodeDocuments = this.http.get(this.getDocumentsUrl + nodeID + '/?nodeType=' + nodeType)
-    var requests = [nodeDetails, nodeParents, nodeTree, nodeUsers, nodeDocuments]
-    forkJoin(requests)
+    let nodeDocuments = this.http.get(this.getDocumentsUrl + nodeID + '/?nodeType=' + nodeType);
+    const requests = concat(nodeDetails, nodeParents, nodeTree, nodeUsers, nodeDocuments)
+
+    requests
+      .pipe(toArray())
       .subscribe(responses => {
         console.log(responses)
         var node = responses[0];

@@ -31,7 +31,8 @@
                   fxFlex fxLayout="row" fxLayoutAlign="start center">
 
                 <mat-form-field class="message-text" fxFlex floatLabel="never" appearance="standard">
-                	<input matInput #msgInput placeholder="Type your message here">
+                	<quill-editor [sanitize]="true"></quill-editor>
+                	<!--<input matInput #msgInput placeholder="Type your message here">-->
                 </mat-form-field>
 
                 <button class="send-message-button" mat-icon-button type="submit" aria-label="Send message">

@@ -47,7 +47,7 @@
 
 	<div class="quill-container">
 		<label>Content</label>
-		<quill-editor [(ngModel)]="node.content"></quill-editor>
+		<quill-editor [sanitize]="true" [(ngModel)]="node.content"></quill-editor>
 	</div>
 
 	<div>
@@ -82,7 +82,7 @@
 
 		<div class="quill-container">
 			<label>Content</label>
-			<quill-editor [(ngModel)]="node.content"></quill-editor>
+			<quill-editor [sanitize]="true" [(ngModel)]="node.content"></quill-editor>
 		</div>
 
 		<div>
@@ -104,7 +104,7 @@
 
 		<div class="quill-container">
 			<label>Content</label>
-			<quill-editor [(ngModel)]="node.content"></quill-editor>
+			<quill-editor [sanitize]="true" [(ngModel)]="node.content"></quill-editor>
 		</div>
 
 		<!-- TODO - create a assignee field (user select with a dropdown list search) -->
@@ -138,7 +138,7 @@
 
 		<div class="quill-container">
 			<label>Content</label>
-			<quill-editor [(ngModel)]="node.content"></quill-editor>
+			<quill-editor [sanitize]="true" [(ngModel)]="node.content"></quill-editor>
 		</div>
 
 		<!-- TODO - create a assignee field (user select with a dropdown list search) -->
@@ -182,7 +182,7 @@
 
 		<div class="quill-container">
 			<label>Content</label>
-			<quill-editor [(ngModel)]="node.content"></quill-editor>
+			<quill-editor [sanitize]="true" [(ngModel)]="node.content"></quill-editor>
 		</div>
 
 		<!-- TODO - create a assignee field (user select with a dropdown list search) -->

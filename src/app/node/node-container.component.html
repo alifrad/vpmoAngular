@@ -35,8 +35,7 @@
             <mat-icon class="tab-icon">chat</mat-icon>
             <span class="hide-text">Chat</span>
         </ng-template>
- 
-
+        <app-chat [nodeID]="nodeID" [nodeType]="nodeType"></app-chat>
     </mat-tab>
 
     <mat-tab *ngIf="nodeType!=='Team'"> 

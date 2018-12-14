@@ -12,7 +12,7 @@
 				<img *ngIf="message.author !== currentUser.username && message.attributes.authorAvatar != null" [src]="message.attributes.authorAvatar" class="avatar"/>
 				<!-- message.author available here as well -->
 				<div class="bubble">
-					<div class="message">{{ message.body }}</div>
+					<div class="message" [innerHTML]="message.body"></div>
 					<div class="time secondary-text">{{message.attributes.authorName}}</div>
 				</div>
 				
@@ -27,13 +27,15 @@
         <div class="reply-form" fxFlex="0 0 auto" fxLayout="row" fxLayoutAlign="center center">
 
             <form #replyForm="ngForm"
-                  (ngSubmit)="sendMessage(msgInput.value); msgInput.value=''" 
+                  (ngSubmit)="sendMessage(chatMsg); chatMsg=''" 
                   fxFlex fxLayout="row" fxLayoutAlign="start center">
 
+                <!--
                 <mat-form-field class="message-text" fxFlex floatLabel="never" appearance="standard">
-                	<quill-editor [sanitize]="true"></quill-editor>
-                	<!--<input matInput #msgInput placeholder="Type your message here">-->
+                	<input matInput #msgInput placeholder="Type your message here">
                 </mat-form-field>
+                -->
+                <quill-editor [modules]="{toolbar: [['bold', 'italic', 'underline', 'strike', 'code-block']]}" [ngModelOptions]="{standalone: true}" [(ngModel)]="chatMsg" [sanitize]="true"></quill-editor>
 
                 <button class="send-message-button" mat-icon-button type="submit" aria-label="Send message">
                     <mat-icon class="secondary-text">send</mat-icon>

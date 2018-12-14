@@ -5,7 +5,6 @@ import { HttpClient } from '@angular/common/http';
 
 import { FuseSplashScreenService } from '@fuse/services/splash-screen.service';
 import { FuseTranslationLoaderService } from '@fuse/services/translation-loader.service';
-import { FuseNavigationService } from '@fuse/components/navigation/navigation.service';
 import { FuseConfigService } from '@fuse/services/config.service';
 
 import { locale as navigationEnglish } from './navigation/i18n/en';
@@ -16,7 +15,7 @@ import { User } from './user/user';
 
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { navigation } from 'app/navigation/navigation'
+
 
 @Component({
     selector   : 'fuse-root',
@@ -30,19 +29,16 @@ export class AppComponent implements OnInit, OnDestroy {
     fullname: string;
     isLoggedIn: boolean;
     fuseConfig: any;
-    navigation: any;
 
     // Private
     private _unsubscribeAll: Subject<any>;
 
     constructor(
         private translate: TranslateService,
-        private fuseNavigationService: FuseNavigationService,
         private fuseSplashScreen: FuseSplashScreenService,
         private fuseTranslationLoader: FuseTranslationLoaderService,
         private authService: AuthenticationService,
         private _fuseConfigService: FuseConfigService,
-        private _fuseNavigationService: FuseNavigationService,
         @Inject(DOCUMENT) private document: any,
         // private http: HttpClient,
     )
@@ -61,17 +57,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
         // Set the private defaults
         this._unsubscribeAll = new Subject();
-
-        // Get default navigation
-        this.navigation = navigation;
-
-        // Register the navigation to the service
-        this._fuseNavigationService.register('main', this.navigation);
-
-        // Set the main navigation as our current navigation
-        this._fuseNavigationService.setCurrentNavigation('main');
     }
-
 
     ngOnInit() {
         if (localStorage.getItem("user")) {

@@ -73,6 +73,10 @@
                         .message {
                             white-space: pre-wrap;
                             line-height: 1.2;
+
+                            * {
+                                margin: 0;
+                            }
                         }
 
                         .time {
@@ -198,6 +202,10 @@
 
             .reply-form {
                 position: relative;
+
+                quill-editor {
+                    width: 85%
+                }
 
                 .message-text {
                     padding: 16px 8px;

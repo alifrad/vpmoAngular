@@ -48,6 +48,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   unreadMessageCount: any;
   pageSize: any = 15;
   currentUserPermissions: string[] = [];
+  chatMsg: string;
 
   _unsubscribeAll: Subject<any>;
 
@@ -229,11 +230,13 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   private sendMessage (msg) {
-    console.log(msg)
-    this.channel.sendMessage(msg, {
-      authorName: this.currentUser.fullname,
-      authorAvatar: this.currentUser.avatar
-    })
+    if (msg.replace(/\s/g,'').length > 0) {
+      console.log(msg)
+      this.channel.sendMessage(msg, {
+        authorName: this.currentUser.fullname,
+        authorAvatar: this.currentUser.avatar
+      })
+    }
   }
 
   isLastMessageOfGroup(message, index) {

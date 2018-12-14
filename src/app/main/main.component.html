@@ -2,22 +2,8 @@
 
     <div id="fuse-main-content">
 
-        <!-- TOOLBAR: Above -->
-        <ng-container *ngIf="fuseSettings.layout.toolbar === 'above'">
-            <fuse-toolbar class="above" [ngClass]="fuseSettings.colorClasses.toolbar"></fuse-toolbar>
-        </ng-container>
-        <!-- / TOOLBAR: Above -->
-
-        <!-- NAVBAR: Top -->
-        <navbar layout="horizontal"
-                     class="top-navbar" fxHide fxShow.gt-md
-                     [ngClass]="fuseSettings.colorClasses.navbar"
-                     *ngIf="fuseSettings.layout.navigation === 'top'">
-        </navbar>
-        <!-- / NAVBAR: Top -->
 
         <div id="wrapper">
-
             <!-- NAVBAR: Left -->
             <fuse-sidebar [name]="'navbar'"
                           [folded]="fuseSettings.layout.navbar.folded"
@@ -45,17 +31,6 @@
                 <!-- / FOOTER: Below -->
 
             </div>
-
-            <!-- NAVBAR: Right -->
-            <fuse-sidebar [name]="'navbar'" [position]="'right'"
-                          [folded]="fuseSettings.layout.navigationFolded"
-                          [lockedOpen]="'gt-md'"
-                          class="right-navbar" [ngClass]="fuseSettings.colorClasses.navbar"
-                          *ngIf="fuseSettings.layout.navigation === 'right'">
-                <navbar layout="vertical"></navbar>
-            </fuse-sidebar>
-            <!-- / NAVBAR: Right -->
-
         </div>
 
         <!-- FOOTER: Above -->

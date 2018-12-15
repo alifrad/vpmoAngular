@@ -121,7 +121,7 @@ export class FuseToolbarComponent implements OnInit {
         // this.fullname = this.authService.getUserName()
     }
 
-    toggleSidebarOpened(key)
+    toggleSidebarOpen(key)
     {
         this.sidebarService.getSidebar(key).toggleOpen();
     }

@@ -20,6 +20,7 @@ export class NodeService {
 
   private readonly apiUrl: string = `${appConfig.apiUrl}`;
   private readonly nodeRetrieveUpdateUrl: string = this.apiUrl + '/node/';
+  private readonly childrenListUrl: string = this.apiUrl + '/nodes/'
   private readonly permissionsDetailUrl: string = `${appConfig.apiAuthUrl}/user_node_permissions/`;
   private readonly nodeFavoriteUrl: string = `${appConfig.apiAuthUrl}/favorite_nodes/`;
   private readonly getNodeParentsUrl: string = this.apiUrl + '/node_parents/';
@@ -41,12 +42,18 @@ export class NodeService {
   getNodeDetails (nodeID: string, nodeType: string) {
     var taskID = this.loadingService.startTask()
 
-    let nodeDetails = this.http.get(this.nodeRetrieveUpdateUrl + nodeID + '/');
-    let nodeParents = this.http.get(this.getNodeParentsUrl + nodeID + '/');
-    let nodeTree = this.http.get(this.nodesTreeUrl + nodeID + '/');
-    let nodeUsers = this.http.get(this.permissionsUserListUrl + nodeID + '/?nodeType=' + nodeType);
-    let nodeDocuments = this.http.get(this.getDocumentsUrl + nodeID + '/?nodeType=' + nodeType);
-    const requests = concat(nodeDetails, nodeParents, nodeTree, nodeUsers, nodeDocuments)
+    var nodeDetails = this.http.get(this.nodeRetrieveUpdateUrl + nodeID + '/');
+    var nodeParents = this.http.get(this.getNodeParentsUrl + nodeID + '/');
+    var nodeTree = this.http.get(this.nodesTreeUrl + nodeID + '/');
+    var nodeUsers = this.http.get(this.permissionsUserListUrl + nodeID + '/?nodeType=' + nodeType);
+    var nodeDocuments = this.http.get(this.getDocumentsUrl + nodeID + '/?nodeType=' + nodeType);
+
+    if (nodeType == 'Team') {
+      var children = this.http.get(this.childrenListUrl+'?nodeType=Project&parentNodeID='+nodeID)
+      var requests = concat(nodeDetails, nodeParents, nodeTree, nodeUsers, nodeDocuments, children)
+    } else {
+      var requests = concat(nodeDetails, nodeParents, nodeTree, nodeUsers, nodeDocuments)
+    }
 
     requests
       .pipe(toArray())
@@ -57,6 +64,11 @@ export class NodeService {
         node.tree = responses[2];
         node.users = responses[3];
         node.documents = responses[4]
+        if (nodeType == 'Team') {
+          node.children = responses[5]
+        } else {
+          node.children = null
+        }
         this.node.next(node);
         console.log(node);
         this.loadingService.taskFinished(taskID)

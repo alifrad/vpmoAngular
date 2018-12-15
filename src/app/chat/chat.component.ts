@@ -231,7 +231,6 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   private sendMessage (msg) {
     if (msg.replace(/\s/g,'').length > 0) {
-      console.log(msg)
       this.channel.sendMessage(msg, {
         authorName: this.currentUser.fullname,
         authorAvatar: this.currentUser.avatar

@@ -40,5 +40,4 @@ export class ProjectService {
   getTopicsUnderProject(parentNodeID, topicType) {
     return this.http.get(appConfig.apiUrl + '/nodes/?nodeType='+topicType+'&parentNodeID='+parentNodeID)
   }
-
 }

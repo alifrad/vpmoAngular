@@ -3,6 +3,7 @@ import { ProjectService } from './project.service';
 import { Router } from '@angular/router';
 import { ChatService } from '../chat/chat.service';
 import { Subscription } from 'rxjs';
+import { delay } from 'rxjs/operators';
 
 @Component({
   selector: 'topics-list',
@@ -56,6 +57,7 @@ export class TopicsListComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnInit() {
   	this.projectService.getTopicsUnderProject(this.parentNodeID, this.topicType)
+      .pipe(delay(1000))
   		.subscribe(response => {
   			this.topics = response
   		})

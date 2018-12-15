@@ -7,13 +7,14 @@ import {MatDialog, MatDialogConfig} from '@angular/material';
 import { takeUntil } from 'rxjs/operators';
 import { Subject ,  Subscription } from 'rxjs';
 import { ChatService } from 'app/chat/chat.service';
+import { NodeService } from '../node/node.service';
 
 @Component({
   selector: 'team-dashboard',
   templateUrl: './team-dashboard.component.html',
   styleUrls: ['./team-dashboard.component.scss', './teams-list.component.scss']
 })
-export class TeamDashboardComponent implements OnInit, OnChanges, OnDestroy {
+export class TeamDashboardComponent implements OnInit, OnDestroy {
 
   @Input()
   nodeID: string;
@@ -21,35 +22,37 @@ export class TeamDashboardComponent implements OnInit, OnChanges, OnDestroy {
 
   projects: any[] = [];
   unreadMessages: any;
-  unreadMessageSubscription: Subscription;
+  _unsubscribeAll: Subject<any>;
 
   constructor(
       private teamService: TeamService,
       private router: Router,
-      private chatService: ChatService
-  ) { }
-
-  ngOnInit() {
-    this.unreadMessageSubscription = this.chatService.unreadMessageTracker.subscribe(unreadMessages => {
-      this.unreadMessages = unreadMessages
-      this.setUnreadMessages()
-    })
+      private chatService: ChatService,
+      private nodeService: NodeService
+  ) {
+    this._unsubscribeAll = new Subject();
   }
 
-  ngOnChanges (changes) {
-    this.getProjects(changes['nodeID'].currentValue)
+  ngOnInit() {
+    this.chatService.unreadMessageTracker
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe(unreadMessages => {
+        this.unreadMessages = unreadMessages
+        this.setUnreadMessages()
+      })
+
+    this.nodeService.node
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe(node => {
+        if (node && node.node_type == 'Team') {
+          this.projects = node.children
+        }
+      })
   }
 
   ngOnDestroy () {
-    this.unreadMessageSubscription.unsubscribe()
-  }
-
-  getProjects (nodeID) {
-    this.teamService.getTeamProjects(nodeID)
-      .subscribe(response => {
-        this.projects = response
-        this.setUnreadMessages()
-      })
+    this._unsubscribeAll.next();
+    this._unsubscribeAll.complete();
   }
 
   /*

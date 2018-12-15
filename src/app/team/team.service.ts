@@ -55,10 +55,6 @@ export class TeamService {
     return this.http.post(appConfig.apiUrl+'/teams/add/', data)
   }
 
-  getTeamProjects (teamId: string): Observable<any> {
-    return this.http.get(appConfig.apiUrl + '/nodes/?nodeType=Project&parentNodeID='+teamId)
-  }
-
   private handleError(err: HttpErrorResponse) {
     console.log(err.message);
     return observableThrowError(err.message);

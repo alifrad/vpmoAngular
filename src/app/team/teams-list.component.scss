@@ -3,7 +3,7 @@
 
 :host {
     width: 100%;
-    padding: 24px;
+    padding: 12px;
 
     -webkit-flex-flow: row wrap;
     justify-content: space-around;
@@ -16,8 +16,8 @@
 .example-card {
   max-width: 400px;
   display: inline-block;
-  width: 80%;
-  margin: 20px;
+  width: 100%;
+  margin: 8px;
   vertical-align: top;
   cursor: pointer;
 }

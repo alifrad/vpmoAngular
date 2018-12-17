@@ -3,15 +3,15 @@ import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { AuthenticationService } from 'app/_services';
 import { appConfig } from '../app.config';
 import { HttpHeaders, HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { BehaviorSubject } from 'rxjs/index';
 
 import { LoadingService } from '../_services/loading.service';
 import { CustomHttpClient } from '../_services/custom-http.service';
 import { mergeMap, exhaustMap, merge, delay, combineAll, concatMap, toArray } from 'rxjs/operators';
 import { forkJoin } from "rxjs/observable/forkJoin";
-// import { concat } from 'rxjs/observable/concat';
-import {concat} from 'rxjs';
+import { concat, empty } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -46,7 +46,8 @@ export class NodeService {
     var nodeParents = this.http.get(this.getNodeParentsUrl + nodeID + '/');
     var nodeTree = this.http.get(this.nodesTreeUrl + nodeID + '/');
     var nodeUsers = this.http.get(this.permissionsUserListUrl + nodeID + '/?nodeType=' + nodeType);
-    var nodeDocuments = this.http.get(this.getDocumentsUrl + nodeID + '/?nodeType=' + nodeType);
+    var nodeDocuments = this.http.get(this.getDocumentsUrl + nodeID + '/?nodeType=' + nodeType)
+      .pipe(catchError(val => of([])))
 
     if (nodeType == 'Team') {
       var children = this.http.get(this.childrenListUrl+'?nodeType=Project&parentNodeID='+nodeID)

@@ -22,14 +22,13 @@
     </mat-card-header>
 
     <mat-card-content>
-      <div>{{ team.members_count }} Members</div>
-      <div>{{ team.projects_count }} Projects</div>
-
       <div class="node-counts">
-        <div class="issues">{{ team.topic_counts.Issue || 0 }} Issues</div>
-        <div class="risks">{{ team.topic_counts.Risk || 0 }} Risks</div>
-        <div class="deliverables">{{ team.topic_counts.Deliverable || 0 }} Deliverables</div>
-        <div class="tasks">{{ team.Task || 0 }} Tasks</div>
+        <div class="deliverables">{{ team.members_count }} <br> <span class="small-text">Member</span></div>
+        <div class="deliverables">{{ team.projects_count || 0 }} <br> <span class="small-text">Project</span></div>
+        <div class="issues">{{ team.topic_counts.Issue || 0 }} <br> <span class="small-text">Issue</span></div>
+        <div class="risks">{{ team.topic_counts.Risk || 0 }} <br> <span class="small-text">Risk</span></div>
+        <div class="deliverables">{{ team.topic_counts.Deliverable || 0 }} <br> <span class="small-text">Deliverable</span></div>
+        <div class="tasks">{{ team.Task || 0 }} <br> <span class="small-text">Task</span></div>
       </div>
     </mat-card-content>
 

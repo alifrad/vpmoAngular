@@ -4,6 +4,13 @@
 	padding: 24px;
 }
 
+
+.small-text {
+	font-size: x-small;
+	font-weight: normal;
+	line-height: 4px;
+}
+
 .node-counts {
 	// display: -webkit-box;
 	// display: -moz-box;
@@ -18,58 +25,68 @@
 	// -webkit-flex-wrap: wrap;
 	// text-align: center;
 	// align-items: center;
-	padding: 0;
-	margin: 0;
-	list-style: none;
-	
-	display: -webkit-box;
-	display: -moz-box;
-	display: -ms-flexbox;
-	display: -webkit-flex;
 	display: flex;
-	
-	-webkit-flex-flow: row wrap;
+	margin: 2;
+	list-style: none;
+	flex-wrap: wrap;
+	padding: 4px;
 	justify-content: space-around;
+	// display: -webkit-box;
+	// display: -moz-box;
+	// display: -ms-flexbox;
+	// display: -webkit-flex;
+	
+	
+	// -webkit-flex-flow: row wrap;
+	
 	
 
 	.issues{
 		background: rgb(255, 101, 101);
 		text-align: center;
 		padding: 5px;
-		margin-top: 2px;
+		margin: 5;
 		width: 80px;
 		height: 50px;
-		font-size: small;
+		
 		border-radius: 5px 5px 5px 5px;
+		font-size: large;
+		font-weight: bold;
 	}
 	.risks{
 		background-color: rgb(255, 255, 106);
 		text-align: center;
 		padding: 5px;
-		margin-top: 2px;
+		margin: 5;
 		width: 80px;
 		height: 50px;
-		font-size: small;
+		
 		border-radius: 5px 5px 5px 5px;
+		font-size: large;
+		font-weight: bold;
 	}
 	.deliverables{
 		background-color: rgb(182, 179, 179);
 		text-align: center;
 		padding: 5px;
-		margin-top: 2px;
+		margin: 5;
 		width: 80px;
 		height: 50px;
-		font-size: small;
+		
 		border-radius: 5px 5px 5px 5px;
+		font-size: large;
+		font-weight: bold;
 	}
 	.tasks{
 		background-color: rgb(86, 255, 255);
 		text-align: center;
 		padding: 5px;
-		margin-top: 2px;
+		margin: 5;
 		width: 80px;
 		height: 50px;
-		font-size: small;
 		border-radius: 5px 5px 5px 5px;
+		font-size: large;
+		font-weight: bold;
 	}
+
 }

@@ -2,23 +2,47 @@
 @import "team-dashboard.component.scss";
 
 :host {
-    width: 100%;
-    padding: 12px;
 
-    -webkit-flex-flow: row wrap;
-    justify-content: space-around;
+    width: 100%;
+    // padding: 5px;
+   
+    // -webkit-flex-flow: row wrap;
+    justify-content: flex-start;
     
     mat-grid-list {
       width: 100%
     }
 }
 
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+.header {
+  text-align: center;
+  padding: 32px;
+}
+
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0 4px;
+  justify-content: space-around;
+}
+
 .example-card {
+  flex: 30%;
+  max-width: 30%;
   max-width: 400px;
+  padding: 0 4px;
   display: inline-block;
-  width: 100%;
+  // width: 95%;
   margin: 8px;
-  vertical-align: top;
+  vertical-align: middle;
   cursor: pointer;
 }
 
@@ -36,4 +60,20 @@
 .unread-badge {
     background-color: #ffb300;
     color: white;
+}
+
+/* Responsive layout - makes a two column-layout instead of four columns */
+@media (max-width: 1024px) {
+  .example-card {
+    flex: 50%;
+    max-width: 45%;
+  }
+}
+
+/* Responsive layout - makes the two columns stack on top of each other instead of next to each other */
+@media (max-width: 600px) {
+  .example-card {
+    flex: 100%;
+    max-width: 100%;
+  }
 }

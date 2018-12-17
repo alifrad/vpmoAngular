@@ -18,8 +18,6 @@ import { fuseConfig } from './fuse-config';
 
 import { AppComponent } from './app.component';
 import { FuseMainModule } from './main/main.module';
-import { HomeModule } from './home/home.module';
-
 import { UserModule } from './user/user.module';
 import { ProjectModule } from './project/project.module';
 import { ChatModule } from './chat/chat.module';
@@ -28,7 +26,6 @@ import { ScrumboardModule } from './scrumboard/scrumboard.module';
 import { TasksModule } from './tasks/tasks.module';
 import { DocumentsModule } from './documents/documents.module';
 import { NodeBreadcrumbsModule } from './node-breadcrumbs/node-breadcrumbs.module';
-import { HomeComponent } from './home/home.component';
 import { ErrorComponent } from './error/error.component';
 import { AppRoutingModule } from './shared/app.routing';
 import { MessageService } from './shared/message.service';
@@ -117,15 +114,12 @@ export function errorHandlerFactory() {
         HttpClientModule,
         RouterModule.forRoot(appRoutes),
         TranslateModule.forRoot(),
-
         // Fuse Main and Shared modules
         FuseModule.forRoot(fuseConfig),
         FuseSharedModule,
         FuseMainModule,
         FuseSidebarModule,
         FuseThemeOptionsModule,
-        
-        HomeModule,
         TeamModule,
         UserModule,
         ProjectModule,
@@ -146,7 +140,6 @@ export function errorHandlerFactory() {
     // The components, directives, and pipes that belong to this NgModule
     declarations: [
         AppComponent,
-        HomeComponent,
         ErrorComponent,
         AlertComponent,
         LoadingComponent,

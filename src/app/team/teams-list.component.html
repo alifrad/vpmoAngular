@@ -1,44 +1,44 @@
-
-<div>
+<div class="header">
   <h1>My Teams
-      <button mat-icon-button (click)="openTeamCreateDialog(createTeamDialog)">
-        <mat-icon> add </mat-icon>
-      </button>
-   </h1>
+    <button mat-icon-button (click)="openTeamCreateDialog(createTeamDialog)">
+      <mat-icon> add </mat-icon>
+    </button>
+  </h1>
 </div>
 
-<mat-card class="example-card" *ngFor='let team of teams'>
+<div class="card-container">
+  <mat-card class="example-card" *ngFor='let team of teams' style="width:100%">
+    <mat-card-header>
+      <mat-card-title>
+        <img src="../../assets/icons/Team-T-Icon.svg" height="15" width="15">
+        <span class="pl-4"><b>{{team.name}}</b></span>
+        <!-- <button *ngIf="team.unreadMessages != undefined" mat-icon-button class="unread-badge">
+          {{ team.unreadMessages }}
+        </button> -->
+        <span *ngIf="team.unreadMessages != undefined">
+          <mat-icon [matBadge]="team.unreadMessages" matBadgeColor="warn">chat_bubble</mat-icon>
+        </span>
+      </mat-card-title>
+    </mat-card-header>
 
-  <mat-card-header>
-    <mat-card-title>
-      <img src="../../assets/icons/Team-T-Icon.svg" height="15" width="15">
-      <span class="pl-4"><b>{{team.name}}</b></span>
-      <!-- <button *ngIf="team.unreadMessages != undefined" mat-icon-button class="unread-badge">
-        {{ team.unreadMessages }}
-      </button> -->
-      <span *ngIf="team.unreadMessages != undefined">
-        <mat-icon [matBadge]="team.unreadMessages" matBadgeColor="warn">chat_bubble</mat-icon>
-      </span>
-    </mat-card-title>
-  </mat-card-header>
+    <mat-card-content>
+      <div>{{ team.members_count }} Members</div>
+      <div>{{ team.projects_count }} Projects</div>
 
-  <mat-card-content>
-    <div>{{ team.members_count }} Members</div>
-    <div>{{ team.projects_count }} Projects</div>
+      <div class="node-counts">
+        <div class="issues">{{ team.topic_counts.Issue || 0 }} Issues</div>
+        <div class="risks">{{ team.topic_counts.Risk || 0 }} Risks</div>
+        <div class="deliverables">{{ team.topic_counts.Deliverable || 0 }} Deliverables</div>
+        <div class="tasks">{{ team.Task || 0 }} Tasks</div>
+      </div>
+    </mat-card-content>
 
-    <div class="node-counts">
-      <div class="issues">{{ team.topic_counts.Issue || 0 }} Issues</div>
-      <div class="risks">{{ team.topic_counts.Risk || 0 }} Risks</div>
-      <div class="deliverables">{{ team.topic_counts.Deliverable || 0 }} Deliverables</div>
-      <div class="tasks">{{ team.Task || 0 }} Tasks</div>
-    </div>
-  </mat-card-content>
+    <mat-card-actions>
+      <button mat-button (click)="getNode(team._id)">View Details</button>
+    </mat-card-actions>
 
-  <mat-card-actions>
-    <button mat-button (click)="getNode(team._id)">View Details</button>
-  </mat-card-actions>
-
-</mat-card>
+  </mat-card>
+</div>
 
 <ng-template #createTeamDialog>
   <h4>Create Team</h4>

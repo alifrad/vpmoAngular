@@ -30,6 +30,7 @@
 	
 	-webkit-flex-flow: row wrap;
 	justify-content: space-around;
+	
 
 	.issues{
 		background: rgb(255, 101, 101);
@@ -39,6 +40,7 @@
 		width: 80px;
 		height: 50px;
 		font-size: small;
+		border-radius: 5px 5px 5px 5px;
 	}
 	.risks{
 		background-color: rgb(255, 255, 106);
@@ -48,6 +50,7 @@
 		width: 80px;
 		height: 50px;
 		font-size: small;
+		border-radius: 5px 5px 5px 5px;
 	}
 	.deliverables{
 		background-color: rgb(182, 179, 179);
@@ -57,6 +60,7 @@
 		width: 80px;
 		height: 50px;
 		font-size: small;
+		border-radius: 5px 5px 5px 5px;
 	}
 	.tasks{
 		background-color: rgb(86, 255, 255);
@@ -66,5 +70,6 @@
 		width: 80px;
 		height: 50px;
 		font-size: small;
+		border-radius: 5px 5px 5px 5px;
 	}
 }

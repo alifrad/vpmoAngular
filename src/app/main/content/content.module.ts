@@ -4,6 +4,8 @@ import { RouterModule } from '@angular/router';
 import { FuseSharedModule } from '@fuse/shared.module';
 
 import { FuseContentComponent } from 'app/main/content/content.component';
+import { MatButtonModule, MatIconModule } from '@angular/material';
+
 
 
 @NgModule({
@@ -14,6 +16,9 @@ import { FuseContentComponent } from 'app/main/content/content.component';
         RouterModule,
 
         FuseSharedModule,
+
+        MatButtonModule,
+        MatIconModule
 
     ],
     exports: [

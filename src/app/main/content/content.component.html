@@ -1,3 +1,7 @@
 <div  style="overflow: scroll;" [class.p-24]="!mobile" fusePerfectScrollbar>
+	<button mat-icon-button id="topicPanelToggle" (click)="toggleTopicPanel()">
+        <mat-icon style="height:48px !important; width:48px !important; font-size: 48px !important;" class="secondary-text s-20">keyboard_arrow_left</mat-icon>
+    </button>
+
     <router-outlet></router-outlet>
 </div>

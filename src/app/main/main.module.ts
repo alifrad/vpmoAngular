@@ -10,6 +10,7 @@ import { NavbarModule } from 'app/main/navbar/navbar.module';
 import { FuseQuickPanelModule } from 'app/main/quick-panel/quick-panel.module';
 import { FuseToolbarModule } from 'app/main/toolbar/toolbar.module';
 import { FuseMainComponent } from './main.component';
+import { TopicPanelModule } from './topic-panel/topic-panel.module';
 
 @NgModule({
     
@@ -28,7 +29,8 @@ import { FuseMainComponent } from './main.component';
         FuseFooterModule,
         NavbarModule,
         FuseQuickPanelModule,
-        FuseToolbarModule
+        FuseToolbarModule,
+        TopicPanelModule
     ],
 
     declarations: [

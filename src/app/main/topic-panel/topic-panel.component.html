@@ -1,0 +1,106 @@
+<div class="header mat-elevation-z4 primary" fxLayout="row" fxLayoutAlign="space-between center">
+
+    <ng-container>
+
+        <div class="title ml-16" fxLayout="row" fxLayoutAlign="start center">
+             <button mat-icon-button class="toggle-sidebar-folded" (click)="toggleSidebarOpen()">
+                <mat-icon class="secondary-text s-20">close</mat-icon>
+            </button>
+            <mat-icon class="s-32 fuse-white-fg">view_list</mat-icon>
+            <h3 class="ml-12">Topics List</h3>
+        </div>
+
+    </ng-container>
+</div>
+
+<div class="content">
+
+
+    <!--
+    <div id="contacts-list" fusePerfectScrollbar [fusePerfectScrollbarOptions]="{suppressScrollX: true}">
+
+        <div *ngFor="let contact of contacts"
+             class="contacts-list-item"
+             [ngClass]="contact.status"
+             [class.active]="contact.id === selectedContact?.id"
+             (click)="toggleChat(contact)">
+
+            <img class="avatar" [src]="contact.avatar"
+                 [matTooltip]="contact.name"
+                 matTooltipPosition="left">
+            <div class="unread-count" *ngIf="contact.unread">{{contact.unread}}</div>
+            <div class="status-icon" [ngClass]="contact.status"></div>
+
+        </div>
+
+    </div>
+    -->
+
+    <!-- No Node selected -->
+    <div id="topicsPanel" fxLayout="column" fxFlex="1 1 auto" *ngIf="rootNode == null">
+
+        <div id="topics" class="topics" fxFlex="1 1 auto" fusePerfectScrollbar>
+
+            <ng-container>
+                
+                <h2>No Node Selected</h2>
+
+            </ng-container>
+
+        </div>
+
+    </div>
+
+    <!-- Topics -->
+    <div id="topicsPanel" fxLayout="column" fxFlex="1 1 auto" *ngIf="rootNode != null">
+
+        <div id="topics" class="topics" fxFlex="1 1 auto" fusePerfectScrollbar>
+
+            <ng-container>
+
+                <mat-toolbar color="primary">
+                    <mat-form-field>
+                        <mat-select [(ngModel)]="selectedTopicType" (selectionChange)="filtersChanged()" placeholder="Selected Topic Type">
+                            <mat-option *ngFor="let topicType of topicChoices" [value]="topicType">
+                                {{topicType}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field *ngIf="rootNodeChildren != null">
+                        <mat-select [(ngModel)]="selectedNode" placeholder="Selected Node" (selectionChange)="filtersChanged()">
+                            <mat-option *ngFor="let node of rootNodeChildren" [value]="node.name">
+                                {{node.name}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </mat-toolbar>
+                <!--
+                <div *ngFor="let message of chat.dialog; let i = index" class="message-row"
+                     [ngClass]="{
+                            'me': message.who === user.id,
+                            'contact': message.who !== user.id,
+                            'first-of-group': isFirstMessageOfGroup(message, i),
+                            'last-of-group': isLastMessageOfGroup(message, i)
+                            }">
+
+                    <img *ngIf="shouldShowContactAvatar(message, i)"
+                         src="{{selectedContact.avatar}}"
+                         class="avatar">
+
+                    <div class="bubble">
+                        <div class="message">{{message.message}}</div>
+                        <div class="time secondary-text">{{message.time | date:'short'}}</div>
+                    </div>
+
+                </div>-->
+
+            </ng-container>
+
+
+        </div>
+
+    </div>
+    <!-- / Chat -->
+
+</div>

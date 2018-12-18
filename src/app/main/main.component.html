@@ -31,6 +31,17 @@
                 <!-- / FOOTER: Below -->
 
             </div>
+            <!-- TopicPanel: RIGHT -->
+            <fuse-sidebar [name]="'topicPanel'"
+                          [foldedAutoTriggerOnHover]="false"
+                          foldedWidth="0"
+                          [folded]="fuseSettings.layout.topicPanel.folded"
+                          [position]="'right'"
+                          class="topicPanel-fuse-sidebar" [ngClass]="fuseSettings.layout.topicPanel.primaryBackground"
+                          *ngIf="fuseSettings.layout.topicPanel.position === 'right'">
+                <topic-panel layout="vertical"></topic-panel>
+            </fuse-sidebar>
+            <!-- / TopicPanel: RIGHT -->
         </div>
 
         <!-- FOOTER: Above -->

@@ -6,6 +6,7 @@ import { filter, map } from 'rxjs/operators';
 
 import { fuseAnimations } from '@fuse/animations/index';
 import { FuseConfigService } from '@fuse/services/config.service';
+import { FuseSidebarService } from '@fuse/components/sidebar/sidebar.service';
 
 @Component({
     selector   : 'fuse-content',
@@ -28,7 +29,8 @@ export class FuseContentComponent implements OnDestroy, OnInit
     constructor(
         private router: Router,
         private activatedRoute: ActivatedRoute,
-        private fuseConfig: FuseConfigService
+        private fuseConfig: FuseConfigService,
+        private _fuseSidebarService: FuseSidebarService
     )
     {
         this.router.events.pipe(
@@ -74,5 +76,9 @@ export class FuseContentComponent implements OnDestroy, OnInit
     ngOnDestroy()
     {
         this.onConfigChanged.unsubscribe();
+    }
+
+    toggleTopicPanel () { 
+        this._fuseSidebarService.getSidebar('topicPanel').toggleOpen();
     }
 }

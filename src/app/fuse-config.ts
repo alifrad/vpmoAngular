@@ -6,47 +6,10 @@
  * about changing these options per component basis.
  */
 
-/*
-export const fuseConfig = {
-            colorTheme      : 'theme-default-dark',
-            layout          : {
-                style    : 'vertical-layout-1',
-                width    : 'fullwidth',
-                navbar   : {
-                    primaryBackground  : 'fuse-navy-700',
-                    secondaryBackground: 'fuse-navy-900',
-                    folded             : false,
-                    hidden             : false,
-                    position           : 'left',
-                    variant            : 'vertical-style-1'
-                },
-                toolbar  : {
-                    customBackgroundColor: false,
-                    background           : 'fuse-navy--bg',
-                    hidden               : false,
-                    position             : 'below'
-                },
-                footer   : {
-                    customBackgroundColor: true,
-                    background           : 'fuse-navy-900',
-                    hidden               : false,
-                    position             : 'below-fixed'
-                },
-                sidepanel: {
-                    hidden  : false,
-                    position: 'right'
-                },
-                navigation: 'left',
-                navigationFolded: false,
-            },
-            customScrollbars: true
-    }
-*/
- // OLD
 export const fuseConfig = {
     colorTheme      : 'theme-default',
     layout          : {
-        navigation      : 'left', // 'right', 'left', 'top', 'none'
+        navigation      : 'left', // 'right', 'left', 'top', 'none',
         // navigationFolded: false, // true, false
         toolbar         : 'below', // 'above', 'below', 'none'
         mode            : 'fullwidth', // 'boxed', 'fullwidth'
@@ -58,6 +21,14 @@ export const fuseConfig = {
             folded             : false,
             hidden             : false,
             position           : 'left',
+            variant            : 'vertical-style-1'
+        },
+        topicPanel: {
+            primaryBackground  : 'fuse-white-bg',
+            secondaryBackground: 'fuse-white-50-bg',
+            folded             : true,
+            hidden             : false,
+            position           : 'right',
             variant            : 'vertical-style-1'
         },
         footer   : {

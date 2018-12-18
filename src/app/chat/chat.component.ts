@@ -21,9 +21,6 @@ declare const Twilio: any
 
 export class ChatComponent implements OnInit, OnDestroy {
 
-  @Input() nodeID: string;
-  @Input() nodeType: string;
-
   constructor(
     private router: Router,
     private _chatService: ChatService,
@@ -38,6 +35,9 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   @ViewChild('chatContainer') chatContainer;
+
+  nodeID: string;
+  nodeType: string;
 
   differ: any;
   messages: any[] = [];
@@ -98,6 +98,8 @@ export class ChatComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe(node => {
         if (node) {
+          this.nodeID = node._id
+          this.nodeType = node.node_type
           this.currentUserPermissions = node.user_permissions
           if (!this.canChat() && this.currentUserPermissions.indexOf('update_'+this.nodeType.toLowerCase()) >= 0){
             this.getChannel()

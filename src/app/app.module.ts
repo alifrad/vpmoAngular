@@ -27,7 +27,7 @@ import { TasksModule } from './tasks/tasks.module';
 import { DocumentsModule } from './documents/documents.module';
 import { NodeBreadcrumbsModule } from './node-breadcrumbs/node-breadcrumbs.module';
 import { ErrorComponent } from './error/error.component';
-import { AppRoutingModule } from './shared/app.routing';
+import { routes } from './shared/app.routing';
 import { MessageService } from './shared/message.service';
 import { AlertComponent } from './_directives/alert.component';
 import { AlertService } from './_services/alert.service';
@@ -84,13 +84,8 @@ import {
 import { GlobalService } from './_services/global.service';
 import { NavigationComponent } from './navigation/navigation.component';
 import { CustomHttpClient } from './_services/custom-http.service';
+import { RouterTabModule } from './navigation/router-tab.module';
 
-const appRoutes: Routes = [
-    {
-        path      : '**',
-        redirectTo: 'user/login'
-    }
-];
 
 const tempUser = null;
 
@@ -112,7 +107,7 @@ export function errorHandlerFactory() {
         CommonModule,
         BrowserAnimationsModule,
         HttpClientModule,
-        RouterModule.forRoot(appRoutes),
+        RouterModule.forRoot(routes),
         TranslateModule.forRoot(),
         // Fuse Main and Shared modules
         FuseModule.forRoot(fuseConfig),
@@ -136,6 +131,7 @@ export function errorHandlerFactory() {
         MatInputModule,
         MatIconModule,
         MatGridListModule,
+        RouterTabModule
     ],
     // The components, directives, and pipes that belong to this NgModule
     declarations: [
@@ -144,6 +140,7 @@ export function errorHandlerFactory() {
         AlertComponent,
         LoadingComponent,
         NavigationComponent,
+        
 
     ],
     // The main application view, called the root component, which hosts all other app views

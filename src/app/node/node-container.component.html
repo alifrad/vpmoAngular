@@ -1,85 +1,102 @@
 <app-nodepage class="hide-text"></app-nodepage>
-<!-- <mat-divider></mat-divider> -->
 
-<mat-tab-group>
-    <mat-tab > 
-        <ng-template mat-tab-label>
-            <mat-icon class="tab-icon">details</mat-icon>
-            <span class="hide-text">Details</span>
-        </ng-template>
-        <app-node-edit></app-node-edit>
-    </mat-tab>
+<!-- ***********method 1 which doesn't have scrolling feature ************* -->
+<!-- <nav mat-tab-nav-bar>
+    <a mat-tab-link
+        [routerLink]="['details']"
+        routerLinkActive #rla="routerLinkActive"
+        [active]="rla.isActive">
+        <mat-icon class="tab-icon">details</mat-icon>
+        <span class="hide-text">Details</span>
+    </a>
+    <a mat-tab-link *ngIf="nodeType == 'Team'"
+        [routerLink]="['teamDashboard']"
+        routerLinkActive #rla="routerLinkActive"
+        [active]="rla.isActive">
+        <mat-icon class="tab-icon">dashboard</mat-icon>
+        <span class="hide-text">Dashboard</span>
+    </a>
+    <a mat-tab-link *ngIf="nodeType == 'Project'"
+        [routerLink]="['projectDashboard']"
+        routerLinkActive #rla="routerLinkActive"
+        [active]="rla.isActive">
+        <mat-icon class="tab-icon">dashboard</mat-icon>
+        <span class="hide-text">Dashboard</span>
+    </a>
+    <a mat-tab-link
+        [routerLink]="['tree']"
+        routerLinkActive #rla="routerLinkActive"
+        [active]="rla.isActive">
+        <mat-icon class="tab-icon">navigation</mat-icon>
+        <span class="hide-text">Tree</span>
+    </a>
+    <a mat-tab-link *ngIf="nodeType!=='Team'"
+        [routerLink]="['chat']"
+        routerLinkActive #rla="routerLinkActive"
+        [active]="rla.isActive">
+        <mat-icon class="tab-icon">chat</mat-icon>
+        <span class="hide-text">Chat</span>
+    </a>
+    <a mat-tab-link *ngIf="nodeType!=='Team'"
+        [routerLink]="['tasks']"
+        routerLinkActive #rla="routerLinkActive"
+        [active]="rla.isActive">
+        <mat-icon class="tab-icon">check_box</mat-icon>
+        <span class="hide-text">Tasks</span>
+    </a>
+    <a mat-tab-link *ngIf="nodeType=='Project'"
+        [routerLink]="['scrumboard']"
+        routerLinkActive #rla="routerLinkActive"
+        [active]="rla.isActive">
+        <mat-icon class="tab-icon">view_column</mat-icon>
+        <span class="hide-text">Scrumboard</span>
+    </a>
+    <a mat-tab-link *ngIf="nodeType!=='Team'"
+        [routerLink]="['documents']"
+        routerLinkActive #rla="routerLinkActive"
+        [active]="rla.isActive">
+        <mat-icon class="tab-icon">attachment</mat-icon>
+        <span class="hide-text">Documents</span>
+    </a>
+    <a mat-tab-link
+        [routerLink]="['permissions']"
+        routerLinkActive #rla="routerLinkActive"
+        [active]="rla.isActive">
+        <mat-icon class="tab-icon">accessibility</mat-icon>
+        <span class="hide-text">Permissions</span>
+    </a>
+</nav> -->
 
-    <mat-tab *ngIf="nodeType!=='Topic'"> 
-        <ng-template mat-tab-label>
-            <mat-icon class="tab-icon">dashboard</mat-icon>
-            <span class="hide-text">Dashboard</span>
-        </ng-template>
-        <!-- Team Dashboard -->
-        <team-dashboard *ngIf="nodeType == 'Team'" [nodeID]="nodeID"></team-dashboard>
-
-        <!-- Project Dashboard + Corresponding topic list -->
-        <project-dashboard *ngIf="nodeType == 'Project'"></project-dashboard>
-    </mat-tab>
-
-    <mat-tab *ngIf="nodeType!=='Topic'"> 
-        <ng-template mat-tab-label>
-            <mat-icon class="tab-icon">navigation</mat-icon>
-            <span class="hide-text">Tree</span>
-        </ng-template>
-        <app-tree-structure></app-tree-structure>
-    </mat-tab>
-
-    <mat-tab *ngIf="nodeType!=='Team'"> 
-        <ng-template mat-tab-label>
-            <mat-icon class="tab-icon">chat</mat-icon>
-            <span class="hide-text">Chat</span>
-        </ng-template>
-        <app-chat [nodeID]="nodeID" [nodeType]="nodeType"></app-chat>
-    </mat-tab>
-
-    <mat-tab *ngIf="nodeType!=='Team'"> 
-        <ng-template mat-tab-label>
-            <mat-icon class="tab-icon">check_box</mat-icon>
-            <span class="hide-text">Tasks</span>
-        </ng-template>
-        <app-tasks></app-tasks>
-    </mat-tab>
-
-    <mat-tab *ngIf="nodeType=='Project'"> 
-        <ng-template mat-tab-label>
-            <mat-icon class="tab-icon">view_column</mat-icon>
-            <span class="hide-text">Scrumboard</span>
-        </ng-template>
-        <app-scrumboard></app-scrumboard>
-    </mat-tab>
-
-    <mat-tab *ngIf="nodeType!=='Team'"> 
-        <ng-template mat-tab-label>
-            <mat-icon class="tab-icon">attachment</mat-icon>
-            <span class="hide-text">Documents</span>
-        </ng-template>
-        <app-documents-list></app-documents-list>
-    </mat-tab>
-
-    <mat-tab> 
-        
-        <ng-template mat-tab-label>
-            <mat-icon class="tab-icon">accessibility</mat-icon>
-            <span class="hide-text">Permissions</span>
-        </ng-template>
-        <app-permissions></app-permissions>
-    </mat-tab>
+<!-- ***********method 2 which didn't manage to get it to work ************* -->
+<!-- <nav mat-tab-nav-bar>
+    <a mat-tab-link
+        *ngFor="let link of navLinks"
+        [routerLink]="['/' + link.path]"
+        routerLinkActive #rla="routerLinkActive"
+        [active]="rla.isActive">
+        {{link.label}}
+    </a>
+</nav> -->
 
 
-</mat-tab-group>
-  
+<!-- Refer to: https://github.com/angular/material2/issues/2177#issuecomment-447787776  -->
 
-<topics-list [parentNodeID]="nodeID" [parentNodeType]="nodeType" [topicType]="contentType" *ngIf="(contentType=='Deliverable' || contentType=='Risk' || contentType=='Issue') && nodeType == 'Project'"></topics-list>
+<app-router-tab>
+    <app-router-tab-item [routerLink]="['details']" label="Details" [routerLinkActiveOptions]="{exact: true}"></app-router-tab-item>	
+    <app-router-tab-item *ngIf="nodeType=='Team'" [routerLink]="['teamDashboard']" label="Dashboard"></app-router-tab-item>	
+    <app-router-tab-item *ngIf="nodeType=='Project'" [routerLink]="['projectDashboard']" label="Dashboard"></app-router-tab-item>
+    <app-router-tab-item *ngIf="nodeType!=='Topic'" [routerLink]="['tree']" label="Tree"></app-router-tab-item>
+    <app-router-tab-item *ngIf="nodeType!=='Team'" [routerLink]="['chat']" label="Chat"></app-router-tab-item>
+    <app-router-tab-item *ngIf="nodeType!=='Team'" [routerLink]="['tasks']" label="Tasks"></app-router-tab-item>
+    <app-router-tab-item *ngIf="nodeType=='Project'" [routerLink]="['scrumboard']" label="Scrumboard"></app-router-tab-item>
+    <app-router-tab-item *ngIf="nodeType!=='Team'" [routerLink]="['documents']" label="Documents"></app-router-tab-item>
+    <app-router-tab-item [routerLink]="['permissions']" label="Permissions"></app-router-tab-item>
+</app-router-tab>
 
 
-
-
+<div>
+    <router-outlet></router-outlet>
+</div>
 
 
 

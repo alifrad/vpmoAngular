@@ -36,28 +36,7 @@ import { NodeNavigationService } from './node-navigation.service';
 import { NodeEditComponent } from './node-edit.component';
 import { NodeContainerComponent } from './node-container.component';
 import { NodeShortcutsComponent } from './node-shortcuts.component';
-
-const NodeRoutes: Routes = [
-  {
-      path: 'node',
-      canActivate: [ AuthGuard ],
-      children: [
-          {
-            path: ':type/:id/:contentType',
-            component: NodeContainerComponent,
-            pathMatch: 'full'
-          },
-          // { path: ':type/:id', 
-          //   component: NodepageComponent,
-          //   outlet: 'breadcrumb'
-          // },
-          // { path: 'edit/:type/:id', 
-          //   component: NodeEditComponent,
-          //   outlet: 'content'
-          // },
-      ]
-  },
-];
+import { RouterTabModule } from 'app/navigation/router-tab.module';
 
 
 @NgModule({
@@ -65,7 +44,7 @@ const NodeRoutes: Routes = [
     CommonModule,
     FormsModule,
     HttpClientModule,
-    RouterModule.forChild(NodeRoutes),
+    RouterModule,
     MatDatepickerModule,
     MatNativeDateModule,
     MatIconModule,
@@ -90,7 +69,8 @@ const NodeRoutes: Routes = [
     NodeBreadcrumbsModule,
     UserModule,
     ScrumboardModule,
-    TeamModule
+    TeamModule,
+    RouterTabModule
   ],
   providers: [
     NodeService,

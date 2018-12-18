@@ -18,7 +18,7 @@ import { PermissionsService } from './permissions.service';
 
 const PermissionsRoutes: Routes = [
   {
-    path: 'permissions/:type/:id',
+    path: 'permissions',
     component: PermissionsComponent,
     canActivate: [ AuthGuard ]
   }

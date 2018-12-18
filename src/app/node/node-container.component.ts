@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLinkActive } from '@angular/router';
+
 
 @Component({
   selector: 'app-node-container',
@@ -14,7 +15,15 @@ export class NodeContainerComponent implements OnInit {
   contentType: any;
   nodeID: any;
   nodeType: any;
+  path: string;
+  navLinks: [
+    {path:'details', label:'Details'},
 
+    {path:'teamDashboard', label:'Dashboard'},
+    {path:'tree', label:'Tree'}
+
+  ];
+ 
   constructor(
     private route: ActivatedRoute
   ) { }
@@ -24,6 +33,7 @@ export class NodeContainerComponent implements OnInit {
       this.contentType = params['contentType'];
       this.nodeID = params['id']
       this.nodeType = params['type']
+      this.path = 'node/' +  this.nodeType + '/' + this.nodeID + '/';
     })
   }
 

@@ -46,7 +46,7 @@ export class TeamsListComponent implements OnInit, OnDestroy {
 
 
   getNode(nodeId: string) {
-    this.router.navigate(['/node/Team/' + nodeId + '/dashboard']);
+    this.router.navigate(['/node/Team/' + nodeId + '/details']);
   }
 
   ngOnInit() {

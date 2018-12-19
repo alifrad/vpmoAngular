@@ -1,0 +1,21 @@
+<mat-nav-list>
+
+  <a mat-list-item (click)="routeToNode(node._id, node.node_type)">
+    <!-- Add icons - skipped because no icon exists for topics - just an img with a mat-list-icon property will work -->
+    <span mat-line>{{ node.name }}</span>
+    <span mat-line>{{ node.node_type }}</span>
+    <mat-icon [matBadge]="unreadMessages[node._id] || 0" matBadgeColor="primary">
+      chat_bubble
+    </mat-icon>
+  </a>
+
+  <a *ngFor="let child of node.child_nodes" mat-list-item (click)="routeToNode(child._id, child.node_type)">
+    <!-- Add icons - skipped because no icon exists for topics - just an img with a mat-list-icon property will work  -->
+    <span mat-line>{{ child.name }}</span>
+    <span mat-line>{{ child.model_name }}</span>
+    <mat-icon [matBadge]="unreadMessages[child._id] || 0" matBadgeColor="primary">
+      chat_bubble
+    </mat-icon>
+  </a>
+
+</mat-nav-list>

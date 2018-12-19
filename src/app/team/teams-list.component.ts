@@ -4,10 +4,11 @@ import { TeamService } from './team.service';
 import { Team } from './team';
 import { Router } from '@angular/router';
 import { GlobalService } from '../_services/global.service';
-import {MatDialog, MatDialogConfig} from '@angular/material';
+import { MatDialog, MatDialogConfig, MatBottomSheet } from '@angular/material';
 import { ChatService } from 'app/chat/chat.service';
 import { Subscription } from 'rxjs';
 import { LoadingService } from '../_services/loading.service';
+import { UnreadMessagesPanelComponent } from 'app/chat/unread-messages-panel.component';
 
 @Component({
   selector: 'teams-list',
@@ -33,7 +34,8 @@ export class TeamsListComponent implements OnInit, OnDestroy {
       private globalService: GlobalService,
       private dialog: MatDialog,
       private chatService: ChatService,
-      private loadingService: LoadingService
+      private loadingService: LoadingService,
+      private bottomSheet: MatBottomSheet
   ) { }
 
   teamTree(team: Team) {
@@ -87,8 +89,8 @@ export class TeamsListComponent implements OnInit, OnDestroy {
         }
 
         for (var child = 0; child < this.teams[team].child_nodes.length; child++) {
-          if (this.unreadMessages[this.teams[team].child_nodes[child]] != undefined) {
-            this.teams[team].unreadMessages += this.unreadMessages[this.teams[team].child_nodes[child]]
+          if (this.unreadMessages[this.teams[team].child_nodes[child]._id] != undefined) {
+            this.teams[team].unreadMessages += this.unreadMessages[this.teams[team].child_nodes[child]._id]
           }
         }
       }
@@ -124,6 +126,12 @@ export class TeamsListComponent implements OnInit, OnDestroy {
         this.loadingService.taskFinished(taskID)
         self.dialogRef.close()
       })
+  }
+
+  openUnreadMessagesPanel(team) {
+    const bottomSheetRef = this.bottomSheet.open(UnreadMessagesPanelComponent, {
+      data: { node: team },
+    });
   }
   
 }

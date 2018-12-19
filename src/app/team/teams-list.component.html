@@ -15,7 +15,7 @@
         <!-- <button *ngIf="team.unreadMessages != undefined" mat-icon-button class="unread-badge">
           {{ team.unreadMessages }}
         </button> -->
-        <span *ngIf="team.unreadMessages != undefined">
+        <span *ngIf="team.unreadMessages != undefined"  (click)="openUnreadMessagesPanel(team)">
           <mat-icon [matBadge]="team.unreadMessages" matBadgeColor="warn">chat_bubble</mat-icon>
         </span>
       </mat-card-title>

@@ -17,11 +17,14 @@ import {
   MatListModule, 
   MatDividerModule,
   MatMenuModule,
-  MatRadioModule
+  MatRadioModule,
+  MatBottomSheetModule,
+  MatBadgeModule
 } from '@angular/material';
 
 import { AuthGuard } from '../_guards/auth.guard';
 import { ChatComponent } from './chat.component';
+import { UnreadMessagesPanelComponent } from './unread-messages-panel.component';
 import { ChatService } from './chat.service';
 import { FuseSharedModule } from '../../@fuse/shared.module';
 
@@ -40,6 +43,7 @@ const ChatRoutes: Routes = [
     FormsModule,
     RouterModule.forChild(ChatRoutes),
     HttpClientModule,
+
     MatDatepickerModule,
     MatNativeDateModule,
     MatIconModule,
@@ -52,17 +56,25 @@ const ChatRoutes: Routes = [
     MatDividerModule,
     MatMenuModule,
     MatRadioModule,
+    MatBottomSheetModule,
+    MatBadgeModule,
+
     FuseSharedModule,
+
     QuillModule
   ],
   declarations: [
     ChatComponent,
+    UnreadMessagesPanelComponent
   ],
   providers: [
     ChatService
   ],
   exports: [
     ChatComponent,
+  ],
+  entryComponents: [
+    UnreadMessagesPanelComponent
   ],
   bootstrap: [ChatComponent]
 })

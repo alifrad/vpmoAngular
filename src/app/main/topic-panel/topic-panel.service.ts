@@ -12,14 +12,30 @@ import { BehaviorSubject } from 'rxjs/index';
 export class TopicPanelService
 {
 	selectedTopicType = new BehaviorSubject('Issue');
+
+	private readonly getAssignedTasksUrl: string = appConfig.taskApiUrl + '/list_assigned_tasks/';
     
     constructor(
         private http: CustomHttpClient
     )
     { }
 
-    getTopicsUnderProject(parentNodeID, topicType) {
-	    return this.http.get(appConfig.apiUrl + '/nodes/?nodeType='+topicType+'&parentNodeID='+parentNodeID+'&blanketSearch=True')
+    getTopicsUnderNode(parentNodeID, topicType, assignee) {
+    	if (assignee == null) {
+    		return this.http.get(appConfig.apiUrl + '/nodes/?nodeType='+topicType+'&parentNodeID='+parentNodeID+'&blanketSearch=True')
+    	} else {
+    		return this.http.get(appConfig.apiUrl + '/nodes/?nodeType='+topicType+'&parentNodeID='+parentNodeID+'&blanketSearch=True&assignedToUser=True')
+    	}
+	    
+	}
+
+	getTasksUnderNode (nodeID, username) {
+		if (username == null) {
+			return this.http.get(this.getAssignedTasksUrl+nodeID+'/')
+		} else {
+			return this.http.get(this.getAssignedTasksUrl+nodeID+'/?search='+username)
+		}
+		
 	}
 
 }

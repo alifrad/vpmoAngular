@@ -12,6 +12,7 @@ import { mergeMap, exhaustMap, merge, delay, combineAll, concatMap, toArray } fr
 import { forkJoin } from "rxjs/observable/forkJoin";
 import { concat, empty } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { TopicPanelService } from '../main/topic-panel/topic-panel.service';
 
 @Injectable({
   providedIn: 'root'
@@ -36,7 +37,8 @@ export class NodeService {
   constructor(
     private http: CustomHttpClient, 
     private authService: AuthenticationService,
-    private loadingService: LoadingService
+    private loadingService: LoadingService,
+    private topicPanelService: TopicPanelService
   ) { }
 
   getNodeDetails (nodeID: string, nodeType: string) {
@@ -48,31 +50,23 @@ export class NodeService {
     var nodeUsers = this.http.get(this.permissionsUserListUrl + nodeID + '/?nodeType=' + nodeType);
     var nodeDocuments = this.http.get(this.getDocumentsUrl + nodeID + '/?nodeType=' + nodeType)
       .pipe(catchError(val => of([])))
-
-    if (nodeType == 'Team') {
-      var children = this.http.get(this.childrenListUrl+'?nodeType=Project&parentNodeID='+nodeID)
-      var requests = concat(nodeDetails, nodeParents, nodeTree, nodeUsers, nodeDocuments, children)
-    } else {
-      var requests = concat(nodeDetails, nodeParents, nodeTree, nodeUsers, nodeDocuments)
-    }
+    var children = this.http.get(this.childrenListUrl+'?nodeType=Project&parentNodeID='+nodeID)
+    
+    var requests = concat(nodeDetails, nodeParents, nodeTree, nodeUsers, nodeDocuments, children)
 
     requests
       .pipe(toArray())
       .subscribe(responses => {
-        console.log(responses)
         var node = responses[0];
         node.parents = responses[1];
         node.tree = responses[2];
         node.users = responses[3];
         node.documents = responses[4]
-        if (nodeType == 'Team') {
-          node.children = responses[5]
-        } else {
-          node.children = null
-        }
+        node.children = responses[5]
         this.node.next(node);
         console.log(node);
         this.loadingService.taskFinished(taskID)
+        this.topicPanelService.selectedTopicType.next('Issue')
       })
 
     /*

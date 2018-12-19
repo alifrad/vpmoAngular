@@ -16,10 +16,10 @@
     <div>{{ project.members_count }} Members</div>
 
     <div class="node-counts">
-      <div class="issues">{{ project.topic_counts.Issue || 0 }} Issues</div>
-      <div class="risks">{{ project.topic_counts.Risk || 0 }} Risks</div>
-      <div class="deliverables">{{ project.topic_counts.Deliverable || 0 }} Deliverables</div>
-      <div class="tasks">{{ project.Task || 0 }} Tasks</div>
+      <div class="topic">{{ project.topic_counts.Issue || 0 }} <span class="node-label issue">i</span></div>
+      <div class="topic risks">{{ project.topic_counts.Risk || 0 }} Risks</div>
+      <div class="topic deliverables">{{ project.topic_counts.Deliverable || 0 }} Deliverables</div>
+      <div class="topic tasks">{{ project.Task || 0 }} Tasks</div>
     </div>
   </mat-card-content>
 

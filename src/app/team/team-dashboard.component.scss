@@ -1,92 +1,15 @@
 @import "src/@fuse/scss/fuse";
+@import "src/app/shared/global-style.less";
 
 :host {
 	padding: 24px;
 }
 
 
-.small-text {
+.topic-label {
 	font-size: x-small;
 	font-weight: normal;
-	line-height: 4px;
+	text-transform: uppercase;
+	display: block;
 }
 
-.node-counts {
-	// display: -webkit-box;
-	// display: -moz-box;
-	// display: -ms-flexbox;
-	// display: -webkit-flex;
-	// display: flex;
-	// font-size: small;
-	// flex-direction: row;
-	// flex-wrap: wrap;
-	// justify-content: center;
-	// align-content: center;
-	// -webkit-flex-wrap: wrap;
-	// text-align: center;
-	// align-items: center;
-	display: flex;
-	margin: 2;
-	list-style: none;
-	flex-wrap: wrap;
-	padding: 4px;
-	justify-content: space-around;
-	// display: -webkit-box;
-	// display: -moz-box;
-	// display: -ms-flexbox;
-	// display: -webkit-flex;
-	
-	
-	// -webkit-flex-flow: row wrap;
-	
-	
-
-	.issues{
-		background: rgb(255, 101, 101);
-		text-align: center;
-		padding: 5px;
-		margin: 5;
-		width: 80px;
-		height: 50px;
-		
-		border-radius: 5px 5px 5px 5px;
-		font-size: large;
-		font-weight: bold;
-	}
-	.risks{
-		background-color: rgb(255, 255, 106);
-		text-align: center;
-		padding: 5px;
-		margin: 5;
-		width: 80px;
-		height: 50px;
-		
-		border-radius: 5px 5px 5px 5px;
-		font-size: large;
-		font-weight: bold;
-	}
-	.deliverables{
-		background-color: rgb(182, 179, 179);
-		text-align: center;
-		padding: 5px;
-		margin: 5;
-		width: 80px;
-		height: 50px;
-		
-		border-radius: 5px 5px 5px 5px;
-		font-size: large;
-		font-weight: bold;
-	}
-	.tasks{
-		background-color: rgb(86, 255, 255);
-		text-align: center;
-		padding: 5px;
-		margin: 5;
-		width: 80px;
-		height: 50px;
-		border-radius: 5px 5px 5px 5px;
-		font-size: large;
-		font-weight: bold;
-	}
-
-}

@@ -254,10 +254,10 @@ export class TopicPanelComponent implements OnInit, AfterViewInit, OnDestroy
         var node = this.rootNodeChildren.filter(i => i.name == this.selectedNode)[0]
         this.setDisplayedColumns();
         this.topics = [];
-        if (node.node_type == 'Team' && this.selectedTopicType == 'Task') {
-            // Do Nothing if the selected node is a team + Tasks are selected - since teams dont have tasks
-            return
-        }
+        // if (node.node_type == 'Team' && this.selectedTopicType == 'Task') {
+        //     // Do Nothing if the selected node is a team + Tasks are selected - since teams dont have tasks
+        //     return
+        // }
 
         this.updateTopicsList(node._id, this.selectedTopicType)
     }

@@ -1,9 +1,9 @@
 <div class="header">
-  <h1>My Teams
-    <button mat-icon-button (click)="openTeamCreateDialog(createTeamDialog)">
-      <mat-icon> add </mat-icon>
-    </button>
-  </h1>
+  My Teams
+  <button mat-icon-button (click)="openTeamCreateDialog(createTeamDialog)">
+    <mat-icon> add </mat-icon>
+  </button>
+  
 </div>
 
 <div class="card-container">
@@ -23,12 +23,12 @@
 
     <mat-card-content>
       <div class="node-counts">
-        <div class="deliverables">{{ team.members_count }} <br> <span class="small-text">Member</span></div>
-        <div class="deliverables">{{ team.projects_count || 0 }} <br> <span class="small-text">Project</span></div>
-        <div class="issues">{{ team.topic_counts.Issue || 0 }} <br> <span class="small-text">Issue</span></div>
-        <div class="risks">{{ team.topic_counts.Risk || 0 }} <br> <span class="small-text">Risk</span></div>
-        <div class="deliverables">{{ team.topic_counts.Deliverable || 0 }} <br> <span class="small-text">Deliverable</span></div>
-        <div class="tasks">{{ team.Task || 0 }} <br> <span class="small-text">Task</span></div>
+        <div class="topic deliverables">{{ team.members_count }} <span class="node-label">Member</span></div>
+        <div class="topic deliverables">{{ team.projects_count || 0 }} <span class="node-label">Project</span></div>
+        <div class="topic issues">{{ team.topic_counts.Issue || 0 }} <span class="node-label">Issue</span></div>
+        <div class="topic risks">{{ team.topic_counts.Risk || 0 }} <span class="node-label">Risk</span></div>
+        <div class="topic deliverables">{{ team.topic_counts.Deliverable || 0 }} <span class="node-label">Deliverable</span></div>
+        <div class="topic tasks">{{ team.Task || 0 }} <span class="node-label">Task</span></div>
       </div>
     </mat-card-content>
 

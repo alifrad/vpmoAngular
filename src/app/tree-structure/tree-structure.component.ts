@@ -147,17 +147,27 @@ export class TreeStructureComponent implements OnInit, OnDestroy {
   public viewDetail = (node) => {
     const nodeType = node.data.node_type;
     const nodeId = node.data._id;
-    const nodeName = node.data.name;
+    
     console.log('Opening Node', node);
     localStorage.setItem('nodeID', nodeId);
     localStorage.setItem('nodeType', nodeType);
 
     console.log('node/' + nodeType + '/' + nodeId);
     if (nodeType == 'Topic') {
-      this.router.navigate(['node/' + nodeType + '/' + nodeId + '/edit']);
+      this.router.navigate(['node/' + nodeType + '/' + nodeId + '/details']);
     } else {
       this.router.navigate(['node/' + nodeType + '/' + nodeId + '/tree']);
     }
+  }
+
+  viewChat(node) {
+    const nodeType = node.data.node_type;
+    const nodeId = node.data._id;
+
+    localStorage.setItem('nodeID', nodeId);
+    localStorage.setItem('nodeType', nodeType);
+    
+    this.router.navigate(['node/' + nodeType + '/' + nodeId + '/chat']);
   }
 
   toggleFavorite (nodeID) {

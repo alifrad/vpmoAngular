@@ -28,7 +28,10 @@ div, mat-form-field {
 .quill-container label {
 	font-size: 1.2em;
 }
-  
+
+mat-form-field {
+	margin-bottom: 10px;
+}
  
 /* .large-box {
 	min-height: 500px;

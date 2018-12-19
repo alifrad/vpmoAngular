@@ -75,7 +75,7 @@ export class TeamDashboardComponent implements OnInit, OnDestroy {
   }
 
   goToNode (node) {
-    this.router.navigate(['/node/Project/' + node._id + '/dashboard']);
+    this.router.navigate(['/node/Project/' + node._id + '/projectDashboard']);
   }
 
 }

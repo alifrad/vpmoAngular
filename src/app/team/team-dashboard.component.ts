@@ -67,8 +67,8 @@ export class TeamDashboardComponent implements OnInit, OnDestroy {
       }
 
       for (var child = 0; child < this.projects[project].child_nodes.length; child++) {
-        if (this.unreadMessages[this.projects[project].child_nodes[child]] != undefined) {
-          this.projects[project].unreadMessages += this.unreadMessages[this.projects[project].child_nodes[child]]
+        if (this.unreadMessages[this.projects[project].child_nodes[child]._id] != undefined) {
+          this.projects[project].unreadMessages += this.unreadMessages[this.projects[project].child_nodes[child]._id]
         }
       }
     }
@@ -77,5 +77,4 @@ export class TeamDashboardComponent implements OnInit, OnDestroy {
   goToNode (node) {
     this.router.navigate(['/node/Project/' + node._id + '/projectDashboard']);
   }
-
 }

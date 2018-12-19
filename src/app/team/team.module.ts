@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from '../_guards/auth.guard';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ChatModule } from '../chat/chat.module';
 import {
     MatButtonModule,
     MatCardModule,
@@ -15,7 +16,8 @@ import {
     MatFormFieldModule,
     MatInputModule,
     MatGridListModule,
-    MatBadgeModule
+    MatBadgeModule,
+    MatBottomSheetModule
   } from '@angular/material';
 
 const TeamRoutes: Routes = [
@@ -34,6 +36,7 @@ const TeamRoutes: Routes = [
     imports: [
         CommonModule,
         RouterModule.forChild(TeamRoutes),
+
         MatButtonModule,
         MatCardModule,
         MatListModule,
@@ -44,7 +47,10 @@ const TeamRoutes: Routes = [
         MatFormFieldModule,
         MatInputModule,
         MatGridListModule,
-        MatBadgeModule
+        MatBadgeModule,
+        MatBottomSheetModule,
+
+        ChatModule
     ],
     exports: [
         TeamsListComponent,

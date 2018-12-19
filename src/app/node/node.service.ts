@@ -50,6 +50,7 @@ export class NodeService {
     var nodeUsers = this.http.get(this.permissionsUserListUrl + nodeID + '/?nodeType=' + nodeType);
     var nodeDocuments = this.http.get(this.getDocumentsUrl + nodeID + '/?nodeType=' + nodeType)
       .pipe(catchError(val => of([])))
+    // NOTE - This may be unnecessary at this point since the nodeDetails for teams/projects has a child_nodes attribute
     var children = this.http.get(this.childrenListUrl+'?nodeType=Project&parentNodeID='+nodeID)
     
     var requests = concat(nodeDetails, nodeParents, nodeTree, nodeUsers, nodeDocuments, children)

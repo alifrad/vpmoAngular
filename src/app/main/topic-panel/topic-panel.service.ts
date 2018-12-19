@@ -31,9 +31,9 @@ export class TopicPanelService
 
 	getTasksUnderNode (nodeID, username) {
 		if (username == null) {
-			return this.http.get(this.getAssignedTasksUrl+nodeID+'/')
+			return this.http.get(this.getAssignedTasksUrl+nodeID+'/?blanketSearch=True')
 		} else {
-			return this.http.get(this.getAssignedTasksUrl+nodeID+'/?search='+username)
+			return this.http.get(this.getAssignedTasksUrl+nodeID+'/?blanketSearch=True&search='+username)
 		}
 		
 	}

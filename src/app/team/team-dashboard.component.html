@@ -16,28 +16,31 @@
       </mat-card-title>
     </mat-card-header>
     <mat-card-content class="node-counts">
-      
-        <a mat-stroked-button routerLink="."> {{ project.members_count }} <span class="material-icons">person</span> </a>
-        
-        <a mat-stroked-button routerLink=".">{{ project.topic_counts.Issue || 0 }} <span class="node-label-btm issue-label">issue</span> </a>
-        <a mat-stroked-button routerLink=".">{{ project.topic_counts.Risk || 0 }} <span class="node-label-btm risk-label">risk</span> </a>
-        <a mat-stroked-button routerLink=".">{{ project.topic_counts.Deliverable || 0 }} <span class="node-label-btm deliverable-label">Deliverable</span> </a>
-        <a mat-stroked-button routerLink=".">{{ project.topic_counts.Task || 0 }} <span class="node-label-btm task-label">Task</span> </a>
-    
-      <!-- <div>{{ project.members_count }} Members</div> -->
-
-<!--       
-        <div class="topic">{{ project.topic_counts.Issue || 0 }} <span class="node-label issue">i</span></div>
-        <div class="topic risks">{{ project.topic_counts.Risk || 0 }} Risks</div>
-        <div class="topic deliverables">{{ project.topic_counts.Deliverable || 0 }} Deliverables</div>
-        <div class="topic tasks">{{ project.Task || 0 }} Tasks</div>
-       -->
+      <a mat-stroked-button [routerLink]="['/node/Project/', project._id, 'permissions']"> 
+        {{ project.members_count }} 
+        <span class="material-icons">person</span> 
+      </a>
+      <button mat-stroked-button (click)="openListPanel(project._id, 'Issue')">
+        {{ project.topic_counts.Issue || 0 }} 
+        <span class="node-label-btm issue-label">issue</span>
+      </button>
+      <button mat-stroked-button (click)="openListPanel(project._id, 'Risk')">
+        {{ project.topic_counts.Risk || 0 }} 
+        <span class="node-label-btm risk-label">risk</span>
+      </button>
+      <button mat-stroked-button (click)="openListPanel(project._id, 'Deliverable')">
+        {{ project.topic_counts.Deliverable || 0 }} 
+        <span class="node-label-btm deliverable-label">Deliverable</span> 
+      </button>
+      <button mat-stroked-button (click)="openListPanel(project._id, 'Task')">
+        {{ project.topic_counts.Task || 0 }} 
+        <span class="node-label-btm task-label">Task</span>
+      </button>
     </mat-card-content>
 
-    <mat-card-actions>
+    <!-- <mat-card-actions>
       <button mat-button (click)="goToNode(project)">View Details</button>
-      <!-- <button mat-button>SHARE</button> -->
-    </mat-card-actions>
+    </mat-card-actions> -->
 
 </mat-card>
 

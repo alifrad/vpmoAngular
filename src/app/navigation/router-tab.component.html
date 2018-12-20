@@ -1,7 +1,7 @@
 <mat-tab-group #matTabGroup class="hide-tab-wrapper">
   <mat-tab *ngFor="let tab of routerTabItems" [routerLink]="tab.routerLink" [disabled]="tab.disabled" [routerLinkActiveOptions]="tab.routerLinkActiveOptions">
     <ng-template mat-tab-label>
-      <a *ngIf="!tab.disabled" class="router-tab-link" [routerLink]="tab.routerLink"></a>
+      <a *ngIf="!tab.disabled" class="router-tab-link" [routerLink]="tab.routerLink" routerLinkActive="active-tab"></a>
       {{ tab.label }}
     </ng-template>
   </mat-tab>

@@ -142,8 +142,10 @@ export class TeamsListComponent implements OnInit, OnDestroy {
 
   openListPanel(nodeId, topicType) {
     this.getNode(nodeId);
+  
     this._fuseSidebarService.getSidebar('topicPanel').toggleOpen();
-    this._topicPanelService.selectedTopicType.next(topicType)
+    this._topicPanelService.selectedTopicType.next(topicType);
+    
   }
 
 }

@@ -9,6 +9,8 @@ import { Subject ,  Subscription } from 'rxjs';
 import { ChatService } from 'app/chat/chat.service';
 import { NodeService } from '../node/node.service';
 import { UnreadMessagesPanelComponent } from 'app/chat/unread-messages-panel.component';
+import { FuseSidebarService } from '@fuse/components/sidebar/sidebar.service';
+import { TopicPanelService } from 'app/main/topic-panel/topic-panel.service';
 
 @Component({
   selector: 'team-dashboard',
@@ -30,7 +32,9 @@ export class TeamDashboardComponent implements OnInit, OnDestroy {
       private router: Router,
       private chatService: ChatService,
       private nodeService: NodeService,
-      private bottomSheet: MatBottomSheet
+      private bottomSheet: MatBottomSheet,
+      private _fuseSidebarService: FuseSidebarService,
+      private _topicPanelService : TopicPanelService
   ) {
     this._unsubscribeAll = new Subject();
   }
@@ -84,5 +88,13 @@ export class TeamDashboardComponent implements OnInit, OnDestroy {
     const bottomSheetRef = this.bottomSheet.open(UnreadMessagesPanelComponent, {
       data: { node: project },
     });
+  }
+
+  openListPanel(nodeId, topicType) {
+    this.goToNode(nodeId);
+  
+    this._fuseSidebarService.getSidebar('topicPanel').toggleOpen();
+    this._topicPanelService.selectedTopicType.next(topicType);
+    
   }
 }

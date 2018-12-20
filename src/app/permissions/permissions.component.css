@@ -6,3 +6,19 @@
 .mat-table {
 	width: 100%	;
 }
+
+.avatar-container {
+	display: flex;
+	position: relative;
+	top: auto;
+	padding: 0;
+	transform: translateX(0);
+	left: auto;
+	align-items: center;
+
+}
+.avatar {
+	width: 40px;
+	height: 40px;
+	float: left;
+}

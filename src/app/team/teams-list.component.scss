@@ -23,12 +23,15 @@ body {
 }
 
 .header {
-  background-color: cyan;
+  color: cyan;
   text-align: left;
-  font-size: 5vw;
+  font-size: 2vw;
   font-weight: bold;
   font-family: Arial, Helvetica, sans-serif;
-  padding: 20px;
+  padding: 10px;
+  button {
+    height: 2vw;
+  }
 }
 
 

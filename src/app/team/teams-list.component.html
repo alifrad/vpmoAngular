@@ -7,34 +7,33 @@
 </div>
 
 <div class="card-container">
-  <mat-card class="example-card" *ngFor='let team of teams' style="width:100%">
+  <mat-card class="dashboard-card" *ngFor='let team of teams' style="width:100%">
     <mat-card-header>
       <mat-card-title>
-        <img src="../../assets/icons/Team-T-Icon.svg" height="15" width="15">
-        <span class="pl-4"><b>{{team.name}}</b></span>
-        <!-- <button *ngIf="team.unreadMessages != undefined" mat-icon-button class="unread-badge">
-          {{ team.unreadMessages }}
-        </button> -->
-        <span *ngIf="team.unreadMessages != undefined"  (click)="openUnreadMessagesPanel(team)">
-          <mat-icon [matBadge]="team.unreadMessages" matBadgeColor="warn">chat_bubble</mat-icon>
+        <button mat-button (click)="getNode(team._id)">{{team.name}} <span class="node-label-left team-label">team</span></button>
+        <span style="position: absolute; right: 10px;" *ngIf="team.unreadMessages != undefined && team.unreadMessages == 0"  (click)="openUnreadMessagesPanel(team)">
+          <mat-icon style="color: darkgray" >chat_bubble</mat-icon>
+        </span>
+        <span style="position: absolute; right: 10px;" *ngIf="team.unreadMessages != undefined && team.unreadMessages > 0"  (click)="openUnreadMessagesPanel(team)">
+          <mat-icon style="color: black" [matBadge]="team.unreadMessages" matBadgeColor="warn">chat_bubble</mat-icon>
         </span>
       </mat-card-title>
     </mat-card-header>
 
     <mat-card-content>
       <div class="node-counts">
-        <div class="topic deliverables">{{ team.members_count }} <span class="node-label">Member</span></div>
-        <div class="topic deliverables">{{ team.projects_count || 0 }} <span class="node-label">Project</span></div>
-        <div class="topic issues">{{ team.topic_counts.Issue || 0 }} <span class="node-label">Issue</span></div>
-        <div class="topic risks">{{ team.topic_counts.Risk || 0 }} <span class="node-label">Risk</span></div>
-        <div class="topic deliverables">{{ team.topic_counts.Deliverable || 0 }} <span class="node-label">Deliverable</span></div>
-        <div class="topic tasks">{{ team.Task || 0 }} <span class="node-label">Task</span></div>
+        <button mat-stroked-button > {{ team.members_count }} <span class="material-icons">person</span> </button>
+        <button mat-stroked-button routerLink="'/node/Team/' + team._id + '/teamDashboard'"> {{ team.projects_count || 0 }} <span class="node-label-btm project-label">Project</span> </button>
+        <button mat-stroked-button (click)="openListPanel(team._id, 'Issue')">{{ team.topic_counts.Issue || 0 }} <span class="node-label-btm issue-label">issue</span> </button>
+        <button mat-stroked-button (click)="openListPanel(team._id, 'Risk')">{{ team.topic_counts.Risk || 0 }} <span class="node-label-btm risk-label">risk</span> </button>
+        <button mat-stroked-button (click)="openListPanel(team._id, 'Deliverable')">{{ team.topic_counts.Deliverable || 0 }} <span class="node-label-btm deliverable-label">Deliverable</span> </button>
+        <button mat-stroked-button (click)="openListPanel(team._id, 'Task')">{{ team.topic_counts.Task || 0 }} <span class="node-label-btm task-label">Task</span> </button>
       </div>
     </mat-card-content>
 
-    <mat-card-actions>
+    <!-- <mat-card-actions>
       <button mat-button (click)="getNode(team._id)">View Details</button>
-    </mat-card-actions>
+    </mat-card-actions> -->
 
   </mat-card>
 </div>

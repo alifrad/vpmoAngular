@@ -27,6 +27,7 @@ import { ChatComponent } from './chat.component';
 import { UnreadMessagesPanelComponent } from './unread-messages-panel.component';
 import { ChatService } from './chat.service';
 import { FuseSharedModule } from '../../@fuse/shared.module';
+import { ChatIconComponent } from './chat-icon.component';
 
 const ChatRoutes: Routes = [
   {
@@ -65,7 +66,8 @@ const ChatRoutes: Routes = [
   ],
   declarations: [
     ChatComponent,
-    UnreadMessagesPanelComponent
+    UnreadMessagesPanelComponent,
+    ChatIconComponent
   ],
   providers: [
     ChatService

@@ -48,7 +48,7 @@ export class UnreadMessagesPanelComponent implements OnInit, OnDestroy {
   }
 
   routeToNode (nodeID, nodeType) {
-    this.router.navigate(['node/' + nodeType + '/' + nodeID + '/details']);
+    this.router.navigate(['node/' + nodeType + '/' + nodeID + '/chat']);
     this.bottomSheetRef.dismiss();
   }
   

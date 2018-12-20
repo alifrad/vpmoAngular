@@ -9,6 +9,9 @@ import { ChatService } from 'app/chat/chat.service';
 import { Subscription } from 'rxjs';
 import { LoadingService } from '../_services/loading.service';
 import { UnreadMessagesPanelComponent } from 'app/chat/unread-messages-panel.component';
+import { FuseSidebarService } from '@fuse/components/sidebar/sidebar.service';
+import { TopicPanelService } from 'app/main/topic-panel/topic-panel.service';
+
 
 @Component({
   selector: 'teams-list',
@@ -35,7 +38,10 @@ export class TeamsListComponent implements OnInit, OnDestroy {
       private dialog: MatDialog,
       private chatService: ChatService,
       private loadingService: LoadingService,
-      private bottomSheet: MatBottomSheet
+      private bottomSheet: MatBottomSheet,
+      private _fuseSidebarService: FuseSidebarService,
+      private _topicPanelService : TopicPanelService
+
   ) { }
 
   teamTree(team: Team) {
@@ -133,5 +139,11 @@ export class TeamsListComponent implements OnInit, OnDestroy {
       data: { node: team },
     });
   }
-  
+
+  openListPanel(nodeId, topicType) {
+    this.getNode(nodeId);
+    this._fuseSidebarService.getSidebar('topicPanel').toggleOpen();
+    this._topicPanelService.selectedTopicType.next(topicType)
+  }
+
 }

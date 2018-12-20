@@ -1,32 +1,43 @@
-<div>
-	<h1>Projects</h1>
+<h1>Projects</h1>
+<div class="card-container">
+	<mat-card class="dashboard-card" *ngFor='let project of projects' style="width:100%">
 
-	<mat-card class="example-card" *ngFor='let project of projects'>
+    <mat-card-header>
+      <mat-card-title>
+        <button mat-button (click)="getNode(team._id)">{{project.name}} <span class="node-label-left project-label">project</span></button>
+        
+        <span style="position: absolute; right: 10px;" *ngIf="project.unreadMessages != undefined" (click)="openUnreadMessagesPanel(project)">
+          <mat-icon style="color: darkgray" >chat_bubble</mat-icon>
+        </span>
+        <span style="position: absolute; right: 10px;" *ngIf="project.unreadMessages != undefined && project.unreadMessages > 0"  (click)="openUnreadMessagesPanel(project)">
+          <mat-icon style="color: black" [matBadge]="team.unreadMessages" matBadgeColor="warn">chat_bubble</mat-icon>
+        </span>
 
-  <mat-card-header>
-    <mat-card-title>
-      <img src="../../assets/icons/Project-P-Icon.svg" height="15" width="15">
-      <span class="pl-4"><b>{{project.name}}</b></span>
-      <button *ngIf="project.unreadMessages != undefined" mat-icon-button class="unread-badge">
-        {{ project.unreadMessages }}
-      </button>
-    </mat-card-title>
-  </mat-card-header>
-  <mat-card-content>
-    <div>{{ project.members_count }} Members</div>
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="node-counts">
+      
+        <a mat-stroked-button routerLink="."> {{ project.members_count }} <span class="material-icons">person</span> </a>
+        
+        <a mat-stroked-button routerLink=".">{{ project.topic_counts.Issue || 0 }} <span class="node-label-btm issue-label">issue</span> </a>
+        <a mat-stroked-button routerLink=".">{{ project.topic_counts.Risk || 0 }} <span class="node-label-btm risk-label">risk</span> </a>
+        <a mat-stroked-button routerLink=".">{{ project.topic_counts.Deliverable || 0 }} <span class="node-label-btm deliverable-label">Deliverable</span> </a>
+        <a mat-stroked-button routerLink=".">{{ project.topic_counts.Task || 0 }} <span class="node-label-btm task-label">Task</span> </a>
+    
+      <!-- <div>{{ project.members_count }} Members</div> -->
 
-    <div class="node-counts">
-      <div class="topic">{{ project.topic_counts.Issue || 0 }} <span class="node-label issue">i</span></div>
-      <div class="topic risks">{{ project.topic_counts.Risk || 0 }} Risks</div>
-      <div class="topic deliverables">{{ project.topic_counts.Deliverable || 0 }} Deliverables</div>
-      <div class="topic tasks">{{ project.Task || 0 }} Tasks</div>
-    </div>
-  </mat-card-content>
+<!--       
+        <div class="topic">{{ project.topic_counts.Issue || 0 }} <span class="node-label issue">i</span></div>
+        <div class="topic risks">{{ project.topic_counts.Risk || 0 }} Risks</div>
+        <div class="topic deliverables">{{ project.topic_counts.Deliverable || 0 }} Deliverables</div>
+        <div class="topic tasks">{{ project.Task || 0 }} Tasks</div>
+       -->
+    </mat-card-content>
 
-  <mat-card-actions>
-    <button mat-button (click)="goToNode(project)">View Details</button>
-    <!-- <button mat-button>SHARE</button> -->
-  </mat-card-actions>
+    <mat-card-actions>
+      <button mat-button (click)="goToNode(project)">View Details</button>
+      <!-- <button mat-button>SHARE</button> -->
+    </mat-card-actions>
 
 </mat-card>
 

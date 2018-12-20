@@ -5,7 +5,7 @@ import { FuseSharedModule } from '@fuse/shared.module';
 
 import { TopicPanelComponent } from './topic-panel.component';
 import { TopicPanelService } from './topic-panel.service';
-import { ScrumboardModule } from 'app/scrumboard/scrumboard.module';
+
 
 @NgModule({
     declarations: [
@@ -32,7 +32,7 @@ import { ScrumboardModule } from 'app/scrumboard/scrumboard.module';
 
         FuseSharedModule,
 
-        ScrumboardModule
+        
     ],
     exports     : [
         TopicPanelComponent

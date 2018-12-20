@@ -31,23 +31,6 @@ body {
   padding: 20px;
 }
 
-.card-container {
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: flex-start;
-}
-
-.example-card {
-  flex: 30%;
-  max-width: 30%;
-  max-width: 320px;
-  padding: 16px;
-  display: inline-block;
-  // width: 95%;
-  margin: 8px;
-  vertical-align: middle;
-  cursor: pointer;
-}
 
 .example-header-image {
   // background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');

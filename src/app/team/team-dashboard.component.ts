@@ -3,11 +3,12 @@ import { AuthenticationService } from 'app/_services/authentication.service';
 import { TeamService } from './team.service';
 import { Router } from '@angular/router';
 import { GlobalService } from '../_services/global.service';
-import {MatDialog, MatDialogConfig} from '@angular/material';
+import {MatDialog, MatDialogConfig, MatBottomSheet} from '@angular/material';
 import { takeUntil } from 'rxjs/operators';
 import { Subject ,  Subscription } from 'rxjs';
 import { ChatService } from 'app/chat/chat.service';
 import { NodeService } from '../node/node.service';
+import { UnreadMessagesPanelComponent } from 'app/chat/unread-messages-panel.component';
 
 @Component({
   selector: 'team-dashboard',
@@ -28,7 +29,8 @@ export class TeamDashboardComponent implements OnInit, OnDestroy {
       private teamService: TeamService,
       private router: Router,
       private chatService: ChatService,
-      private nodeService: NodeService
+      private nodeService: NodeService,
+      private bottomSheet: MatBottomSheet
   ) {
     this._unsubscribeAll = new Subject();
   }
@@ -76,5 +78,11 @@ export class TeamDashboardComponent implements OnInit, OnDestroy {
 
   goToNode (node) {
     this.router.navigate(['/node/Project/' + node._id + '/projectDashboard']);
+  }
+
+  openUnreadMessagesPanel(project) {
+    const bottomSheetRef = this.bottomSheet.open(UnreadMessagesPanelComponent, {
+      data: { node: project },
+    });
   }
 }

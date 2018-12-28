@@ -23,7 +23,7 @@ export class TreeStructureHttpService {
 
 
   public updateNode(nodeID: string, nodeType: string, updateData: any): Observable<any> {
-    return this.http.patch(this.nodeUpdateUrl + nodeType + '/' + nodeID + '/', updateData)
+    return this.http.patch(this.nodeUpdateUrl + nodeID + '/', updateData)
   }
 
   // update bunch of nodes

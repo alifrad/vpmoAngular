@@ -3,6 +3,8 @@ import { TreeStructureHttpService } from './tree-structure-http.service';
 import { MAT_DIALOG_DATA } from '@angular/material';
 import { TasksService } from 'app/tasks/tasks.service';
 import { LoadingService } from '../_services/loading.service';
+import { NodeService } from 'app/node/node.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
 	selector: 'app-create-node',
@@ -34,6 +36,8 @@ export class CreateNodeComponent implements OnInit {
 		private treeStructureHttpService: TreeStructureHttpService,
 		private _tasksService: TasksService,
 		private loadingService: LoadingService,
+		private _nodeService: NodeService,
+		private route: ActivatedRoute,
 		@Inject(MAT_DIALOG_DATA) public data: any
 	) { }
 
@@ -108,9 +112,14 @@ export class CreateNodeComponent implements OnInit {
 		var taskID = this.loadingService.startTask()
 		this.treeStructureHttpService.createNode(this.createNodeFormData, this.selectedNodeType)
 			.subscribe(response => {
-				self.loadingService.taskFinished(taskID)
+				
 				self.onCreate.emit(response);
+				const nodeID = JSON.parse(localStorage.getItem('node'))._id;
+				this._nodeService.getNodeTree();
+				
+				self.loadingService.taskFinished(taskID)
 			});
+		
 	}
 
 	filterUsers (e) {

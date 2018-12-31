@@ -40,7 +40,7 @@ export class NodeService {
     private loadingService: LoadingService,
     private topicPanelService: TopicPanelService
   ) { }
-
+  
   getNodeDetails (nodeID: string, nodeType: string) {
     var taskID = this.loadingService.startTask()
 
@@ -51,9 +51,9 @@ export class NodeService {
     var nodeDocuments = this.http.get(this.getDocumentsUrl + nodeID + '/?nodeType=' + nodeType)
       .pipe(catchError(val => of([])))
     // NOTE - This may be unnecessary at this point since the nodeDetails for teams/projects has a child_nodes attribute
-    var children = this.http.get(this.childrenListUrl+'?nodeType=Project&parentNodeID='+nodeID)
+    var children = this.http.get(this.childrenListUrl+'?nodeType=Project&parentNodeID='+nodeID);
     
-    var requests = concat(nodeDetails, nodeParents, nodeTree, nodeUsers, nodeDocuments, children)
+    var requests = concat(nodeDetails, nodeParents, nodeTree, nodeUsers, nodeDocuments, children);
 
     requests
       .pipe(toArray())
@@ -65,10 +65,27 @@ export class NodeService {
         node.documents = responses[4]
         node.children = responses[5]
         this.node.next(node);
+        localStorage.setItem('node', JSON.stringify(node));
         console.log(node);
-        this.loadingService.taskFinished(taskID)
-        this.topicPanelService.selectedTopicType.next('Issue')
+        this.loadingService.taskFinished(taskID);
+        this.topicPanelService.selectedTopicType.next('Issue');
       })
+    }
+
+  getNodeTree () {
+    var taskID = this.loadingService.startTask()
+    if (this.node) {
+      this.http.get(this.nodesTreeUrl + this.node.value._id + '/')
+        .subscribe(response => {
+          var node = this.node.value;
+          node.tree = response;
+          this.node.next(node);
+          localStorage.setItem('node', JSON.stringify(node));
+          this.loadingService.taskFinished(taskID);
+        });
+    }
+    
+  }
 
     /*
     if (nodeID) {
@@ -98,7 +115,6 @@ export class NodeService {
         })
     }
     */
-  }
 
   getUserPermissions (nodeID: string, nodeType: string) {
     this.http.get(this.permissionsDetailUrl+nodeID+'/?nodeType='+nodeType)

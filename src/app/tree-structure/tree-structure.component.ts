@@ -149,8 +149,8 @@ export class TreeStructureComponent implements OnInit, OnDestroy {
     const nodeId = node.data._id;
     
     console.log('Opening Node', node);
-    localStorage.setItem('nodeID', nodeId);
-    localStorage.setItem('nodeType', nodeType);
+    // localStorage.setItem('nodeID', nodeId);
+    // localStorage.setItem('nodeType', nodeType);
 
     console.log('node/' + nodeType + '/' + nodeId);
     if (nodeType == 'Topic') {
@@ -164,8 +164,8 @@ export class TreeStructureComponent implements OnInit, OnDestroy {
     const nodeType = node.data.node_type;
     const nodeId = node.data._id;
 
-    localStorage.setItem('nodeID', nodeId);
-    localStorage.setItem('nodeType', nodeType);
+    // localStorage.setItem('nodeID', nodeId);
+    // localStorage.setItem('nodeType', nodeType);
     
     this.router.navigate(['node/' + nodeType + '/' + nodeId + '/chat']);
   }

@@ -37,7 +37,7 @@ export class SignUpComponent implements OnInit {
   registerForm: FormGroup;
   avatar: any = null;
   avatarSelectedEvent: any = '';
-
+  croppedImage: any = '';
 
   constructor(
     private userService: UserService,
@@ -104,6 +104,7 @@ export class SignUpComponent implements OnInit {
     let fReader = new FileReader()
     var that = this
     var enc = new TextDecoder("utf-8");
+    this.croppedImage = e.base64;
     fReader.onload = function (e) {
     // @ts-ignore
       that.avatar = fReader.result.split(',')[1]

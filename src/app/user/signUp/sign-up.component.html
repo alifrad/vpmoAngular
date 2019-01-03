@@ -18,6 +18,8 @@
                       (imageCropped)="avatarCropped($event)"
                     ></image-cropper>
 
+                    <img [src]="croppedImage" />
+
                     <mat-form-field>
                       <input matInput placeholder="Email" formControlName="email" required>
                       <mat-error *ngIf="registerForm.get('email').errors && registerForm.get('email').errors.required">

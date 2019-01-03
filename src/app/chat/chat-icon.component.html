@@ -1,8 +1,8 @@
-<div>
-  <span style="position: absolute; right: 10px;" *ngIf="unreadMessages != undefined && unreadMessages == 0">
-    <mat-icon style="color: darkgray" >chat_bubble</mat-icon>
-  </span>
-  <span style="position: absolute; right: 10px;" *ngIf="unreadMessages != undefined && unreadMessages > 0">
-    <mat-icon style="color: black" [matBadge]="team.unreadMessages" matBadgeColor="warn">chat_bubble</mat-icon>
-  </span>
-</div>
+
+<mat-icon class="someUnread" *ngIf="unreadMessages != undefined && unreadMessages > 0"
+  [matBadge]="unreadMessages" matBadgeColor="warn">
+  chat
+</mat-icon>
+<mat-icon class="noUnread" *ngIf="unreadMessages != undefined && unreadMessages == 0">
+  chat
+</mat-icon>

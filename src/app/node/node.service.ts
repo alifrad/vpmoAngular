@@ -52,18 +52,17 @@ export class NodeService {
       .pipe(catchError(val => of([])))
     // NOTE - This may be unnecessary at this point since the nodeDetails for teams/projects has a child_nodes attribute
     var children = this.http.get(this.childrenListUrl+'?nodeType=Project&parentNodeID='+nodeID);
-    
-    var requests = concat(nodeDetails, nodeParents, nodeTree, nodeUsers, nodeDocuments, children);
+    var requests = concat(nodeDetails, nodeParents, children, nodeTree, nodeUsers, nodeDocuments);
 
     requests
       .pipe(toArray())
       .subscribe(responses => {
         var node = responses[0];
-        node.parents = responses[1];
-        node.tree = responses[2];
-        node.users = responses[3];
-        node.documents = responses[4]
-        node.children = responses[5]
+        node.parents = responses[1];        
+        node.children = responses[2];
+        node.tree = responses[3];
+        node.users = responses[4];
+        node.documents = responses[5];
         this.node.next(node);
         localStorage.setItem('node', JSON.stringify(node));
         console.log(node);
@@ -72,20 +71,52 @@ export class NodeService {
       })
     }
 
-  getNodeTree () {
-    var taskID = this.loadingService.startTask()
+  getNodeTree () {  
     if (this.node) {
+      var taskID = this.loadingService.startTask()
       this.http.get(this.nodesTreeUrl + this.node.value._id + '/')
         .subscribe(response => {
           var node = this.node.value;
           node.tree = response;
           this.node.next(node);
           localStorage.setItem('node', JSON.stringify(node));
-          this.loadingService.taskFinished(taskID);
+          
         });
+      this.loadingService.taskFinished(taskID);
     }
-    
   }
+
+  getNodeDocuments () {
+    if (this.node) {
+      var taskID = this.loadingService.startTask()
+      this.http.get(this.getDocumentsUrl + this.node.value._id + '/?nodeType=' + this.node.value.node_type)
+        .pipe(catchError(val => of([])))
+        .subscribe(response => {
+          var node = this.node.value;
+          node.documents = response;
+          this.node.next(node);
+          localStorage.setItem('node', JSON.stringify(node));
+          
+        });
+      this.loadingService.taskFinished(taskID);
+    }
+  }
+
+  getNodePermissions () {
+    if (this.node) {
+      var taskID = this.loadingService.startTask()
+      this.http.get(this.permissionsUserListUrl + this.node.value._id + '/?nodeType=' + this.node.value.node_type)
+        .subscribe(response => {
+          var node = this.node.value;
+          node.users = response;
+          this.node.next(node);
+          localStorage.setItem('node', JSON.stringify(node));
+          
+        });
+      this.loadingService.taskFinished(taskID);
+    }
+  }
+
 
     /*
     if (nodeID) {

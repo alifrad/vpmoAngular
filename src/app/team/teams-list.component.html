@@ -15,18 +15,8 @@
         </button>
 
         <span style="position: absolute; right: 10px;" 
-          *ngIf="team.unreadMessages != undefined && team.unreadMessages == 0"  
           (click)="openUnreadMessagesPanel(team)">
-          <mat-icon style="color: darkgray" >chat_bubble</mat-icon>
-        </span>
-
-        <span style="position: absolute; right: 10px;" 
-          *ngIf="team.unreadMessages != undefined && team.unreadMessages > 0"  
-          (click)="openUnreadMessagesPanel(team)">
-          <mat-icon style="color: black" [matBadge]="team.unreadMessages" 
-            matBadgeColor="warn">
-            chat_bubble
-          </mat-icon>
+          <chat-icon [unreadMessages]="team.unreadMessages"></chat-icon>
         </span>
 
       </mat-card-title>

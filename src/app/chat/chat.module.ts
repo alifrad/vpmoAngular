@@ -74,6 +74,7 @@ const ChatRoutes: Routes = [
   ],
   exports: [
     ChatComponent,
+    ChatIconComponent
   ],
   entryComponents: [
     UnreadMessagesPanelComponent

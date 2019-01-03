@@ -104,7 +104,7 @@ export class TreeStructureComponent implements OnInit, OnDestroy {
     this.tree.treeModel.update();
 
     var updateData = { name: this.newNodeName }
-    this.treeStructureHttpService.updateNode(this.renamingNode.data._id, this.renamingNode.data.node_type, updateData)
+    this._treeStructureHttpService.updateNode(this.renamingNode.data._id, this.renamingNode.data.node_type, updateData)
       .subscribe(response => {
         console.log('Node Rename successful')
       })
@@ -112,15 +112,14 @@ export class TreeStructureComponent implements OnInit, OnDestroy {
   }
 
   constructor(
-    private treeStructureService: TreeStructureService, 
-    private treeStructureHttpService: TreeStructureHttpService,
-    private router: Router,
+    private _treeStructureService: TreeStructureService, 
+    private _treeStructureHttpService: TreeStructureHttpService,
+    private _router: Router,
     private route: ActivatedRoute,
-    private globalService: GlobalService,
     private dialog: MatDialog,
-    private nodeService: NodeService,
-    private authService: AuthenticationService,
-    private chatService: ChatService
+    private _nodeService: NodeService,
+    private _authService: AuthenticationService,
+    private _chatService: ChatService
   ) {
     this._unsubscribeAll = new Subject();
   }
@@ -131,10 +130,10 @@ export class TreeStructureComponent implements OnInit, OnDestroy {
     if ($event.to.parent.node_type != 'Topic') {
       console.log('On Move', $event)
       const movedNode: ITreeNode = this.tree.treeModel.getNodeById($event.node._id);
-      const updatedList: IVisualNodeData[] = this.treeStructureService.updateModel(movedNode, this.tree.treeModel);
-      const updatedListDto = this.treeStructureService.converVisualNodeToDtoList(updatedList, false);
+      const updatedList: IVisualNodeData[] = this._treeStructureService.updateModel(movedNode, this.tree.treeModel);
+      const updatedListDto = this._treeStructureService.converVisualNodeToDtoList(updatedList, false);
       // this line should change to accomodate the changes to structure when the top node is a project
-      this.treeStructureHttpService.updateNodeList(updatedListDto, this.getTopNode());
+      this._treeStructureHttpService.updateNodeList(updatedListDto, this.getTopNode());
     }
   }
 
@@ -154,9 +153,10 @@ export class TreeStructureComponent implements OnInit, OnDestroy {
 
     console.log('node/' + nodeType + '/' + nodeId);
     if (nodeType == 'Topic') {
-      this.router.navigate(['node/' + nodeType + '/' + nodeId + '/details']);
+      this._router.navigate(['node/' + nodeType + '/' + nodeId + '/details']);
     } else {
-      this.router.navigate(['node/' + nodeType + '/' + nodeId + '/tree']);
+      this._router.navigate(['node/' + nodeType + '/' + nodeId + '/tree']);
+      this.ngOnInit();
     }
   }
 
@@ -167,19 +167,19 @@ export class TreeStructureComponent implements OnInit, OnDestroy {
     // localStorage.setItem('nodeID', nodeId);
     // localStorage.setItem('nodeType', nodeType);
     
-    this.router.navigate(['node/' + nodeType + '/' + nodeId + '/chat']);
+    this._router.navigate(['node/' + nodeType + '/' + nodeId + '/chat']);
   }
 
   toggleFavorite (nodeID) {
     if (this.favoriteNodeIds.indexOf(nodeID) >= 0) {
-      this.nodeService.unfavoriteNode(nodeID)
+      this._nodeService.unfavoriteNode(nodeID)
         .subscribe(val => {
-          this.authService.favoriteNodes.next(val)
+          this._authService.favoriteNodes.next(val)
         })
     } else {
-      this.nodeService.favoriteNode(nodeID)
+      this._nodeService.favoriteNode(nodeID)
         .subscribe(val => {
-          this.authService.favoriteNodes.next(val)
+          this._authService.favoriteNodes.next(val)
         })
     }
   }
@@ -187,11 +187,13 @@ export class TreeStructureComponent implements OnInit, OnDestroy {
   ngOnInit () {
     console.log('TreeStructure Init')
 
-    this.nodeService.node
+    this._nodeService.getNodeTree();
+    
+    this._nodeService.node
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe(node => {
         if (node !== null) {
-          this.nodes = this.treeStructureService.preUploadData(node.tree);
+          this.nodes = this._treeStructureService.preUploadData(node.tree);
           // need time in order create dom for tree
           setTimeout(() => {
             this.tree.treeModel.expandAll();
@@ -199,15 +201,17 @@ export class TreeStructureComponent implements OnInit, OnDestroy {
           this.nodeID = node._id
         }
       })
+    
 
+    
 
-    this.authService.favoriteNodes
+    this._authService.favoriteNodes
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe(favoriteNodes => {
         this.favoriteNodeIds = favoriteNodes.map(i => i._id)
       })
 
-    this.chatService.unreadMessageTracker
+    this._chatService.unreadMessageTracker
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe(unreadMessages => {
         this.unreadMessages = unreadMessages

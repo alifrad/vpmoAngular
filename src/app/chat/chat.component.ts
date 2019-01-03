@@ -24,9 +24,9 @@ export class ChatComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private _chatService: ChatService,
-    private authService: AuthenticationService,
+    private _authService: AuthenticationService,
     private route: ActivatedRoute,
-    private nodeService: NodeService,
+    private _nodeService: NodeService,
     differs: IterableDiffers,
     private loadingService: LoadingService
   ) {
@@ -64,7 +64,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.authService.user
+    this._authService.user
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe(user => {
         if (user) {
@@ -78,11 +78,11 @@ export class ChatComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe(chatClient => {
         if (chatClient) {
-          this.chatClient = chatClient
-          var that = this
+          this.chatClient = chatClient;
+          var that = this;
           this.chatClient.getSubscribedChannels().then(function (resp) {
             that.getChannel()
-          })
+          });
         }
       })
 
@@ -94,7 +94,7 @@ export class ChatComponent implements OnInit, OnDestroy {
         }
       })
 
-    this.nodeService.node
+    this._nodeService.node
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe(node => {
         if (node) {

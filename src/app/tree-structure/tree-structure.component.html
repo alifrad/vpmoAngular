@@ -49,13 +49,7 @@
           {{ unreadMessages[node.data._id] }}
         </button> -->
         <button mat-icon-button (click)="viewChat(node)">
-          <mat-icon *ngIf="unreadMessages[node.data._id] !== undefined && unreadMessages[node.data._id]>0" 
-            [matBadge]="unreadMessages[node.data._id]" matBadgeColor="warn">
-            chat_bubble
-          </mat-icon>
-          <mat-icon *ngIf="unreadMessages[node.data._id] !== undefined && unreadMessages[node.data._id]==0">
-            chat_bubble
-          </mat-icon>
+          <chat-icon [unreadMessages]="unreadMessages[node.data._id]"></chat-icon>
         </button>
         <button mat-icon-button (click)="viewDetail(node)">
           <mat-icon> navigate_next </mat-icon>

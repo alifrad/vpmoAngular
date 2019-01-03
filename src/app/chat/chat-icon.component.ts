@@ -1,15 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
-  selector: 'app-chat-icon',
+  selector: 'chat-icon',
   templateUrl: './chat-icon.component.html',
   styleUrls: ['./chat-icon.component.less']
 })
-export class ChatIconComponent implements OnInit {
+export class ChatIconComponent {
+  @Input()
+  unreadMessages;
 
-  constructor() { }
-
-  ngOnInit() {
-  }
 
 }

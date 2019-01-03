@@ -13,6 +13,7 @@ import { MatIconModule, MatDialogModule, MatFormFieldModule,
           MatAutocompleteModule, MatProgressSpinnerModule, MatDividerModule, MatBadgeModule } from '@angular/material';
 import { AuthGuard } from '../_guards/auth.guard';
 import { NodepageComponent } from 'app/node/nodepage.component';
+import { ChatModule } from 'app/chat/chat.module';
 
 const routes = [
   {
@@ -44,7 +45,8 @@ const routes = [
     MatAutocompleteModule,
     MatProgressSpinnerModule,
     MatDividerModule,
-    MatBadgeModule
+    MatBadgeModule,
+    ChatModule
   ],
   exports: [
     TreeStructureComponent,

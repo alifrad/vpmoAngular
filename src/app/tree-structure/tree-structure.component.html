@@ -15,7 +15,7 @@
     <div class="my-container" *ngIf="!node.data.isRenaming">
      
       <!-- Node Label - START -->
-      <div class="node-label">
+      <div class="node-label" (click)="viewDetail(node)">
         <div *ngIf="node.data.node_type=='Team'" class="node-label team">Team</div>
         <div *ngIf="node.data.node_type=='Project'" class="node-label project">Project</div>
         <div class="topic">
@@ -26,7 +26,7 @@
         </div>
       </div>
       <!-- ----------------- -->
-      <div class="node-name">{{ node.data.name }}</div>
+      <div class="node-name" (click)="viewDetail(node)">{{ node.data.name }}</div>
 
       <!-- Node Control buttons - START -->
       <div class="buttons">
@@ -51,9 +51,9 @@
         <button mat-icon-button (click)="viewChat(node)">
           <chat-icon [unreadMessages]="unreadMessages[node.data._id]"></chat-icon>
         </button>
-        <button mat-icon-button (click)="viewDetail(node)">
+        <!-- <button mat-icon-button (click)="viewDetail(node)">
           <mat-icon> navigate_next </mat-icon>
-        </button>
+        </button> -->
         <!-- <a class="button-red" (click)="removeNode(node)">
           <i class="material-icons"> clear </i>
         </a> -->

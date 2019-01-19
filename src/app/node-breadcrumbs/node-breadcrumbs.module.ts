@@ -10,6 +10,7 @@ import { MatFormFieldModule, MatIconModule, MatInputModule, MatButtonModule,
 import { AuthGuard } from '../_guards/auth.guard';
 import { NodeBreadcrumbsComponent } from './node-breadcrumbs.component';
 import { NodeBreadcrumbsService } from './node-breadcrumbs.service';
+import { ChatModule } from 'app/chat/chat.module';
 
 const NodeBreadcrumbsRoutes: Routes = [
   {
@@ -31,7 +32,8 @@ const NodeBreadcrumbsRoutes: Routes = [
     MatInputModule,
     MatButtonModule,
     MatListModule,
-    MatBottomSheetModule
+    MatBottomSheetModule,
+    ChatModule
   ],
   declarations: [
     NodeBreadcrumbsComponent

@@ -14,12 +14,15 @@ import { Subscription } from 'rxjs';
 export class NodeEditComponent implements OnInit, OnDestroy {
   errorMessage: string;
 
+  
   constructor(
           private _nodeService: NodeService,
           private router: Router,
           private global: GlobalService,
           private route: ActivatedRoute
         ) {}
+  
+ 
 
   node: any = {};
   severityList: any[] = [
@@ -39,6 +42,7 @@ export class NodeEditComponent implements OnInit, OnDestroy {
   ];
 
   private nodeSubscription: Subscription;
+  editor_modules: any;
 
   ngOnInit(): void {
     this.nodeSubscription = this._nodeService.node.subscribe(node => {
@@ -49,6 +53,33 @@ export class NodeEditComponent implements OnInit, OnDestroy {
         }
       }
     })
+
+    this.editor_modules = {
+      toolbar: {
+        container: [
+            ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+            ['blockquote', 'code-block'],
+  
+            [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+            [{ 'script': 'sub' }, { 'script': 'super' }],      // superscript/subscript
+            [{ 'indent': '-1' }, { 'indent': '+1' }],          // outdent/indent
+            [{ 'direction': 'rtl' }],                         // text direction
+  
+            [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+            [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+  
+            [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+            [{ 'font': [] }],
+            [{ 'align': [] }],
+            ['link', 'image'],
+            ['clean']                                    // remove formatting button
+  
+        ]
+      },
+      imageResize: true
+    };
+    
   }
 
   ngOnDestroy () {
@@ -64,4 +95,44 @@ export class NodeEditComponent implements OnInit, OnDestroy {
       );
   }
   
+
+  
+
+  public editorOptions = {
+    theme: 'snow',
+    modules: {
+        toolbar: {
+        container:
+        [
+            ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+            ['blockquote', 'code-block'],
+
+            [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+            [{ 'script': 'sub' }, { 'script': 'super' }],      // superscript/subscript
+            [{ 'indent': '-1' }, { 'indent': '+1' }],          // outdent/indent
+            [{ 'direction': 'rtl' }],                         // text direction
+
+            [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+            [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+
+            [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+            [{ 'font': [] }],
+            [{ 'align': [] }],
+            ['link', 'image'],
+            ['clean']                                    // remove formatting button
+
+        ],
+        handlers: {
+            "placeholder": function (value) { 
+                if (value) {
+                    const cursorPosition = this.quill.getSelection().index;
+                    this.quill.insertText(cursorPosition, value);
+                    this.quill.setSelection(cursorPosition + value.length);
+                }
+            }
+        }
+      }
+    }
+  };
 }

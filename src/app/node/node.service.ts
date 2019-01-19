@@ -118,35 +118,6 @@ export class NodeService {
   }
 
 
-    /*
-    if (nodeID) {
-      this.http.get(this.nodeRetrieveUpdateUrl + nodeID + '/')
-        .pipe(concatMap(node => {
-          this.node.next(node)
-          localStorage.setItem('node', JSON.stringify(node));
-          this.userPermissions.next({
-            permissions: node.user_permissions,
-            role: node.user_role
-          });
-
-          let parents = this.http.get(this.getNodeParentsUrl + node._id + '/')
-          let tree = this.http.get(this.nodesTreeUrl + node._id + '/');
-          let userPermissionsList = this.http.get(this.permissionsListUrl+node._id+'/?nodeType='+node.node_type)
-
-          return forkJoin([parents, tree, userPermissionsList])
-          
-          // return this.http.get(this.getNodeParentsUrl + node._id + '/')
-        }))
-        .subscribe(response => {
-          console.log('Http Tree', response)
-          this.nodeParents.next(response[0])
-          this.nodeTree.next(response[1])
-          this.userPermissionsList.next(response[2])
-          this.loadingService.taskFinished(taskID)
-        })
-    }
-    */
-
   getUserPermissions (nodeID: string, nodeType: string) {
     this.http.get(this.permissionsDetailUrl+nodeID+'/?nodeType='+nodeType)
       .subscribe(response => {
@@ -168,4 +139,5 @@ export class NodeService {
   unfavoriteNode (nodeID: string) {
     return this.http.request('delete', this.nodeFavoriteUrl, {node: nodeID})
   }
+
 }

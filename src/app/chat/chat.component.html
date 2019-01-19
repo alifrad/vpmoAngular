@@ -13,11 +13,11 @@
 				<!-- message.author available here as well -->
 				<div class="bubble">
 					<div>
-						<span class="small">{{message.attributes.authorName}} <br></span>
+						<span class="from">{{message.attributes.authorName}} <br></span>
 						<span class="message" [innerHTML]="message.body"></span>
 					</div>
 					
-					<div class="time small">time</div>
+					<div class="time from">{{message.date_created}}</div>
 				</div>
 				
 			</div>

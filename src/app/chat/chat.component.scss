@@ -69,6 +69,8 @@
                         justify-content: center;
                         padding: 12px;
                         max-width: 100%;
+                        
+                        
 
                         .message {
                             white-space: pre-wrap;
@@ -102,6 +104,11 @@
 
                             background-color: #3c4252;
                             color: #fff;
+
+                            .from {
+                                color: rgb(221, 221, 221);
+                                font-size: x-small;
+                            }
 
                             .time {
                                 margin-left: 12px;
@@ -143,6 +150,11 @@
                             color: rgba(12, 12, 12, 0.87);
                             background-color: #e0e0e0;
 
+                            .from {
+                                color: rgb(51, 51, 51);
+                                font-size: x-small;
+                            }
+                            
                             .time {
                                 justify-content: flex-end;
                                 right: 0;

@@ -47,7 +47,11 @@
 
 	<div class="quill-container">
 		<label>Content</label>
-		<quill-editor [sanitize]="true" [(ngModel)]="node.content"></quill-editor>
+		<quill-editor 
+			[sanitize]="true" 
+			[modules]="editor_modules"
+			[(ngModel)]="node.content">
+		</quill-editor>
 	</div>
 
 	<div>

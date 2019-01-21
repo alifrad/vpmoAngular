@@ -4,6 +4,7 @@ import { NodeService } from './node.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { GlobalService } from '../../app/_services/global.service';
 import { Subscription } from 'rxjs';
+import { AlertService } from 'app/_services';
 
 @Component({
   selector: 'app-node-edit',
@@ -19,7 +20,8 @@ export class NodeEditComponent implements OnInit, OnDestroy {
           private _nodeService: NodeService,
           private router: Router,
           private global: GlobalService,
-          private route: ActivatedRoute
+          private route: ActivatedRoute,
+          private _alertService: AlertService
         ) {}
   
  
@@ -91,8 +93,9 @@ export class NodeEditComponent implements OnInit, OnDestroy {
     console.log('saveContent', this.node)
     this._nodeService.partialUpdateNode(this.node._id, this.node)
       .subscribe(
-        node => this.node = node 
-      );
+        node => {this.node = node;
+        this._alertService.success("Saved");
+        });
   }
   
 

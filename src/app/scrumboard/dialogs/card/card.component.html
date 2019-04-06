@@ -1,0 +1,257 @@
+<div class="dialog-content-wrapper">
+
+    <mat-toolbar *ngIf="card" matDialogTitle class="accent m-0" fxFlex="1 0 auto" fxLayout="row">
+
+        <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
+
+            <div fxFlex fxLayout="row" fxLayoutAlign="start center">
+
+                <!-- DUE DATE -->
+                <div class="due-date" fxFlex="0 1 auto">
+
+                    <!--
+                    <button *ngIf="card.due_date" mat-icon-button [matMenuTriggerFor]="dueDateMenu">
+                        <mat-icon>today</mat-icon>
+                    </button>
+
+                    <mat-menu #dueDateMenu="matMenu" [overlapTrigger]="false">
+                        <button mat-menu-item (click)="removeDueDate()">Remove Due Date</button>
+                    </mat-menu>
+                    -->
+                    <mat-form-field *ngIf="card.due_date">
+                        <input matInput [matDatepicker]="menuPicker" [(ngModel)]="card.due_date" (ngModelChange)="updateCard()">
+                        <mat-datepicker-toggle matSuffix [for]="menuPicker"></mat-datepicker-toggle>
+                        <mat-datepicker #menuPicker></mat-datepicker>
+                    </mat-form-field>
+
+                </div>
+                <!-- / DUE DATE -->
+
+                <!-- OPTIONS -->
+                <div class="options " fxFlex="0 1 auto">
+
+                    <button mat-icon-button class="" [matMenuTriggerFor]="optionsMenu">
+                        <mat-icon>more_horiz</mat-icon>
+                    </button>
+
+                    <mat-menu #optionsMenu="matMenu" [overlapTrigger]="false">
+                        <button mat-menu-item (click)="removeCard()">
+                            Remove Card
+                        </button>
+                    </mat-menu>
+
+                </div>
+                <!-- / OPTIONS -->
+
+            </div>
+
+            <!-- CLOSE DIALOG BUTTON -->
+            <button mat-icon-button (click)="matDialogRef.close()" aria-label="Close Dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+            <!-- / CLOSE DIALOG BUTTON -->
+
+        </div>
+
+    </mat-toolbar>
+
+    <div *ngIf="card" mat-dialog-content class="py-24 px-0 m-0" fusePerfectScrollbar>
+
+        <!-- BREADCRUMB -->
+        <div *ngIf="list" class="card-breadcrumb mt-8 mb-32 px-24" fxLayout="row" fxLayoutAlign="start center">
+            <span>{{list.title}}</span>
+            <mat-icon class="s-20">chevron_right</mat-icon>
+        </div>
+        <!-- / BREADCRUMB -->
+
+        <div fxLayout="row" fxLayoutAlign="start center">
+
+            <!-- NAME -->
+            <div class="card-name px-24" fxLayout="row" fxLayoutAlign="start center">
+                <mat-form-field appearance="outline" class="w-100-p">
+                    <mat-label>Title</mat-label>
+                    <input matInput [(ngModel)]="card.title" required (change)="updateCard()">
+                </mat-form-field>
+            </div>
+            <!-- / NAME -->
+
+            <!-- DUE DATE -->
+            <div *ngIf="card.due_date" class="due-date px-24 pl-0" fxLayout="row" fxLayoutAlign="start center">
+                <mat-form-field appearance="outline" class="w-100-p">
+                    <mat-label>Due Date</mat-label>
+                    <input matInput [matDatepicker]="picker" [(ngModel)]="card.due_date" (ngModelChange)="updateCard()">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+            </div>
+            <!-- / DUE DATE -->
+
+        </div>
+
+        <!-- DESCRIPTION -->
+        <div class="description px-24 mb-16">
+            <mat-form-field appearance="outline" class="w-100-p">
+                <mat-label>Description</mat-label>
+                <textarea matInput [(ngModel)]="card.content" columns="1"
+                          mat-maxlength="150" max-rows="4" (change)="updateCard()"></textarea>
+            </mat-form-field>
+        </div>
+        <!-- / DESCRIPTION -->
+
+        <!-- ASSIGNEE -->
+        <user-search appearance="outline" class="w-100-p" class="card-assignee px-24" fxLayout="row" fxLayoutAlign="start center" [preselectedUser]="card.assignee.username" [searchUrl]="searchUrl" (userSelected)="assigneeChanged($event)"></user-search>
+        <!-- / ASSIGNEE -->
+
+        <!-- SECTIONS -->
+        <div class="sections">
+
+            <!-- ATTACHMENTS SECTION -->
+            <div class="section">
+
+                <div class="attachments">
+
+                    <div class="section-header" fxLayout="row" fxLayoutAlign="start">
+                        <mat-icon class="mr-8">attachment</mat-icon>
+                        <span class="section-title">Attachments</span>
+                    </div>
+
+                    <div class="section-content">
+
+                        <div fxLayout="column" fxLayoutAlign="start" fxLayoutWrap fxLayout.gt-sm="row">
+
+                            <div class="attachment" fxFlex="33" *ngFor="let item of card.documents">
+
+
+                                <div fxLayout="column" fxLayoutAlign="start">
+
+                                    <!--
+                                    <div class="attachment-preview mat-elevation-z1">
+                                        <img [src]="item.src">
+                                    </div>-->
+
+                                    <div class="attachment-content mt-8" fxLayout="row"
+                                         fxLayoutAlign="start center">
+
+                                        <div fxFlex>
+
+                                            <div fxLayout="row" fxLayoutAlign="start start">
+                                                <span class="attachment-name">{{item.document_name}}</span>
+                                            </div>
+
+                                            <span class="attachment-time">{{item.uploaded_at | date:"short"}}</span>
+
+                                        </div>
+
+                                        <button mat-icon-button class="attachment-actions-button"
+                                                [matMenuTriggerFor]="attachmentActionsMenu">
+                                            <mat-icon>more_vert</mat-icon>
+                                        </button>
+
+                                        <mat-menu #attachmentActionsMenu="matMenu">
+                                            <button mat-menu-item (click)="removeAttachment(item)">
+                                                Remove Attachment
+                                            </button>
+                                            <a [href]="item.document_url" target="_blank">
+                                                <button mat-menu-item>
+                                                    Download File
+                                                </button>
+                                            </a>
+                                        </mat-menu>
+
+                                    </div>
+
+                                </div>
+                                <!--
+                                <div *ngSwitchCase="'link'" fxLayout="row">
+                                    <div class="attachment-preview mat-elevation-z2" fxLayout="column"
+                                         fxLayoutAlign="center center">
+                                        <span>LINK</span>
+                                    </div>
+                                    <div class="attachment-content" fxLayout="column">
+                                        <span class="attachment-url">{{item.url}}</span>
+                                        <span class="attachment-time">{{item.time}}</span>
+                                    </div>
+                                </div>
+                                -->
+                            </div>
+
+                        </div>
+
+                        <input #file type="file" (change)="addAttachment($event)" style="display: none;">
+                        <button (click)="file.click()" mat-stroked-button class="add-attachment-button" aria-label="add attachment">
+                            Add an attachment
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+            <!-- / ATTACHMENTS SECTION -->
+
+
+            <!-- COMMENTS SECTION -->
+            <!-- To be turned into a twilio chat section
+            <div class="section">
+
+                <div class="comments">
+
+                    <div class="section-header" fxLayout="row" fxLayoutAlign="start center">
+                        <mat-icon class="mr-8">comment</mat-icon>
+                        <span class="section-title">Comments</span>
+                    </div>
+
+                    <div class="section-content">
+
+                        <form name="cardCommentForm"
+                              #newCommentForm="ngForm" (submit)="addNewComment(newCommentForm)"
+                              class="comment new-comment" fxLayout="column" fxLayoutAlign="start" no-validate>
+
+                            <div fxLayout="row" fxLayoutAlign="center center">
+
+                                <img class="comment-member-avatar" src="assets/images/avatars/profile.jpg">
+
+                                <mat-form-field class="mr-12" appearance="outline" fxFlex>
+                                    <mat-label>Comment</mat-label>
+                                    <input matInput name="newComment" ngModel #newComment="ngModel" required>
+                                </mat-form-field>
+
+                                <button mat-mini-fab class="mat-accent"
+                                        [disabled]="!newCommentForm.valid || newCommentForm.pristine"
+                                        aria-label="Add">
+                                    <mat-icon>add</mat-icon>
+                                </button>
+
+                            </div>
+
+                        </form>
+
+                        <div class="comment" fxLayout="row" fxLayoutAlign="start center"
+                             *ngFor="let comment of card.comments">
+
+                            <img class="comment-member-avatar"
+                                 [src]="board.members | getById: comment.idMember:'avatar'">
+
+                            <div fxLayout="column">
+                                <div class="comment-member-name">
+                                    {{board.members | getById: comment.idMember:'name'}}
+                                </div>
+                                <div class="comment-bubble">{{comment.message}}</div>
+                                <div class="comment-time secondary-text">{{comment.time}}</div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+            -->
+            <!-- / COMMENTS SECTION -->
+
+        </div>
+        <!-- / SECTIONS -->
+
+    </div>
+
+</div>

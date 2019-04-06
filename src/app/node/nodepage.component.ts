@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { GlobalService } from '../_services/global.service';
 import { NodeService } from './node.service';
+import { LoadingService } from '../_services/loading.service';
+import { AuthenticationService } from '../_services/authentication.service';
 
 @Component({
   selector: 'app-nodepage',
@@ -11,50 +13,44 @@ import { NodeService } from './node.service';
 export class NodepageComponent implements OnInit {
   errorMessage: string;
   node: any;
-  nodeType: string;
-  
-  constructor(
-          private router: Router,
-          private route: ActivatedRoute,
-          private globalService: GlobalService,
-          private nodeService: NodeService,
-          ) { 
-              globalService.nodeValue.subscribe(
-                (nextValue) => {
-                  this.node = JSON.parse(nextValue);
-              });
-          }
+  selectedIndex: any;
 
-  updateGlobal(nodeType, nodeId) {
-    localStorage.setItem('nodeType', nodeType);
-    
-    this.nodeService.getNodeParents(nodeId)
-      .subscribe(
-        params => {
-          // this.globalService.team = JSON.stringify(params.root);
-          // this.globalService.project = JSON.stringify(params.immediate_parent);
-          this.globalService.node = JSON.stringify(params.node);
-          console.log('node parents: ' + JSON.stringify(params));
-        },
-        err => console.error('getNodeParents service error: ' + err)
-      );
-  }
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private globalService: GlobalService,
+    private _nodeService: NodeService,
+    private loadingService: LoadingService,
+    private authService: AuthenticationService
+  ) { }  
 
   ngOnInit() {
-    let nodeType: string;
-    let nodeId: string;
+    this._nodeService.node.subscribe(value => {
+      if (value != null && value != undefined) {
+          this.node = value
+      }
+    })
+
     this.route.params.subscribe(
-      params => { 
-        nodeType = params['type'];
-        nodeId = params['id'];
-        this.updateGlobal(nodeType, nodeId);
-        console.log(params);
+      params => {
+        if (params['id'] && params['type']) {
+          this._nodeService.getNodeDetails(params['id'], params['type'])
+        }
       }
     );
-
-   
-    // this.nodeType = localStorage.getItem('nodeType');
-    
   }
+
+  onTabChanged (e) {
+    this.selectedIndex = e.index
+  }
+
+  showContent () {
+    if (this.node.node_type == 'Topic') {
+      return this.selectedIndex == 0 || this.selectedIndex == undefined || this.selectedIndex == null
+    } else {
+      return this.selectedIndex == 1
+    }
+  }
+
 
 }

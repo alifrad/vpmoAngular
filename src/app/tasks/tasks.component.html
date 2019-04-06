@@ -1,28 +1,41 @@
-
-<div>
+<div *ngIf="nodeID">
 	<button mat-icon-button class="white-icon" (click)="openCreateTasksDialog()" >
         <mat-icon> add </mat-icon>
     </button>
 
-	<table mat-table [dataSource]="assignedTasks">
+	<table mat-table [dataSource]="assignedTasks" *ngIf="getUser()">
 		<ng-container matColumnDef="title">
 	        <th mat-header-cell *matHeaderCellDef> Title </th>
 	        <td mat-cell *matCellDef="let task"> {{ task.title }} </td>
+	    </ng-container>
+	    <ng-container matColumnDef="assignee_name">
+	        <th mat-header-cell *matHeaderCellDef> Assignee </th>
+	        <td mat-cell *matCellDef="let task">
+	        	<span *ngIf="task.assignee">{{ task.assignee.fullname }}</span>
+	        </td>
+	    </ng-container>
+	    <ng-container matColumnDef="due_date">
+	        <th mat-header-cell *matHeaderCellDef> Due Date </th>
+	        <td mat-cell *matCellDef="let task"> {{ task.due_date }} </td>
+	    </ng-container>
+	    <ng-container matColumnDef="task_list">
+	        <th mat-header-cell *matHeaderCellDef> Task List </th>
+	        <td mat-cell *matCellDef="let task"> {{ task.task_list.title }} </td>
 	    </ng-container>
 	    <ng-container matColumnDef="status">
 	        <th mat-header-cell *matHeaderCellDef> Status </th>
 	        <td mat-cell *matCellDef="let task">
 
-	        	<mat-form-field *ngIf="currentUser._id == task.assignee">
-						  <mat-select [(value)]="task.status" (selectionChange)="changeTaskStatus($event.value, task)">
-						    <mat-option *ngFor="let status of taskStatusList" [value]="status.value">
-						      {{ status.text }}
-						    </mat-option>
-						  </mat-select>
-						</mat-form-field>
+	        	<mat-form-field *ngIf="getUser()._id == task.assignee._id">
+					<mat-select [(value)]="task.status" (selectionChange)="changeTaskStatus($event.value, task)">
+					<mat-option *ngFor="let status of taskStatusList" [value]="status.value">
+						{{ status.text }}
+					</mat-option>
+					</mat-select>
+				</mat-form-field>
 
-						<span *ngIf="currentUser._id != task.assignee">
-	        		{{ task.status }}
+						<span *ngIf="getUser()._id != task.assignee._id">
+	        		{{ taskStatusMap[task.status] }}
 	        	</span>
 	        </td>
 	    </ng-container>
@@ -33,7 +46,7 @@
 	        	<button mat-icon-button class="white-icon" (click)="deleteTask(task)" >
 			        <mat-icon> delete </mat-icon>
 			    </button>
-			    <button mat-icon-button class="white-icon" (click)="openReassignDialog(task)" >
+			    <button mat-icon-button class="white-icon" (click)="openEditDialog(task)" >
 			        <mat-icon> edit </mat-icon>
 			    </button>
 	        </td>

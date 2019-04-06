@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable ,  of } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { of } from 'rxjs/observable/of';
 
 import { HttpCacheService } from './http-cache.service';
 
@@ -14,7 +13,7 @@ export class CacheInterceptor implements HttpInterceptor {
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
         // pass along non-cachable requests and invalidates the cache
-        if (req.method !== 'GET' || req.url.indexOf('assignable_task_users') >= 0) {
+        if (req.method !== 'GET' || req.url.indexOf('assignable_task_users') >= 0 || req.url.indexOf('token') >= 0) {
             console.log(`Invalidating cache: ${req.method} ${req.url}`);
             this.cacheService.invalidateCache();
             return next.handle(req);

@@ -8,7 +8,7 @@ import { FuseSidebarService } from '@fuse/components/sidebar/sidebar.service';
 import { navigation } from 'app/navigation/navigation';
 import { AuthenticationService } from 'app/_services/authentication.service';
 import { GlobalService } from '../../_services/global2.service';
-import { Observable } from 'rxjs';
+import { Observable ,  Subscription } from 'rxjs';
 
 
 @Component({
@@ -27,9 +27,8 @@ export class FuseToolbarComponent implements OnInit {
     navigation: any;
     title = 'app';
     isLoggedIn: boolean;
-    user: any;
+    user: any = null;
     fullname: any;
-
 
     constructor(
         private router: Router,
@@ -37,7 +36,7 @@ export class FuseToolbarComponent implements OnInit {
         private sidebarService: FuseSidebarService,
         private translate: TranslateService,
         private authService: AuthenticationService,
-        private globalService: GlobalService,
+        private globalService: GlobalService
     )
     {
         this.userStatusOptions = [
@@ -95,49 +94,34 @@ export class FuseToolbarComponent implements OnInit {
                 }
             });
 
-        this.fuseConfig.onConfigChanged.subscribe((settings) => {
+        this.fuseConfig.config.subscribe((settings) => {
             this.horizontalNav = settings.layout.navigation === 'top';
             this.noNav = settings.layout.navigation === 'non e';
         });
 
         this.navigation = navigation;
 
-        this.globalService.currentUserValue.subscribe(
-            (user) => {
-                this.user = user;
-                this.user = JSON.parse(this.user);
-                this.fullname = this.user.token;            
-            },
-            (err: any) => console.log(err),
-        );
-
+        this.authService.user.subscribe(user => {
+            if (user) {
+                this.user = user
+                this.fullname = this.user.fullname
+                this.isLoggedIn = true
+            } else {
+                this.user = null
+                this.fullname = ''
+                this.isLoggedIn = false
+            }
+        })
 
     }
 
     ngOnInit() {
         // debugger;
 
-        this.authService.getUserName()
-            .subscribe(
-                (data: string) => {
-                    this.fullname = data;
-                    console.log(`username:' ${this.fullname}`);
-                },
-                (err: any) => console.log('toolbar oninit: could not retrieve user fullname')
-
-            );
-
-        this.authService.isAuthenticated()
-            .subscribe(
-                (data: boolean) => { this.isLoggedIn = data, console.log(`isLoggedIn: ${this.isLoggedIn}`); },
-                (err: any) => console.log(`error in reading isAuthenticated from Auth component ${err}`),
-                () => console.log('isAuthenticated function read properly')
-            );
-        console.log('ngOnInit complete');
-
+        // this.fullname = this.authService.getUserName()
     }
 
-    toggleSidebarOpened(key)
+    toggleSidebarOpen(key)
     {
         this.sidebarService.getSidebar(key).toggleOpen();
     }
@@ -160,16 +144,6 @@ export class FuseToolbarComponent implements OnInit {
     logout() {
         // console.log(this.user$ + ' is loggin out...');
         this.authService.logout();
-        
-    }
-
-    loggedIn() {
-        if (this.authService.isAuthenticated()){
-            console.log('user is authenticated'); 
-        } else {
-            console.log('user is not authenticated'); 
-        }
-        
         
     }
 }

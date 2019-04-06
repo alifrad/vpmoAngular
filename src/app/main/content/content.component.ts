@@ -1,4 +1,4 @@
-import { Component, HostBinding, OnDestroy } from '@angular/core';
+import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 
 import { Subscription } from 'rxjs';
@@ -6,6 +6,7 @@ import { filter, map } from 'rxjs/operators';
 
 import { fuseAnimations } from '@fuse/animations/index';
 import { FuseConfigService } from '@fuse/services/config.service';
+import { FuseSidebarService } from '@fuse/components/sidebar/sidebar.service';
 
 @Component({
     selector   : 'fuse-content',
@@ -13,10 +14,11 @@ import { FuseConfigService } from '@fuse/services/config.service';
     styleUrls  : ['./content.component.scss'],
     animations : fuseAnimations
 })
-export class FuseContentComponent implements OnDestroy
+export class FuseContentComponent implements OnDestroy, OnInit
 {
     onConfigChanged: Subscription;
     fuseSettings: any;
+    mobile: boolean;
 
     @HostBinding('@routerTransitionUp') routeAnimationUp = false;
     @HostBinding('@routerTransitionDown') routeAnimationDown = false;
@@ -27,7 +29,8 @@ export class FuseContentComponent implements OnDestroy
     constructor(
         private router: Router,
         private activatedRoute: ActivatedRoute,
-        private fuseConfig: FuseConfigService
+        private fuseConfig: FuseConfigService,
+        private _fuseSidebarService: FuseSidebarService
     )
     {
         this.router.events.pipe(
@@ -55,7 +58,7 @@ export class FuseContentComponent implements OnDestroy
         });
 
         this.onConfigChanged =
-            this.fuseConfig.onConfigChanged
+            this.fuseConfig.config
                 .subscribe(
                     (newSettings) => {
                         this.fuseSettings = newSettings;
@@ -63,8 +66,19 @@ export class FuseContentComponent implements OnDestroy
                 );
     }
 
+    ngOnInit () {
+        console.log('Width', window.screen.width)
+        if (window.screen.width <= 360) { // 768px portrait
+            this.mobile = true;
+        }
+    }
+
     ngOnDestroy()
     {
         this.onConfigChanged.unsubscribe();
+    }
+
+    toggleTopicPanel () { 
+        this._fuseSidebarService.getSidebar('topicPanel').toggleOpen();
     }
 }

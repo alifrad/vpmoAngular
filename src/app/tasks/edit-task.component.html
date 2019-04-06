@@ -1,0 +1,21 @@
+<div>
+	<h3>Reassign Task</h3>
+
+	<mat-form-field class="full-width">
+	    <input [(ngModel)]="newTitle" matInput placeholder="Task Title">
+	</mat-form-field>
+
+	<user-search [searchUrl]="searchUrl" [preselectedUser]="selectedUser" (userSelected)="userSelected($event)"></user-search>
+
+  	<div>
+		<mat-form-field class="full-width">
+		  	<input matInput [matDatepicker]="picker" placeholder="Due Date" [(ngModel)]="newDueDate">
+		  	<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+		  	<mat-datepicker #picker></mat-datepicker>
+		</mat-form-field>
+	</div>
+
+  	<div>
+		<button [disabled]="filteredAssignableUsers.length == 0" mat-flat-button color="primary" (click)="editTask()">Save Task</button>
+	</div>
+</div>

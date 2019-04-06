@@ -1,0 +1,33 @@
+<div  class="add-card-form-wrapper">
+
+    <form [formGroup]="form" (submit)="onFormSubmit()" class="add-card-form" fxLayout="column">
+
+        <mat-form-field fxFlex floatLabel="never">
+            <input #nameInput matInput formControlName="title" placeholder="Task Title" autocomplete="off" required>
+        </mat-form-field>
+
+        <mat-form-field fxFlex floatLabel="never">
+            <textarea matInput formControlName="content" placeholder="Task Content" autocomplete="off"></textarea>
+        </mat-form-field>
+
+        <mat-form-field fxFlex floatLabel="never">
+          <input matInput formControlName="due_date" [matDatepicker]="picker" placeholder="Task Due Date">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+        <user-search [searchUrl]="searchUrl" (userSelected)="userSelected($event)"></user-search>
+
+        <div class="pl-8" fxLayout="row" fxLayoutAlign="space-between center">
+
+            <button mat-raised-button class="add-button mat-accent" aria-label="add"
+                    [disabled]="form.invalid || filteredAssignableUsers.length == 0">
+                <span>Add</span>
+            </button>
+
+            <button mat-icon-button (click)="closeForm()" class="cancel-button" aria-label="cancel">
+                <mat-icon>close</mat-icon>
+            </button>
+        </div>
+    </form>
+</div>

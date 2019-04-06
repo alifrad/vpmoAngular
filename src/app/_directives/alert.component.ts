@@ -1,21 +1,36 @@
 import { Component, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
+import { MatSnackBar } from '@angular/material';
 
 import { AlertService } from '../_services/index';
 
 @Component({
     // moduleId: module.id,
     selector: 'alert',
-    templateUrl: 'alert.component.html'
+    templateUrl: 'alert.component.html',
+    styleUrls: ['alert.component.css']
 })
 
 export class AlertComponent implements OnDestroy {
     private subscription: Subscription;
-    message: any;
 
-    constructor(private alertService: AlertService) {
+    constructor(
+        private alertService: AlertService,
+        public snackBar: MatSnackBar
+    ) {
         // subscribe to alert messages
-        this.subscription = alertService.getMessage().subscribe(message => { this.message = message; });
+        this.subscription = alertService.alertSubject.subscribe(alert => {
+            if (alert) {
+                this.openSnackBar(alert)
+            }
+        });
+    }
+
+    openSnackBar(alert: any) {
+        this.snackBar.open(alert.text, alert.type.toUpperCase(), {
+            duration: 2000,
+            panelClass: alert.type
+        });
     }
 
     ngOnDestroy(): void {

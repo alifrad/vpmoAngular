@@ -14,7 +14,7 @@ import { DocumentsService } from './documents.service';
 
 const DocumentsRoutes: Routes = [
   {
-    path: 'documents',
+    path: 'documents/:type/:id',
     component: DocumentsListComponent,
     canActivate: [ AuthGuard ]
   }

@@ -3,7 +3,7 @@ import BugsnagErrorHandler from 'bugsnag-angular';
 import bugsnag from 'bugsnag-js';
 
 import { CommonModule } from '@angular/common';
-import { NgModule, ErrorHandler } from '@angular/core';
+import { NgModule, ErrorHandler, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -13,25 +13,26 @@ import 'hammerjs';
 
 import { FuseModule } from '@fuse/fuse.module';
 import { FuseSharedModule } from '@fuse/shared.module';
-
+import { FuseSidebarModule, FuseThemeOptionsModule } from '@fuse/components'
 import { fuseConfig } from './fuse-config';
 
 import { AppComponent } from './app.component';
 import { FuseMainModule } from './main/main.module';
-import { FuseSampleModule } from './main/content/sample/sample.module';
-
 import { UserModule } from './user/user.module';
 import { ProjectModule } from './project/project.module';
 import { ChatModule } from './chat/chat.module';
 import { PermissionsModule } from './permissions/permissions.module';
+import { ScrumboardModule } from './scrumboard/scrumboard.module';
 import { TasksModule } from './tasks/tasks.module';
 import { DocumentsModule } from './documents/documents.module';
-import { HomeComponent } from './home/home.component';
+import { NodeBreadcrumbsModule } from './node-breadcrumbs/node-breadcrumbs.module';
 import { ErrorComponent } from './error/error.component';
-import { AppRoutingModule } from './shared/app.routing';
+import { routes } from './shared/app.routing';
 import { MessageService } from './shared/message.service';
 import { AlertComponent } from './_directives/alert.component';
 import { AlertService } from './_services/alert.service';
+import { LoadingService } from './_services/loading.service';
+import { LoadingComponent } from './_directives/loading.component';
 import { AuthGuard } from './_guards/auth.guard';
 import { AuthenticationService } from './_services/authentication.service';
 import { HttpCacheService } from './_services/http-cache.service';
@@ -82,13 +83,9 @@ import {
   } from '@angular/material';
 import { GlobalService } from './_services/global.service';
 import { NavigationComponent } from './navigation/navigation.component';
+import { CustomHttpClient } from './_services/custom-http.service';
+import { RouterTabModule } from './navigation/router-tab.module';
 
-const appRoutes: Routes = [
-    {
-        path      : '**',
-        redirectTo: 'sample'
-    }
-];
 
 const tempUser = null;
 
@@ -102,14 +99,6 @@ export function errorHandlerFactory() {
 }
 
 
-
-export function tokenGetter() {
-    this.tempUser = JSON.parse(localStorage.getItem('currentUser'));
-    console.log(this.tempUser.token);
-    return this.tempUser.token;
-}
-
-
 @NgModule({
     // Other modules whose exported classes are needed 
     // by component templates declared in this NgModule 
@@ -118,31 +107,40 @@ export function tokenGetter() {
         CommonModule,
         BrowserAnimationsModule,
         HttpClientModule,
-        RouterModule.forRoot(appRoutes),
+        RouterModule.forRoot(routes),
         TranslateModule.forRoot(),
-
         // Fuse Main and Shared modules
         FuseModule.forRoot(fuseConfig),
         FuseSharedModule,
         FuseMainModule,
-        FuseSampleModule,
+        FuseSidebarModule,
+        FuseThemeOptionsModule,
         TeamModule,
         UserModule,
         ProjectModule,
         ChatModule,
         PermissionsModule,
+        ScrumboardModule,
         TasksModule,
         DocumentsModule,
+        NodeBreadcrumbsModule,
         TreeStructureModule,
         NodeModule,
+        MatProgressSpinnerModule,
+        MatSnackBarModule,
+        MatInputModule,
+        MatIconModule,
+        MatGridListModule,
+        RouterTabModule
     ],
     // The components, directives, and pipes that belong to this NgModule
     declarations: [
         AppComponent,
-        HomeComponent,
         ErrorComponent,
         AlertComponent,
+        LoadingComponent,
         NavigationComponent,
+        
 
     ],
     // The main application view, called the root component, which hosts all other app views
@@ -158,6 +156,7 @@ export function tokenGetter() {
         MatCardModule,
         MatListModule,
         MatIconModule,
+        MatProgressSpinnerModule
     ],
     // Creators of services that this NgModule contributes to the global
     // collection of services; they become accessible in all parts of the app
@@ -167,11 +166,15 @@ export function tokenGetter() {
         GlobalService,
         AuthGuard,
         AlertService,
+        LoadingService,
         HttpCacheService,
-        { provide: ErrorHandler, useFactory: errorHandlerFactory },
+        CustomHttpClient,
+        { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor , multi: true },
+        // { provide: ErrorHandler, useFactory: errorHandlerFactory },
         { provide: HTTP_INTERCEPTORS, useClass: CacheInterceptor , multi: true },
-        { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor , multi: true }
+        
       ],
+    
 })
 export class AppModule
 {

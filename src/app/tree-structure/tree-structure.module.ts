@@ -9,8 +9,11 @@ import { TreeModule } from 'angular-tree-component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule, MatDialogModule, MatFormFieldModule,
           MatInputModule, MatButtonModule, MatTooltipModule,
-          MatDatepickerModule, MatNativeDateModule, MatSelectModule  } from '@angular/material';
+          MatDatepickerModule, MatNativeDateModule, MatSelectModule,
+          MatAutocompleteModule, MatProgressSpinnerModule, MatDividerModule, MatBadgeModule } from '@angular/material';
 import { AuthGuard } from '../_guards/auth.guard';
+import { NodepageComponent } from 'app/node/nodepage.component';
+import { ChatModule } from 'app/chat/chat.module';
 
 const routes = [
   {
@@ -38,7 +41,12 @@ const routes = [
     MatTooltipModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatSelectModule
+    MatSelectModule,
+    MatAutocompleteModule,
+    MatProgressSpinnerModule,
+    MatDividerModule,
+    MatBadgeModule,
+    ChatModule
   ],
   exports: [
     TreeStructureComponent,
@@ -46,7 +54,8 @@ const routes = [
   ],
   declarations: [
     TreeStructureComponent,
-    CreateNodeComponent
+    CreateNodeComponent,
+    
   ],
   providers: [
     TreeStructureService, 

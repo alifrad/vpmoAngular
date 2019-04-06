@@ -1,0 +1,7 @@
+@mixin main-theme($theme) {
+    $foreground: map-get($theme, foreground);
+
+    fuse-toolbar {
+        background: map-get($foreground, divider);
+    }
+}

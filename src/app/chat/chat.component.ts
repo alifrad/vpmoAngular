@@ -1,87 +1,247 @@
-import { Component, OnInit, OnDestroy, ViewChild, AfterViewChecked } from '@angular/core';
-import { Router } from '@angular/router';
-// import { Socket } from 'ngx-socket-io';
+import { Component, OnInit, OnDestroy,
+          ViewChild, AfterViewChecked, AfterViewInit,
+          IterableDiffers, DoCheck, Input } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 import { ChatService } from './chat.service';
 import { AuthenticationService } from '../_services';
 import { appConfig } from '../app.config';
+import { Subscription } from 'rxjs';
+import { NodeService } from '../node/node.service';
+import { LoadingService } from '../_services/loading.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
+declare const Twilio: any
 
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
-  styleUrls: ['./chat.component.css']
+  styleUrls: ['./chat.component.scss']
 })
 
-export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
+export class ChatComponent implements OnInit, OnDestroy {
 
   constructor(
-    // private socket: Socket,
     private router: Router,
     private _chatService: ChatService,
-    private authUser: AuthenticationService,
-  ) { }
+    private _authService: AuthenticationService,
+    private route: ActivatedRoute,
+    private _nodeService: NodeService,
+    differs: IterableDiffers,
+    private loadingService: LoadingService
+  ) {
+    this.differ = differs.find([]).create(null);
+    this._unsubscribeAll = new Subject();
+  }
 
   @ViewChild('chatContainer') chatContainer;
 
+  nodeID: string;
+  nodeType: string;
+
+  differ: any;
   messages: any[] = [];
-  node: any;
-  chatSocket: any;
-  maxMessageLength: 20;
+  chatToken: string;
+  chatClient: any;
+  channel: any = null;
+  currentUser: any;
+  unreadMessageCount: any;
+  pageSize: any = 15;
+  currentUserPermissions: string[] = [];
+  chatMsg: string;
 
+  _unsubscribeAll: Subject<any>;
 
-  ngOnDestroy () {
-    this.chatSocket.close();
+  scrollToBottom(){
+    if(this.chatContainer) {
+      // I can't remember why I added a short timeout, 
+      // the below works great though. 
+      if(this.chatContainer != undefined){
+        var that = this
+        setTimeout(() => { that.chatContainer.nativeElement.scrollTop = that.chatContainer.nativeElement.scrollHeight; }, 200);
+      }
+    }
   }
 
   ngOnInit() {
-    const cookie = this.authUser.getToken();
-    this.node = JSON.parse(localStorage.getItem('node'))._id;
-    this.chatSocket = new WebSocket(
-        appConfig.wsUrl + '/chat/' + this.node + '/?' + this.authUser.getToken()
-    );
-
+    this._authService.user
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe(user => {
+        if (user) {
+          this.currentUser = user
+        } else {
+          this.currentUser = ''
+        }
+      })
     
-    this._chatService.getMessages(this.node)
-      .subscribe(
-        messages => this.messages = messages
-      );
+    this._chatService.chatClient
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe(chatClient => {
+        if (chatClient) {
+          this.chatClient = chatClient;
+          var that = this;
+          this.chatClient.getSubscribedChannels().then(function (resp) {
+            that.getChannel()
+          });
+        }
+      })
 
-    const currentThis = this;
-    this.chatSocket.onmessage = function (e) {
-      const data = JSON.parse(e.data).message;
-      currentThis.messages.push(data);
-    }
+    this._chatService.messages
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe(message => {
+        if (message) {
+          this.messageAdded(message)
+        }
+      })
 
-    this.chatContainer.nativeElement.scrollTop = this.chatContainer.nativeElement.scrollHeight;
+    this._nodeService.node
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe(node => {
+        if (node) {
+          this.nodeID = node._id
+          this.nodeType = node.node_type
+          this.currentUserPermissions = node.user_permissions
+          if (!this.canChat() && this.currentUserPermissions.indexOf('update_'+this.nodeType.toLowerCase()) >= 0){
+            this.getChannel()
+          }
+        }
+      })
   }
 
-  ngAfterViewChecked () {
-    
+  ngOnDestroy () {
+    this._unsubscribeAll.next();
+    this._unsubscribeAll.complete();
+  }
+
+  canChat () {
+    if (this.currentUserPermissions.indexOf('update_'+this.nodeType.toLowerCase()) >= 0) {
+      return true
+    } else {
+      return false
+    }
+  }
+
+  messageAdded (message) {
+    if (this.channel != null && message.channel.sid == this.channel.sid) {
+      if (this.messages.length == 0 || message.index == this.messages[this.messages.length-1].index+1) {
+        this.messages.push(message)
+
+        this.updateLastConsumed(message.index)
+
+        this.scrollToBottom()
+      }
+    }
+  }
+
+  getChannel () {
+    var taskID = this.loadingService.startTask()
+    var that = this
+    this.chatClient.getChannelByUniqueName(this.nodeID)
+      .then(function (channel) {
+        that.channel = channel
+        that.setupChannel()
+        that.loadingService.taskFinished(taskID)
+      })
+  }
+
+  setupChannel () {
+    var that = this
+    var lastSeenIndex = this.channel.lastConsumedMessageIndex || 0
+    var taskID = this.loadingService.startTask()
+
+    if (lastSeenIndex == 0) {
+      this.getTotalMessageCount()
+    } else {
+      this.getUnconsumedMessageCount()
+    }
+
+    // Getting messages forwards from the last seen message
+    if (this.channel.lastMessage && lastSeenIndex > this.channel.lastMessage.index-14) {
+      // If last seen index was in the last page, just get the last page
+      if (this.channel.lastMessage.index <= 15) {
+        this.getMessages(0, 'forwards')
+      } else {
+        this.getMessages(this.channel.lastMessage.index-14, 'forwards')
+      }
+    } else {
+      // Otherwise, get from the last seen page
+      this.getMessages(lastSeenIndex, 'forwards')
+    }
+    this.loadingService.taskFinished(taskID)
+  }
+
+
+
+  getTotalMessageCount () {
+    var that = this
+    this.channel.getMessagesCount().then(function (c) {
+      if (c <= 15) {
+        that.unreadMessageCount = 0
+      } else {
+        that.unreadMessageCount = c - 15
+      }
+      
+    })
+  }
+
+  getUnconsumedMessageCount () {
+    var that = this
+    this.channel.getUnconsumedMessagesCount().then(function (c) {
+      that.unreadMessageCount = c
+    })
+  }
+
+  getMessages (fromIndex, direction) {
+    var that = this
+    var taskID = this.loadingService.startTask()
+    that.channel.getMessages(that.pageSize, fromIndex, direction).then(function (messages) {
+      if (messages.items.length > 0) {
+        // Adding to the back of the array if we're scrolling up (lastPage)
+        if (direction == 'backwards') {
+          for (var i = messages.items.length-1; i >= 0; i--) {
+            that.messages.unshift(messages.items[i])
+          }
+        } else {
+          // Adding to the front of the array if we're scrolliing down (nextPage)
+          for (var i = 0; i < messages.items.length; i++) {
+            that.messages.push(messages.items[i])
+            that.scrollToBottom()
+          }
+        }
+        that.updateLastConsumed(that.messages[that.messages.length-1].index)
+      }
+      that.loadingService.taskFinished(taskID)
+    })
+  }
+
+  updateLastConsumed(index) {
+    var that = this
+    that.channel.advanceLastConsumedMessageIndex(index).then(function (c) {
+      that.unreadMessageCount = c
+      that._chatService.updateChannelUnread(that.channel)
+    })
   }
 
   private onScroll (e) {
     if (e.target.scrollTop === 0 && this.messages.length > 0) {
       const olderMessages = [];
-      this._chatService.getMessages(this.node, this.messages[0]._id)
-      .subscribe(
-        messages => {
-          for ( let i = messages.length; i >= 0; i--) {
-            if (messages[i] !== undefined) {
-              this.messages.unshift(messages[i]);
-            } 
-          }
-        }
-      );
+      this.getMessages(this.messages[0].index-1, "backwards")
+    } else if (e.target.scrollTop === e.target.scrollHeight - e.target.offsetHeight && this.messages.length > 0) {
+      this.getMessages(this.messages[this.messages.length-1].index+1, "forward")
     }
   }
 
   private sendMessage (msg) {
-    var data = {
-      'content': msg,
-      'sent_on': new Date()
+    if (msg.replace(/\s/g,'').length > 0) {
+      this.channel.sendMessage(msg, {
+        authorName: this.currentUser.fullname,
+        authorAvatar: this.currentUser.avatar
+      })
     }
+  }
 
-    this.chatSocket.send(JSON.stringify(data));
+  isLastMessageOfGroup(message, index) {
+    return (index == this.messages.length-1 || this.messages[index+1] && this.messages[index+1].author != message.author)
   }
 
 }

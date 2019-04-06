@@ -17,7 +17,7 @@ fuse-main {
             overflow: hidden;
             height: 100vh;
 
-            @include media-breakpoint-down('sm') {
+            @include media-breakpoint('sm') {
                 height: auto !important;
             }
 
@@ -32,6 +32,12 @@ fuse-main {
                     position: relative;
                     flex: 1;
                     overflow: hidden;
+
+                    .topicPanel-fuse-sidebar {
+                        width: 100%;
+                        min-width: 100%;
+                        max-width: 100%;
+                    }
 
                     .content-wrapper {
                         display: flex;

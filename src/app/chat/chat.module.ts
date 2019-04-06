@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
+import { QuillModule } from 'ngx-quill';
 
 import { 
   MatDatepickerModule, 
@@ -14,23 +15,26 @@ import {
   MatButtonModule, 
   MatCardModule, 
   MatListModule, 
-  MatDividerModule 
+  MatDividerModule,
+  MatMenuModule,
+  MatRadioModule,
+  MatBottomSheetModule,
+  MatBadgeModule
 } from '@angular/material';
-// import { ChatRoomComponent } from "./chat-room.component"
+
 import { AuthGuard } from '../_guards/auth.guard';
 import { ChatComponent } from './chat.component';
-// import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+import { UnreadMessagesPanelComponent } from './unread-messages-panel.component';
 import { ChatService } from './chat.service';
+import { FuseSharedModule } from '../../@fuse/shared.module';
+import { ChatIconComponent } from './chat-icon.component';
 
 const ChatRoutes: Routes = [
   {
-    path: 'chat',
+    path: 'chat/:type/:id',
     component: ChatComponent
   }
 ];
-
-// const config: SocketIoConfig = { url: '127.0.0.1:8000', options: {path: '/ws/chat/'+localStorage.getItem('node')+'/',
-// transports: ['websocket']} };
 
 
 @NgModule({
@@ -40,6 +44,7 @@ const ChatRoutes: Routes = [
     FormsModule,
     RouterModule.forChild(ChatRoutes),
     HttpClientModule,
+
     MatDatepickerModule,
     MatNativeDateModule,
     MatIconModule,
@@ -50,16 +55,29 @@ const ChatRoutes: Routes = [
     MatListModule,
     MatIconModule,
     MatDividerModule,
-    // SocketIoModule.forRoot(config)
+    MatMenuModule,
+    MatRadioModule,
+    MatBottomSheetModule,
+    MatBadgeModule,
+
+    FuseSharedModule,
+
+    QuillModule
   ],
   declarations: [
     ChatComponent,
+    UnreadMessagesPanelComponent,
+    ChatIconComponent
   ],
   providers: [
     ChatService
   ],
   exports: [
     ChatComponent,
+    ChatIconComponent
+  ],
+  entryComponents: [
+    UnreadMessagesPanelComponent
   ],
   bootstrap: [ChatComponent]
 })

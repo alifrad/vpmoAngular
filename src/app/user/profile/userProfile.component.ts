@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { User } from '../user';
 import { UserService } from '../user.service';
 
+
 @Component({
     selector: 'user-Profile',
     templateUrl: './userProfile.component.html',
@@ -14,19 +15,19 @@ import { UserService } from '../user.service';
 export class UserProfileComponent implements OnInit {
     userProfileForm: FormGroup;
     currentUser: any;
+    errMessage: any;
  
 
     constructor(private authService: AuthenticationService,
                 private router: Router,
                 private userService: UserService,
-                private fb: FormBuilder) { }
+                private fb: FormBuilder,
+            
+                ) { }
 
     ngOnInit() {
-        this.authService.user
-            .subscribe(
-                user => this.currentUser = user,
-                (err: any) => console.log(err)
-            );
+        this.currentUser = this.authService.getUser()
+
         console.log(this.currentUser.fullname + ' to be present');
 
         const fullname = new FormControl(this.currentUser.fullname, [Validators.required]);
@@ -51,11 +52,11 @@ export class UserProfileComponent implements OnInit {
                 data => {
                     this.authService.updateLocalStorage(formValues.fullname, formValues.username, formValues.email);
                     console.log('success: ', data);
-                    console.log(localStorage.getItem('currentUser.token'));
+                    // console.log(localStorage.getItem('user.token'));
                     this.router.navigate(['/user/dashboard']);
                 },
                 err => {
-                    console.log('error: ', err);
+                    console.error(err);
                     // this.router.navigate(['user/login']);
                 }
             );

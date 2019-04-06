@@ -1,24 +1,12 @@
-<div>
-  <h2>{{node.name}}</h2>
-  {{nodeType}}
+<div *ngIf="node">
+  <!--<app-node-breadcrumbs></app-node-breadcrumbs>-->
+
+  <!-- <div>
+    <small>{{node._id}}</small>
+  </div> -->
+
+    
+
 </div>
-<mat-tab-group [selectedIndex]="1">
-  <mat-tab *ngIf="nodeType !== 'Topic'" label="Tree"> 
-    <app-tree-structure></app-tree-structure> 
-  </mat-tab>
-  <mat-tab label="Content" *ngIf="nodeType !== 'Team'" >  
-    <app-node-edit></app-node-edit> 
-  </mat-tab>
-  <mat-tab label="Conversation"> 
-    <!--<app-chat></app-chat>-->
-  </mat-tab>
-  <mat-tab label="Tasks"> 
-    <app-tasks></app-tasks>
-  </mat-tab>
-  <mat-tab label="Documents">
-    <app-documents-list></app-documents-list>
-  </mat-tab>
-  <mat-tab label="Permissions">
-  	<app-permissions></app-permissions>
-  </mat-tab>
-</mat-tab-group>
+
+

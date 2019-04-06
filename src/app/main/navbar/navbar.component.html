@@ -1,41 +1,43 @@
-<ng-container *ngIf="layout == 'vertical'">
+<div style="overflow: scroll;" fusePerfectScrollbar class="navbar-top" [ngClass]="fuseConfig.layout.navbar.secondaryBackground">
 
-    <div class="navbar-vertical">
+    <div class="logo">
+        <img class="logo-icon" src="assets/images/logos/RadConsultantsLogo3.png">
+        <span class="logo-text secondary-text">gingerComms</span>
+    </div>
 
-        <div class="navbar-header">
+    <div class="buttons">
 
-            <div class="logo">
-                <img class="logo-icon" src="assets/images/logos/vpmo-logo-small.png">
-                <!-- <span class="logo-text">VPMO</span> -->
-            </div>
+        <button mat-icon-button class="toggle-sidebar-folded"
+                (click)="toggleSidebarFolded()" fxHide.lt-lg>
+            <mat-icon class="secondary-text">menu</mat-icon>
+        </button>
 
-            <button mat-icon-button class="toggle-button-navbar"
-                    (click)="toggleSidebarFolded()" fxHide.lt-lg>
-                <mat-icon>menu</mat-icon>
-            </button>
+        <button mat-icon-button class="toggle-sidebar-opened"
+                (click)="toggleSidebarOpened()" fxHide.gt-md>
+            <mat-icon class="secondary-text">arrow_back</mat-icon>
+        </button>
 
-            <button mat-icon-button class="toggle-button-navbar"
-                    (click)="toggleSidebarOpened()" fxHide.gt-md>
-                <mat-icon>arrow_back</mat-icon>
-            </button>
+    </div>
 
-        </div>
+</div>
 
-        <div class="navbar-content" fusePerfectScrollbar>
-            <!-- {{team}} -->
-            <!-- <app-node-navigation></app-node-navigation> -->
-            <fuse-navigation [navigation]="navigation" layout="vertical"></fuse-navigation>
-            <!-- {{navigation}} -->
+
+<div class="navbar-scroll-container" [ngClass]="fuseConfig.layout.navbar.primaryBackground"
+     fusePerfectScrollbar [fusePerfectScrollbarOptions]="{suppressScrollX: true}">
+
+    <div *ngIf="user" class="user" fxLayout="column" [ngClass]="fuseConfig.layout.navbar.secondaryBackground">
+
+        <div class="h3 username">{{ user.fullname }}</div>
+        <div class="h5 email hint-text mt-8">{{ user.email }}</div>
+        <div class="avatar-container" [ngClass]="fuseConfig.layout.navbar.primaryBackground">
+            <img *ngIf="user != null && user.avatar == null" class="avatar" src="assets/images/avatars/profile.jpg">
+            <img *ngIf="user != null && user.avatar != null" class="avatar" [src]="user.avatar">
         </div>
 
     </div>
 
-</ng-container>
-
-<ng-container *ngIf="layout == 'horizontal'">
-
-    <div class="navbar-horizontal">
-        <fuse-navigation [navigation]="navigation" layout="horizontal"></fuse-navigation>
+    <div class="navbar-content">
+        <fuse-navigation class="material2" layout="vertical"></fuse-navigation>
     </div>
 
-</ng-container>
+</div>

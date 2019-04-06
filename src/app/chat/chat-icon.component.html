@@ -1,0 +1,8 @@
+
+<mat-icon class="someUnread" *ngIf="unreadMessages != undefined && unreadMessages > 0"
+  [matBadge]="unreadMessages" matBadgeColor="warn">
+  chat
+</mat-icon>
+<mat-icon class="noUnread" *ngIf="unreadMessages != undefined && unreadMessages == 0">
+  chat
+</mat-icon>

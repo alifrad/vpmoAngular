@@ -1,15 +1,9 @@
 <div>
 	<h3>{{ nodeType }}</h3>
 
-	<mat-form-field>
-	  	<mat-select placeholder="Choose User" [(ngModel)]="selectedUser">
-	    	<mat-option *ngFor="let user of usersList" [value]="user._id">
-	      		{{ user.username }}
-	    	</mat-option>
-	 	</mat-select>
-	</mat-form-field>
+	<user-search [searchUrl]="searchUrl" (userSelected)="userSelected($event)"></user-search>
 
 	<div style="text-align: center;">
-		<button (click)="addUser()" mat-raised-button matTooltip="Adds the SelectedUser as a viewer-rank role">Add User</button>
+		<button [disabled]="usersList.length == 0" (click)="addUser()" mat-raised-button matTooltip="Adds the SelectedUser as a viewer-rank role">Add User</button>
 	</div>
 </div>

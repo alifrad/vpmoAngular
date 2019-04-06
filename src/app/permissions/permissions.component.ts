@@ -1,9 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { Router, ActivatedRoute } from '@angular/router';
 import { AddPermissionsComponent } from './add-permissions.component';
 import { AuthenticationService } from '../_services';
 import { PermissionsService } from './permissions.service';
 import { MatDialog, MatDialogConfig } from '@angular/material';
+import { LoadingService } from '../_services/loading.service';
+import { NodeService } from '../node/node.service';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-permissions',
@@ -11,15 +16,20 @@ import { MatDialog, MatDialogConfig } from '@angular/material';
   styleUrls: ['./permissions.component.css']
 })
 
-export class PermissionsComponent implements OnInit {
+export class PermissionsComponent implements OnInit, OnDestroy {
   
   title = 'Permissions';
 
   constructor(
-    private authUser: AuthenticationService,
+    private authService: AuthenticationService,
     private _permissionsService: PermissionsService,
-    private dialog: MatDialog
-  ) { }
+    private dialog: MatDialog,
+    private route: ActivatedRoute,
+    private loadingService: LoadingService,
+    private nodeService: NodeService
+  ) {
+    this._unsubscribeAll = new Subject();
+  }
 
   userList: any[] = [];
   nodeID: string;
@@ -28,39 +38,51 @@ export class PermissionsComponent implements OnInit {
   currentUserPermissions: string[] = [];
   // Role of the current user for the node
   currentUserRole: string;
-  currentUserID: string;
   displayedColumns: string[] = ['username', 'role', 'controlsColumn'];
   // The roles assignable by the user
   assignableRoles: string[] = [];
+  currentUser: any;
+  nodeOwner: string;
+
+  private _unsubscribeAll: Subject<any>;
 
   ngOnInit() {
-    const nodeID = JSON.parse(localStorage.getItem('node'))._id;
-    const nodeType = localStorage.getItem('nodeType');
+    this.authService.user
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe(user => {
+        this.currentUser = user
+      })
 
-    this.getUserPermissions(nodeID, nodeType);
+    this.nodeService.node
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe(node => {
+        if (node) {
+          this.nodeType = node.node_type
+          this.nodeID = node._id
 
-    this.getPermissionsList(nodeID, nodeType);
+          if (node.user_linked != false && node.user_linked != undefined) {
+            this.nodeOwner = node.user_team
+          } else {
+            this.nodeOwner = ''
+          }
 
-    this.getAssignableRoles(nodeID, nodeType);
-
-    this.nodeID = nodeID;
-    this.nodeType = nodeType;
-    localStorage.setItem('nodeID', nodeID)
-    localStorage.setItem('nodeType', nodeType)
-  }
-
-  getUserPermissions (nodeID, nodeType) {
-    this._permissionsService.getUserPermissions(nodeID, nodeType)
-      .subscribe(
-        userPermissions => {
-          this.currentUserPermissions = userPermissions.permissions;
-          this.currentUserRole = userPermissions.role;
-          this.currentUserID = userPermissions._id;
+          this.userList = node.users
+          this.currentUserPermissions = node.user_permissions
+          this.currentUserRole = node.user_role
+          // TODO: Move into the nodeService
+          this.getAssignableRoles(this.nodeID, this.nodeType);
         }
-      );
+      })
   }
+
+  ngOnDestroy () {
+    this._unsubscribeAll.next();
+    this._unsubscribeAll.complete();
+  }
+
 
   getPermissionsList (nodeID, nodeType) {
+    // Gets a list of users that have permissions for this node
     this._permissionsService.getPermissionsList(nodeID, nodeType)
       .subscribe(
         permissions => {
@@ -80,11 +102,13 @@ export class PermissionsComponent implements OnInit {
 
   assignRole (newRole, user) {
     const self = this;
-    this._permissionsService.assignUserToNode(this.nodeID, this.nodeType, user._id, newRole)
+    var taskID = this.loadingService.startTask()
+    this._permissionsService.assignUserToNode(this.nodeID, this.nodeType, user.username, newRole)
       .subscribe(
         response => {
-          if (user._id === self.currentUserID) {
-            self.getUserPermissions(self.nodeID, self.nodeType);
+          this.loadingService.taskFinished(taskID)
+          if (user._id === self.authService.getUser()._id) {
+            self.nodeService.getUserPermissions(self.nodeID, self.nodeType);
           }
         }
       );
@@ -129,7 +153,12 @@ export class PermissionsComponent implements OnInit {
     dialogConfig.height = '500';
 
     localStorage.setItem('assignableRoles', JSON.stringify(this.assignableRoles));
-    const dialogRef = this.dialog.open(AddPermissionsComponent, dialogConfig);
+    const dialogRef = this.dialog.open(AddPermissionsComponent, {
+      'autoFocus': true,
+      width: '350',
+      height: '500',
+      data: {nodeType: this.nodeType, nodeID: this.nodeID}
+    });
     dialogRef.afterClosed().subscribe(result => {
       this.getPermissionsList(this.nodeID, this.nodeType);
     });
@@ -139,9 +168,12 @@ export class PermissionsComponent implements OnInit {
   // Use it in add permissions to set the base role when adding a user
 
   removeUserPermissions (user) {
+    var taskID = this.loadingService.startTask()
+
     this._permissionsService.removeUserPermissions(this.nodeID, this.nodeType, user._id)
        .subscribe(
         response => {
+          this.loadingService.taskFinished(taskID)
           this.userList = this.userList.filter(item => item._id !== user._id);
           // this.userList.splice(this.userList.indexOf(user), 1)
         }

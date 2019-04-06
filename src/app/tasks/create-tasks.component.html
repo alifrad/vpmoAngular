@@ -7,14 +7,17 @@
 		</mat-form-field>
 	</div>
 
-	<mat-form-field class="full-width">
-    	<input (input)="filterUsers($event.target.value)" type="text" placeholder="Task Assignee" matInput [matAutocomplete]="auto" [(ngModel)]="selectedUser">
-	    <mat-autocomplete #auto="matAutocomplete">
-	      <mat-option *ngFor="let option of filteredAssignableUsers" [value]="option.username">
-	        {{option.username}}
-	      </mat-option>
-	    </mat-autocomplete>
-  	</mat-form-field>
+	<div *ngIf="taskLists && taskLists.length > 0">
+		<mat-form-field>
+		    <mat-select [(ngModel)]="selectedTaskList">
+		        <mat-option *ngFor="let taskList of taskLists" [value]="taskList._id">
+		            {{ taskList.title }}
+		        </mat-option>
+		    </mat-select>
+		</mat-form-field>
+	</div>
+
+	<user-search [searchUrl]="searchUrl" (userSelected)="userSelected($event)"></user-search>
 
 	<div>
 		<mat-form-field class="full-width">
@@ -24,6 +27,6 @@
 		</mat-form-field>
 	</div>
 	<div>
-		<button mat-flat-button color="primary" (click)="createTask()">Create Task</button>
+		<button [disabled]="filteredAssignableUsers.length == 0" mat-flat-button color="primary" (click)="createTask()">Create Task</button>
 	</div>
 </div>

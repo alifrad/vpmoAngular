@@ -13,24 +13,53 @@
       </div>
     </div>
     <div class="my-container" *ngIf="!node.data.isRenaming">
-      <img *ngIf="node.data.node_type=='Team'" src="../../assets/icons/Team-T-Icon.svg" height="15" width="15"/>
-      <img *ngIf="node.data.node_type=='Project'" src="../../assets/icons/Project-P-Icon.png" height="15" width="15"/>
-      
-      <div class="node-name">{{ node.data.name }}</div>
-      <div>
+     
+      <!-- Node Label - START -->
+      <div class="node-label" (click)="viewDetail(node)">
+        <div *ngIf="node.data.node_type=='Team'" class="node-label team">Team</div>
+        <div *ngIf="node.data.node_type=='Project'" class="node-label project">Project</div>
+        <div class="topic">
+          <div *ngIf="node.data.model_name=='Deliverable'" class="node-label deliverable">Deliverable</div>
+          <div *ngIf="node.data.model_name=='Issue'" class="node-label issue">Issue</div>
+          <div *ngIf="node.data.model_name=='Risk'" class="node-label risk">Risk</div>
+          <div *ngIf="node.data.model_name=='Meeting'" class="node-label meeting">Meeting</div>
+        </div>
+      </div>
+      <!-- ----------------- -->
+      <div class="node-name" (click)="viewDetail(node)">{{ node.data.name }}</div>
+
+      <!-- Node Control buttons - START -->
+      <div class="buttons">
+        <button mat-icon-button class="yellow-icon" *ngIf="favoriteNodeIds.indexOf(node.data._id) >= 0" 
+          (click)="toggleFavorite(node.data._id)">
+          <mat-icon> star </mat-icon>
+        </button>
+        <button mat-icon-button *ngIf="favoriteNodeIds.indexOf(node.data._id) <= -1" 
+          (click)="toggleFavorite(node.data._id)">
+          <mat-icon> star_border </mat-icon>
+        </button>
+        
         <button *ngIf="node.data.node_type!='Topic'" mat-icon-button (click)="startAdd(node)">
           <mat-icon> add </mat-icon>
         </button>
-        <button mat-icon-button class="white-icon" (click)="startRenaming(node)">
+        <button mat-icon-button (click)="startRenaming(node)">
           <mat-icon> edit </mat-icon>
         </button>
-        <button mat-icon-button class="white-icon" (click)="viewDetail(node)">
-          <mat-icon> navigate_next </mat-icon>
+        <!-- <button *ngIf="unreadMessages[node.data._id] !== undefined" mat-icon-button class="unread-badge">
+          {{ unreadMessages[node.data._id] }}
+        </button> -->
+        <button mat-icon-button (click)="viewChat(node)">
+          <chat-icon [unreadMessages]="unreadMessages[node.data._id]"></chat-icon>
         </button>
+        <!-- <button mat-icon-button (click)="viewDetail(node)">
+          <mat-icon> navigate_next </mat-icon>
+        </button> -->
         <!-- <a class="button-red" (click)="removeNode(node)">
           <i class="material-icons"> clear </i>
         </a> -->
       </div>
+      <!-- ---------------------------- -->
+
     </div>
 
   </ng-template>

@@ -6,6 +6,8 @@ import { fuseAnimations } from '@fuse/animations';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthenticationService } from 'app/_services/authentication.service';
 import { AlertService } from 'app/_services/alert.service';
+import { LoadingService } from 'app/_services/loading.service';
+
 
 @Component({
     selector   : 'fuse-login',
@@ -13,6 +15,7 @@ import { AlertService } from 'app/_services/alert.service';
     styleUrls  : ['./login.component.scss'],
     animations : fuseAnimations
 })
+
 export class LoginComponent implements OnInit
 {
     loginForm: FormGroup;
@@ -31,6 +34,7 @@ export class LoginComponent implements OnInit
         private router: Router,
         private authenticationService: AuthenticationService,
         private alertService: AlertService,
+        private loadingService: LoadingService
     )
     {
         this.fuseConfig.setConfig({
@@ -49,6 +53,7 @@ export class LoginComponent implements OnInit
 
     ngOnInit()
     {
+        
         // reset login status
         this.authenticationService.logout();
 
@@ -58,12 +63,14 @@ export class LoginComponent implements OnInit
 
         this.loginForm = this.formBuilder.group({
             email   : ['', [Validators.required, Validators.email]],
-            password: ['', Validators.required]
+            password: ['', Validators.required],
         });
 
         this.loginForm.valueChanges.subscribe(() => {
             this.onLoginFormValuesChanged();
         });
+
+        this.loadingService.clearTasks();
     }
 
 
@@ -72,8 +79,7 @@ export class LoginComponent implements OnInit
         this.authenticationService.login(this.loginForm.value.email, this.loginForm.value.password)
             .subscribe(
                 data => {
-                  console.log(this.model.email);
-                  console.log(localStorage.getItem('currentUser'));
+                  console.log(localStorage.getItem('user'));
                   // this.userLoggedIn.emit(this.model.fullname);
                   if (this.authenticationService.redirectUrl) {
                     this.router.navigateByUrl(this.authenticationService.redirectUrl);

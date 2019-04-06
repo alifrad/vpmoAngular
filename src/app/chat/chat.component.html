@@ -1,46 +1,59 @@
-<style>
-	.chat-container {
-		height: 70%;
-		overflow: scroll;
-		position: relative;
-	}
+<div class="chat" fxFlex fxLayout="column" *ngIf="canChat()">
 
-	.chat-container mat-list {
-		max-height: 100%;
-	}
-
-	.chat-inp {
-		width: 100%;
-	}
-
-</style>
-
-<mat-card>
-	<div #chatContainer class="chat-container" (scroll)="onScroll($event)">
-		<mat-list>
-		<!-- <ng-template let-item let-i="index" let-last="last" ngFor [ngForOf]="let message of messages"> -->
-		
-			<mat-list-item *ngFor="let message of messages; let i = index; let last = last">
+	<div id="chat-content" fusePerfectScrollbar fxFlex="1 1 auto" (scroll)="onScroll($event)" #chatContainer>
+		<div class="chat-messages">
+			<div class="message-row" *ngFor="let message of messages; let i = index" 
+				[ngClass]="{
+					'me': message.author === currentUser.username,
+					'contact': message.author !== currentUser.username,
+                    'last-of-group': isLastMessageOfGroup(message, i)
+				}">
+				<img *ngIf="message.author !== currentUser.username && message.attributes.authorAvatar  == null" src="../../assets/images/avatars/profile.jpg" class="avatar"/>
+				<img *ngIf="message.author !== currentUser.username && message.attributes.authorAvatar  != null" [src]="message.attributes.authorAvatar" class="avatar"/>
+				<!-- message.author available here as well -->
+				<div class="bubble">
+					<div>
+						<span class="from">{{message.attributes.authorName}} <br></span>
+						<span class="message" [innerHTML]="message.body"></span>
+					</div>
+					
+					<div class="time from">{{message.date_created}}</div>
+				</div>
 				
-					<img matListAvatar src="http://lorempixel.com/40/40/people/{{i}}" />
-					
-					
-						<h3 matLine class="cursor-pointer"> {{ message.author }} </h3>
-						<p matLine>
-							<span>{{ message.content }}</span>
-						</p>
-					
-						<h5>{{ message.sent_on | date:'dd-MMM-yyyy @ h:mma' }}</h5>
-
-					<mat-divider *ngIf="!last"></mat-divider>
-				
-			</mat-list-item>
-		
-		<!-- </ng-template> -->
-		</mat-list>
+			</div>
+		</div>
 	</div>
 
-	<mat-form-field class="chat-inp">
-	    <input #msgInput matInput placeholder="Message" value="" (keyup.enter)="sendMessage(msgInput.value)">
-	</mat-form-field>
-</mat-card>
+	 <!-- CHAT FOOTER -->
+    <div class="chat-footer" fxFlex="0 0 auto" fxLayout="column">
+
+        <!-- REPLY FORM -->
+        <div class="reply-form" fxFlex="0 0 auto" fxLayout="row" fxLayoutAlign="center center">
+
+            <form #replyForm="ngForm"
+                  (ngSubmit)="sendMessage(chatMsg); chatMsg=''" 
+                  fxFlex fxLayout="row" fxLayoutAlign="start center">
+
+                <!--
+                <mat-form-field class="message-text" fxFlex floatLabel="never" appearance="standard">
+                	<input matInput #msgInput placeholder="Type your message here">
+                </mat-form-field>
+                -->
+                <quill-editor [modules]="{toolbar: [['bold', 'italic', 'underline', 'strike', 'code-block']]}" [ngModelOptions]="{standalone: true}" [(ngModel)]="chatMsg" [sanitize]="true"></quill-editor>
+
+                <button class="send-message-button" mat-icon-button type="submit" aria-label="Send message">
+                    <mat-icon class="secondary-text">send</mat-icon>
+                </button>
+
+            </form>
+
+        </div>
+        <!-- / REPLY FORM -->
+
+    </div>
+
+</div>
+
+<div *ngIf="!canChat()">
+	Can not Chat
+</div>

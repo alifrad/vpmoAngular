@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { TasksService } from './tasks.service';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { appConfig } from '../app.config';
 
 @Component({
   selector: 'create-tasks',
@@ -12,36 +14,51 @@ export class CreateTasksComponent implements OnInit {
 	title = 'Create Tasks';
 
 	constructor(
-		private _tasksService: TasksService
+		private _tasksService: TasksService,
+		private dialogRef: MatDialogRef<CreateTasksComponent>,
+		@Inject(MAT_DIALOG_DATA) public data: any
 	){ }
 
 	nodeID: string;
  	nodeType: string;
+ 	taskLists: any[] = [];
 
 	taskTitle: string;
 	taskDueDate: any;
 	filteredAssignableUsers: any = [];
 	selectedUser: any;
+	searchUrl: string;
+	selectedTaskList: string;
 
 	ngOnInit () {
-		this.nodeID = JSON.parse(localStorage.getItem('node'))._id;
-   		this.nodeType = localStorage.getItem('nodeType');
+		this.nodeID = this.data.nodeID;
+   		this.nodeType = this.data.nodeType;
+   		this.searchUrl = `${appConfig.taskApiUrl}` + '/assignable_task_users/' + this.nodeID +'/' + '?nodeType='+this.nodeType + '&search='
+
+   		this.getTaskLists(this.nodeID)
+	}
+
+	getTaskLists (nodeID) {
+		this._tasksService.getTaskLists(this.nodeID)
+			.subscribe(response => {
+				this.taskLists =  response.map(list => {
+					return { _id: list._id, title: list.title }
+				})
+			})
 	}
 
 	createTask () {
-		if (!this.taskTitle || !this.taskDueDate || !this.selectedUser) {
+		console.log(this.selectedTaskList)
+		if (!this.taskTitle || !this.taskDueDate || !this.selectedUser || this.filteredAssignableUsers.length == 0 || !this.selectedTaskList) {
 			alert('Missing Data')
-			return
+			return;
 		}
-		this._tasksService.createTask(this.nodeID, this.nodeType, this.taskDueDate, this.selectedUser, this.taskTitle)
-			.subscribe(resp => alert('Task Created'))
+		this._tasksService.createTask(this.nodeID, this.nodeType, this.taskDueDate, this.selectedUser, this.taskTitle, this.selectedTaskList)
+			.subscribe(resp => this.dialogRef.close())
 	}
 
-	filterUsers (e) {
-		if (e.length < 5) {
-			return
-		}
-		this._tasksService.getAssignableUsers(this.nodeID, this.nodeType, e)
-			.subscribe(assignableUsers => this.filteredAssignableUsers = assignableUsers)
+	userSelected (e) {
+		this.filteredAssignableUsers = e.filteredUsers
+		this.selectedUser = e.selectedUser
 	}
 }

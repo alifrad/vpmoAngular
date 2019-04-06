@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from '../user';
 import { AuthenticationService } from '../../_services/authentication.service';
+import { ChatService } from 'app/chat/chat.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -11,15 +12,11 @@ export class DashboardComponent implements OnInit {
 
   fullname: any;
 
-  constructor(private authService: AuthenticationService) {}
+  constructor(
+  	private authService: AuthenticationService,
+  	private chatService: ChatService
+  ) { }
 
-  ngOnInit() {
-    this.authService.getUserName()
-      .subscribe(
-          user => this.fullname = user,
-          (err: any) => console.log(err)
-      );
-    console.log(this.fullname);
-  }
+  ngOnInit() { }
 
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { TreeStructureService } from './tree-structure.service';
 import { TreeStructureHttpService } from './tree-structure-http.service';
 import { TreeComponent, ITreeOptions } from '../../../node_modules/angular-tree-component';
@@ -7,23 +7,25 @@ import * as _ from 'lodash';
 import { IVisualNodeData } from './tree-structure-model';
 import { timeout } from '../../../node_modules/rxjs/operators';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, Subscription, Subject } from 'rxjs';
 import { GlobalService } from '../_services/global.service';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { CreateNodeComponent } from './create-node.component';
+import { NodeService } from '../node/node.service';
+import { AuthenticationService } from '../_services/authentication.service';
+import { ChatService } from '../chat/chat.service';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-tree-structure',
   templateUrl: './tree-structure.component.html',
   styleUrls: ['./tree-structure.component.scss']
 })
-export class TreeStructureComponent implements OnInit {
+export class TreeStructureComponent implements OnInit, OnDestroy {
   treeRoot: any;
   nodeType: any;
-  node: any;
-  team: any;
-  project: any;
-  topic: any;
+  nodeID: any;
+
   @ViewChild(TreeComponent)
   private tree: TreeComponent;
   // user the object for cancel or save created node
@@ -33,6 +35,12 @@ export class TreeStructureComponent implements OnInit {
   private renamingNode: any = null;
   // array of tree nodes
   public nodes = [];
+  // array of nodes that are favorited by the user
+  private favoriteNodeIds: any[] = [];
+  // mapping of {node.name: unreadMessageCount}
+  private unreadMessages: any = {};
+
+  _unsubscribeAll: Subject<any>;
 
   // set options for tree
   public options: ITreeOptions = {
@@ -42,7 +50,13 @@ export class TreeStructureComponent implements OnInit {
     //
     allowDrag: true,
     allowDrop: (element, to: { parent: ITreeNode, index }): boolean => {
-      return !to.parent.data.virtual;
+      // Disabling dropping into topic nodes
+      if (to.parent.data.node_type == 'Topic') {
+        return false
+      } else {
+        return true
+      }
+      // return !to.parent.data.virtual;
     },
   };
 
@@ -90,7 +104,7 @@ export class TreeStructureComponent implements OnInit {
     this.tree.treeModel.update();
 
     var updateData = { name: this.newNodeName }
-    this.treeStructureHttpService.updateNode(this.renamingNode.data._id, this.renamingNode.data.node_type, updateData)
+    this._treeStructureHttpService.updateNode(this.renamingNode.data._id, this.renamingNode.data.node_type, updateData)
       .subscribe(response => {
         console.log('Node Rename successful')
       })
@@ -98,119 +112,114 @@ export class TreeStructureComponent implements OnInit {
   }
 
   constructor(
-        private treeStructureService: TreeStructureService, 
-        private treeStructureHttpService: TreeStructureHttpService,
-        private router: Router,
-        private route: ActivatedRoute,
-        private globalService: GlobalService,
-        private dialog: MatDialog
-        ) { 
-          globalService.teamValue.subscribe(
-            (nextValue) => {
-              this.team = JSON.parse(nextValue);
-          });
-          globalService.projectValue.subscribe(
-            (nextValue) => {
-              this.project = JSON.parse(nextValue);
-          });
-          globalService.topicValue.subscribe(
-            (nextValue) => {
-              this.topic = JSON.parse(nextValue);
-          });
-          globalService.nodeValue.subscribe(
-            (nextValue) => {
-              this.node = JSON.parse(nextValue);
-              const nodeType = this.getNodeType();
-              if (nodeType !== 'Topic') {
-                this.getTree(this.getNodeType(), JSON.parse(nextValue)._id);
-              }
-          });
-        }
+    private _treeStructureService: TreeStructureService, 
+    private _treeStructureHttpService: TreeStructureHttpService,
+    private _router: Router,
+    private route: ActivatedRoute,
+    private dialog: MatDialog,
+    private _nodeService: NodeService,
+    private _authService: AuthenticationService,
+    private _chatService: ChatService
+  ) {
+    this._unsubscribeAll = new Subject();
+  }
 
   // IMPORTANT update is needed
   public onMoveNode($event) {
-    
-    const movedNode: ITreeNode = this.tree.treeModel.getNodeById($event.node._id);
-    const updatedList: IVisualNodeData[] = this.treeStructureService.updateModel(movedNode, this.tree.treeModel);
-    const updatedListDto = this.treeStructureService.converVisualNodeToDtoList(updatedList, false);
-    // this line should change to accomodate the changes to structure when the top node is a project
-    this.treeStructureHttpService.updateNodeList(updatedListDto, this.getTopNode());
-  }
-
-
-  getTeam(): string {
-    try{
-        this.treeRoot = this.team._id;
+    // Cancel the event if the node is being moved into a topic
+    if ($event.to.parent.node_type != 'Topic') {
+      console.log('On Move', $event)
+      const movedNode: ITreeNode = this.tree.treeModel.getNodeById($event.node._id);
+      const updatedList: IVisualNodeData[] = this._treeStructureService.updateModel(movedNode, this.tree.treeModel);
+      const updatedListDto = this._treeStructureService.converVisualNodeToDtoList(updatedList, false);
+      // this line should change to accomodate the changes to structure when the top node is a project
+      this._treeStructureHttpService.updateNodeList(updatedListDto, this.getTopNode());
     }
-    catch (err) {
-        console.log('Error: ' + err);
-        return ('Error: ' + err);
-    }
-    console.log('team: ' +  this.treeRoot);
-    return this.treeRoot;
   }
-
 
   getTopNode(): string {
     // this.treeRoot = JSON.parse(localStorage.getItem('node'));
-    return this.node._id;
-  }
-
-  getNodeType(): string {
-    try{
-        this.nodeType = (localStorage.getItem('nodeType'));
-        return this.nodeType;
-    }
-    catch (err) {
-        console.log('Error: ' + err);
-        return ('');
-    }
+    console.log('Top Node', this.nodeID)
+    return this.nodeID;
   }
 
   public viewDetail = (node) => {
     const nodeType = node.data.node_type;
     const nodeId = node.data._id;
-    const nodeName = node.data.name;
+    
     console.log('Opening Node', node);
     // localStorage.setItem('nodeID', nodeId);
-    localStorage.setItem('nodeType', nodeType);
-    this.globalService.node = JSON.stringify({ _id: nodeId, name: nodeName });
-    
-    if (nodeType === 'Team') {
-      this.globalService.team = JSON.stringify({ _id: nodeId, name: nodeName });
-      // localStorage.setItem('teamID', nodeId);
-    } else if (nodeType === 'Project') {
-      this.globalService.project = JSON.stringify({ _id: nodeId, name: nodeName });
-    } else {
-      this.globalService.topic = JSON.stringify({ _id: nodeId, name: nodeName });
-    }
+    // localStorage.setItem('nodeType', nodeType);
 
-    // this.router.navigate(['node/details']);
     console.log('node/' + nodeType + '/' + nodeId);
-    this.router.navigate(['node/' + nodeType + '/' + nodeId]);
+    if (nodeType == 'Topic') {
+      this._router.navigate(['node/' + nodeType + '/' + nodeId + '/details']);
+    } else {
+      this._router.navigate(['node/' + nodeType + '/' + nodeId + '/tree']);
+      this.ngOnInit();
+    }
   }
 
-  getTree(nodeType, nodeId) {
-    this.treeStructureHttpService.getTree(nodeType, nodeId)
-      .subscribe(
-        (data) => {
-          this.nodes = this.treeStructureService.preUploadData(data);
+  viewChat(node) {
+    const nodeType = node.data.node_type;
+    const nodeId = node.data._id;
+
+    // localStorage.setItem('nodeID', nodeId);
+    // localStorage.setItem('nodeType', nodeType);
+    
+    this._router.navigate(['node/' + nodeType + '/' + nodeId + '/chat']);
+  }
+
+  toggleFavorite (nodeID) {
+    if (this.favoriteNodeIds.indexOf(nodeID) >= 0) {
+      this._nodeService.unfavoriteNode(nodeID)
+        .subscribe(val => {
+          this._authService.favoriteNodes.next(val)
+        })
+    } else {
+      this._nodeService.favoriteNode(nodeID)
+        .subscribe(val => {
+          this._authService.favoriteNodes.next(val)
+        })
+    }
+  }
+
+  ngOnInit () {
+    console.log('TreeStructure Init')
+
+    this._nodeService.getNodeTree();
+    
+    this._nodeService.node
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe(node => {
+        if (node !== null) {
+          this.nodes = this._treeStructureService.preUploadData(node.tree);
           // need time in order create dom for tree
           setTimeout(() => {
             this.tree.treeModel.expandAll();
           }, 111);
-        },
-        (err: any) => console.log('getTree ', err),
-        () => console.log('All done getting nodes.')
-      );
-  }
-  
+          this.nodeID = node._id
+        }
+      })
+    
 
-  public ngOnInit() {
-    this.route.params.subscribe(
-      params => { 
-        this.getTree(params['type'], params['id']);
-      }
-    );
+    
+
+    this._authService.favoriteNodes
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe(favoriteNodes => {
+        this.favoriteNodeIds = favoriteNodes.map(i => i._id)
+      })
+
+    this._chatService.unreadMessageTracker
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe(unreadMessages => {
+        this.unreadMessages = unreadMessages
+      })
+  }
+
+  ngOnDestroy () {
+    this._unsubscribeAll.next();
+    this._unsubscribeAll.complete();
   }
 }

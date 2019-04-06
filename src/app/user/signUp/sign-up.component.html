@@ -4,44 +4,70 @@
             <div class="card darken-1">
                 <div class="card-content">
                   <span class="card-title">
-                      register as a new user
+                      register as a new user {{ registerForm.hasError('emailNotSame')}}
                   </span>
-                  <form class="col s12 white" #userRegistratoinForm="ngForm" (ngSubmit)="OnSubmit(userRegistratoinForm)">
-                      <div class="row">
-                        <div class="input-field col s12">
-                          <input class="validate" type="text" name="email" #email="ngModel" [(ngModel)]="user.email" [pattern]="emailPattern" required>
-                          <label data-error="Invalid Email!">User Email</label>
-                        </div>
-                        <div class="input-field col s12">
-                          <input class="validate" type="text" name="email2" #email="ngModel" [(ngModel)]="user.email2" [pattern]="emailPattern" required>
-                          <label data-error="Invalid Email!">Confirm Email</label>
-                        </div>
-                        <div class="input-field col s12">
-                          <input class="validate" type="password" name="password" #password="ngModel" [(ngModel)]="user.password" required minlength="8">
-                          <label [attr.data-error]="password.errors!=null? (password.errors.required?'Required field':'Minimum 8 characters needed'):''">Password</label>
-                        </div>
+                  <form class="col s12 white" #form="ngForm" [formGroup]="registerForm" (ngSubmit)="OnSubmit(registerForm)">
 
-                        <div class="input-field col s12">
-                          <input class="validate" type="text" name="username" #username="ngModel" [(ngModel)]="user.username" required minlength="4">
-                          <label [attr.data-error]="username.errors!=null? (username.errors.required?'Required field':'Minimum 4 characters needed'):''">Username</label>
-                        </div>
+                    <input (change)="avatarSelected($event)" id="input-file-id" multiple type="file" multiple />
+                    <image-cropper
+                      [imageChangedEvent]="avatarSelectedEvent"
+                      [maintainAspectRatio]="true"
+                      [aspectRatio]="1 / 1"
+                      [resizeToWidth]="128"
+                      format="png"
+                      (imageCropped)="avatarCropped($event)"
+                    ></image-cropper>
 
-                        <div class="input-field col s12">
-                          <input type="text" name="fullname" #fullname="ngModel" [(ngModel)]="user.fullname">
-                          <label >Full Name</label>
-                        </div>
+                    <img [src]="croppedImage" />
 
-                      </div>
-                      <div class="row center">
-                        <div class="input-field col s12">
-                          <button [disabled]="!userRegistratoinForm.valid" class="btn-large waves-effect waves-light teal lighten-1 btn-submit" type="submit">Submit</button>
-                        </div>
-                      </div>
+                    <mat-form-field>
+                      <input matInput placeholder="Email" formControlName="email" required>
+                      <mat-error *ngIf="registerForm.get('email').errors && registerForm.get('email').errors.required">
+                        Email is required
+                      </mat-error>
+                      <mat-error *ngIf="registerForm.get('email').errors && !registerForm.get('email').errors.required && registerForm.get('email').errors.email">
+                        Please enter a valid email address
+                      </mat-error>
+                      <mat-error *ngIf="registerForm.get('email').errors && registerForm.get('email').errors.exists">
+                        This Email already Exists
+                      </mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                      <input matInput placeholder="Confirm Email" formControlName="email2" required>
+                      <mat-error *ngIf="registerForm.get('email2').errors && registerForm.get('email2').errors.emailNotSame">
+                        Emails do not match
+                      </mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                      <input matInput placeholder="Username" formControlName="username" required>
+                      <mat-error *ngIf="registerForm.get('username').errors && registerForm.get('username').errors.required">
+                        Username is required
+                      </mat-error>
+                      <mat-error *ngIf="registerForm.get('username').errors && registerForm.get('username').errors.exists">
+                        Username already exists
+                      </mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                      <input matInput placeholder="Full Name" formControlName="fullname">
+                      <mat-error *ngIf="registerForm.get('fullname').errors && registerForm.get('fullname').errors.required">
+                        Full Name is required
+                      </mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                      <input matInput type="password" placeholder="Password" formControlName="password" required>
+                        <mat-error *ngIf="registerForm.get('password').errors && registerForm.get('password').errors.required">
+                          Password is required
+                      </mat-error>
+                    </mat-form-field>
+                      
+                    <button type="submit" mat-raised-button color="primary" [disabled]="form.invalid">
+                      Sign Up
+                    </button>
                   </form>
-        
-        Angular: {{ userRegistratoinForm.value | json }}
-        {{diagnostic}}
-
           </div>
         </div>
     </div>

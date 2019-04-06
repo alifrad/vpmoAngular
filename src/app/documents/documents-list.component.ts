@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { Router, ActivatedRoute } from '@angular/router';
 import { AuthenticationService } from '../_services';
 import { DocumentsService } from './documents.service';
 import { PermissionsService } from '../permissions/permissions.service'
 import {MatDialog, MatDialogConfig} from '@angular/material';
 import { ChangeDetectorRef } from '@angular/core';
+import { NodeService } from '../node/node.service';
 
 @Component({
   selector: 'app-documents-list',
@@ -12,7 +14,7 @@ import { ChangeDetectorRef } from '@angular/core';
   styleUrls: ['./documents-list.component.css']
 })
 
-export class DocumentsListComponent implements OnInit {
+export class DocumentsListComponent implements OnInit, OnDestroy {
   
   title = 'Documents';
 
@@ -21,7 +23,9 @@ export class DocumentsListComponent implements OnInit {
     private _documentsService: DocumentsService,
     private _permissionsService: PermissionsService,
     private dialog: MatDialog,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private route: ActivatedRoute,
+    private nodeService: NodeService
   ) { }
 
   nodeID: string;
@@ -31,30 +35,32 @@ export class DocumentsListComponent implements OnInit {
   displayedColumns: string[] = ['document_name', 'document_size', 'uploaded_by', "uploaded_at", "utils"];
   renamingDocument: any;
 
+  private nodeSubscription: Subscription;
+
   ngOnInit() {
-    this.nodeID = JSON.parse(localStorage.getItem('node'))._id;
-    this.nodeType = localStorage.getItem('nodeType');
-    this.getDocuments()
-    this.getUserPermissions(this.nodeID, this.nodeType)
+    this.nodeSubscription = this.nodeService.node.subscribe(node => {
+      if (node) {
+        this.nodeType = node.node_type
+        this.nodeID = node._id
+        this.currentUserPermissions = node.user_permissions
+        this.uploadedDocuments = node.documents
+      }
+    })
+
   }
 
+  ngOnDestroy () {
+    this.nodeSubscription.unsubscribe()
+  }
+
+  /* Unused */
   getDocuments () {
     this._documentsService.getUploadedDocuments(this.nodeID, this.nodeType)
       .subscribe(documents => {
         this.uploadedDocuments = documents
       })
   }
-
-  getUserPermissions (nodeID, nodeType) {
-    this._permissionsService.getUserPermissions(nodeID, nodeType)
-      .subscribe(
-        userPermissions => {
-          console.log('Permissions', userPermissions)
-          this.currentUserPermissions = userPermissions.permissions;
-        }
-      );
-  }
-
+  
   canUploadDocuments () {
     var uploadPerms = this.currentUserPermissions.filter(item => item.indexOf('update_') >= 0)
 

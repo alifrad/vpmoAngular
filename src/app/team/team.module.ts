@@ -1,10 +1,12 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { AppModule } from '../app.module';
-import { TeamsComponent } from './teams.component';
+import { TeamsListComponent } from './teams-list.component';
+import { TeamDashboardComponent } from './team-dashboard.component'
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from '../_guards/auth.guard';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ChatModule } from '../chat/chat.module';
 import {
     MatButtonModule,
     MatCardModule,
@@ -12,7 +14,10 @@ import {
     MatIconModule,
     MatDialogModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    MatGridListModule,
+    MatBadgeModule,
+    MatBottomSheetModule
   } from '@angular/material';
 
 const TeamRoutes: Routes = [
@@ -21,7 +26,7 @@ const TeamRoutes: Routes = [
         // component: UserComponent,
         children: [
             // { path: 'tree', component: SignUpComponent },
-            { path: 'all', component: TeamsComponent },
+            { path: 'all', component: TeamsListComponent },
         ],
         canActivate: [ AuthGuard ],
     },
@@ -31,6 +36,7 @@ const TeamRoutes: Routes = [
     imports: [
         CommonModule,
         RouterModule.forChild(TeamRoutes),
+
         MatButtonModule,
         MatCardModule,
         MatListModule,
@@ -39,18 +45,22 @@ const TeamRoutes: Routes = [
         FormsModule,
         ReactiveFormsModule,
         MatFormFieldModule,
-        MatInputModule
+        MatInputModule,
+        MatGridListModule,
+        MatBadgeModule,
+        MatBottomSheetModule,
+
+        ChatModule
     ],
     exports: [
-        TeamsComponent,
-        
+        TeamsListComponent,
+        TeamDashboardComponent
     ],
     declarations: [
-        TeamsComponent,
-        
+        TeamsListComponent,
+        TeamDashboardComponent
     ],
     providers: [
-        
 
     ],
     schemas: [

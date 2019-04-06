@@ -1,12 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { Router, ActivatedRoute } from '@angular/router';
 import { AuthenticationService } from '../_services';
 import { TasksService } from './tasks.service';
 import {MatDialog, MatDialogConfig} from '@angular/material';
 
 import { CreateTasksComponent } from './create-tasks.component';
-import { ReassignTaskComponent } from './reassign-task.component';
-import { GlobalService } from 'app/_services/global.service';
+import { EditTaskComponent } from './edit-task.component';
+import { NodeService } from '../node/node.service';
+import { ScrumboardCardDialogComponent } from '../scrumboard/dialogs/card/card.component'
 
 @Component({
   selector: 'app-tasks',
@@ -14,7 +16,7 @@ import { GlobalService } from 'app/_services/global.service';
   styleUrls: ['./tasks.component.css']
 })
 
-export class TasksComponent implements OnInit {
+export class TasksComponent implements OnInit, OnDestroy {
   
   title = 'Tasks';
   nodeID: string;
@@ -26,38 +28,48 @@ export class TasksComponent implements OnInit {
     private authUser: AuthenticationService,
     private _tasksService: TasksService,
     private dialog: MatDialog,
-    private globalService: GlobalService,
-  ) { 
-    globalService.nodeValue.subscribe(
-      (nextValue) => {
-    
-        this.node = JSON.parse(nextValue);
-        this.nodeID = this.node._id;
-        this.getAssignedTasks();
-    });
-  }
+    private route: ActivatedRoute,
+    private nodeService: NodeService
+  ) { }
 
+  
   assignedTasks: any[] = [];
-  displayedColumns: string[] = ['title', 'status', 'utils'];
+  displayedColumns: string[] = ['title', 'assignee_name', 'due_date', 'status', 'utils', 'task_list'];
   taskStatusList: any[] = [
     {value: 'NEW', text: 'New'},
     {value: 'IN_PROGRESS', text: 'In Progress'},
     {value: 'COMPLETE', text: 'Complete'}
   ];
 
+  taskStatusMap = {
+    'NEW': 'New',
+    'IN_PROGRESS': 'In Progress',
+    'COMPLETE': 'Complete'
+  };
+
+  private nodeSubscription: Subscription;
+
   ngOnInit () {
-    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    this.nodeSubscription = this.nodeService.node.subscribe(node => {
+      if (node) {
+        this.nodeType = node.node_type
+        this.nodeID = node._id
+        this.getAssignedTasks();
+      }
+    })
+  }
 
-    this.nodeID = this.node._id;
-    this.nodeType = localStorage.getItem('nodeType');
+  ngOnDestroy () {
+    this.nodeSubscription.unsubscribe()
+  }
 
-    this.getAssignedTasks();
+  getUser () {
+    return this.authUser.getUser()
   }
 
   getAssignedTasks () {
     this._tasksService.getAssignedTasks(this.nodeID).subscribe(
-      tasks => this.assignedTasks = tasks,
-      err => console.error('Error getting tasks list ' + err),
+      tasks => this.assignedTasks = tasks
     );
   }
 
@@ -68,21 +80,28 @@ export class TasksComponent implements OnInit {
     dialogConfig.width = '350';
     dialogConfig.height = '500';
 
-    const dialogRef = this.dialog.open(CreateTasksComponent, dialogConfig);
+    const dialogRef = this.dialog.open(CreateTasksComponent, {
+      width: '350',
+      height: '500',
+      data: {nodeID: this.nodeID, nodeType: this.nodeType}
+    });
+
     dialogRef.afterClosed().subscribe(result => {
       this.getAssignedTasks();
     });
   }
 
-  openReassignDialog (task) {
-    const dialogConfig = new MatDialogConfig();
-
-    dialogConfig.autoFocus = true;
-    dialogConfig.width = '350';
-    dialogConfig.height = '500';
-
-    localStorage.setItem('taskID', task._id)
-    const dialogRef = this.dialog.open(ReassignTaskComponent, dialogConfig);
+  openEditDialog (task) {
+    const dialogRef = this.dialog.open(ScrumboardCardDialogComponent, {
+            panelClass: 'scrumboard-card-dialog',
+            data      : {
+                task: task,
+                list: task.task_list,
+                nodeID: this.nodeID,
+                nodeType: this.nodeType
+            }
+        });
+        
     dialogRef.afterClosed().subscribe(result => {
       this.getAssignedTasks();
     });
@@ -103,5 +122,4 @@ export class TasksComponent implements OnInit {
         }
       )
   }
-
 }

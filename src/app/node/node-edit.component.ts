@@ -1,92 +1,138 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+
+import { NodeService } from './node.service';
 import { Router, ActivatedRoute } from '@angular/router';
-
-import { ProjectService } from 'app/project/project.service';
-import { TeamService } from 'app/team/team.service';
-import { flatten } from '@angular/router/src/utils/collection';
-import { GlobalService } from 'app/_services/global.service';
-
+import { GlobalService } from '../../app/_services/global.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-node-edit',
   templateUrl: './node-edit.component.html',
-  styleUrls: ['./node-edit.component.less']
+  styleUrls: ['./node-edit.component.css']
 })
-export class NodeEditComponent implements OnInit {
 
+export class NodeEditComponent implements OnInit, OnDestroy {
+  errorMessage: string;
 
   
-  project: any;
-  team: any;
-  content = '';
-  node: any;
-
   constructor(
-    private _projectService: ProjectService,
-    private _teamService: TeamService,
-    private router: Router,
-    private route: ActivatedRoute,
-    private globalService: GlobalService
-  ) {
-    globalService.nodeValue.subscribe(
-      (nextValue) => {
-        this.node = JSON.parse(nextValue);
-        localStorage.setItem('nodeID', this.node._id)
-    });
-  }
+          private _nodeService: NodeService,
+          private router: Router,
+          private global: GlobalService,
+          private route: ActivatedRoute
+        ) {}
   
-  getContent(nodeType, nodeId) {
+ 
 
-    if (nodeType === 'Team') {
-      this.content = '';
-    } else if (nodeType === 'Project') {
-        console.log('Project.................');
-        this._projectService.getProject(nodeId)
-          .subscribe(
-            project => this.content = project.content,
-            err => console.error('Reading Project Content: ' + err)
-          );
-        // this.project = this._projectService.getProject(nodeId);
-        // if (this.project.content !== null) {
-        //   this.content = this.project.content;
-        //   console.log('NOT NULL!', this.content);
-        // }
-    } else if (nodeType === 'Deliverable'){
+  node: any = {};
+  severityList: any[] = [
+    {value: '1', text: 'Low'},
+    {value: '2', text: 'Medium'},
+    {value: '3', text: 'High'}
+  ];
+  impactList: any[] = [
+    {value: '1', text: 'Minor'},
+    {value: '2', text: 'Moderate'},
+    {value: '3', text: 'High'}
+  ];
+  probabilityList: any[] = [
+    {value: '1', text: 'Low probability'},
+    {value: '2', text: 'Medium probability'},
+    {value: '3', text: 'High probability'}
+  ];
 
-    }
-  }
-
-  saveContent () {
-    let nodeId: string;
-    let nodeType: string;
-
-    nodeType = JSON.parse(localStorage.getItem('nodeType'));
-    nodeId = JSON.parse(localStorage.getItem('nodeID'));
-
-    if (nodeType === 'Project') {
-      this._projectService.partialUpdateProject(nodeId, this.content)
-      .subscribe(
-        project => this.project = project
-      );
-    } else if (nodeType === 'Deliverable') {
-      
-    }
-    
-  }
+  private nodeSubscription: Subscription;
+  editor_modules: any;
 
   ngOnInit(): void {
-    // read content against this.node
-
-    this.route.params.subscribe(
-      params => { 
-        this.getContent(params['type'], params['id']);
+    this.nodeSubscription = this._nodeService.node.subscribe(node => {
+      if (node) {
+        this.node = node
+        if (this.node.content == null) {
+          this.node.content = ''
+        }
       }
-    );
-    
-    
+    })
 
+    this.editor_modules = {
+      toolbar: {
+        container: [
+            ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+            ['blockquote', 'code-block'],
+  
+            [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+            [{ 'script': 'sub' }, { 'script': 'super' }],      // superscript/subscript
+            [{ 'indent': '-1' }, { 'indent': '+1' }],          // outdent/indent
+            [{ 'direction': 'rtl' }],                         // text direction
+  
+            [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+            [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+  
+            [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+            [{ 'font': [] }],
+            [{ 'align': [] }],
+            ['link', 'image'],
+            ['clean']                                    // remove formatting button
+  
+        ]
+      },
+      imageResize: true
+    };
+    
+  }
+
+  ngOnDestroy () {
+    this.nodeSubscription.unsubscribe();
   }
 
 
+  saveContent () {
+    console.log('saveContent', this.node)
+    this._nodeService.partialUpdateNode(this.node._id, this.node)
+      .subscribe(
+        node => this.node = node 
+      );
+  }
   
+
+  
+
+  public editorOptions = {
+    theme: 'snow',
+    modules: {
+        toolbar: {
+        container:
+        [
+            ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+            ['blockquote', 'code-block'],
+
+            [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+            [{ 'script': 'sub' }, { 'script': 'super' }],      // superscript/subscript
+            [{ 'indent': '-1' }, { 'indent': '+1' }],          // outdent/indent
+            [{ 'direction': 'rtl' }],                         // text direction
+
+            [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+            [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+
+            [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+            [{ 'font': [] }],
+            [{ 'align': [] }],
+            ['link', 'image'],
+            ['clean']                                    // remove formatting button
+
+        ],
+        handlers: {
+            "placeholder": function (value) { 
+                if (value) {
+                    const cursorPosition = this.quill.getSelection().index;
+                    this.quill.insertText(cursorPosition, value);
+                    this.quill.setSelection(cursorPosition + value.length);
+                }
+            }
+        }
+      }
+    }
+  };
 }

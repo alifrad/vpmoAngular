@@ -1,0 +1,17 @@
+scrumboard-add-card {
+    .add-card-form-wrapper {
+
+        .add-card-form {
+            z-index: 999;
+            display: block;
+            position: relative;
+            padding: 8px;
+
+            mat-form-field {
+                width: 100%;
+                margin: 0;
+                padding: 12px 8px;
+            }
+        }
+    }
+}

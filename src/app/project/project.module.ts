@@ -6,9 +6,9 @@ import { HttpClientModule } from '@angular/common/http';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 
 import { ProjectAddComponent } from './project-add.component';
-import { ProjectEditComponent } from './project-edit.component';
 import { ProjectService } from './project.service';
 import { ProjectComponent } from './project.component';
+import { ProjectDashboardComponent } from './project-dashboard.component'
 import { 
   MatDatepickerModule, 
   MatNativeDateModule, 
@@ -17,10 +17,12 @@ import {
   MatInputModule, 
   MatButtonModule, 
   MatCardModule, 
-  MatListModule 
+  MatListModule,
+  MatTableModule
 } from '@angular/material';
 import { AuthGuard } from '../_guards/auth.guard';
 import { ProjectListComponent } from './project-list.component';
+import { TopicsListComponent } from './topics-list.component'
 import { QuillModule } from 'ngx-quill';
 import { NodeModule } from '../node/node.module';
 // import { MzButtonModule, MzInputModule, MzDatepickerModule } from 'ng2-materialize';
@@ -33,7 +35,6 @@ const ProjectRoutes: Routes = [
       children: [
           { path: 'add', component: ProjectAddComponent },
           { path: '', component: ProjectListComponent },
-          { path: 'edit', component: ProjectEditComponent }
       ],
       canActivate: [ AuthGuard ],
   },
@@ -55,20 +56,22 @@ const ProjectRoutes: Routes = [
     MatCardModule,
     MatListModule,
     MatIconModule,
-    QuillModule,
-    
+    MatTableModule,
+    QuillModule
   ],
   declarations: [
     ProjectComponent,
     ProjectAddComponent,
     ProjectListComponent,
-    ProjectEditComponent,
+    ProjectDashboardComponent,
+    TopicsListComponent
   ],
   providers: [
     ProjectService,
   ],
   exports: [
-    ProjectEditComponent,
+    ProjectDashboardComponent,
+    TopicsListComponent
   ],
 })
 export class ProjectModule { }

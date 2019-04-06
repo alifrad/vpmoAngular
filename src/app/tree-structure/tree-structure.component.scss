@@ -1,24 +1,81 @@
-.white-icon {
-    color: rgba(146, 146, 146, 0.925);
-    margin-left: 5px;
-  }
+
+:host {
+    padding: 10px;
+}
+
+
+.unread-badge {
+    background-color: #ffb300;
+    color: white;
+}
+
 .my-container {
     display: flex;
     // background: rgb(105, 105, 105);
     align-items: center;
+    flex-direction: row;
+    flex-wrap: wrap;
     
+    .node-label {
+        width: auto;
+        font-size:x-small;
+        border-radius: 5px;
+        padding: 2px;
+        .team {
+            float: left;
+            margin: 0;
+            background-color: black;
+            color: white;
+        }
+        .project {
+            float: left;
+            margin: 0;
+            background-color: rgb(46, 41, 117);
+            color: rgb(245, 255, 244);
+        }
+        .topic {
+            float: left;
+            margin: 0;
+            color: rgb(43, 43, 43);
+            .deliverable {
+                background-color: rgb(0, 200, 200);
+            }
+            .issue {
+                background-color: rgb(255, 100, 0);
+            }
+            .risk {
+                background-color: rgb(230, 180, 0);
+            }
+            .meeting {
+                padding: 5px;
+                border-radius: 10px;
+                background-color: rgb(20, 20, 150);
+                color: rgb(224, 224, 224);
+            }
+        }
+    
+    }
     .node-name {
         flex: 1;
-        margin-left: 20px;
-        margin-right: 40px;
-        
+        flex-grow: 7;
+        margin-left: 5px;
+        margin-right: 20px;
+        text-align: left;
         color: rgb(100, 100, 100);
     }
+    
     .buttons {
         display: flex;
         align-items: center;
+        flex-grow: 2;
         margin-left: 5px;
-        color: rgba(255, 255, 255, 0.685);
+        justify-content: flex-end;
+        // width: 100px;
+        color: rgba(156, 155, 155, 0.685);
+        
+        .yellow-icon {
+            color: #ffb300 !important;
+        }
         a {
             padding: 1px 5px;
             line-height: 1.5;
@@ -46,6 +103,7 @@
             background-color: #428bca;
         }
     }
+    
 }
 
 .flex-item {
@@ -66,8 +124,9 @@
         display: flex;
         align-items: center;
         border: 1px solid #dae2ea;
-        border-radius: 50px 5px 5px 50px;
-        background: rgb(233, 233, 233);
+        border-style: none none none solid;
+        border-radius: 0px 0px 0px 20px;
+        background: rgb(243, 243, 243);
         color: #546b79;
     }
     tree-node-expander {
@@ -83,3 +142,6 @@
         box-shadow: none !important;
     }
 }
+
+
+

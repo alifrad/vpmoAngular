@@ -1,46 +1,40 @@
+
+import {throwError as observableThrowError,  Observable ,  of } from 'rxjs';
 import { Injectable } from '@angular/core';
 // import { Headers, Http } from '@angular/http';
 import { HttpClient, HttpHeaders, HttpRequest } from '@angular/common/http';
 import { Response, RequestOptions } from '@angular/http';
-import { Observable } from 'rxjs';
-import { of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
-import 'rxjs/add/operator/map';
+
 
 import { User } from './user';
 import { MessageService } from '../shared/message.service';
 import { appConfig } from '../app.config';
-import { AuthenticationService } from '../_services';
-
+import { AuthenticationService, AlertService } from '../_services';
+import { CustomHttpClient } from '../_services/custom-http.service';
 
 
 @Injectable()
 export class UserService {
 
   constructor(
-    private http: HttpClient,
+    private http: CustomHttpClient,
+    private genericHttp: HttpClient,
     private messageService: MessageService,
-    private authUser: AuthenticationService,
+    private authService: AuthenticationService,
+    private alertService: AlertService
     ) { }
 
-  httpOptions = {
-    headers: new HttpHeaders({ 
-      'Content-Type': 'application/json',
-      'Authorization': 'JWT'
-    })
-  };
-  // private extractData(res: Response) {
-  //   let body = res.json();
-  //   return body.fields || { };
-  // }
+  public searchUsers (searchUrl: string, query: string): Observable<any> {
+    return this.http.get(searchUrl + query)
+  }
 
-  // private handleError(error: any) {
-  //   console.error('post error: ', error);
-  //   return Observable.throw(error.statusText);
-  // }
+  public userExists (queryField: string, query: string): Observable<any> {
+    return this.http.get(appConfig.apiAuthUrl + '/user_exists/?query_field='+queryField+'&query='+query)
+  }
 
   getAll() {
-    return this.http.get<User[]>(appConfig.apiAuthUrl + '/users');
+    return this.http.get(appConfig.apiAuthUrl + '/users');
   }
 
   getById(_id: string) {
@@ -48,7 +42,14 @@ export class UserService {
   }
 
   create(user: User) {
-      return this.http.post(appConfig.apiAuthUrl + '/users/register/', user);
+    var formData = new FormData()
+    for (var key in user) {
+      if (user.hasOwnProperty(key)) {
+        formData.append(key, user[key])
+      }
+    }
+    console.log(formData)
+    return this.genericHttp.post(appConfig.apiAuthUrl + '/users/register/', formData);
   }
 
   // update(user: User) {
@@ -61,7 +62,13 @@ export class UserService {
 
   update(_id: number, user: User) {
       const url = appConfig.apiAuthUrl + '/users/update/' + _id + '/';
-      return this.http.patch(url, user, this.httpOptions);
+      return this.http.patch(url, user).pipe(
+        catchError(err => this.handleError(err)));
+  }
+
+  private handleError(error: any) { 
+    let errMsg = (error.message) ? error.message : error.status ? `${error.status} - ${error.statusText}` : 'Server error';
+    return observableThrowError(error);
   }
 
   /**
@@ -70,23 +77,23 @@ export class UserService {
    * @param operation - name of the operation that failed
    * @param result - optional value to return as the observable result
    */
-  private handleError<T> (operation = 'operation', result?: T) {
-    return (error: any): Observable<T> => {
+  // private handleError2<T> (operation = 'operation', result?: T) {
+  //   return (error: any): Observable<T> => {
 
-      // TODO: send the error to remote logging infrastructure
-      console.error(error); // log to console instead
+  //     // TODO: send the error to remote logging infrastructure
+  //     console.error(error); // log to console instead
 
-      // TODO: better job of transforming error for user consumption
-      this.log(`${operation} failed: ${error.message}`);
+  //     // TODO: better job of transforming error for user consumption
+  //     this.alert(`${operation} failed: ${error.message}`);
 
-      // Let the app keep running by returning an empty result.
-      return of(result as T);
-    };
-  }
+  //     // Let the app keep running by returning an empty result.
+  //     return of(result as T);
+  //   };
+  // }
 
-  /** Log a HeroService message with the MessageService */
-  private log(message: string) {
-    this.messageService.add('HeroService: ' + message);
-  }
+ 
+  // private alert(message: string) {
+  //   this.alertService.error('Error: ' + message);
+  // }
 
 }

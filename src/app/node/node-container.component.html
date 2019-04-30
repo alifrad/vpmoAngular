@@ -1,6 +1,73 @@
+<div class="container">
+
+    <!-- TODO: This app currently only loads the node - not sure why we have it separated -->
+    <app-nodepage></app-nodepage>
+    
+    <div class="main-wrap">
+
+        <app-sidebar></app-sidebar>
+
+        <div class="content-section">
+
+            <div class="top-bar">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <app-node-breadcrumbs></app-node-breadcrumbs>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="search-section">
+                            <input type="text" placeholder="Search..." class="form-control">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="outer-section">
+                <div class="secondary-nav">
+                    <div><a [routerLink]="['details']" href="#details" class="details" [ngClass]="{'active': contentType == 'details'}"><span>Details</span></a></div>
+
+                    <div *ngIf="nodeType == 'Team' || nodeType == 'Project'">
+                        <a [ngClass]="{'active': contentType == 'teamDashboard'}" *ngIf="nodeType == 'Team'" [routerLink]="['teamDashboard']" href="#dashboard" class="dashboard"><span>Dashboard</span></a>
+                        <a [ngClass]="{'active': contentType == 'projectDashboard'}" *ngIf="nodeType == 'Project'" [routerLink]="['projectDashboard']" href="#dashboard" class="dashboard"><span>Dashboard</span></a>
+                    </div>
+
+                    <!-- removed activeOptions property from the tree link ?? -->
+                    <div *ngIf="nodeType !== 'Topic'">
+                        <a [ngClass]="{'active': contentType == 'tree'}" [routerLink]="['tree']" class="tree"><span>Tree</span></a>
+                    </div>
+                    <div *ngIf="nodeType != 'Team'">
+                        <a [ngClass]="{'active': contentType == 'chat'}" [routerLink]="['chat']" class="chat"><span>Chat</span></a>
+                    </div>
+                    <div *ngIf="nodeType != 'Team'">
+                        <a [ngClass]="{'active': contentType == 'tasks'}" [routerLink]="['tasks']" class="tasks"><span>Tasks</span></a>
+                    </div>
+                    <div *ngIf="nodeType == 'Project'">
+                        <a [ngClass]="{'active': contentType == 'scrumboard'}" [routerLink]="['scrumboard']" class="scrumboard"><span>Scrumboard</span></a>
+                    </div>
+                    <div>
+                        <a [ngClass]="{'active': contentType == 'documents'}" [routerLink]="['documents']"  class="documents"><span>Documents</span></a>
+                    </div>
+                    <div>
+                        <a [ngClass]="{'active': contentType == 'permissions'}" [routerLink]="['permissions']" class="permissions"><span>Permissions</span></a>
+                    </div>
+                </div>
+
+                <div class="tabs-content-wrap">
+                    <div class="tabs-content" id="details" style="display: block;">
+                        <router-outlet></router-outlet>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<!--
 <app-nodepage class="hide-text"></app-nodepage>
 
-<!-- Refer to: https://github.com/angular/material2/issues/2177#issuecomment-447787776  -->
+<!!-- Refer to: https://github.com/angular/material2/issues/2177#issuecomment-447787776  -!->
 
 <app-router-tab>
     <app-router-tab-item 
@@ -32,10 +99,12 @@
     </app-router-tab-item>
 </app-router-tab>
 
-
+// Note: This needs to be added to load the sub-components; i.e. the node-detail, or node-edit components after
+// a tab has been selected.
 <div>
     <router-outlet></router-outlet>
 </div>
+-->
 
 
 

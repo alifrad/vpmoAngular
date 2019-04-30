@@ -1,7 +1,10 @@
+var prodUrl = "http://gingercomms.radconsultants.com.au"
+var devUrl = "http://127.0.0.1:8000"
+
 export const appConfig = {
-    apiUrl: 'http://gingercomms.radconsultants.com.au/vpmoapp/api',
-    docApiUrl: 'http://gingercomms.radconsultants.com.au/vpmodoc/api',
-    apiAuthUrl: 'http://gingercomms.radconsultants.com.au/vpmoauth/api',
-    chatUrl: 'http://gingercomms.radconsultants.com.au/chat',
-    taskApiUrl: 'http://gingercomms.radconsultants.com.au/vpmotask/api'
+    apiUrl: devUrl + '/vpmoapp/api',
+    docApiUrl: devUrl + '/vpmodoc/api',
+    apiAuthUrl: devUrl + '/vpmoauth/api',
+    chatUrl: devUrl + '/chat',
+    taskApiUrl: devUrl + '/vpmotask/api'
 };

@@ -26,7 +26,7 @@
     <br>
     
     <button mat-raised-button color="primary" type="submit" [disabled]="userProfileForm.invalid">Save</button>
-    <button mat-raised-button routerLink="user/dashboard">Cancel</button>
+    <button mat-raised-button [routerLink]="['/user/dashboard']">Cancel</button>
     
 </form>
 

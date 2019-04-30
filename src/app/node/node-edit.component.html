@@ -1,6 +1,33 @@
 <!-- Team Edit Block -->
-<div *ngIf="node.node_type == 'Team'">
+<div class="general-form">
 
+	<div *ngIf="node.node_type == 'Team'">
+
+	    <div class="general-group">
+	        <label>Name</label>
+	        <input type="text" [(ngModel)]="node.name" class="form-control">
+	    </div>
+	    <div class="general-group">
+	        <label>User Linked</label>
+	        <input [(ngModel)]="node.user_linked" type="text" class="form-control" disabled>
+	    </div>
+	    <div class="general-group">
+	        <label>User Team</label>
+	        <input [(ngModel)]="node.user_team" type="text" class="form-control">
+	    </div>
+	    <div class="general-group">
+	        <label>Created At</label>
+	        <div class="datepiker-wrap">
+	            <input type="text" [(ngModel)]="node.created_at" class="form-control datepicker">
+	        </div>
+	    </div>
+
+	</div>
+
+	<input type="submit" value="Save" class="btn btn-info" (click)="saveContent()">
+	<!-- Old Submit
+	<button mat-raised-button color="primary" (click)="saveContent()">Save</button>
+	
 	<div>
 		<mat-form-field>
 		  <input matInput placeholder="Name" [(ngModel)]="node.name">
@@ -26,7 +53,7 @@
 		  <mat-datepicker #picker></mat-datepicker>
 		</mat-form-field>
 	</div>
-
+	-->
 </div>
 
 
@@ -198,9 +225,4 @@
 		</div>
 	</div>
 
-</div>
-
-
-<div>
-	<button mat-raised-button color="primary" (click)="saveContent()">Save</button>
 </div>

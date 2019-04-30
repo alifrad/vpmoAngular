@@ -1,6 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterLinkActive } from '@angular/router';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ActivatedRoute, RouterLinkActive, Router, NavigationStart } from '@angular/router';
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
+import 'rxjs/add/operator/filter';
 
+
+declare var $: any;
 
 @Component({
   selector: 'app-node-container',
@@ -10,7 +15,7 @@ import { ActivatedRoute, RouterLinkActive } from '@angular/router';
     '[class.p-24]': "contentType != 'chat'"
   }
 })
-export class NodeContainerComponent implements OnInit {
+export class NodeContainerComponent implements OnInit, OnDestroy {
 
   contentType: any;
   nodeID: any;
@@ -21,22 +26,37 @@ export class NodeContainerComponent implements OnInit {
 
     {path:'teamDashboard', label:'Dashboard'},
     {path:'tree', label:'Tree'}
-
   ];
+  _unsubscribeAll = new Subject<any>();
  
   constructor(
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) { }
 
-  ngOnInit(): void {
-    this.route.params.subscribe(params => {
-      this.contentType = params['contentType'];
-      this.nodeID = params['id']
-      this.nodeType = params['type']
-      this.path = 'node/' +  this.nodeType + '/' + this.nodeID + '/';
-    })
+  ngOnInit () {
+    var currentUrlParams = this.router.url.split("/")
+    this.contentType = currentUrlParams[currentUrlParams.length-1]
+
+    this.route.params
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe(params => {
+        this.nodeID = params['id']
+        this.nodeType = params['type']
+        this.path = 'node/' +  this.nodeType + '/' + this.nodeID + '/';
+      })
+
+    this.router.events
+      .filter(event => event instanceof NavigationStart)
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe((event:NavigationStart) => {
+        var routeParams = event.url.split("/")
+        this.contentType = routeParams[routeParams.length-1]
+      })
   }
 
-  
-
+  ngOnDestroy () {
+    this._unsubscribeAll.next();
+    this._unsubscribeAll.complete();
+  }
 }

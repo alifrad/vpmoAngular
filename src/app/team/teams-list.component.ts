@@ -9,8 +9,13 @@ import { ChatService } from 'app/chat/chat.service';
 import { Subscription } from 'rxjs';
 import { LoadingService } from '../_services/loading.service';
 import { UnreadMessagesPanelComponent } from 'app/chat/unread-messages-panel.component';
-import { FuseSidebarService } from '@fuse/components/sidebar/sidebar.service';
-import { TopicPanelService } from 'app/main/topic-panel/topic-panel.service';
+
+import { Subject, Observable } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+
+declare var $: any;
+
+/* TODO: Topic-Panel may need to be rewritten without fuse, since we're removing fuse altogether */
 
 
 @Component({
@@ -27,8 +32,9 @@ export class TeamsListComponent implements OnInit, OnDestroy {
   newTeamName: string;
   dialogRef: any;
   unreadMessages: any;
+  favoriteNodeIds: string[] = [];
 
-  unreadMessageSubscription: Subscription;
+  _unsubscribeAll = new Subject<any>();
 
   constructor(
       private authenticationService: AuthenticationService,
@@ -39,9 +45,6 @@ export class TeamsListComponent implements OnInit, OnDestroy {
       private chatService: ChatService,
       private loadingService: LoadingService,
       private bottomSheet: MatBottomSheet,
-      private _fuseSidebarService: FuseSidebarService,
-      private _topicPanelService : TopicPanelService
-
   ) { }
 
   teamTree(team: Team) {
@@ -60,14 +63,25 @@ export class TeamsListComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.getTeams()
 
-    this.unreadMessageSubscription = this.chatService.unreadMessageTracker.subscribe(unreadMessages => {
-      this.unreadMessages = unreadMessages
-      this.setUnreadMessages()
-    })
+    this.chatService.unreadMessageTracker
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe(unreadMessages => {
+        this.unreadMessages = unreadMessages
+        this.setUnreadMessages()
+      })
+
+    this.authenticationService.favoriteNodes
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe(favoriteNodes => {
+        favoriteNodes.forEach(i => {
+            this.favoriteNodeIds.push(i._id)
+        })
+      })
   }
 
   ngOnDestroy () {
-    this.unreadMessageSubscription.unsubscribe();
+    this._unsubscribeAll.next();
+    this._unsubscribeAll.complete();
   }
 
   getTeams () {
@@ -103,22 +117,6 @@ export class TeamsListComponent implements OnInit, OnDestroy {
     }
   }
 
-
-
-  openTeamCreateDialog (templateRef) {
-    let dialogRef = this.dialog.open(templateRef, {
-        width: '250px',
-    });
-    this.dialogRef = dialogRef
-
-    var self = this
-    dialogRef.afterClosed().subscribe(result => {
-      self.newTeamName = ''
-      self.dialogRef = null
-      self.getTeams()
-    });
-  }
-
   createNewTeam () {
     if (!this.newTeamName) {
       alert('Please type in a team name')
@@ -130,7 +128,12 @@ export class TeamsListComponent implements OnInit, OnDestroy {
     this.teamService.createTeam(this.newTeamName)
       .subscribe(createdTeam => {
         this.loadingService.taskFinished(taskID)
-        self.dialogRef.close()
+
+        // Adding the createdTeam to the displayed array
+        createdTeam.topic_counts = {} // This can be empty since there won't be any topics on a new object
+        this.teams.push(createdTeam)
+
+        $("#createTeam").modal("hide")
       })
   }
 
@@ -142,10 +145,7 @@ export class TeamsListComponent implements OnInit, OnDestroy {
 
   openListPanel(nodeId, topicType) {
     this.getNode(nodeId);
-  
-    this._fuseSidebarService.getSidebar('topicPanel').toggleOpen();
-    this._topicPanelService.selectedTopicType.next(topicType);
-    
+    console.log("Fuse-TopicPanel sidebar needs to be rewritten.")    
   }
 
 }

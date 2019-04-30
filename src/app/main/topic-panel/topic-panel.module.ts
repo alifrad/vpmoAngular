@@ -11,7 +11,7 @@ import { TopicPanelService } from './topic-panel.service';
     declarations: [
         TopicPanelComponent
     ],
-    providers   : [
+    providers: [
         TopicPanelService
     ],
     imports     : [

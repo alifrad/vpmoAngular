@@ -1,3 +1,117 @@
+<div>
+    <!-- createTeamModal -->
+    <div class="modal fade modal-createteam" id="createTeam" tabindex="-1" role="dialog" aria-labelledby="createTeam" aria-hidden="true">
+        <div class="modal-dialog modal-md modal-dialog-centered modal-createteam" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Create Team</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="general-form">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label>Team Name</label>
+                                <input [(ngModel)]="newTeamName" type="text" class="form-control" />
+                            </div>
+                        </div>
+                        <input (click)="createNewTeam()" type="submit" value="Create Team" class="btn btn-block btn-info">
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- createTeamModal -->
+
+    <div class="top-bar">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <!-- (click)="openTeamCreateDialog(createTeamDialog)" -->
+                <nav data-toggle="modal" data-target="#createTeam" aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">My Team</li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="col-md-4">
+                <div class="search-section">
+                    <input type="text" placeholder="Search..." class="form-control">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="article-wrap">
+        <div class="row">
+
+            <div class="col-lg-4 col-md-6" *ngFor="let team of teams">
+                <div class="article-section">
+                    <h3 (click)="getNode(team._id)" [ngClass]="{'active': favoriteNodeIds.indexOf(team.id) >= 0}"><a>{{ team.name }}</a></h3>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="count">
+                                <img src="./assets/images/icons/icon-bag.png" alt="">
+                                <span>{{ team.projects_count || 0 }}</span>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="count count-purple">
+                                <img src="./assets/images/icons/icon-check.png" alt="">
+                                <span>{{ team.topic_counts.Task || 0 }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="list-section">
+                        <ul>
+                            <li><strong>{{ team.topic_counts.Issue || 0 }}</strong> <span>Issue</span></li>
+                            <li><strong>{{ team.topic_counts.Deliverable || 0 }}</strong> <span>Deliverable</span></li>
+                            <li><strong>{{ team.topic_counts.Risk || 0 }}</strong> <span>Risk</span></li>
+                        </ul>
+                    </div>
+                    <div class="article-bot">
+                        <div class="row align-items-center">
+                            <div class="col-8">
+                                <div class="blog-users">
+                                    <ul>
+                                        <!-- TODO: Add actual member photos here -->
+                                        <li><div class="blog-user"><img src="./assets/images/img-1.png" alt=""></div></li>
+                                        <li><div class="blog-user"><img src="./assets/images/img-2.png" alt=""></div></li>
+                                        <li><div class="blog-user"><img src="./assets/images/img-3.png" alt=""></div></li>
+                                        <li><div class="blog-user"><img src="./assets/images/img-4.png" alt=""></div></li>
+                                        <li class="total-blog-users"><a href="#">+ 3</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="emai-icon-wrap"> 
+                                    <!-- TODO: Add unread messages badge here -->
+                                    <a href="#" class="email-icon"><img src="./assets/images/icons/icon-envelope2.png" alt=""></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- article-wrap -->
+
+    <!--
+    <ng-template #createTeamDialog>
+        <h4>Create Team</h4>
+        <mat-form-field class="full-width">
+            <input [(ngModel)]="newTeamName" matInput />
+        </mat-form-field>
+
+        <div style="text-align: center;" class="full-width">
+            <button (click)="createNewTeam()" mat-raised-button matTooltip="Creates the team">Create Team</button>
+        </div>
+    </ng-template>
+    -->
+</div>
+<!-- 
 <div class="header">
   My Teams
   <button mat-icon-button (click)="openTeamCreateDialog(createTeamDialog)">
@@ -49,20 +163,10 @@
       </button>
     </mat-card-content>
 
-    <!-- <mat-card-actions>
+    <COMMENT-- <mat-card-actions>
       <button mat-button (click)="getNode(team._id)">View Details</button>
-    </mat-card-actions> -->
+    </mat-card-actions> -COMMENT->
 
   </mat-card>
 </div>
-
-<ng-template #createTeamDialog>
-  <h4>Create Team</h4>
-  <mat-form-field class="full-width">
-    <input [(ngModel)]="newTeamName" matInput />
-  </mat-form-field>
-
-  <div style="text-align: center;" class="full-width">
-    <button (click)="createNewTeam()" mat-raised-button matTooltip="Creates the team">Create Team</button>
-  </div>
-</ng-template>
+-->

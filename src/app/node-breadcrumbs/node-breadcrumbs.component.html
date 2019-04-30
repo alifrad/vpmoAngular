@@ -1,24 +1,25 @@
-<div *ngIf="nodeParents.length > 0">
-	<ul *ngIf="nodeParents.length < 4">
-		<li *ngFor="let breadcrumb of nodeParents" (click)="switchToNode(breadcrumb._id, breadcrumb.node_type)">
-			{{ breadcrumb.name }}
-		</li>
-	</ul>
+<nav aria-label="breadcrumb" *ngIf="nodeParents.length > 0">
 
-	<ul *ngIf="nodeParents.length >= 4">
-		<li (click)="switchToNode(nodeParents[0]._id, nodeParents[0].node_type)">
+    <ol class="breadcrumb" *ngIf="nodeParents.length < 4">
+        <li *ngFor="let breadcrumb of nodeParents" (click)="switchToNode(breadcrumb._id, breadcrumb.node_type)" class="breadcrumb-item" [ngClass]="{'active': nodeParents.reverse().indexOf(breadcrumb) == 0}">
+        	{{ breadcrumb.name }}
+       	</li>
+    </ol>
+
+	<ol *ngIf="nodeParents.length >= 4">
+		<li class="breadcrumb-item" (click)="switchToNode(nodeParents[0]._id, nodeParents[0].node_type)">
 			{{ nodeParents[0].name }}
 		</li>
-		<li (click)="openNodeParentsPanel(nodeParentsPanel)">
+		<li class="breadcrumb-item" (click)="openNodeParentsPanel(nodeParentsPanel)">
 			. . . . 
 		</li>
-		<li (click)="switchToNode(nodeParents[nodeParents.length-2]._id, nodeParents[nodeParents.length-2].node_type)">
+		<li  class="breadcrumb-item" (click)="switchToNode(nodeParents[nodeParents.length-2]._id, nodeParents[nodeParents.length-2].node_type)">
 			{{ nodeParents[nodeParents.length-2].name }}
 		</li>
-		<li (click)="switchToNode(nodeParents[nodeParents.length-1]._id, nodeParents[nodeParents.length-1].node_type)">
+		<li  class="breadcrumb-item" (click)="switchToNode(nodeParents[nodeParents.length-1]._id, nodeParents[nodeParents.length-1].node_type)">
 			{{ nodeParents[nodeParents.length-1].name }}
 		</li>
-	</ul>
+	</ol>
 
 	<ng-template #nodeParentsPanel>
 	    <mat-nav-list>
@@ -27,4 +28,4 @@
 			</a>
 		</mat-nav-list>
 	</ng-template>
-</div>
+</nav>

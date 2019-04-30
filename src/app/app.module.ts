@@ -11,13 +11,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import 'hammerjs';
 
-import { FuseModule } from '@fuse/fuse.module';
-import { FuseSharedModule } from '@fuse/shared.module';
-import { FuseSidebarModule, FuseThemeOptionsModule } from '@fuse/components'
-import { fuseConfig } from './fuse-config';
-
 import { AppComponent } from './app.component';
-import { FuseMainModule } from './main/main.module';
 import { UserModule } from './user/user.module';
 import { ProjectModule } from './project/project.module';
 import { ChatModule } from './chat/chat.module';
@@ -86,9 +80,9 @@ import { NavigationComponent } from './navigation/navigation.component';
 import { CustomHttpClient } from './_services/custom-http.service';
 import { RouterTabModule } from './navigation/router-tab.module';
 
-
 const tempUser = null;
 
+/*
 // configure Bugsnag ASAP, before any other imports
 const bugsnagClient = bugsnag('API_KEY');
 
@@ -97,6 +91,7 @@ const bugsnagClient = bugsnag('API_KEY');
 export function errorHandlerFactory() {
   return new BugsnagErrorHandler(bugsnagClient);
 }
+*/
 
 
 @NgModule({
@@ -109,12 +104,6 @@ export function errorHandlerFactory() {
         HttpClientModule,
         RouterModule.forRoot(routes),
         TranslateModule.forRoot(),
-        // Fuse Main and Shared modules
-        FuseModule.forRoot(fuseConfig),
-        FuseSharedModule,
-        FuseMainModule,
-        FuseSidebarModule,
-        FuseThemeOptionsModule,
         TeamModule,
         UserModule,
         ProjectModule,
@@ -138,16 +127,12 @@ export function errorHandlerFactory() {
         AppComponent,
         ErrorComponent,
         AlertComponent,
-        LoadingComponent,
-        NavigationComponent,
-        
-
+        LoadingComponent
     ],
     // The main application view, called the root component, which hosts all other app views
     // Only the root NgModule should set the bootstrap property
-    bootstrap   : [
-        AppComponent,
-        
+    bootstrap: [
+        AppComponent
     ],
     // The subset of declarations that should be visible and 
     // usable in the component templatesof other NgModules

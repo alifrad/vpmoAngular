@@ -37,6 +37,8 @@ import { NodeEditComponent } from './node-edit.component';
 import { NodeContainerComponent } from './node-container.component';
 import { NodeShortcutsComponent } from './node-shortcuts.component';
 import { RouterTabModule } from 'app/navigation/router-tab.module';
+import { SidebarModule } from '../sidebar/sidebar.module';
+import { TopicPanelModule } from "../main/topic-panel/topic-panel.module";
 
 
 @NgModule({
@@ -93,7 +95,9 @@ import { RouterTabModule } from 'app/navigation/router-tab.module';
     UserModule,
     ScrumboardModule,
     TeamModule,
-    RouterTabModule
+    RouterTabModule,
+    SidebarModule,
+    TopicPanelModule
   ],
   providers: [
     NodeService,

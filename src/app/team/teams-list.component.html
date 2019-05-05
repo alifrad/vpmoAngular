@@ -30,7 +30,7 @@
         <div class="row align-items-center">
             <div class="col-md-8">
                 <!-- (click)="openTeamCreateDialog(createTeamDialog)" -->
-                <nav data-toggle="modal" data-target="#createTeam" aria-label="breadcrumb">
+                <nav (click)="openTeamCreateDialog(createTeamDialog)" aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">My Team</li>
                     </ol>
@@ -97,76 +97,17 @@
             </div>
         </div>
     </div><!-- article-wrap -->
+</div>
 
-    <!--
-    <ng-template #createTeamDialog>
-        <h4>Create Team</h4>
-        <mat-form-field class="full-width">
-            <input [(ngModel)]="newTeamName" matInput />
-        </mat-form-field>
-
-        <div style="text-align: center;" class="full-width">
-            <button (click)="createNewTeam()" mat-raised-button matTooltip="Creates the team">Create Team</button>
+<ng-template #createTeamDialog>
+    <h4>Create Team</h4>
+    <div class="general-form">
+        <div class="row">
+            <div class="col-md-12">
+                <label>Team Name</label>
+                <input [(ngModel)]="newTeamName" type="text" class="form-control" />
+            </div>
         </div>
-    </ng-template>
-    -->
-</div>
-<!-- 
-<div class="header">
-  My Teams
-  <button mat-icon-button (click)="openTeamCreateDialog(createTeamDialog)">
-    <mat-icon> add_circle_outline </mat-icon>
-  </button>
-  
-</div>
-
-<div class="card-container">
-  <mat-card class="dashboard-card" *ngFor='let team of teams' style="width:100%">
-    <mat-card-header>
-      <mat-card-title>
-        <button mat-button (click)="getNode(team._id)">
-          {{team.name}} <span class="node-label-left team-label">team</span>
-        </button>
-
-        <span style="position: absolute; right: 10px;" 
-          (click)="openUnreadMessagesPanel(team)">
-          <chat-icon [unreadMessages]="team.unreadMessages"></chat-icon>
-        </span>
-
-      </mat-card-title>
-    </mat-card-header>
-
-    <mat-card-content class="node-counts">
-      <a mat-stroked-button [routerLink]="['/node/Project/', team._id, 'permissions']"> 
-        {{ team.members_count }} 
-        <span class="material-icons">person</span> 
-      </a>
-      <a mat-stroked-button [routerLink]="['/node/Team/', team._id, 'teamDashboard']">
-         {{ team.projects_count || 0 }} 
-         <span class="node-label-btm project-label">Project</span>
-      </a>
-      <button mat-stroked-button (click)="openListPanel(team._id, 'Issue')">
-        {{ team.topic_counts.Issue || 0 }} 
-        <span class="node-label-btm issue-label">issue</span>
-      </button>
-      <button mat-stroked-button (click)="openListPanel(team._id, 'Risk')">
-        {{ team.topic_counts.Risk || 0 }} 
-        <span class="node-label-btm risk-label">risk</span> 
-      </button>
-      <button mat-stroked-button (click)="openListPanel(team._id, 'Deliverable')">
-        {{ team.topic_counts.Deliverable || 0 }} 
-        <span class="node-label-btm deliverable-label">Deliverable</span>
-      </button>
-      <button mat-stroked-button (click)="openListPanel(team._id, 'Task')">
-        {{ team.topic_counts.Task || 0 }} 
-        <span class="node-label-btm task-label">Task</span> 
-      </button>
-    </mat-card-content>
-
-    <COMMENT-- <mat-card-actions>
-      <button mat-button (click)="getNode(team._id)">View Details</button>
-    </mat-card-actions> -COMMENT->
-
-  </mat-card>
-</div>
--->
+        <input (click)="createNewTeam()" type="submit" value="Create Team" class="btn btn-block btn-info">
+    </div>
+</ng-template>

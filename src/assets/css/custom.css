@@ -1,0 +1,50 @@
+/* This file contains the styles created to overlay certain mat-theme and style.css styles */
+
+.modal-createteam {
+	width: 500px;
+}
+
+.datepicker-group {
+	display: flex;
+}
+
+.datepicker-group mat-datepicker-toggle {
+	background-color: #f7f9fc;
+}
+
+.datepicker-group.disabled mat-datepicker-toggle {
+	background-color: #e9ecef;
+}
+
+.table-tree .node-wrapper {
+	padding: 12px 20px;
+	border: none;
+	border-bottom: 1px solid #eff0f2;
+}
+
+.node-wrapper .node-row {
+	font-size: 14px;
+	font-weight: 500;
+	align-items: center;
+	border-bottom: 1px solid #eff0f2;
+}
+
+.node-wrapper .node-row.top-level-node {
+	font-weight: 600;
+	background-color: #f7f9fc;
+}
+
+.node-collapse-icon {
+	display: block;
+	width: 13px;
+    height: 13px;
+	background: url(../images/icons/icon-add.png) no-repeat;
+}
+
+.node-controls {
+	text-align: right;
+}
+
+.tree-children {
+	padding-left: 20px;
+}

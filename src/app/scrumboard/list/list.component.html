@@ -1,6 +1,30 @@
+<div class="board-section">
+    <div class="board-title">
+        <scrumboard-edit-list-name
+            [list]="list"
+            (listNameChanged)="onListNameChanged($event)">
+        </scrumboard-edit-list-name> <!-- This contains the title -->
+
+        <div class="more-wrap">
+            <a [matMenuTriggerFor]="listMenu" class="more-link"></a>
+        </div>
+        <mat-menu #listMenu="matMenu">
+            <button mat-menu-item (click)="removeList(list._id)">Remove List</button>
+        </mat-menu>
+    </div>
+    <div class="board-body" cdkDropList [cdkDropListData]="list.tasks" (cdkDropListDropped)="onDrop($event)" [id]="list._id" [cdkDropListConnectedTo]="listIds()"> <!-- TODO: This needs to be sortable -->
+        <scrumboard-card 
+           (click)="openCardDialog(task)"
+           class="scrumboard-card ngx-dnd-item"
+           *ngFor="let task of list.tasks"
+           [card]="task"
+           cdkDrag>
+        </scrumboard-card> 
+    </div>
+</div>
+<!--
 <div class="list mat-elevation-z1" fxLayout="column">
 
-    <!-- LIST HEADER -->
     <div class="list-header" fxFlex fxLayout="row" fxLayoutAlign="space-between center">
 
         <scrumboard-edit-list-name
@@ -19,9 +43,7 @@
         </div>
 
     </div>
-    <!-- / LIST HEADER -->
 
-    <!-- LIST CONTENT -->
     <div class="list-content" fxLayout="column">
 
         <div class="list-cards ngx-dnd-container"
@@ -36,19 +58,6 @@
             </scrumboard-card>
         </div>
     </div>
-    <!-- / LIST CONTENT -->
-
-    <!-- NEW CARD BUTTON-->
-    <!-- Disabled for now
-    <div class="list-footer">
-        <div class="add-card-button"
-            (click)="openCardCreateDialog()"
-            fxLayout="row" fxLayoutAlign="start center">
-            <mat-icon class="s-20">add</mat-icon>
-            <div>Add a card</div>
-        </div>
-    </div>
-    -->
-    <!-- / NEW CARD BUTTON-->
 
 </div>
+-->

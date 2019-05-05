@@ -7,6 +7,7 @@ import { PermissionsService } from '../permissions/permissions.service'
 import {MatDialog, MatDialogConfig} from '@angular/material';
 import { ChangeDetectorRef } from '@angular/core';
 import { NodeService } from '../node/node.service';
+import { LoadingService } from '../_services/loading.service';
 
 @Component({
   selector: 'app-documents-list',
@@ -25,7 +26,8 @@ export class DocumentsListComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private cd: ChangeDetectorRef,
     private route: ActivatedRoute,
-    private nodeService: NodeService
+    private nodeService: NodeService,
+    private loadingService: LoadingService
   ) { }
 
   nodeID: string;
@@ -77,6 +79,7 @@ export class DocumentsListComponent implements OnInit, OnDestroy {
 
     console.log(e, files)
     for (var index=0; index < files.length; index++) {
+      var taskId = this.loadingService.startTask()
       var file = files[index]
       self._documentsService.getFileUploadUrl(self.nodeID, self.nodeType, file.name).subscribe(response => {
         var documentName = response.file_name
@@ -84,6 +87,7 @@ export class DocumentsListComponent implements OnInit, OnDestroy {
           self._documentsService.createDocument(self.nodeID, self.nodeType, documentName).subscribe(currentDocuments => {
             self.uploadedDocuments = currentDocuments
           })
+          .add(() => this.loadingService.taskFinished(taskId))
         })
       })
     }

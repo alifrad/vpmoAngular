@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import {
     MatButtonModule, MatCheckboxModule, MatChipsModule, MatDatepickerModule, MatDialogModule, MatFormFieldModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule,
     MatProgressBarModule, MatRippleModule, MatSidenavModule, MatToolbarModule, MatTooltipModule
@@ -7,9 +8,6 @@ import {
 import { NgxDnDModule } from '@swimlane/ngx-dnd';
 
 import { UserModule } from '../user/user.module';
-
-import { FuseSharedModule } from '@fuse/shared.module';
-import { FuseConfirmDialogModule, FuseMaterialColorPickerModule } from '@fuse/components';
 
 import { BoardResolve, ScrumboardService } from './scrumboard.service';
 import { ScrumboardComponent } from './scrumboard.component';
@@ -20,6 +18,8 @@ import { ScrumboardCardComponent } from './list/card/card.component';
 import { ScrumboardAddListComponent } from './add-list/add-list.component';
 import { ScrumboardCardDialogComponent } from './dialogs/card/card.component';
 import { ScrumboardLabelSelectorComponent } from './dialogs/card/label-selector/label-selector.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 const routes: Routes = [
     {
@@ -32,7 +32,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-    declarations   : [
+    declarations: [
         ScrumboardComponent,
         ScrumboardAddListComponent,
         ScrumboardListComponent,
@@ -42,9 +42,11 @@ const routes: Routes = [
         ScrumboardLabelSelectorComponent,
         ScrumboardCardComponent
     ],
-    imports        : [
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        FormsModule,
         RouterModule.forChild(routes),
-
         MatButtonModule,
         MatCheckboxModule,
         MatChipsModule,
@@ -64,11 +66,9 @@ const routes: Routes = [
         NgxDnDModule,
         UserModule,
 
-        FuseSharedModule,
-        FuseConfirmDialogModule,
-        FuseMaterialColorPickerModule
+        DragDropModule
     ],
-    providers      : [
+    providers: [
         ScrumboardService,
         BoardResolve
     ],

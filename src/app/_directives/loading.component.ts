@@ -1,5 +1,7 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { LoadingService } from '../_services/loading.service';
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
     // moduleId: module.id,
@@ -8,39 +10,49 @@ import { LoadingService } from '../_services/loading.service';
     styleUrls: ['loading.component.css',]
 })
 
-export class LoadingComponent {
+export class LoadingComponent implements OnInit, OnDestroy {
     message: string = 'Loading!';
     loadingObjects: string[] = [];
-    // Timeout of 10 seconds
-    timeout: number = 1000;
+    // Timeout of 30 seconds
+    timeout: number = 30000;
+
+    _unsubscribeAll = new Subject<any>();
 
     constructor(private _loadingService: LoadingService) {
     }
 
     ngOnInit() {
-	    this._loadingService.onLoadStarted.subscribe(loadingObject => {
-            if (loadingObject !== null && typeof(loadingObject) != 'string') {
-                // Only timeout reasons have object loadingObjects
-                if (this.loadingObjects.indexOf(loadingObject.taskID) >= 0) {
-                    var index = this.loadingObjects.indexOf(loadingObject.taskID)
-                    this.loadingObjects.splice(index, 1)
-                }
-            } else if (loadingObject !== null && loadingObject !== 'CLEAR') {
-                var index = this.loadingObjects.indexOf(loadingObject)
-                if (index < 0) {
-                    this.loadingObjects.push(loadingObject)
-                    var that = this
-                    // Set interval to toggle the loading task OFF after a specified timeout
-                    setInterval(function () {
-                        that._loadingService.taskTimedout(loadingObject)
-                    }, this.timeout)
+	    this._loadingService.onLoadStarted
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe(loadingObject => {
+                if (loadingObject !== null && typeof(loadingObject) != 'string') {
+                    // Only timeout reasons have object loadingObjects
+                    if (this.loadingObjects.indexOf(loadingObject.taskID) >= 0) {
+                        var index = this.loadingObjects.indexOf(loadingObject.taskID)
+                        this.loadingObjects.splice(index, 1)
+                    }
+                } else if (loadingObject !== null && loadingObject !== 'CLEAR') {
+                    var index = this.loadingObjects.indexOf(loadingObject)
+                    if (index < 0) {
+                        this.loadingObjects.push(loadingObject)
+                        var that = this
+                        // Set interval to toggle the loading task OFF after a specified timeout
+                        setInterval(function () {
+                            that._loadingService.taskTimedout(loadingObject)
+                        }, this.timeout)
 
-                } else {
-                    this.loadingObjects.splice(index, 1)
+                    } else {
+                        this.loadingObjects.splice(index, 1)
+                    }
+                } else if (loadingObject == 'CLEAR') {
+                    this.loadingObjects = []
                 }
-            } else if (loadingObject == 'CLEAR') {
-                this.loadingObjects = []
-            }
-	    })
-	  }
+    	    })
+	}
+
+    ngOnDestroy () {
+        this._unsubscribeAll.next();
+        this._unsubscribeAll.complete();
+    }
+
 }

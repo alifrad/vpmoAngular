@@ -127,7 +127,7 @@ export class ScrumboardService
 
     updateTaskIndexes(list): Promise<any> {
         return new Promise((resolve, reject) => {
-            this.http.put(this.taskReorderUrl+'/'+list._id+'/', list.tasks)
+            this.http.put(this.taskReorderUrl+list._id+'/', list.tasks)
                 .subscribe(response => {
                     resolve(this.lists)
                 }, reject)

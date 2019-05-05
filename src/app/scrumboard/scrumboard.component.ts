@@ -8,6 +8,7 @@ import { fuseAnimations } from '@fuse/animations';
 
 import { ScrumboardService } from './scrumboard.service';
 import { NodeService } from '../node/node.service';
+import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 
 @Component({
     selector     : 'app-scrumboard',
@@ -34,6 +35,14 @@ export class ScrumboardComponent implements OnInit, OnDestroy
     {
         // Set the private defaults
         this._unsubscribeAll = new Subject();
+    }
+
+    get listIds () {
+        var ids = [];
+        this.lists.forEach(list => {
+            ids.push(list._id)
+        })
+        return ids
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -91,7 +100,7 @@ export class ScrumboardComponent implements OnInit, OnDestroy
      */
     onDrop(ev): void
     {
-        console.log(this.lists)
+        moveItemInArray(this.lists, ev.previousIndex, ev.currentIndex)
         this._scrumboardService.updateTaskListsIndexes(this.lists)
     }
 }

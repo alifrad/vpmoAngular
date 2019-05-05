@@ -16,7 +16,6 @@ import { LoadingService } from 'app/_services/loading.service';
 
 export class LoginComponent implements OnInit
 {    
-    loading = false;
     returnUrl: string;
     loginForm: any;
 
@@ -57,7 +56,7 @@ export class LoginComponent implements OnInit
 
 
     login() {
-        this.loading = true;
+        var loadingTaskID = this.loadingService.startTask()
         this.authenticationService.login(this.email.value, this.password.value)
             .subscribe(
                 data => {
@@ -70,7 +69,8 @@ export class LoginComponent implements OnInit
                 error => {
                   this.alertService.error(error);
                   this.errorMessage = error
-                  this.loading = false;
-                });
+                }
+            )
+            .add(() => this.loadingService.taskFinished(loadingTaskID))
     }
 }

@@ -117,6 +117,19 @@ export class TeamsListComponent implements OnInit, OnDestroy {
     }
   }
 
+  openTeamCreateDialog (templateRef) {
+    let dialogRef = this.dialog.open(templateRef, {
+        panelClass: "modal-createteam"
+    });
+    this.dialogRef = dialogRef
+
+    var self = this
+    dialogRef.afterClosed().subscribe(result => {
+      self.newTeamName = ''
+      self.dialogRef = null
+    });
+  }
+
   createNewTeam () {
     if (!this.newTeamName) {
       alert('Please type in a team name')

@@ -1,6 +1,7 @@
 <!-- Team Edit Block -->
 <div class="general-form">
 
+	<!-- Team Edit Block -->
 	<div *ngIf="node.node_type == 'Team'">
 
 	    <div class="general-group">
@@ -17,91 +18,227 @@
 	    </div>
 	    <div class="general-group">
 	        <label>Created At</label>
-	        <div class="datepiker-wrap">
-	            <input type="text" [(ngModel)]="node.created_at" class="form-control datepicker">
-	        </div>
+	        <div class="datepicker-group disabled">
+	            <input type="text" [(ngModel)]="node.created_at" [matDatepicker]="createdAtPicker" class="form-control datepicker" disabled>
+	            <mat-datepicker-toggle matSuffix [for]="createdAtPicker"></mat-datepicker-toggle>
+		  		<mat-datepicker #createdAtPicker></mat-datepicker>
+		  	</div>
 	    </div>
 
 	</div>
+	<!-- Team Edit Block End -->
+
+	<!-- All node types except teams need to be tested -->
+
+	<!-- Project Edit Block -->
+	<div *ngIf="node.node_type == 'Project'">
+
+		<div class="general-group">
+	        <label>Name</label>
+	        <input type="text" [(ngModel)]="node.name" class="form-control">
+	    </div>
+
+		<div class="general-group">
+	        <label>Node Description</label>
+	        <input type="text" [(ngModel)]="node.description" class="form-control">
+	    </div>
+
+		<div class="quill-container">
+			<label>Content</label>
+			<quill-editor 
+				[sanitize]="true" 
+				[modules]="editor_modules"
+				[(ngModel)]="node.content">
+			</quill-editor>
+		</div>
+
+		<div class="general-group">
+	        <label>Planned Start</label>
+	        <div class="datepicker-group">
+	            <input type="text" [(ngModel)]="node.start" [matDatepicker]="plannedStartPicker" class="form-control datepicker">
+	            <mat-datepicker-toggle matSuffix [for]="plannedStartPicker"></mat-datepicker-toggle>
+		  		<mat-datepicker #plannedStartPicker></mat-datepicker>
+		  	</div>
+	    </div>
+
+		<div class="general-group">
+	        <label>Created At</label>
+	        <div class="datepicker-group disabled">
+	            <input type="text" [(ngModel)]="node.created_at" [matDatepicker]="createdAtPicker" class="form-control datepicker" disabled>
+	            <mat-datepicker-toggle matSuffix [for]="createdAtPicker"></mat-datepicker-toggle>
+		  		<mat-datepicker #createdAtPicker></mat-datepicker>
+		  	</div>
+	    </div>
+
+	</div>
+	<!-- Project Edit Block End -->
+
+	<!-- Topic Edit Block -->
+	<div *ngIf="node.node_type == 'Topic'">
+
+		<!-- Deliverable edit block -->
+		<div *ngIf="node.topic_type == 'Deliverable'">
+			<div class="general-group">
+		        <label>Name</label>
+		        <input type="text" [(ngModel)]="node.name" class="form-control">
+		    </div>
+
+			<div class="quill-container">
+				<label>Content</label>
+				<quill-editor [sanitize]="true" [(ngModel)]="node.content"></quill-editor>
+			</div>
+
+			<div class="general-group">
+		        <label>Due Date</label>
+		        <div class="datepicker-group">
+		            <input type="text" [(ngModel)]="node.due_date" [matDatepicker]="dueDatePicker" class="form-control datepicker">
+		            <mat-datepicker-toggle matSuffix [for]="dueDatePicker"></mat-datepicker-toggle>
+			  		<mat-datepicker #dueDatePicker></mat-datepicker>
+			  	</div>
+		    </div>
+		</div>
+		<!-- Deliverable edit block end -->
+
+		<!-- Issue edit block -->
+		<div *ngIf="node.topic_type == 'Issue'">
+			<div class="general-group">
+		        <label>Name</label>
+		        <input type="text" [(ngModel)]="node.name" class="form-control">
+		    </div>
+
+			<div class="quill-container">
+				<label>Content</label>
+				<quill-editor [sanitize]="true" [(ngModel)]="node.content"></quill-editor>
+			</div>
+
+			<!-- TODO - create a assignee field (user select with a dropdown list search) -->
+
+			<div class="general-group">
+		        <label>Issue Severity</label>
+		        <select [(ngModel)]="node.severity" class="form-control">
+		        	<option *ngFor="let severity of severityList" [value]="severity.value">
+		        		{{ severity.text }}
+		        	</option>
+		        </select>
+		    </div>
+		    <!--
+			<div>
+				<mat-form-field class="full-width">
+					<mat-select matInput placeholder="issue severity" [(ngModel)]="node.severity">
+						<mat-option *ngFor="let severity of severityList" [value]="severity.value">
+							{{ severity.text }}
+						</mat-option>
+					</mat-select>
+				</mat-form-field>
+			</div>
+			-->
+
+			<div class="general-group">
+		        <label>Due Date</label>
+		        <div class="datepicker-group">
+		            <input type="text" [(ngModel)]="node.due_date" [matDatepicker]="dueDatePicker" class="form-control datepicker">
+		            <mat-datepicker-toggle matSuffix [for]="dueDatePicker"></mat-datepicker-toggle>
+			  		<mat-datepicker #dueDatePicker></mat-datepicker>
+			  	</div>
+		    </div>
+		</div>
+		<!-- Issue Edit block end -->
+
+		<!-- Risk edit block -->
+		<div *ngIf="node.topic_type == 'Risk'">
+			<div class="general-group">
+		        <label>Name</label>
+		        <input type="text" [(ngModel)]="node.name" class="form-control">
+		    </div>
+
+			<div class="quill-container">
+				<label>Content</label>
+				<quill-editor [sanitize]="true" [(ngModel)]="node.content"></quill-editor>
+			</div>
+
+			<!-- TODO - create a assignee field (user select with a dropdown list search) -->
+
+			<div class="general-group">
+		        <label>Risk Impact</label>
+		        <select [(ngModel)]="node.impact" class="form-control">
+		        	<option *ngFor="let impact of impactList" [value]="impact.value">
+		        		{{ impact.text }}
+		        	</option>
+		        </select>
+		    </div>
+		    <!--
+			<div>
+				<mat-form-field class="full-width">
+					<mat-select matInput placeholder="Risk Impact" [(ngModel)]="node.impact">
+						<mat-option *ngFor="let impact of impactList" [value]="impact.value">
+							{{ impact.text }}
+						</mat-option>
+					</mat-select>
+				</mat-form-field>
+			</div>
+			-->
+
+			<div class="general-group">
+		        <label>Risk Probability</label>
+		        <select [(ngModel)]="node.probability" class="form-control">
+		        	<option *ngFor="let probability of probabilityList" [value]="probability.value">
+		        		{{ probability.text }}
+		        	</option>
+		        </select>
+		    </div>
+		    <!--
+			<div>
+				<mat-form-field class="full-width">
+					<mat-select matInput placeholder="Risk Probability" [(ngModel)]="node.probability">
+						<mat-option *ngFor="let probability of probabilityList" [value]="probability.value">
+							{{ probability.text }}
+						</mat-option>
+					</mat-select>
+				</mat-form-field>
+			</div>
+			-->
+
+			<div class="general-group">
+		        <label>Due Date</label>
+		        <div class="datepicker-group">
+		            <input type="text" [(ngModel)]="node.due_date" [matDatepicker]="dueDatePicker" class="form-control datepicker">
+		            <mat-datepicker-toggle matSuffix [for]="dueDatePicker"></mat-datepicker-toggle>
+			  		<mat-datepicker #dueDatePicker></mat-datepicker>
+			  	</div>
+		    </div>
+		</div>
+		<!-- Risk edit block end -->
+
+		<!-- Meeting edit block -->
+		<div *ngIf="node.topic_type == 'Meeting'">
+			<div class="general-group">
+		        <label>Name</label>
+		        <input type="text" [(ngModel)]="node.name" class="form-control">
+		    </div>
+
+			<div class="quill-container">
+				<label>Content</label>
+				<quill-editor [sanitize]="true" [(ngModel)]="node.content"></quill-editor>
+			</div>
+
+			<!-- TODO - create a assignee field (user select with a dropdown list search) -->
+			
+			
+
+			<div>
+				<!-- mat datetime picker for meeting time and date -->
+			</div>
+		</div>
+		<!-- Meeting edit block end -->
+
+	</div>
+	<!-- Topic Block End -->
 
 	<input type="submit" value="Save" class="btn btn-info" (click)="saveContent()">
-	<!-- Old Submit
-	<button mat-raised-button color="primary" (click)="saveContent()">Save</button>
-	
-	<div>
-		<mat-form-field>
-		  <input matInput placeholder="Name" [(ngModel)]="node.name">
-		</mat-form-field>
-	</div>
-
-	<div>
-		<mat-form-field>
-		  <input matInput placeholder="User Linked" [(ngModel)]="node.user_linked" disabled>
-		</mat-form-field>
-	</div>
-
-	<div>
-		<mat-form-field>
-		  <input matInput placeholder="User Team" [(ngModel)]="node.user_team">
-		</mat-form-field>
-	</div>
-	
-	<div>
-		<mat-form-field>
-		  <input matInput [matDatepicker]="picker" placeholder="Created At" [(ngModel)]="node.created_at" disabled>
-		  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-		  <mat-datepicker #picker></mat-datepicker>
-		</mat-form-field>
-	</div>
-	-->
-</div>
-
-
-<!-- Project Edit Block -->
-<div *ngIf="node.node_type == 'Project'">
-
-	<div>
-		<mat-form-field>
-		  <input matInput placeholder="Name" [(ngModel)]="node.name">
-		</mat-form-field>
-	</div>
-
-	<div>
-		<mat-form-field>
-		  <input matInput placeholder="Node Description" [(ngModel)]="node.description">
-		</mat-form-field>
-	</div>
-
-	<div class="quill-container">
-		<label>Content</label>
-		<quill-editor 
-			[sanitize]="true" 
-			[modules]="editor_modules"
-			[(ngModel)]="node.content">
-		</quill-editor>
-	</div>
-
-	<div>
-		<mat-form-field>
-		  <input matInput [matDatepicker]="startPicker" placeholder="Planned Start" [(ngModel)]="node.start">
-		  <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
-		  <mat-datepicker #startPicker></mat-datepicker>
-		</mat-form-field>
-	</div>
-
-	<div>
-		<mat-form-field>
-		  <input matInput [matDatepicker]="createdAtPicker" placeholder="Created At" [(ngModel)]="node.created_at" disabled>
-		  <mat-datepicker-toggle matSuffix [for]="createdAtPicker"></mat-datepicker-toggle>
-		  <mat-datepicker #createdAtPicker></mat-datepicker>
-		</mat-form-field>
-	</div>
-
 </div>
 
 
 <!-- Topic Edit Block -->
-
 <div *ngIf="node.node_type == 'Topic'">
 	<!-- Deliverable edit block -->
 	<div *ngIf="node.topic_type == 'Deliverable'">

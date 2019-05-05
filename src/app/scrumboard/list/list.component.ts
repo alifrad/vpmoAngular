@@ -10,6 +10,7 @@ import { FusePerfectScrollbarDirective } from '@fuse/directives/fuse-perfect-scr
 import { ScrumboardService } from '../scrumboard.service';
 import { ScrumboardCardDialogComponent } from '../dialogs/card/card.component';
 import { ScrumboardAddCardComponent } from './add-card/add-card.component';
+import { CdkDragDrop, moveItemInArray, transferArrayItem  } from '@angular/cdk/drag-drop';
 
 @Component({
     selector     : 'scrumboard-list',
@@ -26,6 +27,9 @@ export class ScrumboardListComponent implements OnInit, OnDestroy
     list;
 
     @Input()
+    allListIds;
+
+    @Input()
     nodeID;
 
     @Input()
@@ -33,6 +37,16 @@ export class ScrumboardListComponent implements OnInit, OnDestroy
 
     @ViewChild(FusePerfectScrollbarDirective)
     listScroll: FusePerfectScrollbarDirective;
+
+    listIds () {
+        var ids = [];
+        this.allListIds.forEach(i => {
+            if (i != this.list._id) {
+                ids.push(i)
+            } 
+        })
+        return ids
+    }
 
     confirmDialogRef: MatDialogRef<FuseConfirmDialogComponent>;
 
@@ -196,9 +210,19 @@ export class ScrumboardListComponent implements OnInit, OnDestroy
      *
      * @param ev
      */
-    onDrop(ev): void
+    onDrop(event): void
     {
+        console.log(event)
+        if (event.previousContainer == event.container) {
+            moveItemInArray(this.list.tasks, event.previousIndex, event.currentIndex)
+        } else {
+            transferArrayItem(event.previousContainer.data,
+                            event.container.data,
+                            event.previousIndex,
+                            event.currentIndex)
+        }
         this._scrumboardService.updateTaskIndexes(this.list)
+        
         // this._scrumboardService.updateBoard();
     }
 }

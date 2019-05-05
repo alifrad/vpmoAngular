@@ -1,4 +1,4 @@
-<div class="chat-wrap">
+<div class="chat-wrap" #chatContainer>
 
 	<div class="chat-section" *ngFor="let message of messages; let i = index" [ngClass]="{
 					'me': message.author === currentUser.username,
@@ -6,7 +6,7 @@
                     'last-of-group': isLastMessageOfGroup(message, i)
 				}">
         <div class="chat-avatar">
-        	<img *ngIf="message.attributes.authorAvatar  == null" src="./assets/images/img-1.png" class="avatar"/>
+        	<img *ngIf="message.attributes.authorAvatar  == null" src="./assets/images/user.png" class="avatar"/>
         	<img *ngIf="message.attributes.authorAvatar  != null" [src]="message.attributes.authorAvatar" class="avatar"/>
         </div>
         <div class="chat-title">
@@ -17,14 +17,14 @@
             <p [innerHTML]="message.body"></p>
         </div>
     </div>
-
-    <div class="chat-message">
-        <input [(ngModel)]="chatMsg" type="text" placeholder="Type message..." class="form-control">
-        <input type="submit" (click)="sendMessage(chatMsg); chatMsg=''" value="Send" class="btn btn-info">
-    </div>
-
 </div>
 
+ <form #replyForm="ngForm"
+    (ngSubmit)="sendMessage(chatMsg); chatMsg=''">
+    <input name="chatMsg" [(ngModel)]="chatMsg" type="text" placeholder="Type message..." class="form-control">
+    <input type="submit" value="Send" class="btn btn-info">
+</form>
+{{ chatMsg }}
 <!--
 <div class="chat" *ngIf="canChat()">
 

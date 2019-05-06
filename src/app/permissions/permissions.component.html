@@ -16,8 +16,8 @@
 			<tbody>
 				<tr *ngFor="let user of userList">
 					<td>
-						<img *ngIf="user != null && user.avatar == null" src="./assets/images/user.png" alt="">
-						<img *ngIf="user != null && user.avatar != null" [src]="user.avatar" alt="">
+						<img class="avatar" *ngIf="user != null && user.avatar == null" src="./assets/images/user.png" alt="">
+						<img class="avatar" *ngIf="user != null && user.avatar != null" [src]="user.avatar" alt="">
 						<span>{{ user.fullname }}</span>
 					</td>
 					<td>

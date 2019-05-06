@@ -773,6 +773,12 @@ input[disabled] {
     padding: 0 25px;
     margin: 0 0 40px;
     position: relative;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.secondary-nav > div {
+    width: 14.28%;
 }
 
 .secondary-nav a {
@@ -798,17 +804,18 @@ input[disabled] {
 
 .secondary-nav a span {
     display: inline-block;
-    padding: 0 0 16px 28px;
     position: relative;
+    padding: 30px 0 14px 0;
 }
 
 .secondary-nav a span:before {
     content: " ";
     position: absolute;
-    left: 0;
-    top: 1px;
     width: 21px;
     height: 21px;
+    left: 50%;
+    margin-left: -11px;
+    top: 0;
 }
 
 .secondary-nav a.details span:before {
@@ -1485,24 +1492,6 @@ input[disabled] {
 }
 
 @media (min-width:1300px) {
-    .secondary-nav {
-        display: flex;
-        flex-wrap: wrap;
-    }
-
-    .secondary-nav > div {
-        width: 14.28%;
-    }
-
-    .secondary-nav a span {
-        padding: 30px 0 14px 0;
-    }
-
-    .secondary-nav a span:before {
-        left: 50%;
-        margin-left: -11px;
-        top: 0;
-    }
 
     .slick-prev, .slick-next {
         top: 20px;

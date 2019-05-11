@@ -6,14 +6,20 @@
 
 .datepicker-group {
 	display: flex;
+	position: relative;
 }
 
 .datepicker-group mat-datepicker-toggle {
-	background-color: #f7f9fc;
+	background-color: transparent;
+	position: absolute;
+	right: 10px;
+	top: 5px;
 }
 
-.datepicker-group.disabled mat-datepicker-toggle {
-	background-color: #e9ecef;
+@media (max-width: 767px) {
+	.datepicker-group mat-datepicker-toggle {
+		top: 0;
+	}
 }
 
 .table-tree .node-wrapper {
@@ -27,6 +33,7 @@
 	font-weight: 500;
 	align-items: center;
 	border-bottom: 1px solid #eff0f2;
+	padding: 1.1em 0;
 }
 
 .node-wrapper .node-row.top-level-node {
@@ -41,10 +48,30 @@
 	background: url(../images/icons/icon-add.png) no-repeat;
 }
 
+.node-drag-icon {
+	cursor: move;
+	width: 13px;
+	height: 13px;
+	display: block;
+	background: url(../images/icons/icon-vertical.png) center center no-repeat;
+}
+
 .node-controls {
 	text-align: right;
 }
 
-.tree-children {
+.node-label {
+	text-align: left;
+}
+
+.tree-children .node-title {
 	padding-left: 20px;
+}
+
+.node-row mat-icon {
+	color: #a8a8a8;
+}
+
+.node-row .yellow-icon mat-icon {
+	color: #f27f04;
 }

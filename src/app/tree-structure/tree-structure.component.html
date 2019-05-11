@@ -15,11 +15,11 @@
           {{ node.data.name }}
         </div>
 
-        <div class="col-md-2 node-label">
-          <span class="badge badge-primary">{{ node.data.node_type }}</span>
+        <div class="col-md-1 node-label">
+          <span class="badge badge-primary">{{ node.data.model_name }}</span>
         </div>
 
-        <div class=" col-md-3 node-controls" *ngIf="!node.data.isRenaming">
+        <div class=" col-md-4 node-controls" *ngIf="!node.data.isRenaming">
           <button mat-icon-button class="yellow-icon" *ngIf="favoriteNodeIds.indexOf(node.data._id) >= 0" 
             (click)="toggleFavorite(node.data._id)">
             <mat-icon> star </mat-icon>

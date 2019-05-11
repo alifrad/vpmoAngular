@@ -35,10 +35,14 @@ input[disabled] {
 
 @media (min-width:1300px) {
     .container {
-        max-width: 1650px;
         padding-left: 30px;
         padding-right: 30px;
     }
+}
+
+.container {
+    margin: 0 !important;
+    max-width: 100%;
 }
 
 .error-input {
@@ -773,12 +777,15 @@ input[disabled] {
     padding: 0 25px;
     margin: 0 0 40px;
     position: relative;
-    display: flex;
-    flex-wrap: wrap;
+    //display: flex;
+    // flex: 1;
+    overflow-x: auto;
+    /flex-wrap: wrap;
 }
 
 .secondary-nav > div {
     width: 14.28%;
+    display: inline-block;
 }
 
 .secondary-nav a {
@@ -1587,10 +1594,6 @@ input[disabled] {
 
     .secondary-nav a {
         font-size: 12px;
-    }
-
-    .secondary-nav a span {
-        padding: 3px 0 16px 28px;
     }
 
     .line-control-menu-bar a.btn {

@@ -1,54 +1,52 @@
-<div>
-  <tree-root [nodes]="nodes" [options]="options" (moveNode)="onMoveNode($event)">
-    <ng-template #treeNodeTemplate let-node let-index="index">
-      <div class="row node-row" [ngClass]="{'top-level-node': node.data.node_type == 'Team'}">
+<tree-root [nodes]="nodes" [options]="options" (moveNode)="onMoveNode($event)">
+  <ng-template #treeNodeTemplate let-node let-index="index">
+    <div class="row node-row" [ngClass]="{'top-level-node': node.data.node_type == 'Team'}">
 
-        <div class="col-md-1 node-toggler">
-          <a *ngIf="node.data.node_type == 'Team'" class="node-collapse-icon active"></a>
-          <a *ngIf="node.data.node_type != 'Team'" class="node-drag-icon active"></a>
-        </div>
-
-        <div class="col-md-6 node-title" *ngIf="node.data.isRenaming">
-          <input type="text" class="form-control" [(ngModel)]="newNodeName" />
-        </div>
-        <div class="col-md-6 node-title" *ngIf="!node.data.isRenaming" (click)="viewDetail(node)">
-          {{ node.data.name }}
-        </div>
-
-        <div class="col-md-1 node-label">
-          <span class="badge badge-primary">{{ node.data.model_name }}</span>
-        </div>
-
-        <div class=" col-md-4 node-controls" *ngIf="!node.data.isRenaming">
-          <button mat-icon-button class="yellow-icon" *ngIf="favoriteNodeIds.indexOf(node.data._id) >= 0" 
-            (click)="toggleFavorite(node.data._id)">
-            <mat-icon> star </mat-icon>
-          </button>
-
-          <button mat-icon-button *ngIf="favoriteNodeIds.indexOf(node.data._id) <= -1" 
-            (click)="toggleFavorite(node.data._id)">
-            <mat-icon> star_border </mat-icon>
-          </button>
-
-          <button *ngIf="node.data.node_type!='Topic'" mat-icon-button (click)="startAdd(node)">
-            <mat-icon> add </mat-icon>
-          </button>
-
-          <button mat-icon-button (click)="startRenaming(node)">
-            <mat-icon> edit </mat-icon>
-          </button>
-
-          <button mat-icon-button (click)="viewChat(node)">
-            <chat-icon [unreadMessages]="unreadMessages[node.data._id]"></chat-icon>
-          </button>
-        </div>
-
-        <div class=" col-md-3 node-controls" *ngIf="node.data.isRenaming">
-          <button (click)="renameNode(node)" mat-stroked-button color="primary">Save</button>
-          <button (click)="cancelRenameNode(node)" mat-stroked-button color="warn">Cancel</button>
-        </div>
-
+      <div class="col-md-1 node-toggler">
+        <a *ngIf="node.data.node_type == 'Team'" class="node-collapse-icon active"></a>
+        <a *ngIf="node.data.node_type != 'Team'" class="node-drag-icon active"></a>
       </div>
-    </ng-template>
-  </tree-root>
-</div>
+
+      <div class="col-md-6 node-title" *ngIf="node.data.isRenaming">
+        <input type="text" class="form-control" [(ngModel)]="newNodeName" />
+      </div>
+      <div class="col-md-6 node-title" *ngIf="!node.data.isRenaming" (click)="viewDetail(node)">
+        {{ node.data.name }}
+      </div>
+
+      <div class="col-md-1 node-label">
+        <span class="badge badge-primary">{{ node.data.model_name }}</span>
+      </div>
+
+      <div class=" col-md-4 node-controls" *ngIf="!node.data.isRenaming">
+        <button mat-icon-button class="yellow-icon" *ngIf="favoriteNodeIds.indexOf(node.data._id) >= 0" 
+          (click)="toggleFavorite(node.data._id)">
+          <mat-icon> star </mat-icon>
+        </button>
+
+        <button mat-icon-button *ngIf="favoriteNodeIds.indexOf(node.data._id) <= -1" 
+          (click)="toggleFavorite(node.data._id)">
+          <mat-icon> star_border </mat-icon>
+        </button>
+
+        <button *ngIf="node.data.node_type!='Topic'" mat-icon-button (click)="startAdd(node)">
+          <mat-icon> add </mat-icon>
+        </button>
+
+        <button mat-icon-button (click)="startRenaming(node)">
+          <mat-icon> edit </mat-icon>
+        </button>
+
+        <button mat-icon-button (click)="viewChat(node)">
+          <chat-icon [unreadMessages]="unreadMessages[node.data._id]"></chat-icon>
+        </button>
+      </div>
+
+      <div class=" col-md-3 node-controls" *ngIf="node.data.isRenaming">
+        <button (click)="renameNode(node)" mat-stroked-button color="primary">Save</button>
+        <button (click)="cancelRenameNode(node)" mat-stroked-button color="warn">Cancel</button>
+      </div>
+
+    </div>
+  </ng-template>
+</tree-root>

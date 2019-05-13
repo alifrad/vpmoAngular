@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute, RouterLinkActive, Router, NavigationStart } from '@angular/router';
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
@@ -29,6 +29,8 @@ export class NodeContainerComponent implements OnInit, OnDestroy {
   ];
   _unsubscribeAll = new Subject<any>();
  
+  @ViewChild('navContainer') navContainer;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router
@@ -53,6 +55,16 @@ export class NodeContainerComponent implements OnInit, OnDestroy {
         var routeParams = event.url.split("/")
         this.contentType = routeParams[routeParams.length-1]
       })
+  }
+
+  scrollNav(count) {
+    console.log(this.navContainer)
+    if (this.navContainer) {
+      if (this.navContainer != undefined) {
+        var that = this;
+        this.navContainer.nativeElement.scrollLeft += count
+      }
+    }
   }
 
   ngOnDestroy () {

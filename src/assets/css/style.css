@@ -774,18 +774,24 @@ input[disabled] {
 
 .secondary-nav {
     border-bottom: 1px solid #e1e3e6;
-    padding: 0 25px;
+    padding: 0;
     margin: 0 0 40px;
     position: relative;
-    //display: flex;
-    // flex: 1;
+    width: 100%;
+
+    display: flex;
+    flex-wrap: nowrap;
     overflow-x: auto;
-    /flex-wrap: wrap;
+}
+
+.secondary-nav::-webkit-scrollbar { /* WebKit */
+    width: 0;
+    height: 0;
 }
 
 .secondary-nav > div {
+    flex: 0 0 auto;
     width: 14.28%;
-    display: inline-block;
 }
 
 .secondary-nav a {
@@ -881,30 +887,52 @@ input[disabled] {
     background: url(../images/nav/documents-active.png) no-repeat;
 }
 
-.slick-prev, .slick-next {
-    position: absolute;
-    left: 0;
-    top: 7px;
-    background: url(../images/nav/icon-arrow-left.png) no-repeat;
-    width: 9px;
-    height: 14px;
-    border: none;
-    font-size: 0;
+.secondary-nav a.permissions span:before {
+    background: url(../images/nav/documents.png) no-repeat;
+}
+
+.secondary-nav a.permissions.active span:before {
+    background: url(../images/nav/documents-active.png) no-repeat;
+}
+
+.secondary-nav .nav-scroll {
+    flex: 0 0 auto;
+    position: sticky;
+    width: 2%;
     cursor: pointer;
     outline: none !important;
+    background-color: #fff;
+    z-index: 50;
 }
 
-.slick-prev:hover {
-    background-position: left -24px;
+.outer-section .nav-scroll div {
+    width: 9px;
+    height: 14px;
+    top: 15px;
+    position: absolute;
+    font-size: 0;
+    border: none;
 }
 
-.slick-next {
-    background: url(../images/nav/icon-arrow-right.png) no-repeat;
-    left: auto;
+.outer-section #nav-scroll-left {
+    left: 0;
+}
+
+.outer-section #nav-scroll-left div {
+    left: 0;
+    background: url(../images/nav/icon-arrow-left.png) no-repeat;
+}
+
+.secondary-nav #nav-scroll-right {
     right: 0;
 }
 
-.slick-next:hover {
+.secondary-nav #nav-scroll-right div {
+    right: 0;
+    background: url(../images/nav/icon-arrow-right.png) no-repeat;
+}
+
+.secondary-nav #nav-scroll-right:hover div, .secondary-nav #nav-scroll-left:hover div {
     background-position: left -24px;
 }
 

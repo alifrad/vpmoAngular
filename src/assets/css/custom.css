@@ -33,7 +33,7 @@
 	font-weight: 500;
 	align-items: center;
 	border-bottom: 1px solid #eff0f2;
-	padding: 1.1em 0;
+	padding: 0.5em 0 0.8em 0;
 }
 
 .node-wrapper .node-row.top-level-node {
@@ -74,4 +74,8 @@
 
 .node-row .yellow-icon mat-icon {
 	color: #f27f04;
+}
+
+.node-drop-slot {
+	padding: 5px;
 }

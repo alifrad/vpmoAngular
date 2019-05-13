@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" style="padding: 0;">
 
     <!-- TODO: This app currently only loads the node - not sure why we have it separated -->
     <app-nodepage></app-nodepage>
@@ -23,7 +23,12 @@
             </div>
 
             <div class="outer-section">
-                <div class="secondary-nav">
+                
+                <div class="secondary-nav" #navContainer>
+                    <div id="nav-scroll-left" class="nav-scroll" (click)="scrollNav(-60)">
+                        <div></div>
+                    </div>
+
                     <div><a [routerLink]="['details']" href="#details" class="details" [ngClass]="{'active': contentType == 'details'}"><span>Details</span></a></div>
 
                     <div *ngIf="nodeType == 'Team' || nodeType == 'Project'">
@@ -49,6 +54,10 @@
                     </div>
                     <div>
                         <a [ngClass]="{'active': contentType == 'permissions'}" [routerLink]="['permissions']" class="permissions"><span>Permissions</span></a>
+                    </div>
+
+                    <div id="nav-scroll-right" class="nav-scroll" (click)="scrollNav(60)">
+                        <div></div>
                     </div>
                 </div>
 

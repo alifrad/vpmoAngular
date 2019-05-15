@@ -115,7 +115,7 @@ input[disabled] {
 .main-wrap {
     display: flex;
     flex-wrap: wrap;
-    padding: 50px 0;
+    padding: 20px 0;
 }
 
 .sidebar {
@@ -1729,7 +1729,6 @@ input[disabled] {
 
     .main-wrap {
         display: block;
-        padding: 20px 0;
     }
 
     .sidebar {

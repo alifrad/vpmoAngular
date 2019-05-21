@@ -1,6 +1,6 @@
 <tree-root [nodes]="nodes" [options]="options" (moveNode)="onMoveNode($event)">
   <ng-template #treeNodeTemplate let-node let-index="index">
-    <div class="row node-row" [ngClass]="{'top-level-node': node.data.node_type == 'Team'}">
+    <div class="row node-row" [ngClass]="{'top-level-node': node.data._id == nodeID}">
 
       <div class="col-md-1 node-toggler">
         <a *ngIf="node.data.node_type == 'Team'" class="node-collapse-icon active"></a>

@@ -6,7 +6,7 @@
        	</li>
     </ol>
 
-	<ol *ngIf="nodeParents.length >= 4">
+	<ol class="breadcrumb" *ngIf="nodeParents.length >= 4">
 		<li class="breadcrumb-item" (click)="switchToNode(nodeParents[0]._id, nodeParents[0].node_type)">
 			{{ nodeParents[0].name }}
 		</li>
